@@ -123,8 +123,11 @@ def normalize_url(url, base_url):
     url = url.strip()
     if url.startswith(("#", "javascript:", "mailto:", "tel:", "data:")):
         return None
-    full = urljoin(base_url, url)
-    parsed = urlparse(full)
+    try:
+        full = urljoin(base_url, url)
+        parsed = urlparse(full)
+    except ValueError:
+        return None
     return urlunparse(parsed._replace(fragment=""))
 
 
