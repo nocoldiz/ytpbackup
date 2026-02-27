@@ -155,7 +155,9 @@ def is_thread_url(url):
 def safe_filename(name, max_len=80):
     name = re.sub(r'[<>:"/\\|?*]', '_', name)
     name = re.sub(r'\s+', ' ', name).strip()
-    return name[:max_len] if len(name) > max_len else name
+    name = name[:max_len] if len(name) > max_len else name
+    name = name.rstrip('. ')
+    return name or '_'
 
 
 def thread_filepath(section_dir, thread_id, title=None):
