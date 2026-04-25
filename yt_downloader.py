@@ -28,8 +28,8 @@ SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te","YTPMV dimportazione","YTP da i
 
 CHANNEL_KEYWORDS = re.compile(
     r'(?i)(YTP|YTPMV|Collab|Youtube\s+poop|YT\s+Poop|Poop'
-    r'|matteo\s+montesi|avventure|Zeb|Favij|Testoh|Pingu'
-    r'|Dipr[eè]|Bello\s+Figo|Yotobi|He[\s-]?Man|Berlusconi|Muniz)'
+    r'|matteo\s+montesi|avventure|Zeb|Tennis|Acid|Favij|Testoh|Pingu'
+    r'|Dipr[eè]|Bello\s+Figo|Yotobi|He[\s-]?Man|Berlusconi|Muniz|Fabri|Nemesis|Testo|Jack Black|Super Quark|Iscritti|YTM|YTG|MLG)'
 )
 
 DEFAULT_SITE_DIR = "./site_mirror"
