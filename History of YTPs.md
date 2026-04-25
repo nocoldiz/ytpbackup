@@ -236,7 +236,7 @@ Inizio fenomeno MLG
 ---
 
 
-## 🟠 Era 6 — L'Adpocalipse (2017 - 2022)
+## 🟠 Era 6 — L'Adpocalipse ed era YTP sugli youtuber (2017 - 2022)
 
 **Sources di riferimento:**
 Il Collegio, altri youtuber. Masterchef, Marvel
@@ -310,7 +310,7 @@ Poopers come Mastercast, RTPoop riescono a trasformare la loro abilità di monta
 **L'arrivo dell'IA generativa**:
 - Il sentence mixing tradizionale può essere **tecnicamente sostituito dall'IA**, che ricrea perfettamente la voce di un politico
 - Ma — paradossalmente — l'IA *surclassa troppo*: si perde l'effetto comico del **"taglia e cuci" amatoriale**, l'impressione di artigianalità che è parte essenziale del codice estetico delle YTP
-- Strumenti come la trascrizione automatica di Premiere e After Effects con IA integrata **velocizzano di molte volte** il lavoro manuale di sentence mixing
+- Strumenti come la trascrizione automatica di Premiere e rotoscopio After Effects con IA integrata **velocizzano di molte volte** il lavoro manuale di sentence mixing e di masking
 
 
 ---
