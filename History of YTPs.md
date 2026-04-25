@@ -46,19 +46,19 @@ Prima ancora che esistesse YouTube, alcuni esperimenti **anticipavano formalment
 
 ### La Cronologia del "Big Bang"
 
-**22 dicembre 2004 | Il Proto-Poop su SheezyArt**
+**22 dicembre 2004**
 L'utente **SuperYoshi** carica sul defunto portale d'arte SheezyArt il video *The Adventures of Super Mario Bros. 3 REMIXED!!!*. Utilizzando Windows Movie Maker, all'epoca una novità rivoluzionaria introdotta con Windows ME/XP, SuperYoshi prende un episodio del cartone animato "Recycled Koopa" e lo distorce. Non c'è una trama, ma solo tagli bruschi, ripetizioni ossessive e un'estetica caotica. È il vero **Big Bang** del fenomeno, realizzato quando YouTube non esisteva ancora
 
-**Febbraio 2005 | Nasce YouTube**
+**Febbraio 2005**
 Viene fondato **YouTube**. Inizialmente concepito come un sito di incontri basato su video (il cui slogan primordiale era *"Tune in, Hook up"*), la piattaforma cambia rapidamente rotta per diventare un raccoglitore universale di video amatoriali. Questo fornirà l'infrastruttura necessaria per far esplodere la sottocultura nascente.
 
-**1 aprile 2006 | Il Battesimo del Fuoco e il Primo "Pooper"**
+**1 aprile 2006**
 Viene caricato su YouTube *Sonic and Robotnik's Sodomy Hour!* dall'utente **Stegblo**. Questo video non solo è considerato la **prima YTP nativa della piattaforma**, ma stabilisce anche uno standard fondamentale: l'uso del cartone animato *Le avventure di Sonic* (AoStH) come materiale di partenza inesauribile. A Stegblo è storicamente attribuita anche la coniazione del termine stesso **"YouTube Poop"**, nato per descrivere letteralmente la qualità "spazzatura" e l'assurdità voluta di quei montaggi.
 
-**Estate/Autunno 2006 | La prima Community**
+**Estate/Autunno 2006**
 Iniziano a emergere i primi canali interamente dedicati a questo stile. Il termine "YouTube Poop" smette di essere un insulto o una descrizione dispregiativa e diventa un vero e proprio *tag* e un genere di appartenenza. I creatori iniziano a chiamarsi "Poopers".
 
-**27 novembre 2006 | La Reliquia Sacra**
+**27 novembre 2006**
 SuperYoshi decide di ricaricare il suo video originale del 2004 su YouTube, cambiandogli il titolo nella frase iconica e in caps-lock: **"I'D SAY HE'S HOT ON OUR TAIL"** (citazione diretta da una battuta di Luigi nel video)
 
 ### Le Fondamenta Tecniche e Culturali
@@ -71,7 +71,7 @@ Durante questa fase embrionale, le YTP non avevano ancora la complessità ritmic
 
 ---
 
-## 🟡 Era 3 - L'Età dell'Oro Americana (2007 - 2011)
+## 🟡 Era 3 - L'Età dell'Oro Americana (2007 - 2010)
 
 ### La "Golden Age" del Poopism
 
@@ -92,7 +92,6 @@ Il fenomeno esplode nella comunità anglofona. Si formalizza il **Poopism**, il 
 
 **2010** - Nasce il termine **Spadinner** (fusione di *spaghetti* + *dinner*) per indicare le YTP scadenti che riciclano gli stessi effetti e fonti fino allo sfinimento. È il segno che la comunità è abbastanza matura da auto-criticarsi.
 
-**2011**
 
 ### Poopers anglofoni di riferimento
 
@@ -140,13 +139,19 @@ A  guidare la community c'era un gruppo di **admin storici**:
 
 In questa fase embrionale, i pooper nostrani iniziano imitando le tecniche americane (basate su *stutter*, *ear rape* e *word splicing* di fonti estere come i giochi CD-i), per poi virare drasticamente verso un linguaggio puramente "italico", fondato su meme e fenomeni locali.
 
+Youtube introduce il formato 720p e le annotazioni video
+
+
 **2009**
 Mondo Emo è la prima YTP italiana a diventare virale
 Ziotok conia la dicitura "Youtube merda" in alternativa alla sigla YTP
 Sono estremamente diffusi gli sparta remix per la loro facilità di creazione
-
+Youtube introduce il formato 1080p e supporto per i video 3d
+ 
 **2010**
 Le YTPMV ed i Tennis salgono in popolarità
+Youtube introduce sistema di voto con thumbs up/down al posto del voto con le stelle
+Youtube introduce il formato 4K
 
 ---
 
@@ -189,12 +194,7 @@ Ecco la tabella completa che unisce i dati precedenti con quelli dei nuovi poope
 
 
 **2011**
-* [**Y.T.M.M.V. : Intensive Angel Unit **](https://www.youtube.com/watch?v=UQ97S7Qcq3Y) *(ZioTok83)*
-* [**Silvio è diventato nonno di se stesso**](https://www.youtube.com/watch?v=ggEwv9ATvpk) *(Nocoldiz)*
-https://www.youtube.com/watch?v=ILnwlHufwfQ
-* [** Go in mona!! **](https://www.youtube.com/watch?v=4C7w6vsu8pw) *(nickkarion)*
-* [** YTPMV: Benigni Rhapsody**](https://www.youtube.com/watch?v=ILnwlHufwfQ) *(JakkoMatto)*
-
+Youtube introduce il live streaming
 
 Nel **2011** , divergenze interne, differenze di visione sul "purismo" delle poop e normali attriti da community portano a un vero e proprio scisma. Una fazione si distacca dal Forum Rosso per fondare un progetto rivale: nasce così **Il Forum Blu**.
 
@@ -203,24 +203,38 @@ Questa divisione dà il via a un periodo noto come la **"Guerra tra forum"**. No
 
 La tensione durò per mesi, fino a quando le due fazioni si resero conto che la divisione stava limitando il potenziale della community. La svolta arriva con la **[Proposta di pace](https://youtubepoopita.forumfree.it/?t=59604480)**: un momento storico di diplomazia digitale che portò a una tregua e, successivamente, a una progressiva riunificazione degli intenti. Questa pace segnò il vero inizio dell'apice dell'Età dell'Oro, permettendo ai migliori talenti di entrambe le sponde di collaborare a progetti giganteschi che hanno fatto la storia di YouTube Italia.
 
+* [**Y.T.M.M.V. : Intensive Angel Unit **](https://www.youtube.com/watch?v=UQ97S7Qcq3Y) *(ZioTok83)*
+* [**Silvio è diventato nonno di se stesso**](https://www.youtube.com/watch?v=ggEwv9ATvpk) *(Nocoldiz)*
+https://www.youtube.com/watch?v=ILnwlHufwfQ
+* [** Go in mona!! **](https://www.youtube.com/watch?v=4C7w6vsu8pw) *(nickkarion)*
+* [** YTPMV: Benigni Rhapsody**](https://www.youtube.com/watch?v=ILnwlHufwfQ) *(JakkoMatto)*
+
+
+
+
 **2012**
+Youtube unisce la sua libreria con quella di google videos ed aggiunge le preview con hover sulla barra di riproduzione
 * [**A for Asthma**](https://www.youtube.com/watch?v=fSM_SO0GIBc) *(Revergo)*
 * [**YTPM - Super Mario Gumball Brothers**](https://www.youtube.com/watch?v=pnO7ul29qPk) *(Ziomeso)*
 
 **2013**
+Youtube rimuove la possibilità di postare video come risposta
+Transizione a nuovo layout canale standard, rimosse molte possibilità di personalizzazione
 * [**Mike Wazowski fa uso di bamba**](https://www.youtube.com/watch?v=6bZzz1x_qHo) *(MasterCast)*
 * [**È finito il vino**](https://www.youtube.com/watch?v=SQWeMj48arw) *(Nocoldiz)*
 * [**YTP ITA - Carlo Conti è un po' scurrile (Prima Parte)**](https://www.youtube.com/watch?v=zOmLjk2GTkM) *(TottiBest)*
 * [**YTP ITA - Richard Benson chiede ad Andrea Diprè se ha gabido**](https://www.youtube.com/watch?v=cIniZFm9SV8)
 
 **2014**
+Inizio fenomeno MLG
+
 * [**YEE**](https://www.youtube.com/watch?v=q6EoRBvdVPQ) *(Revergo)*: Il video valica i confini italiani e diventa un meme **mondiale**.
 * [**Gaston ha i peli esplosivi**](https://www.youtube.com/watch?v=Y9rLp00OU9M) *(Stew Barz)*
 * [**YTP ITA - Carlo Conti è un po' scurrile (Terza Parte)**](https://www.youtube.com/watch?v=QFOvFAJIbG4) *(TottiBest)*
 
-Inizio fenomeno MLG
 
 **2015**
+Youtube aggiunge i video a 360 gradi e il supporto per la risoluzione 8K, lancio di Youtube RED (poi Youtube premium)
 * [**Ah non è un pezzo unico?**](https://www.youtube.com/watch?v=3tQPKSPy8G4) *(Clodd97)*
 * [**Enrico Pasquale Pratticò - Sono Un Ragazzo Carino**](https://www.youtube.com/watch?v=oBH7_mQY_cA) *(Christianice)*
 * [**YTP: La Maledizione del Primo Ceffone**](https://www.youtube.com/watch?v=mX6-SMWUhmE) *(MasterCast)*
@@ -260,40 +274,48 @@ Il Collegio, altri youtuber. Masterchef, Marvel
 ---
 
 **2017**
+Youtube rimuove la possibilità di modificare le annotazioni esistenti, questo rompe un sacco di video interattivi
+Il fenomeno degli MLG volge al termine
+Inizia l'**Adpocalypse** (termine coniato da PewDiePie): inserzionisti ritirano massicciamente le pubblicità da YouTube, i guadagni dei pochi poopers con partership crollano.
+
 * [**YTP - Applausi per Kappalicious, la ragazza perfetta**](https://www.youtube.com/watch?v=olzaqjmWnlc) *(Frederick Frankenstein)*: 
 * [**YTP ITA - Ti faaf staas beeneh**](https://www.youtube.com/watch?v=zNOEeXceyGo) *(ilCirox)*: 
 * [**POOP SQUAD**](https://www.youtube.com/watch?v=HUp7qFE32SA) *(RT Poop)*
 * [**YTP - Lo chef tony è un maniaco incestuoso [ITA]**](https://www.youtube.com/watch?v=L83llpim7Vs) *(AssoDiDenari)*
 
-Il fenomeno degli MLG volge al termine
-Inizia l'**Adpocalypse** (termine coniato da PewDiePie): inserzionisti ritirano massicciamente le pubblicità da YouTube, i guadagni dei pochi poopers con partership crollano.
 
 **2018**
+Youtube rimuove del tutto il sitema di annotazioni
+Frederick Frankestein conia il termine "Youtube Graft"
+
 * [**POOP SQUAD 2: AGE OF TRUMP**](https://www.youtube.com/watch?v=lWKerlHcNIU) *(RT Poop)*
 * [**YTP - POOP FICTION**](https://www.youtube.com/watch?v=1kL192HeJlw) *(Collab)*: 
 * [**YTP - Gommacoglione (feat. Ale199) [ITA]**](https://www.youtube.com/watch?v=LliK20AjFso) *(Davvo)*:
 * **Vendettatori: La Guerra dell'Infinito** *(Nocoldiz)*
 
-Frederick Frankestein conia il termine "Youtube Graft"
 
 **2019**
+Poop su Il Collegio di 125Replay e Alepoops diventano virali; primo grande caso di YTP ITA costruita interamente attorno a un reality show contemporaneo.
+Il canale di **Nocoldiz viene bannato senza spiegazioni**
+
 * [**YTP Il Collegio - Il Collegio è pieno di drogati**](https://www.youtube.com/watch?v=AQ31vfgrn8w) *(125Replay)*
 * [**YTP Il Collegio - La situazione sta degenerando**](https://www.youtube.com/watch?v=p30mjDUmbOE) *(125Replay)*
 * [**YTP - Il Collegio si accultura sulle Youtube Poop italiane**](https://www.youtube.com/watch?v=UelCibgSsk4) *(Alepoops)*
 
-Poop su Il Collegio di 125Replay e Alepoops diventano virali; primo grande caso di YTP ITA costruita interamente attorno a un reality show contemporaneo.
-Il canale di **Nocoldiz viene bannato senza spiegazioni**
 
 **2020**
+Lancio di youtube shorts, aggiunti capitoli ai video
 * [**YTP - ShreKKK [ITA]**](https://www.youtube.com/watch?v=_pOUJKK8o4Q) *(Davvo)*: Il video più importante dell'era. L'incredibile successo scatena la nascita del fenomeno dei **"pooperini"**: migliaia di giovanissimi scoprono il formato e iniziano a creare le proprie poop.
 * [**YTP - Sickwolf si incazza perché l'ho poopato [ITA]**](https://www.youtube.com/watch?v=9MdE35671VA) *(Davvo)*
 * [**YTP ITA - Me Contro Te contro Voi contro quegli altri**](https://www.youtube.com/watch?v=tk3IiPCq4Oc) *(MrPoldoAknar)*
 
 **2021**
+Youtube rimuove i dislikes, purga dei video non in elenco pre 2017
 * [**YTP ITA - Il Grande Festeggiatore (feat. Mastercast)**](https://www.youtube.com/watch?v=8wfGnPA4iYg) *(ilCirox)*
 * [**YTP - La Serie A 21/22 riprende malissimo**](https://www.youtube.com/watch?v=o95EiclhS6g) *(Davvo)*
 
 **2022**
+Redesign dell'UI di Youtube
 * [**YTP - SFERA EBBASTA NON È ITALIANO**](https://www.youtube.com/watch?v=RfC40UeMuMA) *(Davvo)*:
 * [**YTP - Davvo e itsDani sono stupidi (AutoPoop)**](https://www.youtube.com/watch?v=wIByUpd_Q7A) *(Davvo)*
 
