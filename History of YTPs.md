@@ -98,21 +98,33 @@ Il fenomeno esplode nella comunità anglofona. Si formalizza il **Poopism**, il 
 
 ---
 
-## 🟢 Era 4 — L'Età dell'Oro Italiana (2011 - 2018)
-
-### YTP ITA: il fenomeno trova la sua identità
-
+## 🟢 Era 4 — Le origini della community italiana (2009-2011)
 L'Italia scopre le YTP con qualche anno di ritardo, ma sviluppa rapidamente uno **stile autonomo** grazie alla forte tradizione televisiva nazionale e alla ricchezza di volti e tormentoni della cultura pop italiana.
 
-**Primi anni '10** — Nasce lo **YouTube Poop Italian Forum**, prima vera community italiana. I pooper italiani inizialmente imitano lo stile americano, poi sviluppano un linguaggio "italico" basato su meme nostrani.
+**Primi anni '10** — Nasce lo **YouTube Poop Italian Forum** (Forum rosso), prima vera community italiana. I pooper italiani inizialmente imitano lo stile americano, poi sviluppano un linguaggio "italico" basato su meme nostrani.
 
 
+Mondo Emo di bassman, Ziotok83, 
+Pennaz https://www.youtube.com/@Pennaz grafico del forum
+
+admin storici del forum
+Furio the shopkeeper TheLaughingMan Caste. Nicckarion UtenteMacSenzaMac manusnake91
+
+
+---
+
+
+
+
+## 🟢 Era 5 — L'Età dell'Oro Italiana e lo Scisma (2011 - 2018)
 **Caratteristiche distintive del filone italiano:**
+Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperimento e diventa un vero e proprio fenomeno di culto sul web italiano, trovando la sua identità definitiva. È l'epoca dei grandi classici, delle collaborazioni (Collab) e dei tornei (Tennis).
 
 - **Manifestazione degli autori nei video** (Mastercast che interagisce con i video cameo in green screen, video-diari) — al contrario della cultura anonima americana
 - Forte focus sulla **satira politica** (comizi, interviste TV)
 - Uso massiccio del **trash televisivo italiano** (Andrea Dipré, Telemarket, Roberto Baffo, Chef Tony)
 - **Universi narrativi interni** persistenti tra video diversi
+- **Collab** tendenza a fare collab
 - **Protoni** — distorsioni cromatiche e psichedeliche su un singolo stutter
 
 **Pooper italiani di riferimento:**
@@ -121,31 +133,64 @@ L'Italia scopre le YTP con qualche anno di ritardo, ma sviluppa rapidamente uno 
 - **Revergo** — creatore del meme  **Yee** estratto da *Dinosauri* (Dingo Pictures, 2000); autore di *A for Asthma* su Roberto Baffo.
 - **MasterCast** — *Mike Wazowski fa uso di bamba*, *Kuzco È Un Folle*.
 - **Stew Barz** — *Gaston ha i peli esplosivi*.
+- **VVoodochild** - *Le megatoniche avventure di VVoodochild**
 - **Clodd97** — *Ah non è un pezzo unico?* su Alessandro Orlando di Telemarket.
-- **MegaShades** — *Absolutely No Words*.
 
-**Dicembre 2017 – Gennaio 2018** — Esplode il fenomeno **RT Poop**: tramite rotoscopio digitale, l'autore estrae personaggi del panorama televisivo italiano e li fa dialogare in *POOP SQUAD* e *POOP SQUAD 2: AGE OF TRUMP*. La YTP raggiunge un nuovo livello tecnico e narrativo.
+
+### La divisione: La nascita del "Forum Blu" (2011)
+Nel **2011** (non 2021), divergenze interne, differenze di visione sul "purismo" delle poop e normali attriti da community portano a un vero e proprio scisma. Una fazione si distacca dal Forum Rosso per fondare un progetto rivale: nasce così **Il Forum Blu**. 
+
+Guidato da figure di spicco come **FrankTreeps** e **VoodooChild**, il Forum Blu si propone come un'alternativa, attirando nuovi talenti e creando una spaccatura netta nella scena italiana.
+
+### La Guerra tra Forum e la Pace
+Questa divisione dà il via a un periodo noto come la **"Guerra tra forum"**. Non si trattava solo di litigi testuali (come testimoniato dallo storico thread [Guerra tra forum](https://youtubepoopita.forumfree.it/?t=57126077)), ma di vere e proprie sfide a colpi di video, *dissing* nascosti nei montaggi e una forte competizione per stabilire quale fosse la vera élite del pooping italiano. Questa rivalità, seppur accesa, ebbe l'effetto collaterale di alzare drasticamente l'asticella tecnica e creativa dei video prodotti.
+
+La tensione durò per mesi, fino a quando le due fazioni si resero conto che la divisione stava limitando il potenziale della community. La svolta arriva con la **[Proposta di pace](https://youtubepoopita.forumfree.it/?t=59604480)**: un momento storico di diplomazia digitale che portò a una tregua e, successivamente, a una progressiva riunificazione degli intenti. Questa pace segnò il vero inizio dell'apice dell'Età dell'Oro, permettendo ai migliori talenti di entrambe le sponde di collaborare a progetti giganteschi che hanno fatto la storia di YouTube Italia.
+
+
+
+**2011**
+* **Silvio è diventato nonno di se stesso** *(Nocoldiz)*
+
+**2012**
+* **A for Asthma** *(Revergo)*: Roberto Baffo (celebre venditore televisivo) diventa un'icona del trash poppato, inserito in contesti surreali e disturbanti.
+
+**2013**
+* **Mike Wazowski fa uso di bamba** *(MasterCast)*
+* **È finito il vino** *(Nocoldiz)
+
+**2014: Il Fenomeno Globale e la "Poop Disney"**
+* **YEE** *(Revergo)*: Da un oscurissimo e pessimo cartone della *Dingo Pictures* (Dinosauri), Revergo estrapola un dinosauro e un motivetto ("Yee"). Il video valica i confini italiani e diventa un meme **mondiale**, citato ancora oggi su forum internazionali, Reddit e TikTok. L'Italia esporta il no-sense.
+* **Gaston ha i peli esplosivi** *(Stew Barz)*
+
+**2015: L'Arte della Televendita**
+* **Ah non è un pezzo unico?** *(Clodd97)*
+
+**2016**
+* **I Vendettatori** *(Nocoldiz)*
+* **Kuzco È Un Folle** *(MasterCast)*
+
+**2017**
+* **POOP SQUAD** *(_RT_ / RT Poop - fine 2017)*: 
+
+**2018: L'Apoteosi del Crossover**
+* **POOP SQUAD 2: AGE OF TRUMP** *(RT Poop)*:
+* **Vendettatori: La Guerra dell'Infinito** *(Nocoldiz)*:
 
 ---
 
 MLG
 
-## 🟠 Era 5 — La Stagnazione e i Ban (2019 - 2022)
+## 🟠 Era 6 — La Stagnazione e i Ban (2019 - 2022)
 
 ### YouTube cambia, le YTP soffrono
 
 **2017** — Inizia l'**Adpocalypse** (termine coniato da PewDiePie): inserzionisti ritirano massicciamente le pubblicità da YouTube, i guadagni dei pochi poopers con partership crollano.
-**2019** — Il canale di **Nocoldiz viene bannato senza spiegazioni** d
-
-**Effetti:**
-
-- L'algoritmo smette di promuovere il genere
-- Molti pooper storici abbandonano
-- Le YTP escono dalla cresta dell'onda mainstream
-- La community si frammenta su piattaforme alternative
+**2019** —  - Poop su IlCollegio di 125Replay e Alepoops
+Il canale di **Nocoldiz viene bannato senza spiegazioni** 
 
 
-**2 Gennaio 2020** — L'utente **Davvo** pubblica **YTP - ShreKKK [ITA]** ([https://www.youtube.com/watch?v=_pOUJKK8o4Q](https://www.youtube.com/watch?v=_pOUJKK8o4Q)). 
+**2020** — L'utente **Davvo** pubblica **YTP - ShreKKK [ITA]** ([https://www.youtube.com/watch?v=_pOUJKK8o4Q](https://www.youtube.com/watch?v=_pOUJKK8o4Q)). 
 
 L'incredibile  successo  di *ShreKKK* scatena un effetto: la nascita del fenomeno dei **"pooperini"**.
 
@@ -153,7 +198,7 @@ L'incredibile  successo  di *ShreKKK* scatena un effetto: la nascita del fenomen
 
 ---
 
-## 🔵 Era 6 — La Sopravvivenza e l'Era IA (2023 - presente)
+## 🔵 Era 7 — La Sopravvivenza e l'Era IA (2023 - presente)
 
 ### Il fenomeno si trasforma
 
