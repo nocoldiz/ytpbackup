@@ -82,9 +82,9 @@ NOCOLDIZ_BLACKLIST = re.compile(
 # ── Channel keywords ──────────────────────────────────────────────────────────
 
 CHANNEL_KEYWORDS = re.compile(
-    r'(?i)(YTP|YTPMV|Collab|Youtube\s+poop|YT\s+Poop|Poop'
-    r'|matteo\s+montesi|avventure|Zeb|Collegio|Bigazzi|Ambrogio|Risotto|ariete|Harry\s+potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu'
-    r'|Dipr[eè]|Bello\s+Figo|Yotobi|He[\s-]?Man|Gourmet|The king|Link|Berlusconi|Muniz|Travaglio| Nemesis|Testo|Papa|Jack\s+Black|Super\s+Quark|Iscritti|YTM|YTG|MLG'
+    r'(?i)(YTP|YTPMV|Collab|Youtube\s+poop|YT\s+Poop|Poop|Speciale'
+    r'|matteo\s+montesi|avventure|Zeb|Collegio|Bigazzi|Mario|Branduardi|Luigi|Ambrogio|Risotto|ariete|Harry\s+potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu'
+    r'|Dipr[eè]|Bello\s+Figo|Germano|Grillo|Gesù|Nabbo|Yotobi|He[\s-]?Man|Gourmet|The king|Link|Berlusconi|Muniz|Travaglio| Nemesis|Testo|Papa|Jack\s+Black|Super\s+Quark|Iscritti|YTM|YTG|MLG'
     r'|Sentence\s+Mix|Ear\s?rape|G-Major|Mondo emo| Sparta\s+Remix|Scad|Stutter|Zelda|Patrick|Pubblicità|Spot|Spongebob|Reverse|Masking|Pitch\s+Shift'
     r'|Mosconi|Benson|Brumotti|Master\s?chef|Mister\s+Lui|Pappalardo|Sgarbi|Razzi|Salvini|Renzi|Rio mare|Gerry\s+Scotti|Fazio'
     r'|Kabu|Nocoldiz|Poldo|Cloroformio|Giannino|Gianni\s+Morandi|Doraemon|Me\s+cont[ro]o\s+Te)'
