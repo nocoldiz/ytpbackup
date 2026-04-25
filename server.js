@@ -145,38 +145,72 @@ function findThreadFile(sectionName, threadId, pageNum) {
 
 // ─── HTML rewriting ───────────────────────────────────────────────────────────
 
-const DOMAIN_RE      = new RegExp(`https?://${BASE_DOMAIN.replace(/\./g, '\\.')}/`, 'g');
-const DOMAIN_PROT_RE = new RegExp(`//${BASE_DOMAIN.replace(/\./g, '\\.')}/`, 'g');
+// Both domains the forum uses (main + alternate subdomain seen in scraped pages)
+const DOMAIN_RES = [
+  new RegExp(`https?://${BASE_DOMAIN.replace(/\./g, '\\.')}/`, 'g'),
+  new RegExp(`https?://youtubepoop\\.ita\\.forumfree\\.it/`, 'g'),
+  new RegExp(`//${BASE_DOMAIN.replace(/\./g, '\\.')}/`, 'g'),
+  new RegExp(`//youtubepoop\\.ita\\.forumfree\\.it/`, 'g'),
+];
 
-// Injected before </body>: re-implements the forum's page_jump() for local nav.
-const PAGE_JUMP_JS = `
+// Injected before </body>:
+//   1. Overrides page_jump() for local pagination navigation.
+//   2. Removes the GDPR/consent iframe overlay (#appconsent) that blocks clicks.
+//   3. Strips remaining forum-domain hrefs missed by the static rewrite.
+const INJECT_JS = `
+<style>
+/* Remove GDPR consent overlay — it covers the full viewport with z-index max */
+#appconsent { display: none !important; }
+/* Hide any full-screen fixed iframe injected by consent managers */
+iframe[style*="z-index: 2147483647"] { display: none !important; }
+/* Hide cookie/notification bars */
+.note { display: none !important; }
+</style>
 <script>
-/* mirror: override page_jump for local navigation */
 (function () {
-  function page_jump(baseUrl, totalPages, perPage) {
+  /* Remove GDPR overlay node entirely */
+  var ac = document.getElementById('appconsent');
+  if (ac) ac.parentNode.removeChild(ac);
+
+  /* Override page_jump for local pagination */
+  window.page_jump = function (baseUrl, totalPages, perPage) {
     var p = parseInt(window.prompt('Vai alla pagina (1–' + totalPages + '):', '1'), 10);
     if (p >= 1 && p <= totalPages) {
       var st  = (p - 1) * perPage;
       var sep = baseUrl.indexOf('?') !== -1 ? '&' : '?';
       window.location.href = baseUrl + sep + 'st=' + st;
     }
-  }
-  window.page_jump = page_jump;
+  };
+
+  /* Rewrite any forum hrefs the server-side pass may have missed */
+  var re = /https?:\\/\\/(youtubepoopita|youtubepoop\\.ita)\\.forumfree\\.it\\//g;
+  document.querySelectorAll('a[href]').forEach(function (a) {
+    var h = a.getAttribute('href');
+    if (re.test(h)) a.setAttribute('href', h.replace(re, '/'));
+    re.lastIndex = 0;
+  });
 })();
 </script>`;
 
 function rewriteHtml(html) {
-  // Strip the absolute domain from every link/action/src that references it.
-  // Images are already base64-embedded so this only affects navigation URLs.
-  html = html.replace(DOMAIN_RE, '/');
-  html = html.replace(DOMAIN_PROT_RE, '/');
+  // 1. Strip absolute forum domain from every href/action/src in the raw HTML.
+  for (const re of DOMAIN_RES) html = html.replace(re, '/');
 
-  // Inject page_jump override at the very end of the document so it wins
-  // over any earlier definition coming from the original forum scripts.
+  // 2. Fix <base target="_top"> — when served standalone (not in a frameset)
+  //    _top == the current tab, which is fine, but named-frame targets on links
+  //    would open new windows. Change to _self to keep all navigation in-tab.
+  html = html.replace(/(<base\b[^>]*)target="_top"/gi, '$1target="_self"');
+
+  // 3. Strip legacy named-frame targets (target="Presentati!" etc.) from links.
+  //    Keep _blank (external links), drop everything else.
+  html = html.replace(/<a\b([^>]*)\starget="(?!_blank")[^"]*"([^>]*)>/g,
+    (_, before, after) => `<a${before}${after}>`);
+
+  // 4. Inject fixes & overrides before </body>.
   if (html.includes('</body>')) {
-    html = html.replace('</body>', PAGE_JUMP_JS + '\n</body>');
+    html = html.replace('</body>', INJECT_JS + '\n</body>');
   } else {
-    html += PAGE_JUMP_JS;
+    html += INJECT_JS;
   }
   return html;
 }
