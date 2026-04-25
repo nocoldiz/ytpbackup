@@ -47,23 +47,23 @@ Prima ancora che esistesse YouTube, alcuni esperimenti **anticipavano formalment
 ### La Cronologia del "Big Bang"
 
 **22 dicembre 2004 | Il Proto-Poop su SheezyArt**
-L'utente **SuperYoshi** (all'anagrafe Luke Koki) carica sul defunto portale d'arte SheezyArt il video *The Adventures of Super Mario Bros. 3 REMIXED!!!*. Utilizzando Windows Movie Maker, all'epoca una novità rivoluzionaria introdotta con Windows ME/XP, SuperYoshi prende un episodio del cartone animato "Recycled Koopa" e lo distorce. Non c'è una trama, ma solo tagli bruschi, ripetizioni ossessive e un'estetica caotica. È il vero **Big Bang** del fenomeno, realizzato quando YouTube era ancora un miraggio.
+L'utente **SuperYoshi** carica sul defunto portale d'arte SheezyArt il video *The Adventures of Super Mario Bros. 3 REMIXED!!!*. Utilizzando Windows Movie Maker, all'epoca una novità rivoluzionaria introdotta con Windows ME/XP, SuperYoshi prende un episodio del cartone animato "Recycled Koopa" e lo distorce. Non c'è una trama, ma solo tagli bruschi, ripetizioni ossessive e un'estetica caotica. È il vero **Big Bang** del fenomeno, realizzato quando YouTube non esisteva ancora
 
-**Febbraio 2005 | Nasce l'Ecosistema**
+**Febbraio 2005 | Nasce YouTube**
 Viene fondato **YouTube**. Inizialmente concepito come un sito di incontri basato su video (il cui slogan primordiale era *"Tune in, Hook up"*), la piattaforma cambia rapidamente rotta per diventare un raccoglitore universale di video amatoriali. Questo fornirà l'infrastruttura necessaria per far esplodere la sottocultura nascente.
 
 **1 aprile 2006 | Il Battesimo del Fuoco e il Primo "Pooper"**
 Viene caricato su YouTube *Sonic and Robotnik's Sodomy Hour!* dall'utente **Stegblo**. Questo video non solo è considerato la **prima YTP nativa della piattaforma**, ma stabilisce anche uno standard fondamentale: l'uso del cartone animato *Le avventure di Sonic* (AoStH) come materiale di partenza inesauribile. A Stegblo è storicamente attribuita anche la coniazione del termine stesso **"YouTube Poop"**, nato per descrivere letteralmente la qualità "spazzatura" e l'assurdità voluta di quei montaggi.
 
-**Estate/Autunno 2006 | La Formazione della Community**
+**Estate/Autunno 2006 | La prima Community**
 Iniziano a emergere i primi canali interamente dedicati a questo stile. Il termine "YouTube Poop" smette di essere un insulto o una descrizione dispregiativa e diventa un vero e proprio *tag* e un genere di appartenenza. I creatori iniziano a chiamarsi "Poopers".
 
 **27 novembre 2006 | La Reliquia Sacra**
-SuperYoshi decide di ricaricare il suo video originale del 2004 su YouTube, cambiandogli il titolo nella frase iconica e in caps-lock: **"I'D SAY HE'S HOT ON OUR TAIL"** (citazione diretta da una battuta di Luigi nel video). Questo momento sancisce un ponte tra il passato pre-YouTube e la nuova community, rendendo il video universalmente riconosciuto come il **Paziente Zero** delle YTP.
+SuperYoshi decide di ricaricare il suo video originale del 2004 su YouTube, cambiandogli il titolo nella frase iconica e in caps-lock: **"I'D SAY HE'S HOT ON OUR TAIL"** (citazione diretta da una battuta di Luigi nel video)
 
 ### Le Fondamenta Tecniche e Culturali
 
-Durante questa fase embrionale, le YTP non avevano ancora la complessità ritmica o visiva degli anni successivi, ma gettarono le basi per i "tòpoi" del genere:
+Durante questa fase embrionale, le YTP non avevano ancora la complessità ritmica o visiva degli anni successivi, ma gettarono le basi del genere:
 
 * **Il Dominio di Windows Movie Maker:** I limiti del software dettavano lo stile. I tagli netti (hard cuts), le transizioni a stella, le dissolvenze improvvise e i filtri di base (colori negativi, specchiamenti) diventarono il vocabolario visivo standard.
 * **Lo "Stuttering" (Ripetizione a singhiozzo):** Ripetere un frammento di un secondo o meno (spesso una singola sillaba) decine di volte per creare un effetto comico o un ritmo fastidioso.
