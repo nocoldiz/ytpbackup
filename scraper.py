@@ -553,6 +553,62 @@ class ForumScraper:
 
         return list(threads.items())
 
+    def scan_saved_index_for_threads(self):
+        """Scan already-saved index HTML files for thread links not yet in threads_found."""
+        print("\n" + "─" * 70)
+        print("  SCANNING SAVED INDEX PAGES FOR NEW THREADS")
+        print("─" * 70)
+
+        updated = 0
+        for sec_name, sec_url in self.section_list:
+            ss = self.section_state(sec_name)
+
+            if not ss.get("index_pages_saved"):
+                continue
+
+            section_dir = os.path.join(self.output_dir, safe_filename(sec_name))
+            index_dir = os.path.join(section_dir, "index")
+
+            if not os.path.isdir(index_dir):
+                continue
+
+            known_urls = set(ss["threads_found"][::2])
+            new_threads = OrderedDict()
+
+            for html_file in sorted(os.listdir(index_dir)):
+                if not html_file.endswith(".html"):
+                    continue
+                file_path = os.path.join(index_dir, html_file)
+                try:
+                    with open(file_path, encoding="utf-8") as f:
+                        html = f.read()
+                except Exception as e:
+                    log.warning(f"    Could not read {html_file}: {e}")
+                    continue
+
+                soup = BeautifulSoup(html, "lxml")
+                for a in soup.find_all("a", href=True):
+                    href = normalize_url(a["href"], sec_url)
+                    if not href or not is_forum_url(href) or not is_thread_url(href):
+                        continue
+                    tid = get_thread_id(href)
+                    base_thread = f"https://{BASE_DOMAIN}/?t={tid}"
+                    if base_thread not in known_urls and base_thread not in new_threads:
+                        title = a.get_text(strip=True) or f"Thread {tid}"
+                        new_threads[base_thread] = title
+
+            if new_threads:
+                log.info(f"  📁 {sec_name}: +{len(new_threads)} new thread(s) from saved index")
+                for u, t in new_threads.items():
+                    ss["threads_found"].extend([u, t])
+                updated += 1
+            else:
+                log.info(f"  📁 {sec_name}: no new threads in saved index")
+
+        if updated:
+            self.save_state()
+            log.info(f"  ✓ Updated threads_found for {updated} section(s)")
+
     def discover_thread_pages(self, thread_url, html):
         soup = BeautifulSoup(html, "lxml")
         tid = get_thread_id(thread_url)
@@ -659,6 +715,9 @@ class ForumScraper:
                     self.save_state()
                 else:
                     log.info(f"  📁 [{sec_idx+1}/{len(self.section_list)}] {sec_name} (Indices Cached)")
+
+            # ─── Pass 2.5: Scan saved index pages for any missed threads ───
+            self.scan_saved_index_for_threads()
 
             # ─── Pass 3: Fetch Threads ───
             print("\n" + "─" * 70)
