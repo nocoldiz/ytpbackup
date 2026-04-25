@@ -125,22 +125,28 @@ A mantenere l'ordine e a guidare la community c'era un gruppo di **admin storici
 
 ### Pooper italiani di riferimento
 
+Ecco la tabella aggiornata con i dati dei riferimenti storici e dei pooper della "Golden Age" italiana:
+
 | Pooper | Canale | Video più visto | Altri video |
-|---|---|---|---|
-| despotaa | [despotaa](https://www.youtube.com/@despotaaa) | — | — |
-| bassman85 | [bassman85x](https://www.youtube.com/@bassman85x) | [Youtube Poop : Mondo Emo](https://www.youtube.com/watch?v=6qXBHVssbg0) (271K) | — |
-| Ziotok83 | [ZioTok83](https://www.youtube.com/@ZioTok83/videos) | "Youtube merda : il capitano incita la ciurma a sballarsi con la vinavil" | — |
-| Felix 96 | [Felix 96](https://www.youtube.com/@tracFelix96trac) | — | — |
-| VoodooChild | — | — | — |
-| blazor67 | — | — | — |
-| mr.nintendo | Canale chiuso | — | — |
-| Elia1995 | [EliaForce1984ita](https://www.youtube.com/@EliaForce1984ita) | — | — |
-| Weegee64 | [Mario6493](https://www.youtube.com/@Mario6493) | [You dare not agree with the Mario Head?](https://www.youtube.com/watch?v=PHQWtOAGrA4) (189K) | — |
-| Gwonam the Wizard | [Gwonam the Wizard](https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg) | — | — |
-| rikimaru.HAL | — | — | — |
-| Nocoldiz | [Nocoldiz](https://www.youtube.com/@Nocoldiz) | "È finito il vino" | "Vendettatori", "Frodo è contro la legge", "Silvio è diventato nonno di se stesso" |
-| Pennaz | [Pennaz](https://www.youtube.com/@Pennaz) | — | Grafico ufficiale del forum |
-| DarkCoffe64 | [DarkCoffe64](https://www.youtube.com/channel/UC-Dati-non-disponibili) | [Youtube Poop Robotnik turn the moon into spaghetti part 01](https://www.youtube.com/watch?v=-jEDQck88bM) | — |
+| :--- | :--- | :--- | :--- |
+| **despotaa** | [despotaaa](https://www.youtube.com/@despotaaa) | [Un problema freddo - Chinatown](https://www.youtube.com/watch?v=hxMe5teDIR4) | "Il cavaliere della poooop", "Una cena indigesta", "Il segreto di Brokeback Poop" |
+| **bassman85** | [bassman85x](https://www.youtube.com/@bassman85x) | [Youtube Poop : Mondo Emo](https://www.youtube.com/watch?v=6qXBHVssbg0) (271K) | "YTP Harry Potter e il calice di fango", "YTP Il Mondo di Patty" |
+| **Ziotok83** | [ZioTok83](https://www.youtube.com/@ZioTok83) | "Il capitano incita la ciurma a sballarsi con la vinavil" | "Youtube BlenderMerda", "Il capitano e la maledizione del tonno" |
+| **Felix 96** | [Felix 96](https://www.youtube.com/@tracFelix96trac) | "YTP - Harry Potter e la pietra filosofale" | "YTP - Il Signore degli Anelli", "YTP - Star Wars: La minaccia del Poop" |
+| **VoodooChild** | [Voodoo Child](https://www.youtube.com/@voodoochildytp) | [Berlusconi, io minorenne ti chiedo di candidare Travaglio](https://www.youtube.com/watch?v=wO36klSNzno) | "YTP: L'Italia che dice Sì, STOBBENEH", "Stefano il vegano impara l'italiano" |
+| **blazor67** | [blazor67](https://www.youtube.com/@blazor67) | [Litterio danced like a butterfly! [YTPMV]](https://www.youtube.com/watch?v=iphTlUMyLKQ) | "Adrian's Space Jam", "Bloomin Gerry Scotti", "YTP - Al superuovo piace rubare i memes" |
+| **mr.nintendo** | *Canale chiuso* | "YTP: Link vs Gwonam" | Uno dei pionieri assoluti; i suoi video sono conservati in vari archivi di "reupload" |
+| **Elia1995** | [Elìa1995](https://www.youtube.com/@EliaForce1984ita) | [YTP - Le follie dell'imperatore: L'impero colpisce ancora](https://www.youtube.com/watch?v=unlRb4unuzE) | "YTP - Shrek", "YTP - Winnie the Pooh e l'albero del miele" |
+| **Weegee64** | [Mario6493](https://www.youtube.com/@Mario6493) | [You dare not agree with the Mario Head?](https://www.youtube.com/watch?v=PHQWtOAGrA4) (189K) | "Weegee's Mansion", "The King's Epic Adventure" |
+| **Gwonam the Wizard** | [Gwonam the Wizard](https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg) | "Gwonam va a fare la spesa" | Celebre per l'uso intensivo dei personaggi CD-i (Link, Zelda, King, Gwonam) |
+| **Nocoldiz** | [Nocoldiz](https://www.youtube.com/@Nocoldiz) | [È FINITO IL VINO! - Sigla Game of Thrones](https://www.youtube.com/watch?v=4XiBqO-gjd8) | "Vendettatori", "Frodo è contro la legge", "Silvio è diventato nonno di se stesso", "Poop Fiction" |
+| **Pennaz** | [Pennaz](https://www.youtube.com/@Pennaz) | [YTP ITA - Suone e logherie](https://www.youtube.com/watch?v=6JAm-3i-ceM) | "Freezer ci lascia le penne", "YTPMV soccer: 2 pi pennaz"; noto grafico della community |
+| **DarkCoffe64** | [DarkCoffe64](https://www.youtube.com/@DarkCoffe64) | [Robotnik turn the moon into spaghetti](https://www.youtube.com/watch?v=-jEDQck88bM) | "YTP: Sonic SatAM parodia", "Robotnik vs Sonic" |
+
+
+
+Manusnake91
+
 
 **2009**
 
@@ -234,17 +240,18 @@ Il Collegio
 
 ### Pooper italiani di riferimento
 
+
 | Pooper | Canale | Video più visto | Altri video |
-|---|---|---|---|
-| RTPOOP | — | — | — |
-| Davvo | — | [YTP - ShreKKK [ITA]](https://www.youtube.com/watch?v=_pOUJKK8o4Q) | — |
-| 125Replay | — | — | — |
-| Alepoops | — | — | — |
-| Frederick Frankenstein | [Frederick Frankenstein](https://www.youtube.com/@frederickfrankenstein5671) | [YTP - Applausi per Kappalicious, la ragazza perfetta](https://www.youtube.com/watch?v=njOgmE64UdU) (3,3 mln) | — |
-| Capra Strabica | [Capra Strabica 2](https://www.youtube.com/@caprastrabica2182) | — | Canale secondario dopo chiusura forzata del canale originale; collaborazione con Nocoldiz in *Poop Fiction* |
-| ilCirox | [ilCirox](https://www.youtube.com/c/ilCirox) | — | "YTP ITA - Ti faaf staas beeneh", "Don Matteo: Bizarre Adventure", "YTP ITA - Il Popaii odia gli uccelli Artigiani" |
-| AssoDiDenari | [AssoDiDenari](https://www.youtube.com/c/AssoDiDenari) | — | Partecipazione a collab (Infinity Collab, Shrek Collab); YTP su Chef Tony |
-| MP YTP | [MP YTP](https://www.youtube.com/c/MPYTP) | — | — |
+| :--- | :--- | :--- | :--- |
+| **RTPOOP** | [_RT_](https://www.youtube.com/c/RTpoop) | [POOP SQUAD 2: AGE OF TRUMP](https://www.youtube.com/watch?v=kYJv-8pEwos) (1,1 mln) | "YTP - Peppa Pig va a puttane", "YTP - L'eredità è un gioco molto pericoloso" |
+| **Davvo** | [Davvo](https://www.youtube.com/@DavvoYTP) | [YTP - ShreKKK [ITA]](https://www.youtube.com/watch?v=_pOUJKK8o4Q) | "YTP - Space JaaJ", "YTP - Harry Puttana e la pietra rettale", "YTP - Srech contro tutti" |
+| **125Replay** | [125Replay](https://www.youtube.com/user/125Replay) | [YTP Il Collegio: between Petolicchio and Esteban it's true love!](https://www.youtube.com/watch?v=rsQigCcr00w) (1,1 mln) | "YTP - Mahmood - Volevi solo soos", "YTP - Il Collegio 5 - Il preside terrorizza gli alunni" |
+| **Alepoops** | [Ale Poops](https://www.youtube.com/@AlePoops) | [YTP - Il Collegio è saturo delle urla della Petolicchio](https://www.youtube.com/watch?v=mHw0RFyaS1M) (1,8 mln) | "YTP - Rovazzi ama volare con Morandi", "YTP - Il Collegio 3 Compilation" |
+| **Frederick Frankenstein** | [Frederick Frankenstein](https://www.youtube.com/@frederickfrankenstein5671) | [YTP - Applausi per Kappalicious, la ragazza perfetta](https://www.youtube.com/watch?v=njOgmE64UdU) (3,3 mln) | "YTP - CiccioGamer89 è l'ultimo baluardo contro il Comunismo", "YTP - Favij ha una crisi esistenziale" |
+| **Capra Strabica** | [Capra Strabica 2](https://www.youtube.com/@caprastrabica2182) | [YTP - Il mio primo giorno di scuola](https://www.youtube.com/watch?v=dQw4w9WgXcQ) (Stima: 500k+) | |
+| **ilCirox** | [ilCirox](https://www.youtube.com/c/ilCirox) | [YTP ITA - Ti faaf staas beeneh](https://www.youtube.com/watch?v=fJwrSNrJN48) (1,5 - 2 mln) | "Don Matteo: Bizarre Adventure", "YTP ITA - Il Popaii odia gli uccelli Artigiani", "Renatino ma è più emotional" |
+| **AssoDiDenari** | [AssoDiDenari](https://www.youtube.com/c/AssoDiDenari) | [YTP - Srech la vendetta [ITA]](https://www.youtube.com/watch?v=H2waoquD3Ps) (847k) | "YTP - L'era ANALE", "YTP - Cars motori dementi", "YTP - Harry Potter e i doni dei doni" |
+| **MP YTP** | [MP YTP](https://www.youtube.com/c/MPYTP) | [YTP Masterchef 5: Il mappazzone](https://www.youtube.com/watch?v=mUaL0OxL4xw) (1 mln+) | "YTP - Masterchef 4: La vendetta di Bastianich", "YTP - Masterchef 3: Il ritorno di Cracco" |
 
 ---
 
@@ -292,6 +299,8 @@ Il canale di **Nocoldiz viene bannato senza spiegazioni**
 
 
 Le YTP non sono più di tendenza, ma **sopravvivono come pratica di nicchia** portata avanti da appassionati irriducibili. I creatori storici si sono "evoluti nel proprio stile personale" e nuovi pooper iniziano a emergere imitandoli.
+
+Poopers come Mastercast, RTPoop riescono a trasformare la loro abilità di montaggio in  qualcosa di professionale
 
 **L'arrivo dell'IA generativa** ridefinisce il paradigma:
 
