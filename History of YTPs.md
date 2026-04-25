@@ -101,20 +101,38 @@ Il fenomeno esplode nella comunità anglofona. Si formalizza il **Poopism**, il 
 ## 🟢 Era 4 — Le origini della community italiana (2009-2011)
 L'Italia scopre le YTP con qualche anno di ritardo, ma sviluppa rapidamente uno **stile autonomo** grazie alla forte tradizione televisiva nazionale e alla ricchezza di volti e tormentoni della cultura pop italiana.
 
-**Primi anni '10** — Nasce lo **YouTube Poop Italian Forum** (Forum rosso), prima vera community italiana. I pooper italiani inizialmente imitano lo stile americano, poi sviluppano un linguaggio "italico" basato su meme nostrani.
+### La nascita del "Forum Rosso"
+Agli albori degli anni '10, i pooper italiani sentono il bisogno di un luogo di ritrovo. Nasce così lo **YouTube Poop Italian Forum**, presto ribattezzato dalla community come il **"Forum Rosso"** per via della sua veste grafica. È la prima vera e propria casa per i creatori italiani. 
 
+In questa fase embrionale, i pooper nostrani iniziano imitando le tecniche americane (basate su *stutter*, *ear rape* e *word splicing* di fonti estere come i giochi CD-i), per poi virare drasticamente verso un linguaggio puramente "italico", fondato su meme e fenomeni locali.
 
-Mondo Emo di bassman, Ziotok83, 
-Pennaz https://www.youtube.com/@Pennaz grafico del forum
+### I Pionieri e l'Amministrazione
+In questo periodo emergono figure fondamentali per la definizione dello stile italiano:
 
-admin storici del forum
-Furio the shopkeeper TheLaughingMan Caste. Nicckarion UtenteMacSenzaMac manusnake91
+**Pooper italiani di riferimento:**
+Felix 96 https://www.youtube.com/@tracFelix96trac
+VoodooChild
+blazor67
+* **bassman85** https://www.youtube.com/@bassman85x Mondo emo https://www.youtube.com/watch?v=6qXBHVssbg0
+ **Ziotok83**:  https://www.youtube.com/@ZioTok83/videos Youtube merda : il capitano incita la ciurma a sballarsi con la vinavil
+ mr.nintendo (canale chiuso)
+ Elia1995 https://www.youtube.com/@EliaForce1984ita
+ Weeegee64 https://www.youtube.com/@Mario6493
+ Gwonam the Wizard https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg
+ rikimaru.HAL
+ - **Nocoldiz** —r *Vendettatori* *È finito il vino*,*Frodo è contro la legge*, *Silvio è diventato nonno di se stesso*
+
+ * **Pennaz** ([Canale YouTube](https://www.youtube.com/@Pennaz)): Figura chiave non solo come creatore, ma come **grafico ufficiale del forum**, contribuendo a dare un'identità visiva alla nascente community.
+ Weegee64 https://www.youtube.com/@Mario6493 https://www.youtube.com/watch?v=PHQWtOAGrA4
+The Man-Erg
+DarkCoffe64 https://www.youtube.com/watch?v=-jEDQck88bM#
+
+A mantenere l'ordine e a guidare la community c'era un gruppo di **admin storici**, veri e propri curatori dell'estetica e delle regole della YTP ITA delle origini:
+> **Il team di amministrazione:** *Furio the shopkeeper*, *TheLaughingMan*, *Caste.*, *Nicckarion*, *UtenteMacSenzaMac*, *Zebrick* e *manusnake91*.
+
 
 
 ---
-
-
-
 
 ## 🟢 Era 5 — L'Età dell'Oro Italiana e lo Scisma (2011 - 2018)
 **Caratteristiche distintive del filone italiano:**
@@ -122,6 +140,7 @@ Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperim
 
 - **Manifestazione degli autori nei video** (Mastercast che interagisce con i video cameo in green screen, video-diari) — al contrario della cultura anonima americana
 - Forte focus sulla **satira politica** (comizi, interviste TV)
+- Personaggi diventati famosi grazie alle YTP su di loro (Prof. Testoh, Matteo Montesi)
 - Uso massiccio del **trash televisivo italiano** (Andrea Dipré, Telemarket, Roberto Baffo, Chef Tony)
 - **Universi narrativi interni** persistenti tra video diversi
 - **Collab** tendenza a fare collab
@@ -129,12 +148,12 @@ Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperim
 
 **Pooper italiani di riferimento:**
 
-- **Nocoldiz** —r *Vendettatori* *È finito il vino*,*Frodo è contro la legge*, *Silvio è diventato nonno di se stesso*
 - **Revergo** — creatore del meme  **Yee** estratto da *Dinosauri* (Dingo Pictures, 2000); autore di *A for Asthma* su Roberto Baffo.
 - **MasterCast** — *Mike Wazowski fa uso di bamba*, *Kuzco È Un Folle*.
 - **TottiBest** — *La vera storia di Harry Potter* (90% delle scene del primi episodio)
 - **Stew Barz** — *Gaston ha i peli esplosivi*.
-- **VVoodochild** - *Le megatoniche avventure di VVoodochild**
+- **Christianice** — **.
+- **Jakkomatto** - ***
 - **Clodd97** — *Ah non è un pezzo unico?* su Alessandro Orlando di Telemarket.
 
 
