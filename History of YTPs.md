@@ -172,7 +172,7 @@ Ecco la tabella completa che unisce i dati precedenti con quelli dei nuovi poope
 | Pooper | Canale | Video più visto | Altri video |
 |---|---|---|---|
 | **Revergo** | [revergo](https://www.youtube.com/@revergo) | [Yee](https://www.youtube.com/watch?v=q6EoRBvdVPQ) (101 mln) | "A for Asthma" |
-| **svegliamiii** | [svegliamiii](https://www.youtube.com/@svegliamiii) | [YTP ITA - Settimo Ciuelo - Marijuana](https://youtu.be/KVfefa1174U?si=oWefYUVJOkUtoRAe) (100K) | "A for Asthma" |
+| **svegliamiii** | [svegliamiii](https://www.youtube.com/@svegliamiii) | [YTP ITA - Settimo Ciuelo - Marijuana](https://youtu.be/KVfefa1174U?si=oWefYUVJOkUtoRAe) (100K) |  |
 | **MasterCast** | [MasterCast](https://www.youtube.com/@MastercastPresident) | [YTP: Il Signore Del SAS](https://www.youtube.com/watch?v=RInYvE6FidY) (1,2 mln) | "Mike Wazowski fa uso di bamba", "Kuzco È Un Folle" |
 | **Christianice** | [ChristianIce](https://www.youtube.com/user/ChristianIce) | [Enrico Pasquale Pratticò - Sono un ragazzo carino (Remix)](https://www.youtube.com/watch?v=pAnVInh6F-U) (5,8 mln) | "L'INFERNO DEL FOLLETTO", "Toni Iwobi - L'Ora Esatta Di Casa Loro" |
 | **MrPoldoAknar** | [Poldo](https://www.youtube.com/@mrpoldoakbar2849) | [Tutti si uniscono alla Battaglia!](https://www.youtube.com/watch?v=MN1Kvk0VAUM) (1,2 mln) | "YTP ITA - Me Contro Te contro Voi contro quegli altri" |
@@ -199,7 +199,7 @@ https://www.youtube.com/watch?v=ILnwlHufwfQ
 Nel **2011** , divergenze interne, differenze di visione sul "purismo" delle poop e normali attriti da community portano a un vero e proprio scisma. Una fazione si distacca dal Forum Rosso per fondare un progetto rivale: nasce così **Il Forum Blu**.
 
 Guidato da **FrankTreeps** e **VoodooChild**, il Forum Blu si propone come un'alternativa, attirando nuovi talenti e creando una spaccatura netta nella scena italiana.
-Questa divisione dà il via a un periodo noto come la **"Guerra tra forum"**. Non si trattava solo di litigi testuali (come testimoniato dallo storico thread [Guerra tra forum](https://youtubepoopita.forumfree.it/?t=57126077)), ma di vere e proprie sfide a colpi di video, *dissing* nascosti nei montaggi e una forte competizione per stabilire quale fosse la vera élite del pooping italiano. Questa rivalità, seppur accesa, ebbe l'effetto collaterale di alzare drasticamente l'asticella tecnica e creativa dei video prodotti.
+Questa divisione dà il via a un periodo noto come la **"Guerra tra forum"**. Non si trattava solo di litigi testuali (come testimoniato dallo storico thread [Guerra tra forum](https://youtubepoopita.forumfree.it/?t=57126077)), ma una forte competizione per stabilire quale fosse il canone del pooping italiano. Questa rivalità, seppur accesa, ebbe l'effetto collaterale di alzare drasticamente l'asticella tecnica e creativa dei video prodotti.
 
 La tensione durò per mesi, fino a quando le due fazioni si resero conto che la divisione stava limitando il potenziale della community. La svolta arriva con la **[Proposta di pace](https://youtubepoopita.forumfree.it/?t=59604480)**: un momento storico di diplomazia digitale che portò a una tregua e, successivamente, a una progressiva riunificazione degli intenti. Questa pace segnò il vero inizio dell'apice dell'Età dell'Oro, permettendo ai migliori talenti di entrambe le sponde di collaborare a progetti giganteschi che hanno fatto la storia di YouTube Italia.
 
