@@ -714,6 +714,49 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
     print(f"  Index:       {os.path.abspath(index.filepath)}")
 
 
+def do_stats(index):
+    from collections import defaultdict
+
+    if not index.data:
+        print("  Index is empty. Run 'Update index' first.")
+        return
+
+    channels = defaultdict(lambda: {"total": 0, "downloaded": 0, "unavailable": 0,
+                                     "pending": 0, "failed": 0, "sections": set()})
+
+    for e in index.data.values():
+        name = e.get("channel_name") or "(unknown)"
+        ch = channels[name]
+        ch["total"] += 1
+        ch[e.get("status", "pending")] += 1
+        for s in e.get("sections", []):
+            ch["sections"].add(s)
+
+    rows = sorted(channels.items(), key=lambda x: x[1]["total"], reverse=True)
+
+    col_ch  = max(len("Channel"), max(len(n) for n, _ in rows))
+    col_ch  = min(col_ch, 40)
+
+    header = (f"  {'Channel':<{col_ch}}  {'Total':>5}  {'DL':>4}  "
+              f"{'Pend':>4}  {'N/A':>4}  {'Fail':>4}  Sections")
+    sep    = "  " + "─" * (len(header) - 2)
+
+    print()
+    print(header)
+    print(sep)
+    for name, c in rows:
+        truncated = name[:col_ch]
+        secs = ", ".join(sorted(c["sections"]))
+        print(f"  {truncated:<{col_ch}}  {c['total']:>5}  {c['downloaded']:>4}  "
+              f"{c['pending']:>4}  {c['unavailable']:>4}  {c['failed']:>4}  {secs}")
+
+    print(sep)
+    totals = index.stats()
+    print(f"  {'TOTAL':<{col_ch}}  {totals['total']:>5}  {totals['downloaded']:>4}  "
+          f"{totals['pending']:>4}  {totals['unavailable']:>4}  {totals.get('failed', 0):>4}")
+    print()
+
+
 # ── Menu helpers ──────────────────────────────────────────────────────────────
 
 def ask(prompt, choices):
