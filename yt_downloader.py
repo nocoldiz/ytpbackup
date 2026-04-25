@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup
 
 # ── Sections to scan ────────────────────────"Risorse","Old sources","Tutorial per il pooping"──────────────────────────────────
 
-SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te","YTPMV dimportazione","YTP da internet"]
+SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te","YTPMV dimportazione","YTP da internet"] ##"Risorse","Old sources","Tutorial per il pooping
 
 CHANNEL_KEYWORDS = re.compile(
     r'(?i)(YTP|YTPMV|Collab|Youtube\s+poop|YT\s+Poop|Poop'
