@@ -22,9 +22,15 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 
-# ── Sections to scan ──────────────────────────────────────────────────────────
+# ── Sections to scan ────────────────────────"Risorse","Old sources","Tutorial per il pooping"──────────────────────────────────
 
-SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te","YTPMV dimportazione","YTP da internet","Risorse","Old sources","Tutorial per il pooping"]
+SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te","YTPMV dimportazione","YTP da internet"]
+
+CHANNEL_KEYWORDS = re.compile(
+    r'(?i)(YTP|YTPMV|Collab|Youtube\s+poop|YT\s+Poop|Poop'
+    r'|matteo\s+montesi|avventure|Zeb|Favij|Testoh|Pingu'
+    r'|Dipr[eè]|Bello\s+Figo|Yotobi|He[\s-]?Man|Berlusconi|Muniz)'
+)
 
 DEFAULT_SITE_DIR = "./site_mirror"
 DEFAULT_VIDEO_DIR = "./videos"
@@ -68,6 +74,12 @@ def extract_video_id(url):
 
 def canonical_yt_url(vid):
     return f"https://www.youtube.com/watch?v={vid}"
+
+
+def channel_videos_url(channel_url):
+    url = channel_url.rstrip("/")
+    url = re.sub(r'/(videos|shorts|streams|playlists|about|community|featured)$', '', url)
+    return url + "/videos"
 
 
 def safe_filename(name, max_len=80):
@@ -560,6 +572,148 @@ def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
     print(f"  Index:       {os.path.abspath(index.filepath)}")
 
 
+def do_scrape_channels(index):
+    channel_urls = {}
+    for e in index.data.values():
+        url = e.get("channel_url")
+        if url and url not in channel_urls:
+            channel_urls[url] = e.get("channel_name") or url
+
+    if not channel_urls:
+        print("  No channels found in index. Run 'Update index' first.")
+        return
+
+    print(f"  Found {len(channel_urls)} unique channel(s).")
+    new_total = 0
+
+    for ch_url, ch_name in channel_urls.items():
+        print(f"\n  Scraping: {ch_name}")
+        videos_url = channel_videos_url(ch_url)
+
+        try:
+            r = subprocess.run(
+                ["yt-dlp", "--flat-playlist", "--dump-json",
+                 "--no-warnings", "--socket-timeout", "30", videos_url],
+                capture_output=True, text=True, timeout=300,
+            )
+            lines = [l for l in r.stdout.splitlines() if l.strip().startswith("{")]
+            print(f"  {len(lines)} videos found on channel.")
+
+            new_count = 0
+            for line in lines:
+                try:
+                    d = json.loads(line)
+                    vid_id = d.get("id")
+                    title = d.get("title") or ""
+                    if not vid_id:
+                        continue
+                    if not CHANNEL_KEYWORDS.search(title):
+                        continue
+                    was_new = vid_id not in index.data
+                    index.add_video(vid_id, "Youtube", f"channel_scrape:{ch_url}", title)
+                    e = index.data[vid_id]
+                    if not e.get("title"):
+                        index.set_metadata(vid_id, title=title,
+                                           channel_name=ch_name, channel_url=ch_url)
+                    if was_new:
+                        new_count += 1
+                        new_total += 1
+                except (json.JSONDecodeError, KeyError):
+                    continue
+
+            print(f"  Matched: {new_count} new YTP-related video(s) added to 'Youtube' section.")
+        except subprocess.TimeoutExpired:
+            print(f"  [!] Timeout scraping {ch_url}")
+        except Exception as ex:
+            print(f"  [!] Error: {ex}")
+
+        index.save()
+
+    print(f"\n  Done. {new_total} new video(s) added to 'Youtube' section.")
+    st = index.stats()
+    youtube_total = sum(
+        1 for e in index.data.values() if "Youtube" in e.get("sections", [])
+    )
+    print(f"  Total videos in 'Youtube' section: {youtube_total}  (index total: {st['total']})")
+
+
+def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
+    if retry_failed:
+        for e in index.data.values():
+            if "Youtube" in e.get("sections", []) and e["status"] == "failed":
+                e["status"] = "pending"
+        index.save()
+        print("  Cleared failed status for 'Youtube' section — will retry.\n")
+
+    pending = [
+        vid for vid, e in index.data.items()
+        if "Youtube" in e.get("sections", []) and e["status"] == "pending"
+    ]
+
+    if not pending:
+        print("  Nothing to download in 'Youtube' section.")
+        print("  Run 'Scrape channels' first, or everything is already downloaded.")
+        return
+
+    total = len(pending)
+    print(f"  {total} 'Youtube' section video(s) pending.\n")
+
+    ok_count = skip_count = unavail_count = err_count = 0
+    out_dir = os.path.join(video_dir, "Youtube")
+
+    for i, vid in enumerate(pending, 1):
+        e = index.data[vid]
+        label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
+
+        print(f"  [{i}/{total}] {label[:60]}")
+        if e.get("channel_name"):
+            print(f"  Channel: {e['channel_name']}  {e.get('channel_url', '')}")
+        print(f"  URL:     {canonical_yt_url(vid)}")
+
+        status, local_file, dl_title = download_video(
+            vid, out_dir, yt_format, rate_limit, i, total,
+        )
+
+        if status == "ok":
+            rel = os.path.relpath(local_file, ".") if local_file else None
+            index.set_downloaded(vid, rel, dl_title)
+            print(f"  ✓ {os.path.basename(local_file or '')}")
+            ok_count += 1
+        elif status == "exists":
+            if not index.is_done(vid):
+                rel = os.path.relpath(local_file, ".") if local_file else None
+                index.set_downloaded(vid, rel, dl_title)
+            print(f"  = already downloaded")
+            skip_count += 1
+        elif status == "unavailable":
+            index.set_unavailable(vid)
+            print("  ⊘ Unavailable (removed / private)")
+            unavail_count += 1
+        else:
+            index.set_failed(vid)
+            print("  ✗ Failed")
+            err_count += 1
+
+        index.save()
+
+        done = ok_count + skip_count + unavail_count + err_count
+        ov_pct = done / total * 100
+        ov_bar = bar(ov_pct, 30)
+        print(f"  Overall: {ov_bar}  {done}/{total}  "
+              f"dl={ok_count} skip={skip_count} err={err_count}")
+        print()
+
+        if status == "ok":
+            time.sleep(1)
+
+    print("─" * 54)
+    print(f"  Downloaded:  {ok_count}")
+    print(f"  Skipped:     {skip_count}  (already on disk)")
+    print(f"  Unavailable: {unavail_count}  (removed / private)")
+    print(f"  Failed:      {err_count}  (re-run to retry)")
+    print(f"  Index:       {os.path.abspath(index.filepath)}")
+
+
 # ── Menu helpers ──────────────────────────────────────────────────────────────
 
 def ask(prompt, choices):
@@ -607,11 +761,19 @@ def main():
     print("  2  Download indexed videos")
     print("       Download all pending videos in the index.")
     print()
-    print("  3  Both  (update index, then download)")
+    print("  3  Scrape channels")
+    print("       For every channel in the index, fetch all video titles")
+    print("       and add YTP / YTPMV / Collab / Youtube poop matches")
+    print("       to a new 'Youtube' section.")
+    print()
+    print("  4  Download 'Youtube' section")
+    print("       Download only videos scraped via mode 3.")
+    print()
+    print("  5  Both  (update index, then download all)")
     print()
     print("  q  Quit")
     print()
-    choice = ask("  Choice [1/2/3/q]: ", {"1", "2", "3", "q"})
+    choice = ask("  Choice [1/2/3/4/5/q]: ", {"1", "2", "3", "4", "5", "q"})
 
     if choice == "q":
         sys.exit(0)
@@ -621,12 +783,25 @@ def main():
     index = VideoIndex(args.video_dir)
     index.load()
 
-    if choice in ("1", "3"):
+    if choice in ("1", "5"):
         do_update_index(index, args.site_dir)
         print()
 
-    if choice in ("2", "3"):
+    if choice == "3":
+        do_scrape_channels(index)
+        print()
+
+    if choice in ("2", "5"):
         do_download(
+            index,
+            args.video_dir,
+            args.format,
+            args.rate_limit,
+            args.retry_failed,
+        )
+
+    if choice == "4":
+        do_download_youtube(
             index,
             args.video_dir,
             args.format,

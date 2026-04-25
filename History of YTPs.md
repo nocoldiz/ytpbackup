@@ -127,6 +127,9 @@ blazor67
 The Man-Erg
 DarkCoffe64 https://www.youtube.com/watch?v=-jEDQck88bM#
 
+
+Ziotok conia la dicitura "Youtube merda" in alternativa alle YTP
+
 A mantenere l'ordine e a guidare la community c'era un gruppo di **admin storici**, veri e propri curatori dell'estetica e delle regole della YTP ITA delle origini:
 > **Il team di amministrazione:** *Furio the shopkeeper*, *TheLaughingMan*, *Caste.*, *Nicckarion*, *UtenteMacSenzaMac*, *Zebrick* e *manusnake91*.
 
@@ -152,7 +155,10 @@ Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperim
 - **MasterCast** — *Mike Wazowski fa uso di bamba*, *Kuzco È Un Folle*.
 - **TottiBest** — *La vera storia di Harry Potter* (90% delle scene del primi episodio)
 - **Stew Barz** — *Gaston ha i peli esplosivi*.
+- **PierluPoops**
 - **Christianice** — **.
+- **Ziomeso** - **.
+- **Julaoa** - 
 - **Jakkomatto** - ***
 - **Clodd97** — *Ah non è un pezzo unico?* su Alessandro Orlando di Telemarket.
 
@@ -166,6 +172,7 @@ Guidato da figure di spicco come **FrankTreeps** e **VoodooChild**, il Forum Blu
 Questa divisione dà il via a un periodo noto come la **"Guerra tra forum"**. Non si trattava solo di litigi testuali (come testimoniato dallo storico thread [Guerra tra forum](https://youtubepoopita.forumfree.it/?t=57126077)), ma di vere e proprie sfide a colpi di video, *dissing* nascosti nei montaggi e una forte competizione per stabilire quale fosse la vera élite del pooping italiano. Questa rivalità, seppur accesa, ebbe l'effetto collaterale di alzare drasticamente l'asticella tecnica e creativa dei video prodotti.
 
 La tensione durò per mesi, fino a quando le due fazioni si resero conto che la divisione stava limitando il potenziale della community. La svolta arriva con la **[Proposta di pace](https://youtubepoopita.forumfree.it/?t=59604480)**: un momento storico di diplomazia digitale che portò a una tregua e, successivamente, a una progressiva riunificazione degli intenti. Questa pace segnò il vero inizio dell'apice dell'Età dell'Oro, permettendo ai migliori talenti di entrambe le sponde di collaborare a progetti giganteschi che hanno fatto la storia di YouTube Italia.
+
 
 
 
@@ -202,6 +209,12 @@ La tensione durò per mesi, fino a quando le due fazioni si resero conto che la 
 MLG
 
 ## 🟠 Era 6 — La Stagnazione e i Ban (2019 - 2022)
+
+
+PARLARE DI FREDERICK FRANKESTEIN
+YOUTUBE GRAFT
+
+
 
 ### YouTube cambia, le YTP soffrono
 
