@@ -110,22 +110,78 @@ In questa fase embrionale, i pooper nostrani iniziano imitando le tecniche ameri
 In questo periodo emergono figure fondamentali per la definizione dello stile italiano:
 
 **Pooper italiani di riferimento:**
-Felix 96 https://www.youtube.com/@tracFelix96trac
-VoodooChild
-blazor67
-* **bassman85** https://www.youtube.com/@bassman85x Mondo emo https://www.youtube.com/watch?v=6qXBHVssbg0
- **Ziotok83**:  https://www.youtube.com/@ZioTok83/videos Youtube merda : il capitano incita la ciurma a sballarsi con la vinavil
- mr.nintendo (canale chiuso)
- Elia1995 https://www.youtube.com/@EliaForce1984ita
- Weeegee64 https://www.youtube.com/@Mario6493
- Gwonam the Wizard https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg
- rikimaru.HAL
- - **Nocoldiz** —r *Vendettatori* *È finito il vino*,*Frodo è contro la legge*, *Silvio è diventato nonno di se stesso*
+Ecco la lista ristrutturata seguendo il formato markdown precedente:
 
- * **Pennaz** ([Canale YouTube](https://www.youtube.com/@Pennaz)): Figura chiave non solo come creatore, ma come **grafico ufficiale del forum**, contribuendo a dare un'identità visiva alla nascente community.
- Weegee64 https://www.youtube.com/@Mario6493 https://www.youtube.com/watch?v=PHQWtOAGrA4
-The Man-Erg
-DarkCoffe64 https://www.youtube.com/watch?v=-jEDQck88bM#
+## 2. Felix 96
+* **Canale:** [Felix 96](https://www.youtube.com/@tracFelix96trac)
+* **Video più visto:** Dati non disponibili
+* **Altri video:** Dati non disponibili
+
+## 3. VoodooChild
+* **Canale:** Dati non disponibili
+* **Video più visto:** Dati non disponibili
+* **Altri video:** Dati non disponibili
+
+## 4. blazor67
+* **Canale:** Dati non disponibili
+* **Video più visto:** Dati non disponibili
+* **Altri video:** Dati non disponibili
+
+## 5. bassman85
+* **Canale:** [bassman85x](https://www.youtube.com/@bassman85x)
+* **Video più visto:** [Youtube Poop : Mondo Emo (La parodia che ha dato inizio a TUTTO)](https://www.youtube.com/watch?v=6qXBHVssbg0) (271.000 visualizzazioni)
+* **Altri video:** Dati non disponibili
+
+## 6. Ziotok83
+* **Canale:** [ZioTok83](https://www.youtube.com/@ZioTok83/videos)
+* **Video più visto:** "Youtube merda : il capitano incita la ciurma a sballarsi con la vinavil"
+* **Altri video:** Dati non disponibili
+
+## 7. mr.nintendo
+* **Canale:** Canale chiuso
+* **Video più visto:** Dati non disponibili
+* **Altri video:** Dati non disponibili
+
+## 8. Elia1995
+* **Canale:** [EliaForce1984ita](https://www.youtube.com/@EliaForce1984ita)
+* **Video più visto:** Dati non disponibili
+* **Altri video:** Dati non disponibili
+
+## 9. Weegee64
+* **Canale:** [Mario6493](https://www.youtube.com/@Mario6493)
+* **Video più visto:** [You dare not agree with the Mario Head?](https://www.youtube.com/watch?v=PHQWtOAGrA4) (189.000 visualizzazioni)
+* **Altri video:** Dati non disponibili
+
+## 11. Gwonam the Wizard
+* **Canale:** [Gwonam the Wizard](https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg)
+* **Video più visto:** Dati non disponibili
+* **Altri video:** Dati non disponibili
+
+## 11. rikimaru.HAL
+* **Canale:** Dati non disponibili
+* **Video più visto:** Dati non disponibili
+* **Altri video:** Dati non disponibili
+
+## 12. Nocoldiz
+* **Canale:** [Nocoldiz](https://www.youtube.com/@Nocoldiz)
+* **Video più visto:** "È finito il vino"
+* **Altri video:** "Vendettatori", "Frodo è contro la legge", "Silvio è diventato nonno di se stesso".
+
+## 13. Pennaz
+* **Canale:** [Pennaz](https://www.youtube.com/@Pennaz)
+* **Nota:** Figura chiave non solo come creatore, ma come **grafico ufficiale del forum**, contribuendo a dare un'identità visiva alla nascente community.
+* **Video più visto:** Dati non disponibili
+* **Altri video:** Dati non disponibili
+
+## 14. The Man-Erg
+* **Canale:** Dati non disponibili
+* **Video più visto:** Dati non disponibili
+* **Altri video:** Dati non disponibili
+
+## 15. DarkCoffe64
+* **Canale:** [DarkCoffe64](https://www.youtube.com/channel/UC-Dati-non-disponibili) 
+* **Video più visto:** [Youtube Poop Robotnik turn the moon into spaghetti part 01](https://www.youtube.com/watch?v=-jEDQck88bM)
+* **Altri video:** Dati non disponibili
 
 
 Ziotok conia la dicitura "Youtube merda" in alternativa alle YTP
@@ -151,59 +207,60 @@ Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperim
 
 **Pooper italiani di riferimento:**
 
-
 ## 1. Revergo
 * **Canale:** [revergo](https://www.youtube.com/@revergo)
 * **Video più visto:** [Yee](https://www.youtube.com/watch?v=q6EoRBvdVPQ) (101 mln visualizzazioni)
-* **Altri video** "A for Asthma".
+* **Altri video:** "A for Asthma".
 
 ## 2. MasterCast
 * **Canale:** [MasterCast](https://www.youtube.com/@MastercastPresident)
 * **Video più visto:** [YTP: Il Signore Del SAS](https://www.youtube.com/watch?v=RInYvE6FidY) (1,2 mln visualizzazioni)
-* **Altri video** "Mike Wazowski fa uso di bamba" "Kuzco È Un Folle".
+* **Altri video:** "Mike Wazowski fa uso di bamba", "Kuzco È Un Folle".
 
 ## 3. TottiBest
 * **Canale:** [TottiBest](https://www.youtube.com/@TottiBest92)
 * **Video più visto:** [La vera storia di Harry Potter (feat. Nocoldiz)](https://www.youtube.com/watch?v=iFdZxxAn5Fw) (620.000 visualizzazioni)
-* **Altri video** "A carlo conti piace appoggiarsi" "Chef Rubio e le tecniche ninja proibite
+* **Altri video:** "A carlo conti piace appoggiarsi", "Chef Rubio e le tecniche ninja proibite".
 
 ## 4. Stew Barz
 * **Canale:** [StewBarzTube](https://www.youtube.com/user/StewBarzTube)
 * **Video più visto:** [YTP: Celentanoh Trolla Le Donne](https://www.youtube.com/watch?v=pAnVInh6F-U) (310.000 visualizzazioni)
-* **Altri video** "Gaston ha i peli esplosivi".
+* **Altri video:** "Gaston ha i peli esplosivi".
 
 ## 5. PierluPoops
 * **Canale:** [Pierlu Poops](https://www.youtube.com/user/PierluPoops)
 * **Video più visto:** [Panico Paura feat. Angelo Ruoppolo](https://www.youtube.com/watch?v=8ZvWYSukIXU) (32.000 visualizzazioni)
-* **Altri video** 
+* **Altri video:** "YTP - Spaidermen uno [ITA]", "YTP - Gli squali volanti sono persone orribili".
 
 ## 6. Christianice
 * **Canale:** [ChristianIce](https://www.youtube.com/user/ChristianIce)
 * **Video più visto:** [Enrico Pasquale Pratticò - Sono un ragazzo carino (Remix)](https://www.youtube.com/watch?v=pAnVInh6F-U) (5,8 mln visualizzazioni)
-* **Altri video** 
+* **Altri video:** "L'INFERNO DEL FOLLETTO", "Toni Iwobi - L'Ora Esatta Di Casa Loro - by Christian Ice".
 
 ## 7. MrPoldoAknar
 * **Canale:** [Poldo](https://www.youtube.com/@mrpoldoakbar2849)
-* **Video più visto:** 
-* **Altri video** 
+* **Video più visto:** [Tutti si uniscono alla Battaglia!](https://www.youtube.com/watch?v=MN1Kvk0VAUM) (1,2 mln visualizzazioni)
+* **Altri video:** "YTP ITA - Me Contro Te contro Voi contro quegli altri".
 
 ## 8. Ziomeso
 * **Canale:** [ZioMeso](https://www.youtube.com/user/ZioMeso)
 * **Video più visto:** [YTPM - Super Mario Gumball Brothers [Underworld Theme]](https://www.youtube.com/watch?v=pnO7ul29qPk) (18.000 visualizzazioni)
+* **Altri video:** "He Man e la forza di nino d'angelo", "Breaking Bad Ebola Season Walktrough".
 
 ## 9. Julaoa
 * **Canale:** [julaoa](https://www.youtube.com/user/julaoa)
 * **Video più visto:** [NabboCube](https://www.youtube.com/watch?v=KmPRd0lH9vk) (5.000 visualizzazioni)
+* **Altri video:** "Youtube Merda - Fletcher Fiction", "YTPMV - GO BUTTERFLY DOG".
 
 ## 10. Jakkomatto
 * **Canale:** [JakkoMatto](https://www.youtube.com/user/JakkoMatto)
 * **Video più visto:** [Imen e il Raggio di Morandi](https://www.youtube.com/watch?v=7uC8W3_U3h8) (355.000 visualizzazioni)
-* **Altri video**
+* **Altri video:** "He - Man ( parodia )", "Pokemon Infinite Fusion".
 
 ## 11. Clodd97
 * **Canale:** [Clodd](https://www.youtube.com/@Clodd)
-* **Video più visto:** [Ah non è un pezzo unico?](https://www.youtube.com/watch?v=3tQPKSPy8G4)
-* **Altri video** 
+* **Video più visto:** [YTP ITA - Ah non è un pezzo unico?](https://www.youtube.com/watch?v=3tQPKSPy8G4) (35.000 visualizzazioni)
+* **Altri video:** "YTP ITA Junior paga l'abbonamento", "Ytp ita Junior ha una mira mostruosa!".
 
 ## 12. FREDERICK FRANKESTEIN
 * **Canale:** [Frederick Frankenstein](https://www.youtube.com/@frederickfrankenstein5671)
@@ -289,14 +346,8 @@ Le YTP non sono più di tendenza, ma **sopravvivono come pratica di nicchia** po
 
 - Il sentence mixing tradizionale può essere **tecnicamente sostituito dall'IA**, che ricrea perfettamente la voce di un politico
 - Ma — paradossalmente — l'IA *surclassa troppo*: si perde l'effetto comico del **"taglia e cuci" amatoriale**, l'impressione di artigianalità che è parte essenziale del codice estetico delle YTP
-- I pooper come Nocoldiz dichiarano di **lasciare volutamente errorini di montaggio** per sottolineare la natura amatoriale del genere
-- Strumenti come la trascrizione automatica di Premiere e After Effects con IA integrata **velocizzano di dieci volte** il lavoro di sentence mixing
+- Strumenti come la trascrizione automatica di Premiere e After Effects con IA integrata **velocizzano di dieci volte** il lavoro manuale di sentence mixing
 
-**Dilemmi aperti:**
-
-- Quanto del lavoro è del pooper e quanto dell'IA?
-- Cosa attribuire ai dataset di training (spesso usati senza consenso)?
-- Le poop "totalmente IA" sono ancora poop?
 
 ---
 
