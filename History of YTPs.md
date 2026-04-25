@@ -138,13 +138,13 @@ Ecco la tabella aggiornata con i dati dei riferimenti storici e dei pooper della
 | **mr.nintendo** | *Canale chiuso* | "YTP: Link vs Gwonam" | Uno dei pionieri assoluti; i suoi video sono conservati in vari archivi di "reupload" |
 | **Elia1995** | [Elìa1995](https://www.youtube.com/@EliaForce1984ita) | [YTP - Le follie dell'imperatore: L'impero colpisce ancora](https://www.youtube.com/watch?v=unlRb4unuzE) | "YTP - Shrek", "YTP - Winnie the Pooh e l'albero del miele" |
 | **Weegee64** | [Mario6493](https://www.youtube.com/@Mario6493) | [You dare not agree with the Mario Head?](https://www.youtube.com/watch?v=PHQWtOAGrA4) (189K) | "Weegee's Mansion", "The King's Epic Adventure" |
-| **Gwonam the Wizard** | [Gwonam the Wizard](https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg) | "Gwonam va a fare la spesa" | Celebre per l'uso intensivo dei personaggi CD-i (Link, Zelda, King, Gwonam) |
+| **Gwonam the Wizard** | [Gwonam the Wizard](https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg) | "Gwonam va a fare la spesa" | |
 | **Nocoldiz** | [Nocoldiz](https://www.youtube.com/@Nocoldiz) | [È FINITO IL VINO! - Sigla Game of Thrones](https://www.youtube.com/watch?v=4XiBqO-gjd8) | "Vendettatori", "Frodo è contro la legge", "Silvio è diventato nonno di se stesso", "Poop Fiction" |
 | **Pennaz** | [Pennaz](https://www.youtube.com/@Pennaz) | [YTP ITA - Suone e logherie](https://www.youtube.com/watch?v=6JAm-3i-ceM) | "Freezer ci lascia le penne", "YTPMV soccer: 2 pi pennaz"; noto grafico della community |
 | **DarkCoffe64** | [DarkCoffe64](https://www.youtube.com/@DarkCoffe64) | [Robotnik turn the moon into spaghetti](https://www.youtube.com/watch?v=-jEDQck88bM) | "YTP: Sonic SatAM parodia", "Robotnik vs Sonic" |
-
-
-
+TheFilippoop
+Tanibbe
+Barsay
 Manusnake91
 
 
@@ -189,7 +189,9 @@ Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperim
 | Julaoa | [julaoa](https://www.youtube.com/user/julaoa) | [NabboCube](https://www.youtube.com/watch?v=KmPRd0lH9vk) (5K) | "Youtube Merda - Fletcher Fiction", "YTPMV - GO BUTTERFLY DOG" |
 | Jakkomatto | [JakkoMatto](https://www.youtube.com/user/JakkoMatto) | [Imen e il Raggio di Morandi](https://www.youtube.com/watch?v=7uC8W3_U3h8) (355K) | "He - Man ( parodia )", "Pokemon Infinite Fusion" |
 | Clodd97 | [Clodd](https://www.youtube.com/@Clodd) | [YTP ITA - Ah non è un pezzo unico?](https://www.youtube.com/watch?v=3tQPKSPy8G4) (35K) | "YTP ITA Junior paga l'abbonamento", "Ytp ita Junior ha una mira mostruosa!" |
-
+Stew Barz
+UtenteMac SenzaMac
+Barsay
 **2011**
 * [**Silvio è diventato nonno di se stesso**](https://www.youtube.com/watch?v=ggEwv9ATvpk) *(Nocoldiz)*
 
