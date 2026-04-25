@@ -733,44 +733,68 @@ class ForumScraper:
         self.save_state()
         log.info(f"  ✓ Saved {pages_saved} page(s)")
 
+    def _thread_on_disk(self, section_dir, tid, title):
+        """Return True if at least one saved file exists for this thread."""
+        safe_title = safe_filename(title)
+        if os.path.exists(os.path.join(section_dir, f"{tid}_{safe_title}.html")):
+            return True
+        subdir = os.path.join(section_dir, f"{tid}_{safe_title}")
+        if os.path.isdir(subdir) and any(
+            f.startswith("page_") and f.endswith(".html")
+            for f in os.listdir(subdir)
+        ):
+            return True
+        # fallback: match by tid prefix in case stored title differs
+        try:
+            for entry in os.listdir(section_dir):
+                if entry.startswith(f"{tid}_") or entry == f"{tid}.html":
+                    full = os.path.join(section_dir, entry)
+                    if os.path.isfile(full):
+                        return True
+                    if os.path.isdir(full) and any(
+                        f.startswith("page_") for f in os.listdir(full)
+                    ):
+                        return True
+        except OSError:
+            pass
+        return False
+
+    def _restore_missing_threads(self):
+        """Remove from threads_done any thread whose files are absent on disk."""
+        print("\n" + "─" * 70)
+        print("  CHECKING THREADS_DONE AGAINST DISK")
+        print("─" * 70)
+        total_restored = 0
+        for sec_name, _ in self.section_list:
+            ss = self.section_state(sec_name)
+            if not ss["threads_done"]:
+                continue
+            section_dir = os.path.join(self.output_dir, safe_filename(sec_name))
+            title_map = dict(zip(ss["threads_found"][::2], ss["threads_found"][1::2]))
+            missing = [
+                t_url for t_url in ss["threads_done"]
+                if not self._thread_on_disk(
+                    section_dir, get_thread_id(t_url),
+                    title_map.get(t_url, f"Thread {get_thread_id(t_url)}")
+                )
+            ]
+            if missing:
+                log.info(f"  📁 {sec_name}: {len(missing)} missing from disk — will re-fetch")
+                for u in missing:
+                    ss["threads_done"].remove(u)
+                total_restored += len(missing)
+            else:
+                log.info(f"  📁 {sec_name}: all done threads present on disk")
+        if total_restored:
+            self.save_state()
+            log.info(f"  ✓ Restored {total_restored} thread(s) to fetch queue")
+
     def _run_full_mode(self):
         """Full multi-section scrape (original run logic)."""
-        # ─── Pass 1: Fetch Home Page ───
-        home_path = os.path.join(self.output_dir, "Home.html")
-        if not self.state.get("home_done"):
-            log.info("🏠 FETCHING HOME PAGE (Priority)")
-            home_html = self.fetch_page(f"https://{BASE_DOMAIN}/", embed=True)
-            if home_html:
-                with open(home_path, "w", encoding="utf-8") as f:
-                    f.write(home_html)
-                self.state["home_done"] = True
-                self.save_state()
+        # ─── Pre-pass: re-queue threads missing from disk ───
+        self._restore_missing_threads()
 
-        # ─── Pass 2: Fetch Section Listing Indices (Priority) ───
-        print("\n" + "─" * 70)
-        print("  PRIORITY: DISCOVERING & SAVING SECTION INDEX PAGES")
-        print("─" * 70)
-        for sec_idx, (sec_name, sec_url) in enumerate(self.section_list):
-            ss = self.section_state(sec_name)
-            section_dir = os.path.join(self.output_dir, safe_filename(sec_name))
-            os.makedirs(section_dir, exist_ok=True)
-
-            if not ss.get("index_pages_saved") or not ss.get("threads_found"):
-                log.info(f"  📁 [{sec_idx+1}/{len(self.section_list)}] {sec_name}")
-                threads = self.discover_threads_and_save_index(sec_name, sec_url, section_dir)
-                flat = []
-                for u, t in threads:
-                    flat.extend([u, t])
-                ss["threads_found"] = flat
-                ss["index_pages_saved"] = True
-                self.save_state()
-            else:
-                log.info(f"  📁 [{sec_idx+1}/{len(self.section_list)}] {sec_name} (Indices Cached)")
-
-        # ─── Pass 2.5: Scan saved index pages for any missed threads ───
-        self.scan_saved_index_for_threads()
-
-        # ─── Pass 3: Fetch Threads ───
+        # ─── Pass 1: Fetch Threads ───
         print("\n" + "─" * 70)
         print("  FETCHING THREAD PAGES")
         print("─" * 70)
