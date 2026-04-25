@@ -172,7 +172,7 @@ Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperim
 - **Collab** tendenza a fare collab
 - **Protoni** — distorsioni cromatiche e psichedeliche su un singolo stutter
 
-**Sources di riferimento:** "Matteo Montesi"
+**Sources di riferimento:** "Matteo Montesi" "Giuseppe Simone"
 
 ### Pooper italiani di riferimento
 
