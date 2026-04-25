@@ -1,42 +1,12 @@
 #!/usr/bin/env python3
 """
-YouTube Link Extractor & Downloader
-====================================
-Scans offline-saved forum pages for YouTube links, downloads them via
-yt-dlp, organized by forum section.
-
-Videos are saved into:
-    videos/<Section Name>/<video_id> - <title>.mp4
-
-A video_index.json is maintained with full associations:
-    {
-      "dQw4w9WgXcQ": {
-        "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        "title": "Never Gonna Give You Up",
-        "sections": ["YTP da internet", "Off topic"],
-        "source_pages": [
-          "YTP da internet/12345_Thread Title.html",
-          "Off topic/67890_Another Thread/page_1.html"
-        ],
-        "status": "downloaded",
-        "local_file": "videos/YTP da internet/dQw4w9WgXcQ - Never Gonna Give You Up.mp4"
-      }
-    }
-
-Auto-resumes: already-downloaded videos are skipped on re-run.
+YTP Backup — YouTube Downloader (Interactive)
+=============================================
+Scans YTP nostrane / YTP fai da te forum pages for YouTube links,
+fetches video description + channel info from YouTube, then downloads.
 
 Requirements:
     pip install yt-dlp beautifulsoup4 lxml
-    (yt-dlp also needs ffmpeg for merging formats)
-
-Usage:
-    python yt_downloader.py                          # Scan & download all
-    python yt_downloader.py --scan-only              # Just list found links
-    python yt_downloader.py --sections 0,3,7         # Only specific sections
-    python yt_downloader.py --format bestaudio       # Audio only
-    python yt_downloader.py --max-per-section 10     # Limit per section
-    python yt_downloader.py --site-dir ./site_mirror # Custom scraper output dir
-    python yt_downloader.py --retry-failed           # Retry previous failures
 """
 
 import os
@@ -45,59 +15,22 @@ import sys
 import json
 import time
 import glob
-import logging
-import argparse
+import shutil
 import subprocess
+import argparse
 from pathlib import Path
-from collections import OrderedDict
-from urllib.parse import urlparse, parse_qs
 
 from bs4 import BeautifulSoup
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s  %(message)s",
-    datefmt="%H:%M:%S",
-)
-log = logging.getLogger("yt_dl")
+# ── Sections to scan ──────────────────────────────────────────────────────────
 
-# ─── Section names (match scraper folder names) ──────────────────────────────
-
-SECTIONS = [
-    "Bacheca messaggi",
-    "Eventi",
-    "Restyling",
-    "Risorse",
-    "Old sources",
-    "Biografie YTP",
-    "Ganons pub",
-    "YTP fai da te",
-    "Serve aiuto",
-    "Il significato della cacca",
-    "Tutorial per il pooping",
-    "Poop in progress",
-    "YTP da internet",
-    "YTP nostrane",
-    "YTPMV dimportazione",
-    "Collab poopeschi",
-    "Club sportivo della foca grassa",
-    "Internet memes video",
-    "Altri video",
-    "Off topic",
-    "Videogames",
-    "Cinema",
-    "Sport",
-    "Musica",
-    "Arte e grafica",
-    "Flood fun",
-    "THE PIT",
-]
+SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te"]
 
 DEFAULT_SITE_DIR = "./site_mirror"
 DEFAULT_VIDEO_DIR = "./videos"
 DEFAULT_FORMAT = "bestvideo[height<=720]+bestaudio/best[height<=720]/best"
 
-# ─── YouTube URL patterns ────────────────────────────────────────────────────
+# ── YouTube URL helpers ───────────────────────────────────────────────────────
 
 YT_PATTERNS = [
     re.compile(r'https?://(?:www\.)?youtube\.com/watch\?[^\s"\'<>]*v=[\w-]{11}[^\s"\'<>]*', re.I),
@@ -114,37 +47,68 @@ YT_ID_RE = re.compile(
     re.I,
 )
 
+UNAVAIL_MSGS = [
+    "video unavailable", "private video", "has been removed",
+    "content is not available", "copyright claim",
+    "account associated with this video has been terminated",
+    "violates youtube's terms of service", "been removed by the uploader",
+    "confirm your age", "join this channel", "members-only",
+    "not available in your country", "no longer available",
+]
+
+DL_PROGRESS_RE = re.compile(
+    r'\[download\]\s+([\d.]+)%\s+of\s+~?([\d.]+\s*\w+)\s+at\s+([\d.]+\s*[\w/]+)'
+)
+
 
 def extract_video_id(url):
     m = YT_ID_RE.search(url)
     return m.group(1) if m else None
 
 
-def canonical_yt_url(video_id):
-    return f"https://www.youtube.com/watch?v={video_id}"
+def canonical_yt_url(vid):
+    return f"https://www.youtube.com/watch?v={vid}"
 
 
 def safe_filename(name, max_len=80):
     name = re.sub(r'[<>:"/\\|?*]', '_', name)
     name = re.sub(r'\s+', ' ', name).strip()
-    return name[:max_len] if len(name) > max_len else name
+    return name[:max_len]
 
 
-# ─── Video Index ─────────────────────────────────────────────────────────────
+def thread_title_from_filename(fname):
+    """'71236585_Some Thread Title.html'  →  'Some Thread Title'"""
+    stem = Path(fname).stem
+    m = re.match(r'^\d+_(.*)', stem)
+    return m.group(1) if m else stem
+
+
+def bar(pct, width=28):
+    filled = int(width * pct / 100)
+    return "[" + "=" * filled + " " * (width - filled) + f"] {pct:5.1f}%"
+
+
+def clear_line():
+    cols = shutil.get_terminal_size((80, 24)).columns
+    print("\r" + " " * cols + "\r", end="", flush=True)
+
+
+# ── Video Index ───────────────────────────────────────────────────────────────
 
 class VideoIndex:
     """
-    Maintains video_index.json with full video-to-page associations.
-
-    Structure:
     {
-      "<video_id>": {
-        "url": "https://www.youtube.com/watch?v=...",
-        "title": "Video Title" | null,
-        "sections": ["Section A", "Section B"],
-        "source_pages": ["Section A/12345_Thread.html", ...],
-        "status": "pending" | "downloaded" | "unavailable" | "failed",
-        "local_file": "videos/Section A/ID - Title.mp4" | null
+      "VIDEO_ID": {
+        "url":          "https://www.youtube.com/watch?v=...",
+        "title":         str | null,
+        "description":   str | null,        ← from YouTube
+        "channel_name":  str | null,        ← from YouTube
+        "channel_url":   str | null,        ← from YouTube
+        "sections":      ["YTP nostrane", ...],
+        "source_pages":  ["YTP nostrane/71236585_Title.html", ...],
+        "thread_titles": ["In the Madonna — Tassista Romano", ...],
+        "status":        "pending" | "downloaded" | "unavailable" | "failed",
+        "local_file":    str | null
       }
     }
     """
@@ -156,7 +120,7 @@ class VideoIndex:
 
     def load(self):
         if os.path.exists(self.filepath):
-            with open(self.filepath) as f:
+            with open(self.filepath, encoding="utf-8") as f:
                 self.data = json.load(f)
 
     def save(self):
@@ -164,510 +128,501 @@ class VideoIndex:
         with open(self.filepath, "w", encoding="utf-8") as f:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
 
-    def add_video(self, video_id, section, source_page):
-        """Register a video found in a source page."""
+    def add_video(self, video_id, section, source_page, thread_title=None):
         if video_id not in self.data:
             self.data[video_id] = {
                 "url": canonical_yt_url(video_id),
                 "title": None,
+                "description": None,
+                "channel_name": None,
+                "channel_url": None,
                 "sections": [],
                 "source_pages": [],
+                "thread_titles": [],
                 "status": "pending",
                 "local_file": None,
             }
+        e = self.data[video_id]
+        if section not in e["sections"]:
+            e["sections"].append(section)
+        if source_page not in e["source_pages"]:
+            e["source_pages"].append(source_page)
+        if thread_title and thread_title not in e.get("thread_titles", []):
+            e.setdefault("thread_titles", []).append(thread_title)
 
-        entry = self.data[video_id]
+    def needs_metadata(self, video_id):
+        e = self.data.get(video_id, {})
+        return e.get("description") is None and e.get("status") != "unavailable"
 
-        if section not in entry["sections"]:
-            entry["sections"].append(section)
+    def set_metadata(self, video_id, title=None, description=None,
+                     channel_name=None, channel_url=None):
+        if video_id not in self.data:
+            return
+        e = self.data[video_id]
+        if title:
+            e["title"] = title
+        if description is not None:
+            e["description"] = description
+        if channel_name:
+            e["channel_name"] = channel_name
+        if channel_url:
+            e["channel_url"] = channel_url
 
-        if source_page not in entry["source_pages"]:
-            entry["source_pages"].append(source_page)
+    def is_done(self, vid):
+        return self.data.get(vid, {}).get("status") in ("downloaded", "unavailable")
 
-    def get_status(self, video_id):
-        if video_id in self.data:
-            return self.data[video_id]["status"]
-        return "pending"
-
-    def is_done(self, video_id):
-        s = self.get_status(video_id)
-        return s in ("downloaded", "unavailable")
-
-    def set_downloaded(self, video_id, local_file, title=None):
-        if video_id in self.data:
-            self.data[video_id]["status"] = "downloaded"
-            self.data[video_id]["local_file"] = local_file
+    def set_downloaded(self, vid, local_file, title=None):
+        if vid in self.data:
+            e = self.data[vid]
+            e["status"] = "downloaded"
+            e["local_file"] = local_file
             if title:
-                self.data[video_id]["title"] = title
+                e["title"] = title
 
-    def set_unavailable(self, video_id):
-        if video_id in self.data:
-            self.data[video_id]["status"] = "unavailable"
+    def set_unavailable(self, vid):
+        if vid in self.data:
+            self.data[vid]["status"] = "unavailable"
 
-    def set_failed(self, video_id):
-        if video_id in self.data:
-            self.data[video_id]["status"] = "failed"
+    def set_failed(self, vid):
+        if vid in self.data:
+            self.data[vid]["status"] = "failed"
 
     def clear_failed(self):
-        for vid, entry in self.data.items():
-            if entry["status"] == "failed":
-                entry["status"] = "pending"
+        for e in self.data.values():
+            if e["status"] == "failed":
+                e["status"] = "pending"
 
-    def get_primary_section(self, video_id):
-        """Return the first section where this video was found."""
-        if video_id in self.data and self.data[video_id]["sections"]:
-            return self.data[video_id]["sections"][0]
-        return None
+    def pending(self):
+        return [vid for vid, e in self.data.items() if e["status"] == "pending"]
 
-    def stats_for_section(self, section):
-        """Return (total, downloaded, unavailable, failed, pending) for a section."""
-        total = dl = na = fa = pend = 0
-        for vid, entry in self.data.items():
-            if section in entry["sections"]:
-                total += 1
-                s = entry["status"]
-                if s == "downloaded":
-                    dl += 1
-                elif s == "unavailable":
-                    na += 1
-                elif s == "failed":
-                    fa += 1
-                else:
-                    pend += 1
-        return total, dl, na, fa, pend
+    def stats(self):
+        s = {"total": 0, "downloaded": 0, "unavailable": 0, "failed": 0, "pending": 0}
+        for e in self.data.values():
+            s["total"] += 1
+            key = e.get("status", "pending")
+            s[key] = s.get(key, 0) + 1
+        return s
 
 
-# ─── Scanner ─────────────────────────────────────────────────────────────────
+# ── Scanner ───────────────────────────────────────────────────────────────────
 
-class YouTubeScanner:
+class Scanner:
 
     def __init__(self, site_dir):
         self.site_dir = site_dir
 
     def scan_file(self, filepath):
-        """Extract all unique YouTube video IDs from an HTML file."""
         try:
-            with open(filepath, "r", encoding="utf-8", errors="replace") as f:
-                content = f.read()
+            content = Path(filepath).read_text(encoding="utf-8", errors="replace")
         except Exception:
             return set()
-
-        video_ids = set()
-
-        # Regex on raw HTML
-        for pattern in YT_PATTERNS:
-            for m in pattern.finditer(content):
+        ids = set()
+        for pat in YT_PATTERNS:
+            for m in pat.finditer(content):
                 vid = extract_video_id(m.group(0))
                 if vid:
-                    video_ids.add(vid)
-
-        # BeautifulSoup
+                    ids.add(vid)
         try:
             soup = BeautifulSoup(content, "lxml")
-
-            for a in soup.find_all("a", href=True):
-                vid = extract_video_id(a["href"])
-                if vid:
-                    video_ids.add(vid)
-
-            for iframe in soup.find_all("iframe", src=True):
-                vid = extract_video_id(iframe["src"])
-                if vid:
-                    video_ids.add(vid)
-
-            for tag in soup.find_all(["embed", "object", "source"]):
-                for attr in ("src", "data", "value"):
-                    val = tag.get(attr, "")
-                    vid = extract_video_id(val)
+            for tag in soup.find_all(["a", "iframe", "embed", "object", "source", "param"]):
+                for attr in ("href", "src", "data", "value"):
+                    vid = extract_video_id(tag.get(attr, ""))
                     if vid:
-                        video_ids.add(vid)
-
-            for param in soup.find_all("param"):
-                vid = extract_video_id(param.get("value", ""))
-                if vid:
-                    video_ids.add(vid)
+                        ids.add(vid)
         except Exception:
             pass
+        return ids
 
-        return video_ids
+    def scan_sections(self, index, save_fn=None, save_interval=10):
+        new_found = 0
+        file_count = 0
+        for sec in SCAN_SECTIONS:
+            sec_dir = os.path.join(self.site_dir, sec)
+            if not os.path.isdir(sec_dir):
+                print(f"  [!] Directory not found: {sec_dir}")
+                continue
+            html_files = []
+            for root, _, files in os.walk(sec_dir):
+                for fname in files:
+                    if fname.endswith((".html", ".htm")):
+                        html_files.append(os.path.join(root, fname))
 
-    def scan_section(self, section_name, index):
-        """Scan all HTML files in a section and register in VideoIndex."""
-        section_dir = os.path.join(self.site_dir, safe_filename(section_name))
-        if not os.path.isdir(section_dir):
-            return 0
+            print(f"  {sec}: {len(html_files)} HTML files", flush=True)
+            for fpath in html_files:
+                rel = os.path.relpath(fpath, self.site_dir)
+                fname = os.path.basename(fpath)
+                if re.match(r'^page_\d+\.html$', fname):
+                    parent = os.path.basename(os.path.dirname(fpath))
+                    thread_title = thread_title_from_filename(parent)
+                else:
+                    thread_title = thread_title_from_filename(fname)
 
-        count = 0
-        for root, dirs, files in os.walk(section_dir):
-            for fname in files:
-                if not fname.endswith((".html", ".htm")):
-                    continue
-                fpath = os.path.join(root, fname)
-                rel_path = os.path.relpath(fpath, self.site_dir)
                 ids = self.scan_file(fpath)
+                new_this_file = 0
                 for vid in ids:
-                    index.add_video(vid, section_name, rel_path)
-                    count += 1
+                    was_new = vid not in index.data
+                    index.add_video(vid, sec, rel, thread_title)
+                    if was_new:
+                        new_found += 1
+                        new_this_file += 1
 
-        return count
+                if ids:
+                    print(f"  [scan] {rel}  → {len(ids)} video(s) found, {new_this_file} new", flush=True)
+                else:
+                    print(f"  [scan] {rel}  → no videos", flush=True)
 
-    def scan_all(self, index, section_filter=None):
-        """Scan all sections and populate the VideoIndex."""
-        sections = section_filter if section_filter else SECTIONS
-        total = 0
-        for sec in sections:
-            n = self.scan_section(sec, index)
-            total += n
-        return total
+                file_count += 1
+                if save_fn and file_count % save_interval == 0:
+                    save_fn()
 
-
-# ─── Downloader ──────────────────────────────────────────────────────────────
-
-class YouTubeDownloader:
-
-    def __init__(self, video_dir, yt_format, rate_limit=None):
-        self.video_dir = video_dir
-        self.yt_format = yt_format
-        self.rate_limit = rate_limit
-
-    def download(self, video_id, output_dir):
-        """
-        Download a single video into output_dir.
-        Returns: ('ok', local_path, title) | ('exists', ...) |
-                 ('unavailable', None, None) | ('error', None, None)
-        """
-        url = canonical_yt_url(video_id)
-        os.makedirs(output_dir, exist_ok=True)
-
-        outtmpl = os.path.join(output_dir, "%(id)s - %(title).80s.%(ext)s")
-
-        cmd = [
-            "yt-dlp",
-            "--no-playlist",
-            "--no-overwrites",
-            "--write-thumbnail",
-            "--convert-thumbnails", "jpg",
-            "--embed-thumbnail",
-            "--add-metadata",
-            "--print", "after_move:filepath",
-            "--print", "%(title)s",
-            "--format", self.yt_format,
-            "--output", outtmpl,
-            "--retries", "3",
-            "--socket-timeout", "30",
-            "--no-warnings",
-        ]
-
-        if self.rate_limit:
-            cmd.extend(["--limit-rate", self.rate_limit])
-
-        cmd.append(url)
-
-        try:
-            result = subprocess.run(
-                cmd, capture_output=True, text=True, timeout=300,
-            )
-
-            stdout = result.stdout.strip()
-            stderr = result.stderr
-
-            if result.returncode == 0:
-                # Parse printed filepath and title
-                lines = stdout.split("\n")
-                title = None
-                local_file = None
-
-                if len(lines) >= 2:
-                    # --print outputs: first the filepath, then the title
-                    # But order depends on yt-dlp version, be flexible
-                    for line in lines:
-                        line = line.strip()
-                        if not line:
-                            continue
-                        if os.path.sep in line or line.endswith(
-                            (".mp4", ".mkv", ".webm", ".mp3", ".m4a", ".opus")
-                        ):
-                            local_file = line
-                        elif not title:
-                            title = line
-
-                # Fallback: find the file by glob
-                if not local_file:
-                    pattern = os.path.join(output_dir, f"{video_id} - *")
-                    matches = glob.glob(pattern)
-                    # Exclude thumbnails
-                    matches = [m for m in matches if not m.endswith((".jpg", ".png", ".webp"))]
-                    if matches:
-                        local_file = matches[0]
-
-                if "has already been downloaded" in stdout + stderr:
-                    return "exists", local_file, title
-
-                return "ok", local_file, title
-            else:
-                combined = stdout + stderr
-                unavailable_msgs = [
-                    "Video unavailable", "Private video",
-                    "This video has been removed",
-                    "content is not available",
-                    "copyright claim",
-                    "account associated with this video has been terminated",
-                    "violates YouTube's Terms of Service",
-                    "been removed by the uploader",
-                    "confirm your age",
-                    "Join this channel to get access",
-                    "members-only content",
-                    "is not available in your country",
-                    "video is no longer available",
-                ]
-                for msg in unavailable_msgs:
-                    if msg.lower() in combined.lower():
-                        return "unavailable", None, None
-
-                return "error", None, None
-
-        except subprocess.TimeoutExpired:
-            return "error", None, None
-        except Exception as e:
-            log.warning(f"      Exception: {e}")
-            return "error", None, None
+        return new_found
 
 
-# ─── Main ────────────────────────────────────────────────────────────────────
+# ── YouTube metadata ──────────────────────────────────────────────────────────
+
+def fetch_yt_metadata(video_id):
+    """
+    Run yt-dlp --dump-json to get title, description, channel info.
+    Returns dict | 'unavailable' | None (temp error)
+    """
+    url = canonical_yt_url(video_id)
+    try:
+        r = subprocess.run(
+            ["yt-dlp", "--dump-json", "--no-playlist",
+             "--socket-timeout", "20", url],
+            capture_output=True, text=True, timeout=60,
+        )
+        if r.returncode == 0 and r.stdout.strip():
+            raw = r.stdout.strip().splitlines()[-1]
+            d = json.loads(raw)
+            return {
+                "title":        d.get("title"),
+                "description":  (d.get("description") or "")[:3000],
+                "channel_name": d.get("uploader") or d.get("channel"),
+                "channel_url":  d.get("uploader_url") or d.get("channel_url"),
+            }
+        combined = (r.stdout + r.stderr).lower()
+        for msg in UNAVAIL_MSGS:
+            if msg in combined:
+                return "unavailable"
+    except Exception:
+        pass
+    return None
+
+
+# ── Downloader ────────────────────────────────────────────────────────────────
+
+def download_video(video_id, output_dir, yt_format, rate_limit,
+                   current_num, total_num):
+    """
+    Download one video with a real-time per-video progress bar.
+    Shows:  Video:   [=====     ] 45.2%  23.4MB @ 1.5MB/s
+            Overall: [==        ] 12/80
+    Returns ('ok'|'exists'|'unavailable'|'error', local_file, title)
+    """
+    url = canonical_yt_url(video_id)
+    os.makedirs(output_dir, exist_ok=True)
+    outtmpl = os.path.join(output_dir, "%(id)s - %(title).80s.%(ext)s")
+
+    cmd = [
+        "yt-dlp",
+        "--no-playlist", "--no-overwrites",
+        "--write-thumbnail", "--convert-thumbnails", "jpg",
+        "--embed-thumbnail", "--add-metadata",
+        "--newline",
+        "--print", "after_move:filepath",
+        "--print", "%(title)s",
+        "--format", yt_format,
+        "--output", outtmpl,
+        "--retries", "3",
+        "--socket-timeout", "30",
+        "--no-warnings",
+    ]
+    if rate_limit:
+        cmd += ["--limit-rate", rate_limit]
+    cmd.append(url)
+
+    local_file = None
+    title = None
+    is_exists = False
+
+    overall_pct = current_num / total_num * 100
+    ov_bar = bar(overall_pct, 24)
+
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+
+        for line in proc.stdout:
+            line = line.rstrip()
+            if not line:
+                continue
+
+            if "has already been downloaded" in line:
+                is_exists = True
+                continue
+
+            m = DL_PROGRESS_RE.search(line)
+            if m:
+                vid_pct = float(m.group(1))
+                size = m.group(2).strip()
+                speed = m.group(3).strip()
+                vid_bar = bar(vid_pct, 24)
+                print(
+                    f"\r  Video:   {vid_bar}  {size} @ {speed}    ",
+                    end="", flush=True,
+                )
+                continue
+
+            # --print outputs (filepath / title) arrive after download
+            stripped = line.strip()
+            if stripped and not stripped.startswith("["):
+                if (os.sep in stripped or "/" in stripped) and any(
+                    stripped.endswith(e)
+                    for e in (".mp4", ".mkv", ".webm", ".mp3", ".m4a", ".opus")
+                ):
+                    local_file = stripped
+                elif not title:
+                    title = stripped
+
+        proc.wait()
+        clear_line()
+
+        if not local_file:
+            matches = [
+                m for m in glob.glob(os.path.join(output_dir, f"{video_id} - *"))
+                if not m.endswith((".jpg", ".png", ".webp"))
+            ]
+            if matches:
+                local_file = matches[0]
+
+        if is_exists:
+            return "exists", local_file, title
+        if proc.returncode == 0:
+            return "ok", local_file, title
+
+        return "error", None, None
+
+    except subprocess.TimeoutExpired:
+        proc.kill()
+        clear_line()
+        return "error", None, None
+    except Exception as ex:
+        clear_line()
+        print(f"  [!] {ex}")
+        return "error", None, None
+
+
+# ── Interactive phases ────────────────────────────────────────────────────────
+
+def do_update_index(index, site_dir):
+    scanner = Scanner(site_dir)
+
+    print("  Scanning HTML pages for YouTube links...")
+    new_count = scanner.scan_sections(index, save_fn=index.save)
+    index.save()
+
+    st = index.stats()
+    print(f"  Total videos in index: {st['total']}  (new this run: {new_count})")
+    print()
+
+    need_meta = [
+        vid for vid in index.data
+        if index.needs_metadata(vid)
+    ]
+
+    if not need_meta:
+        print("  All videos already have metadata.")
+        return
+
+    total_meta = len(need_meta)
+    print(f"  Fetching YouTube metadata for {total_meta} videos")
+    print(f"  (title, description, channel link)...")
+    print()
+
+    for i, vid in enumerate(need_meta, 1):
+        overall_pct = i / total_meta * 100
+        ov_bar = bar(overall_pct, 30)
+        print(f"\r  {ov_bar}  {i}/{total_meta}", end="", flush=True)
+
+        meta = fetch_yt_metadata(vid)
+        if meta == "unavailable":
+            index.set_unavailable(vid)
+        elif meta:
+            index.set_metadata(vid, **meta)
+        # None = temp error, leave as-is for next run
+
+        if i % 20 == 0:
+            index.save()
+
+    clear_line()
+    index.save()
+
+    st = index.stats()
+    print(f"  Done — index updated.")
+    print(f"  Total: {st['total']}  Pending: {st['pending']}  "
+          f"Unavailable: {st['unavailable']}")
+
+
+def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
+    if retry_failed:
+        index.clear_failed()
+        index.save()
+        print("  Cleared failed status — will retry.\n")
+
+    pending = index.pending()
+    if not pending:
+        print("  Nothing to download — either run 'Update index' first")
+        print("  or everything is already downloaded / unavailable.")
+        return
+
+    total = len(pending)
+    print(f"  {total} videos pending.\n")
+
+    ok_count = skip_count = unavail_count = err_count = 0
+
+    for i, vid in enumerate(pending, 1):
+        e = index.data[vid]
+        sec = e["sections"][0] if e["sections"] else "Unknown"
+        thread = (e.get("thread_titles") or [""])[0] or vid
+        yt_title = e.get("title") or vid
+
+        out_dir = os.path.join(video_dir, safe_filename(sec))
+
+        # ── header ──
+        print(f"  [{i}/{total}] {thread[:60]}")
+        if e.get("channel_name"):
+            ch_url = e.get("channel_url", "")
+            print(f"  Channel: {e['channel_name']}  {ch_url}")
+        print(f"  URL:     {canonical_yt_url(vid)}")
+
+        # ── download + per-video bar ──
+        status, local_file, dl_title = download_video(
+            vid, out_dir, yt_format, rate_limit, i, total,
+        )
+
+        # ── result ──
+        if status == "ok":
+            rel = os.path.relpath(local_file, ".") if local_file else None
+            index.set_downloaded(vid, rel, dl_title)
+            print(f"  ✓ {os.path.basename(local_file or '')}")
+            ok_count += 1
+        elif status == "exists":
+            if not index.is_done(vid):
+                rel = os.path.relpath(local_file, ".") if local_file else None
+                index.set_downloaded(vid, rel, dl_title)
+            print(f"  = already downloaded")
+            skip_count += 1
+        elif status == "unavailable":
+            index.set_unavailable(vid)
+            print("  ⊘ Unavailable (removed / private)")
+            unavail_count += 1
+        else:
+            index.set_failed(vid)
+            print("  ✗ Failed")
+            err_count += 1
+
+        index.save()
+
+        # ── overall bar ──
+        done = ok_count + skip_count + unavail_count + err_count
+        ov_pct = done / total * 100
+        ov_bar = bar(ov_pct, 30)
+        print(f"  Overall: {ov_bar}  {done}/{total}  "
+              f"dl={ok_count} skip={skip_count} err={err_count}")
+        print()
+
+        if status == "ok":
+            time.sleep(1)
+
+    print("─" * 54)
+    print(f"  Downloaded:  {ok_count}")
+    print(f"  Skipped:     {skip_count}  (already on disk)")
+    print(f"  Unavailable: {unavail_count}  (removed / private)")
+    print(f"  Failed:      {err_count}  (re-run to retry)")
+    print(f"  Index:       {os.path.abspath(index.filepath)}")
+
+
+# ── Menu helpers ──────────────────────────────────────────────────────────────
+
+def ask(prompt, choices):
+    while True:
+        ans = input(prompt).strip().lower()
+        if ans in choices:
+            return ans
+        print(f"  Please enter one of: {' / '.join(choices)}")
+
+
+def print_header():
+    print()
+    print("╔══════════════════════════════════════════════════╗")
+    print("║   YTP Backup — YouTube Index & Downloader        ║")
+    print("╚══════════════════════════════════════════════════╝")
+    print()
+
+
+# ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    p = argparse.ArgumentParser(
-        description="Extract YouTube links from scraped forum pages and download them."
-    )
-    p.add_argument("--site-dir", default=DEFAULT_SITE_DIR,
-                   help="Path to scraped site (default: ./site_mirror)")
-    p.add_argument("--video-dir", default=DEFAULT_VIDEO_DIR,
-                   help="Where to save videos (default: ./videos)")
-    p.add_argument("--format", default=DEFAULT_FORMAT,
-                   help="yt-dlp format string")
-    p.add_argument("--rate-limit", default=None,
-                   help="Download rate limit (e.g. 1M, 500K)")
-    p.add_argument("--sections", default=None,
-                   help="Comma-separated section indices")
-    p.add_argument("--max-per-section", type=int, default=None,
-                   help="Max videos to download per section")
-    p.add_argument("--scan-only", action="store_true",
-                   help="Only scan and report, don't download")
-    p.add_argument("--retry-failed", action="store_true",
-                   help="Retry previously failed downloads")
-    p.add_argument("--list", action="store_true",
-                   help="List sections and exit")
-
-    args = p.parse_args()
-
-    if args.list:
-        print("\nForum Sections:")
-        print(f"{'Idx':<4} {'Name'}")
-        print("─" * 50)
-        for i, name in enumerate(SECTIONS):
-            print(f"{i:<4} {name}")
-        sys.exit(0)
+    p = argparse.ArgumentParser(add_help=False)
+    p.add_argument("--site-dir",     default=DEFAULT_SITE_DIR)
+    p.add_argument("--video-dir",    default=DEFAULT_VIDEO_DIR)
+    p.add_argument("--format",       default=DEFAULT_FORMAT)
+    p.add_argument("--rate-limit",   default=None)
+    p.add_argument("--retry-failed", action="store_true")
+    args, _ = p.parse_known_args()
 
     if not os.path.isdir(args.site_dir):
-        print(f"Error: site directory not found: {args.site_dir}")
-        print("Run the forum scraper first.")
+        print(f"[!] site_dir not found: {args.site_dir}")
         sys.exit(1)
 
-    section_filter = None
-    if args.sections is not None:
-        indices = [int(x.strip()) for x in args.sections.split(",")]
-        section_filter = [SECTIONS[i] for i in indices]
-
-    # ── Setup ──
+    print_header()
+    print(f"  Site dir:  {os.path.abspath(args.site_dir)}")
+    print(f"  Video dir: {os.path.abspath(args.video_dir)}")
+    print(f"  Sections:  {', '.join(SCAN_SECTIONS)}")
     print()
-    print("=" * 70)
-    print("  YouTube Link Extractor & Downloader")
-    print(f"  Site dir:   {os.path.abspath(args.site_dir)}")
-    print(f"  Video dir:  {os.path.abspath(args.video_dir)}")
-    print(f"  Format:     {args.format}")
-    print(f"  Scan only:  {'yes' if args.scan_only else 'no'}")
-    print("=" * 70)
+    print("  What do you want to do?")
+    print()
+    print("  1  Update YT video index")
+    print("       Scan HTML pages for links, then fetch title /")
+    print("       description / channel URL from YouTube.")
+    print()
+    print("  2  Download indexed videos")
+    print("       Download all pending videos in the index.")
+    print()
+    print("  3  Both  (update index, then download)")
+    print()
+    print("  q  Quit")
+    print()
+    choice = ask("  Choice [1/2/3/q]: ", {"1", "2", "3", "q"})
+
+    if choice == "q":
+        sys.exit(0)
+
     print()
 
     index = VideoIndex(args.video_dir)
     index.load()
 
-    if args.retry_failed:
-        index.clear_failed()
-        index.save()
-        log.info("  Cleared failed status — will retry those videos.\n")
+    if choice in ("1", "3"):
+        do_update_index(index, args.site_dir)
+        print()
 
-    # ── Phase 1: Scan ──
-    log.info("🔍 Phase 1: Scanning HTML files for YouTube links...\n")
-
-    scanner = YouTubeScanner(args.site_dir)
-    scanner.scan_all(index, section_filter)
-    index.save()
-
-    # Display scan results
-    sections_to_show = section_filter if section_filter else SECTIONS
-    grand_total_unique = set()
-
-    print(f"  {'Section':<40} {'Videos':>7}")
-    print(f"  {'─'*40} {'─'*7}")
-
-    for sec in sections_to_show:
-        total, dl, na, fa, pend = index.stats_for_section(sec)
-        if total > 0:
-            print(f"  📁 {sec:<38} {total:>7}")
-        else:
-            print(f"     {sec:<38} {total:>7}")
-        for vid, entry in index.data.items():
-            if sec in entry["sections"]:
-                grand_total_unique.add(vid)
-
-    print(f"  {'─'*40} {'─'*7}")
-    print(f"  {'UNIQUE VIDEOS':<40} {len(grand_total_unique):>7}")
-    print()
-
-    if args.scan_only:
-        # Detailed output per section
-        for sec in sections_to_show:
-            vids_in_sec = [
-                (vid, entry) for vid, entry in index.data.items()
-                if sec in entry["sections"]
-            ]
-            if not vids_in_sec:
-                continue
-            print(f"\n{'─' * 70}")
-            print(f"  {sec} ({len(vids_in_sec)} videos)")
-            print(f"{'─' * 70}")
-            for vid, entry in sorted(vids_in_sec, key=lambda x: x[0]):
-                status_icon = {
-                    "downloaded": "✓", "unavailable": "⊘",
-                    "failed": "✗", "pending": "·",
-                }.get(entry["status"], "?")
-                print(f"  {status_icon} {entry['url']}")
-                for pg in entry["source_pages"][:3]:
-                    print(f"    └─ {pg}")
-                if len(entry["source_pages"]) > 3:
-                    print(f"    └─ ... and {len(entry['source_pages'])-3} more")
-
-        # Save index even in scan-only mode
-        index.save()
-        log.info(f"\n  Index saved to {index.filepath}")
-        sys.exit(0)
-
-    # ── Phase 2: Download ──
-    log.info("📥 Phase 2: Downloading videos...\n")
-
-    downloader = YouTubeDownloader(args.video_dir, args.format, args.rate_limit)
-
-    total_ok = 0
-    total_skip = 0
-    total_unavail = 0
-    total_err = 0
-
-    for sec in sections_to_show:
-        # Get all videos for this section
-        vids_in_sec = [
-            vid for vid, entry in index.data.items()
-            if sec in entry["sections"]
-        ]
-        if not vids_in_sec:
-            continue
-
-        if args.max_per_section:
-            vids_in_sec = vids_in_sec[:args.max_per_section]
-
-        # Section video folder: videos/<Section Name>/
-        section_video_dir = os.path.join(args.video_dir, safe_filename(sec))
-
-        already_done = sum(1 for v in vids_in_sec if index.is_done(v))
-        to_do = len(vids_in_sec) - already_done
-
-        print(f"{'─' * 70}")
-        print(f"  📁 {sec}")
-        print(f"     {len(vids_in_sec)} videos ({already_done} done, {to_do} remaining)")
-        print(f"{'─' * 70}")
-
-        sec_ok = 0
-        sec_skip = 0
-        sec_unavail = 0
-        sec_err = 0
-
-        for i, vid in enumerate(vids_in_sec, 1):
-            if index.is_done(vid):
-                sec_skip += 1
-                continue
-
-            pct = i / len(vids_in_sec) * 100
-            log.info(f"    [{i}/{len(vids_in_sec)}] ({pct:.0f}%) {canonical_yt_url(vid)}")
-
-            status, local_file, title = downloader.download(vid, section_video_dir)
-
-            if status == "ok":
-                rel_path = os.path.relpath(local_file, ".") if local_file else None
-                index.set_downloaded(vid, rel_path, title)
-                log.info(f"      ✓ Downloaded: {os.path.basename(local_file or '')}")
-                sec_ok += 1
-            elif status == "exists":
-                if not index.is_done(vid):
-                    rel_path = os.path.relpath(local_file, ".") if local_file else None
-                    index.set_downloaded(vid, rel_path, title)
-                sec_skip += 1
-            elif status == "unavailable":
-                index.set_unavailable(vid)
-                log.info(f"      ⊘ Unavailable (removed/private)")
-                sec_unavail += 1
-            else:
-                index.set_failed(vid)
-                log.info(f"      ✗ Failed")
-                sec_err += 1
-
-            index.save()
-
-            if status == "ok":
-                time.sleep(1)
-
-        total_ok += sec_ok
-        total_skip += sec_skip
-        total_unavail += sec_unavail
-        total_err += sec_err
-
-        log.info(
-            f"  ✅ {sec}: {sec_ok} new, {sec_skip} skipped, "
-            f"{sec_unavail} unavailable, {sec_err} failed"
+    if choice in ("2", "3"):
+        do_download(
+            index,
+            args.video_dir,
+            args.format,
+            args.rate_limit,
+            args.retry_failed,
         )
 
-    index.save()
-
-    # ── Summary ──
     print()
-    print("=" * 70)
-    print("  DOWNLOAD SUMMARY")
-    print("=" * 70)
-    print(f"  Downloaded:   {total_ok}")
-    print(f"  Skipped:      {total_skip} (already done)")
-    print(f"  Unavailable:  {total_unavail} (removed/private)")
-    print(f"  Failed:       {total_err} (use --retry-failed)")
-    print()
-
-    print(f"  {'Section':<40} {'DL':>4} {'Skip':>5} {'N/A':>5} {'Err':>4}")
-    print(f"  {'─'*40} {'─'*4} {'─'*5} {'─'*5} {'─'*4}")
-
-    for sec in sections_to_show:
-        total, dl, na, fa, pend = index.stats_for_section(sec)
-        if total == 0:
-            continue
-
-        bar_len = 12
-        done = dl + na
-        filled = int(bar_len * done / total) if total > 0 else 0
-        bar = "█" * filled + "░" * (bar_len - filled)
-
-        print(f"  {sec:<40} {dl:>4} {pend:>5} {na:>5} {fa:>4}  {bar}")
-
-    print()
-    print(f"  Video index:  {os.path.abspath(index.filepath)}")
-    print(f"  Videos dir:   {os.path.abspath(args.video_dir)}")
-    print(f"  Run again to resume. Use --retry-failed to retry errors.")
-    print("=" * 70)
 
 
 if __name__ == "__main__":
