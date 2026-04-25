@@ -7,6 +7,48 @@ fetches video description + channel info from YouTube, then downloads.
 
 Requirements:
     pip install yt-dlp beautifulsoup4 lxml
+
+
+    Todo per claude:
+
+    scrape also the following channels when option 3, remove this from comment afterwards
+    https://www.youtube.com/@cs188
+    https://www.youtube.com/@KroboProductions
+    https://www.youtube.com/@EmperorLemon
+    https://www.youtube.com/@Deepercutt
+    https://www.youtube.com/@Hurricoaster
+    https://www.youtube.com/@despotaaa
+    https://www.youtube.com/@bassman85x
+    https://www.youtube.com/@ZioTok83
+    https://www.youtube.com/@tracFelix96trac
+    https://www.youtube.com/@voodoochildytp
+    https://www.youtube.com/@blazor67
+    https://www.youtube.com/@EliaForce1984ita
+    https://www.youtube.com/@Mario6493
+    https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg
+    https://www.youtube.com/@Nocoldiz
+    https://www.youtube.com/@Pennaz
+    https://www.youtube.com/@DarkCoffe64
+    https://www.youtube.com/@revergo
+    https://www.youtube.com/@MastercastPresident
+    https://www.youtube.com/@TottiBest92
+    https://www.youtube.com/user/StewBarzTube
+    https://www.youtube.com/user/PierluPoops
+    https://www.youtube.com/user/ChristianIce
+    https://www.youtube.com/@mrpoldoakbar2849
+    https://www.youtube.com/user/ZioMeso
+    https://www.youtube.com/user/julaoa
+    https://www.youtube.com/user/JakkoMatto
+    https://www.youtube.com/@Clodd
+    https://www.youtube.com/c/RTpoop
+    https://www.youtube.com/@DavvoYTP
+    https://www.youtube.com/user/125Replay
+    https://www.youtube.com/@AlePoops
+    https://www.youtube.com/@frederickfrankenstein5671
+    https://www.youtube.com/@caprastrabica2182
+    https://www.youtube.com/c/ilCirox
+    https://www.youtube.com/c/AssoDiDenari
+    https://www.youtube.com/c/MPYTP
 """
 
 import os
