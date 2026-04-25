@@ -36,13 +36,9 @@ Prima ancora che esistesse YouTube, alcuni esperimenti **anticipavano formalment
 
 **1993–2023** — **Cordialmente su Radio Deejay** (Linus, Elio e le Storie Tese, Mangoni): Le rubriche dei *Corti* — Le fiabe corte, i Tg corti, le Ricette corte — sono **YTP audio ante litteram**: frasi scomposte, sillabe tagliate e ricomposte da fiabe sonore, telegiornali e spot per creare significati assurdi e volgari. Nocoldiz le indica come antenato tecnico diretto delle YTP italiane (il *sentence mixing*).
 
-**Fine anni '90 - primi 2000** — **Maccio Capatonda (Marcello Macchia)**: Inizia a produrre parodie di trailer cinematografici per *Mai dire…* della Gialappa's Band. La sua sensibilità per il **nonsense surreale italiano**, i finti errori di montaggio e i nomi storpiati plasmerà in modo indelebile il gusto umoristico della futura comunità online italiana.
+**Fine anni '90 - primi 2000** — **Maccio Capatonda (Marcello Macchia)**: Inizia a produrre parodie di trailer cinematografici per *Mai dire…* della Gialappa's Band. La sua sensibilità per il **nonsense surreale italiano**, i finti errori di montaggio e i nomi storpiati plasmerà in modo indelebile il gusto umoristico della futura community online italiana.
 
 **Primi 2000** — **Crescono gli AMV (Anime Music Video)**: La prima vera forma internazionale di *mash-up* video condiviso attivamente in rete dalle community. Insegnano a una generazione di futuri creatori la pratica tecnica del "fare a pezzi e ricomporre a tempo di musica" prodotti culturali amati.
-
----
-
-Ecco un'espansione dettagliata dell'Era 2, che arricchisce la cronologia con il contesto tecnologico, le fonti originarie e la nascita delle prime tecniche di montaggio che avrebbero definito il genere.
 
 ---
 
@@ -88,8 +84,6 @@ Il fenomeno esplode nella comunità anglofona. Si formalizza il **Poopism**, il 
 - **Inversione ripetuta**
 - **Distorsioni ottiche**
 
-**Poopers di riferimento:**
-
 **Sources di riferimento:** cutscene di videogiochi Nintendo per Philips CD-i (*Zelda: The Wand of Gamelon*, *Link: The Faces of Evil*, *Hotel Mario*) e cartoni animati come *The Adventures of Super Mario Bros. 3*.
 
 **2007–2008** — Periodo di massima produzione americana. Si forma una vera **subcultura** con regole, gerghi e wiki dedicati (YouChew, Chewiki).
@@ -100,93 +94,52 @@ Il fenomeno esplode nella comunità anglofona. Si formalizza il **Poopism**, il 
 
 **2011**
 
+### Poopers anglofoni di riferimento
 
-
----
+| Pooper | Canale | Stile | Video rappresentativi |
+|---|---|---|---|
+| cs188 | [cs188](https://www.youtube.com/@cs188) | Maestro del sentence mixing politico; Obama e Bush "dicono" frasi assurde con precisione millimetrica | *Obama Gets Some Advice*, *George W. Bush Doesn't Care About Spaghetti* |
+| WalrusGuy | Permabannato 2009; video su archivi e reuploads | SpongeBob con archi narrativi coerenti tra più video; la sua scomparsa lasciò un vuoto enorme | *The Sky Had a Weegee*, *SpongeBob Comically Mistreats his Neighbors* |
+| KroboProductions | [KroboProductions](https://www.youtube.com/@KroboProductions) | Alta qualità tecnica; fonti CD-i (*Zelda*, *Hotel Mario*); distingue il pooping CD-i dagli imitatori | *I.M. Meen Doesn't Like Books*, *Link Tries to Kill Morshu* |
+| EmperorLemon | [EmperorLemon](https://www.youtube.com/@EmperorLemon) | Attivo dal 2009; narrativa articolata e approccio saggistico; video-manifesti sul genere | *Spingebill and the Cereal Box*, *The Skodwarde Special* |
+| Deepercutt | [Deepercutt](https://www.youtube.com/@Deepercutt) | SpongeBob specialist; timing comico impeccabile; editing frame-by-frame tra i più tecnici dell'era | *Squidward Gets Possessed by a Cereal Mascot*, *Patrick Needs a Professional* |
+| Hurricoaster | [Hurricoaster](https://www.youtube.com/@Hurricoaster) | Sperimentatore visivo; distorsioni cromatiche e After Effects quando gli altri usavano Movie Maker | *Squidward's Bizarre Adventure*, *The Sponge Who Could Fly (But Didn't)* |
+| Yaminomalex | Yaminomalex | Codifica del "canone Zelda CD-i"; approccio sistematico alle cutscene; porta Ganon a un pubblico più ampio | *Zelda's Only Hope*, *Ganon's Got a Brand New Bag* |
+| Conrad Slater | Conrad Slater | Sentence mixing su fonti non convenzionali (documentari, infomercial); apre il pooping a materiale "adulto" | *Billy Mays Shills for the Sham-Wow*, *Guy Fieri Enters the Food Network Dimension* |
 
 ## 🟢 Era 4 — Le origini della community italiana (2009-2011)
+
 L'Italia scopre le YTP con qualche anno di ritardo, ma sviluppa rapidamente uno **stile autonomo** grazie alla forte tradizione televisiva nazionale e alla ricchezza di volti e tormentoni della cultura pop italiana.
 
 ### La nascita del "Forum Rosso"
-Agli albori degli anni '10, i pooper italiani sentono il bisogno di un luogo di ritrovo. Nasce così lo **YouTube Poop Italian Forum**, presto ribattezzato dalla community come il **"Forum Rosso"** per via della sua veste grafica. È la prima vera e propria casa per i creatori italiani. 
+Agli albori degli anni '10, i pooper italiani sentono il bisogno di un luogo di ritrovo. Nasce così lo **YouTube Poop Italian Forum**, presto ribattezzato dalla community come il **"Forum Rosso"** per via della sua veste grafica. È la prima vera e propria casa per i creatori italiani.
 
 In questa fase embrionale, i pooper nostrani iniziano imitando le tecniche americane (basate su *stutter*, *ear rape* e *word splicing* di fonti estere come i giochi CD-i), per poi virare drasticamente verso un linguaggio puramente "italico", fondato su meme e fenomeni locali.
 
 ### I Pionieri e l'Amministrazione
-In questo periodo emergono figure fondamentali per la definizione dello stile italiano:
-A mantenere l'ordine e a guidare la community c'era un gruppo di **admin storici**, veri e propri curatori dell'estetica e delle regole della YTP ITA delle origini:
-> **Il team di amministrazione:** *Furio the shopkeeper*, *TheLaughingMan*, *Caste.*, *Nicckarion*, *UtenteMacSenzaMac*, *Zebrick* e *manusnake91*.
+In questo periodo emergono figure fondamentali per la definizione dello stile italiano.
+A mantenere l'ordine e a guidare la community c'era un gruppo di **admin storici**:
+> *Furio the shopkeeper*, *TheLaughingMan*, *Caste.*, *Nicckarion*, *UtenteMacSenzaMac*, *Zebrick* e *manusnake91*.
 
-**Sources di riferimento:**
+**Sources di riferimento:** "Richard Benson", "Prof Testoh", "Pubblicità anni 80"
 
-**Pooper italiani di riferimento:**
-Ecco la lista ristrutturata seguendo il formato markdown precedente:
+### Pooper italiani di riferimento
 
-## Felix 96
-* **Canale:** [Felix 96](https://www.youtube.com/@tracFelix96trac)
-* **Video più visto:** Dati non disponibili
-* **Altri video:** Dati non disponibili
-
-## VoodooChild
-* **Canale:** Dati non disponibili
-* **Video più visto:** Dati non disponibili
-* **Altri video:** Dati non disponibili
-
-## blazor67
-* **Canale:** Dati non disponibili
-* **Video più visto:** Dati non disponibili
-* **Altri video:** Dati non disponibili
-
-## bassman85
-* **Canale:** [bassman85x](https://www.youtube.com/@bassman85x)
-* **Video più visto:** [Youtube Poop : Mondo Emo (La parodia che ha dato inizio a TUTTO)](https://www.youtube.com/watch?v=6qXBHVssbg0) (271.000 visualizzazioni)
-* **Altri video:** Dati non disponibili
-
-## Ziotok83
-* **Canale:** [ZioTok83](https://www.youtube.com/@ZioTok83/videos)
-* **Video più visto:** "Youtube merda : il capitano incita la ciurma a sballarsi con la vinavil"
-* **Altri video:** Dati non disponibili
-
-## mr.nintendo
-* **Canale:** Canale chiuso
-* **Video più visto:** Dati non disponibili
-* **Altri video:** Dati non disponibili
-
-## Elia1995
-* **Canale:** [EliaForce1984ita](https://www.youtube.com/@EliaForce1984ita)
-* **Video più visto:** Dati non disponibili
-* **Altri video:** Dati non disponibili
-
-## Weegee64
-* **Canale:** [Mario6493](https://www.youtube.com/@Mario6493)
-* **Video più visto:** [You dare not agree with the Mario Head?](https://www.youtube.com/watch?v=PHQWtOAGrA4) (189.000 visualizzazioni)
-* **Altri video:** Dati non disponibili
-
-## Gwonam the Wizard
-* **Canale:** [Gwonam the Wizard](https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg)
-* **Video più visto:** Dati non disponibili
-* **Altri video:** Dati non disponibili
-
-## rikimaru.HAL
-* **Canale:** Dati non disponibili
-* **Video più visto:** Dati non disponibili
-* **Altri video:** Dati non disponibili
-
-## Nocoldiz
-* **Canale:** [Nocoldiz](https://www.youtube.com/@Nocoldiz)
-* **Video più visto:** "È finito il vino"
-* **Altri video:** "Vendettatori", "Frodo è contro la legge", "Silvio è diventato nonno di se stesso".
-
-## Pennaz
-* **Canale:** [Pennaz](https://www.youtube.com/@Pennaz)
-* **Nota:** Figura chiave non solo come creatore, ma come **grafico ufficiale del forum**, contribuendo a dare un'identità visiva alla nascente community.
-* **Video più visto:** Dati non disponibili
-* **Altri video:** Dati non disponibili
-
-## DarkCoffe64
-* **Canale:** [DarkCoffe64](https://www.youtube.com/channel/UC-Dati-non-disponibili) 
-* **Video più visto:** [Youtube Poop Robotnik turn the moon into spaghetti part 01](https://www.youtube.com/watch?v=-jEDQck88bM)
-* **Altri video:** Dati non disponibili
+| Pooper | Canale | Video più visto | Altri video |
+|---|---|---|---|
+| Felix 96 | [Felix 96](https://www.youtube.com/@tracFelix96trac) | — | — |
+| VoodooChild | — | — | — |
+| blazor67 | — | — | — |
+| bassman85 | [bassman85x](https://www.youtube.com/@bassman85x) | [Youtube Poop : Mondo Emo](https://www.youtube.com/watch?v=6qXBHVssbg0) (271K) | — |
+| Ziotok83 | [ZioTok83](https://www.youtube.com/@ZioTok83/videos) | "Youtube merda : il capitano incita la ciurma a sballarsi con la vinavil" | — |
+| mr.nintendo | Canale chiuso | — | — |
+| Elia1995 | [EliaForce1984ita](https://www.youtube.com/@EliaForce1984ita) | — | — |
+| Weegee64 | [Mario6493](https://www.youtube.com/@Mario6493) | [You dare not agree with the Mario Head?](https://www.youtube.com/watch?v=PHQWtOAGrA4) (189K) | — |
+| Gwonam the Wizard | [Gwonam the Wizard](https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg) | — | — |
+| rikimaru.HAL | — | — | — |
+| Nocoldiz | [Nocoldiz](https://www.youtube.com/@Nocoldiz) | "È finito il vino" | "Vendettatori", "Frodo è contro la legge", "Silvio è diventato nonno di se stesso" |
+| Pennaz | [Pennaz](https://www.youtube.com/@Pennaz) | — | Grafico ufficiale del forum |
+| DarkCoffe64 | [DarkCoffe64](https://www.youtube.com/channel/UC-Dati-non-disponibili) | [Youtube Poop Robotnik turn the moon into spaghetti part 01](https://www.youtube.com/watch?v=-jEDQck88bM) | — |
 
 **2009**
 
@@ -198,7 +151,8 @@ Ziotok conia la dicitura "Youtube merda" in alternativa alle YTP
 
 ---
 
-## 🟢 Era 5 — L'Età dell'Oro Italiana (2011 - 2018)
+## 🟢 Era 5 — L'Età dell'Oro Italiana (2011 - 2016)
+
 **Caratteristiche distintive del filone italiano:**
 Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperimento e diventa un vero e proprio fenomeno di culto sul web italiano, trovando la sua identità definitiva. È l'epoca dei grandi classici, delle collaborazioni (Collab) e dei tornei (Tennis).
 
@@ -210,74 +164,28 @@ Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperim
 - **Collab** tendenza a fare collab
 - **Protoni** — distorsioni cromatiche e psichedeliche su un singolo stutter
 
-**Sources di riferimento:**
+**Sources di riferimento:** "Matteo Montesi"
 
-**Pooper italiani di riferimento:**
+### Pooper italiani di riferimento
 
-## Revergo
-* **Canale:** [revergo](https://www.youtube.com/@revergo)
-* **Video più visto:** [Yee](https://www.youtube.com/watch?v=q6EoRBvdVPQ) (101 mln visualizzazioni)
-* **Altri video:** "A for Asthma".
-
-## MasterCast
-* **Canale:** [MasterCast](https://www.youtube.com/@MastercastPresident)
-* **Video più visto:** [YTP: Il Signore Del SAS](https://www.youtube.com/watch?v=RInYvE6FidY) (1,2 mln visualizzazioni)
-* **Altri video:** "Mike Wazowski fa uso di bamba", "Kuzco È Un Folle".
-
-## TottiBest
-* **Canale:** [TottiBest](https://www.youtube.com/@TottiBest92)
-* **Video più visto:** [La vera storia di Harry Potter (feat. Nocoldiz)](https://www.youtube.com/watch?v=iFdZxxAn5Fw) (620.000 visualizzazioni)
-* **Altri video:** "A carlo conti piace appoggiarsi", "Chef Rubio e le tecniche ninja proibite".
-
-## Stew Barz
-* **Canale:** [StewBarzTube](https://www.youtube.com/user/StewBarzTube)
-* **Video più visto:** [YTP: Celentanoh Trolla Le Donne](https://www.youtube.com/watch?v=pAnVInh6F-U) (310.000 visualizzazioni)
-* **Altri video:** "Gaston ha i peli esplosivi".
-
-## PierluPoops
-* **Canale:** [Pierlu Poops](https://www.youtube.com/user/PierluPoops)
-* **Video più visto:** [Panico Paura feat. Angelo Ruoppolo](https://www.youtube.com/watch?v=8ZvWYSukIXU) (32.000 visualizzazioni)
-* **Altri video:** "YTP - Spaidermen uno [ITA]", "YTP - Gli squali volanti sono persone orribili".
-
-## Christianice
-* **Canale:** [ChristianIce](https://www.youtube.com/user/ChristianIce)
-* **Video più visto:** [Enrico Pasquale Pratticò - Sono un ragazzo carino (Remix)](https://www.youtube.com/watch?v=pAnVInh6F-U) (5,8 mln visualizzazioni)
-* **Altri video:** "L'INFERNO DEL FOLLETTO", "Toni Iwobi - L'Ora Esatta Di Casa Loro - by Christian Ice".
-
-## MrPoldoAknar
-* **Canale:** [Poldo](https://www.youtube.com/@mrpoldoakbar2849)
-* **Video più visto:** [Tutti si uniscono alla Battaglia!](https://www.youtube.com/watch?v=MN1Kvk0VAUM) (1,2 mln visualizzazioni)
-* **Altri video:** "YTP ITA - Me Contro Te contro Voi contro quegli altri".
-
-## Ziomeso
-* **Canale:** [ZioMeso](https://www.youtube.com/user/ZioMeso)
-* **Video più visto:** [YTPM - Super Mario Gumball Brothers [Underworld Theme]](https://www.youtube.com/watch?v=pnO7ul29qPk) (18.000 visualizzazioni)
-* **Altri video:** "He Man e la forza di nino d'angelo", "Breaking Bad Ebola Season Walktrough".
-
-## Julaoa
-* **Canale:** [julaoa](https://www.youtube.com/user/julaoa)
-* **Video più visto:** [NabboCube](https://www.youtube.com/watch?v=KmPRd0lH9vk) (5.000 visualizzazioni)
-* **Altri video:** "Youtube Merda - Fletcher Fiction", "YTPMV - GO BUTTERFLY DOG".
-
-## Jakkomatto
-* **Canale:** [JakkoMatto](https://www.youtube.com/user/JakkoMatto)
-* **Video più visto:** [Imen e il Raggio di Morandi](https://www.youtube.com/watch?v=7uC8W3_U3h8) (355.000 visualizzazioni)
-* **Altri video:** "He - Man ( parodia )", "Pokemon Infinite Fusion".
-
-## Clodd97
-* **Canale:** [Clodd](https://www.youtube.com/@Clodd)
-* **Video più visto:** [YTP ITA - Ah non è un pezzo unico?](https://www.youtube.com/watch?v=3tQPKSPy8G4) (35.000 visualizzazioni)
-* **Altri video:** "YTP ITA Junior paga l'abbonamento", "Ytp ita Junior ha una mira mostruosa!".
-
-## FREDERICK FRANKESTEIN
-* **Canale:** [Frederick Frankenstein](https://www.youtube.com/@frederickfrankenstein5671)
-* **Video più visto:** [YTP - Applausi per Kappalicious, la ragazza perfetta](https://www.youtube.com/watch?v=njOgmE64UdU) (3,3 mln visualizzazioni)
-* **Altri video** 
-
+| Pooper | Canale | Video più visto | Altri video |
+|---|---|---|---|
+| Revergo | [revergo](https://www.youtube.com/@revergo) | [Yee](https://www.youtube.com/watch?v=q6EoRBvdVPQ) (101 mln) | "A for Asthma" |
+| MasterCast | [MasterCast](https://www.youtube.com/@MastercastPresident) | [YTP: Il Signore Del SAS](https://www.youtube.com/watch?v=RInYvE6FidY) (1,2 mln) | "Mike Wazowski fa uso di bamba", "Kuzco È Un Folle" |
+| TottiBest | [TottiBest](https://www.youtube.com/@TottiBest92) | [La vera storia di Harry Potter (feat. Nocoldiz)](https://www.youtube.com/watch?v=iFdZxxAn5Fw) (620K) | "A carlo conti piace appoggiarsi", "Chef Rubio e le tecniche ninja proibite" |
+| Stew Barz | [StewBarzTube](https://www.youtube.com/user/StewBarzTube) | [YTP: Celentanoh Trolla Le Donne](https://www.youtube.com/watch?v=pAnVInh6F-U) (310K) | "Gaston ha i peli esplosivi" |
+| PierluPoops | [Pierlu Poops](https://www.youtube.com/user/PierluPoops) | [Panico Paura feat. Angelo Ruoppolo](https://www.youtube.com/watch?v=8ZvWYSukIXU) (32K) | "YTP - Spaidermen uno [ITA]", "YTP - Gli squali volanti sono persone orribili" |
+| Christianice | [ChristianIce](https://www.youtube.com/user/ChristianIce) | [Enrico Pasquale Pratticò - Sono un ragazzo carino (Remix)](https://www.youtube.com/watch?v=pAnVInh6F-U) (5,8 mln) | "L'INFERNO DEL FOLLETTO", "Toni Iwobi - L'Ora Esatta Di Casa Loro" |
+| MrPoldoAknar | [Poldo](https://www.youtube.com/@mrpoldoakbar2849) | [Tutti si uniscono alla Battaglia!](https://www.youtube.com/watch?v=MN1Kvk0VAUM) (1,2 mln) | "YTP ITA - Me Contro Te contro Voi contro quegli altri" |
+| Ziomeso | [ZioMeso](https://www.youtube.com/user/ZioMeso) | [YTPM - Super Mario Gumball Brothers](https://www.youtube.com/watch?v=pnO7ul29qPk) (18K) | "He Man e la forza di nino d'angelo", "Breaking Bad Ebola Season Walktrough" |
+| Julaoa | [julaoa](https://www.youtube.com/user/julaoa) | [NabboCube](https://www.youtube.com/watch?v=KmPRd0lH9vk) (5K) | "Youtube Merda - Fletcher Fiction", "YTPMV - GO BUTTERFLY DOG" |
+| Jakkomatto | [JakkoMatto](https://www.youtube.com/user/JakkoMatto) | [Imen e il Raggio di Morandi](https://www.youtube.com/watch?v=7uC8W3_U3h8) (355K) | "He - Man ( parodia )", "Pokemon Infinite Fusion" |
+| Clodd97 | [Clodd](https://www.youtube.com/@Clodd) | [YTP ITA - Ah non è un pezzo unico?](https://www.youtube.com/watch?v=3tQPKSPy8G4) (35K) | "YTP ITA Junior paga l'abbonamento", "Ytp ita Junior ha una mira mostruosa!" |
 
 **2011**
 * **Silvio è diventato nonno di se stesso** *(Nocoldiz)*
-Nel **2011** (non 2021), divergenze interne, differenze di visione sul "purismo" delle poop e normali attriti da community portano a un vero e proprio scisma. Una fazione si distacca dal Forum Rosso per fondare un progetto rivale: nasce così **Il Forum Blu**. 
+
+Nel **2011** (non 2021), divergenze interne, differenze di visione sul "purismo" delle poop e normali attriti da community portano a un vero e proprio scisma. Una fazione si distacca dal Forum Rosso per fondare un progetto rivale: nasce così **Il Forum Blu**.
 
 Guidato da figure di spicco come **FrankTreeps** e **VoodooChild**, il Forum Blu si propone come un'alternativa, attirando nuovi talenti e creando una spaccatura netta nella scena italiana.
 Questa divisione dà il via a un periodo noto come la **"Guerra tra forum"**. Non si trattava solo di litigi testuali (come testimoniato dallo storico thread [Guerra tra forum](https://youtubepoopita.forumfree.it/?t=57126077)), ma di vere e proprie sfide a colpi di video, *dissing* nascosti nei montaggi e una forte competizione per stabilire quale fosse la vera élite del pooping italiano. Questa rivalità, seppur accesa, ebbe l'effetto collaterale di alzare drasticamente l'asticella tecnica e creativa dei video prodotti.
@@ -285,11 +193,11 @@ Questa divisione dà il via a un periodo noto come la **"Guerra tra forum"**. No
 La tensione durò per mesi, fino a quando le due fazioni si resero conto che la divisione stava limitando il potenziale della community. La svolta arriva con la **[Proposta di pace](https://youtubepoopita.forumfree.it/?t=59604480)**: un momento storico di diplomazia digitale che portò a una tregua e, successivamente, a una progressiva riunificazione degli intenti. Questa pace segnò il vero inizio dell'apice dell'Età dell'Oro, permettendo ai migliori talenti di entrambe le sponde di collaborare a progetti giganteschi che hanno fatto la storia di YouTube Italia.
 
 **2012**
-* **A for Asthma** *(Revergo)*:
+* **A for Asthma** *(Revergo)*
 
 **2013**
 * **Mike Wazowski fa uso di bamba** *(MasterCast)*
-* **È finito il vino** *(Nocoldiz)
+* **È finito il vino** *(Nocoldiz)*
 
 **2014**
 * **YEE** *(Revergo)*: Da un oscurissimo e pessimo cartone della *Dingo Pictures* (Dinosauri), Revergo estrapola un dinosauro e un motivetto ("Yee"). Il video valica i confini italiani e diventa un meme **mondiale**, citato ancora oggi su forum internazionali, Reddit e TikTok. L'Italia esporta il no-sense.
@@ -300,49 +208,60 @@ Inizio fenomeno MLG
 **2015**
 * **Ah non è un pezzo unico?** *(Clodd97)*
 
-
-
 **2016**
 * **I Vendettatori** *(Nocoldiz)*
 * **Kuzco È Un Folle** *(MasterCast)*
 
-**2017**
-* **POOP SQUAD** *(_RT_ / RT Poop - fine 2017)*: 
-Fine fenomeno MLG
-Inizia l'**Adpocalypse** (termine coniato da PewDiePie): inserzionisti ritirano massicciamente le pubblicità da YouTube, i guadagni dei pochi poopers con partership crollano.
-
-**2018**
-* **POOP SQUAD 2: AGE OF TRUMP** *(RT Poop)*:
-* **Vendettatori: La Guerra dell'Infinito** *(Nocoldiz)*:
-PARLARE DI FREDERICK FRANKESTEIN
-FREDERICK FRANKESTEIN
-
 ---
 
 
-## 🟠 Era 6 — La pandemic era (2019 - 2022)
-**Pooper italiani di riferimento:**
+## 🟠 Era 6 — L'Adpocalipse (2017 - 2022)
 
 **Sources di riferimento:**
 Il Collegio
 
-**2019** 
+### Pooper italiani di riferimento
+
+| Pooper | Canale | Video più visto | Altri video |
+|---|---|---|---|
+| RTPOOP | — | — | — |
+| Davvo | — | [YTP - ShreKKK [ITA]](https://www.youtube.com/watch?v=_pOUJKK8o4Q) | — |
+| 125Replay | — | — | — |
+| Alepoops | — | — | — |
+| Frederick Frankenstein | [Frederick Frankenstein](https://www.youtube.com/@frederickfrankenstein5671) | [YTP - Applausi per Kappalicious, la ragazza perfetta](https://www.youtube.com/watch?v=njOgmE64UdU) (3,3 mln) | — |
+
+---
+
+**2017**
+* **POOP SQUAD** *(_RT_ / RT Poop - fine 2017)*
+
+Fine fenomeno MLG
+Inizia l'**Adpocalypse** (termine coniato da PewDiePie): inserzionisti ritirano massicciamente le pubblicità da YouTube, i guadagni dei pochi poopers con partership crollano.
+
+**2018**
+* **POOP SQUAD 2: AGE OF TRUMP** *(RT Poop)*
+* **Vendettatori: La Guerra dell'Infinito** *(Nocoldiz)*
+
+Frederick Frankestein conia il termine "Youtube Graft"
+
+**2019**
 Poop su IlCollegio di 125Replay e Alepoops diventano virali
-Il canale di **Nocoldiz viene bannato senza spiegazioni** 
+Il canale di **Nocoldiz viene bannato senza spiegazioni**
 
-**2020** 
-L'utente **Davvo** pubblica **YTP - ShreKKK [ITA]** ([https://www.youtube.com/watch?v=_pOUJKK8o4Q](https://www.youtube.com/watch?v=_pOUJKK8o4Q)). 
+**2020**
+L'utente **Davvo** pubblica **YTP - ShreKKK [ITA]** ([https://www.youtube.com/watch?v=_pOUJKK8o4Q](https://www.youtube.com/watch?v=_pOUJKK8o4Q)).
 
-L'incredibile  successo  di *ShreKKK* scatena un effetto: la nascita del fenomeno dei **"pooperini"**.
-Migliaia di giovanissimi utenti (scoprono il formato YTP proprio tramite il video di Davvo. Entusiasti, decidono di iniziare a creare le proprie "poop".
+L'incredibile successo di *ShreKKK* scatena un effetto: la nascita del fenomeno dei **"pooperini"**.
+Migliaia di giovanissimi utenti scoprono il formato YTP proprio tramite il video di Davvo. Entusiasti, decidono di iniziare a creare le proprie "poop".
 
-**2021** 
+**2021**
 
-**2022** 
+**2022**
 
 ---
 
 ## 🔵 Era 7 — La Sopravvivenza e l'Era IA (2023 - presente)
+
 **Pooper italiani di riferimento:**
 
 **Sources di riferimento:**

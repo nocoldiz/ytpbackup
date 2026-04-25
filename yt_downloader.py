@@ -148,6 +148,9 @@ class VideoIndex:
                 "description": None,
                 "channel_name": None,
                 "channel_url": None,
+                "publish_date": None,
+                "view_count": None,
+                "like_count": None,
                 "sections": [],
                 "source_pages": [],
                 "thread_titles": [],
@@ -166,12 +169,16 @@ class VideoIndex:
         e = self.data.get(video_id, {})
         if e.get("status") == "unavailable":
             return False
+        if e.get("title") == "warnings.warn(":
+            return True
         return (e.get("title") is None or
                 e.get("description") is None or
-                e.get("channel_name") is None)
+                e.get("channel_name") is None or
+                e.get("view_count") is None)
 
     def set_metadata(self, video_id, title=None, description=None,
-                     channel_name=None, channel_url=None):
+                     channel_name=None, channel_url=None,
+                     publish_date=None, view_count=None, like_count=None):
         if video_id not in self.data:
             return
         e = self.data[video_id]
@@ -183,6 +190,12 @@ class VideoIndex:
             e["channel_name"] = channel_name
         if channel_url:
             e["channel_url"] = channel_url
+        if publish_date is not None:
+            e["publish_date"] = publish_date
+        if view_count is not None:
+            e["view_count"] = view_count
+        if like_count is not None:
+            e["like_count"] = like_count
 
     def is_done(self, vid):
         return self.data.get(vid, {}).get("status") in ("downloaded", "unavailable")
@@ -316,11 +329,18 @@ def fetch_yt_metadata(video_id):
             if raw is None:
                 return None
             d = json.loads(raw)
+            raw_date = d.get("upload_date")  # "20230415"
+            publish_date = None
+            if raw_date and len(raw_date) == 8:
+                publish_date = f"{raw_date[:4]}-{raw_date[4:6]}-{raw_date[6:]}"
             return {
                 "title":        d.get("title"),
                 "description":  (d.get("description") or "")[:3000],
                 "channel_name": d.get("uploader") or d.get("channel"),
                 "channel_url":  d.get("uploader_url") or d.get("channel_url"),
+                "publish_date": publish_date,
+                "view_count":   d.get("view_count"),
+                "like_count":   d.get("like_count"),
             }
         combined = (r.stdout + r.stderr).lower()
         for msg in UNAVAIL_MSGS:
@@ -739,7 +759,7 @@ def do_stats(index):
 
     header = (f"  {'Channel':<{col_ch}}  {'Total':>5}  {'DL':>4}  "
               f"{'Pend':>4}  {'N/A':>4}  {'Fail':>4}  Sections")
-    sep    = "  " + "─" * (len(header) - 2)
+    sep    = "  " + "-" * (len(header) - 2)
 
     print()
     print(header)
@@ -754,6 +774,50 @@ def do_stats(index):
     totals = index.stats()
     print(f"  {'TOTAL':<{col_ch}}  {totals['total']:>5}  {totals['downloaded']:>4}  "
           f"{totals['pending']:>4}  {totals['unavailable']:>4}  {totals.get('failed', 0):>4}")
+    print()
+
+
+def do_chronology(index, top_n=20):
+    if not index.data:
+        print("  Index is empty. Run 'Update index' first.")
+        return
+
+    candidates = [
+        e for e in index.data.values()
+        if e.get("status") != "unavailable"
+        and e.get("title")
+        and e.get("title") != "warnings.warn("
+        and e.get("view_count") is not None
+    ]
+
+    if not candidates:
+        print("  No view count data yet. Run 'Update index' to fetch metadata.")
+        return
+
+    top = sorted(candidates, key=lambda e: e.get("view_count") or 0, reverse=True)[:top_n]
+    top.sort(key=lambda e: e.get("publish_date") or "")
+
+    col_title   = 40
+    col_channel = 22
+    header = (f"  {'#':>3}  {'Year':<4}  {'Title':<{col_title}}  "
+              f"{'Channel':<{col_channel}}  {'Views':>10}  {'Likes':>8}")
+    sep    = "  " + "-" * (len(header) - 2)
+
+    print()
+    print(header)
+    print(sep)
+    for rank, e in enumerate(top, 1):
+        year    = (e.get("publish_date") or "????")[:4]
+        title   = (e.get("title") or "")[:col_title]
+        channel = (e.get("channel_name") or "")[:col_channel]
+        views   = e.get("view_count")
+        likes   = e.get("like_count")
+        views_s = f"{views:,}" if views is not None else "—"
+        likes_s = f"{likes:,}" if likes is not None else "—"
+        print(f"  {rank:>3}  {year:<4}  {title:<{col_title}}  "
+              f"{channel:<{col_channel}}  {views_s:>10}  {likes_s:>8}")
+    print(sep)
+    print(f"  Top {len(top)} most-viewed videos (of {len(candidates)} with view data), sorted by year")
     print()
 
 
@@ -778,17 +842,34 @@ def print_header():
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
+    import io
+    if hasattr(sys.stdout, 'buffer'):
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+
     p = argparse.ArgumentParser(add_help=False)
     p.add_argument("--site-dir",     default=DEFAULT_SITE_DIR)
     p.add_argument("--video-dir",    default=DEFAULT_VIDEO_DIR)
     p.add_argument("--format",       default=DEFAULT_FORMAT)
     p.add_argument("--rate-limit",   default=None)
     p.add_argument("--retry-failed", action="store_true")
+    p.add_argument("--stats",        action="store_true",
+                   help="Print channel stats table and exit")
+    p.add_argument("--chronology",   action="store_true",
+                   help="Print top-20 most-viewed videos by year and exit")
     args, _ = p.parse_known_args()
 
     if not os.path.isdir(args.site_dir):
         print(f"[!] site_dir not found: {args.site_dir}")
         sys.exit(1)
+
+    if args.stats or args.chronology:
+        index = VideoIndex(args.video_dir)
+        index.load()
+        if args.stats:
+            do_stats(index)
+        if args.chronology:
+            do_chronology(index)
+        return
 
     print_header()
     print(f"  Site dir:  {os.path.abspath(args.site_dir)}")
@@ -814,9 +895,15 @@ def main():
     print()
     print("  5  Both  (update index, then download all)")
     print()
+    print("  6  Stats")
+    print("       Channel table: most videos first.")
+    print()
+    print("  7  Chronology")
+    print("       Top 20 most-viewed videos, sorted by year.")
+    print()
     print("  q  Quit")
     print()
-    choice = ask("  Choice [1/2/3/4/5/q]: ", {"1", "2", "3", "4", "5", "q"})
+    choice = ask("  Choice [1/2/3/4/5/6/7/q]: ", {"1", "2", "3", "4", "5", "6", "7", "q"})
 
     if choice == "q":
         sys.exit(0)
@@ -852,6 +939,12 @@ def main():
             args.retry_failed,
         )
 
+    if choice == "6":
+        do_stats(index)
+
+    if choice == "7":
+        do_chronology(index)
+
     print()
 
 
@@ -866,4 +959,8 @@ if __name__ == "__main__":
         print("\n  Interrupted.")
     finally:
         print()
-        input("  Press Enter to close...")
+        try:
+            if sys.stdin.isatty():
+                input("  Press Enter to close...")
+        except (EOFError, OSError):
+            pass
