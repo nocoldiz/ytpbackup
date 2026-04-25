@@ -260,8 +260,8 @@ Il Collegio, altri youtuber. Masterchef, Marvel
 ---
 
 **2017**
-* [**YTP - Applausi per Kappalicious, la ragazza perfetta**](https://www.youtube.com/watch?v=olzaqjmWnlc) *(Frederick Frankenstein)*: Poop sulla youtuber Kappalicious; raggiungerà 3,3 milioni di visualizzazioni diventando uno dei più visti di sempre nella YTP ITA.
-* [**YTP ITA - Ti faaf staas beeneh**](https://www.youtube.com/watch?v=zNOEeXceyGo) *(ilCirox)*: Sentence mixing su dialogo televisivo; il titolo onomatopeico diventa meme interno alla community.
+* [**YTP - Applausi per Kappalicious, la ragazza perfetta**](https://www.youtube.com/watch?v=olzaqjmWnlc) *(Frederick Frankenstein)*: 
+* [**YTP ITA - Ti faaf staas beeneh**](https://www.youtube.com/watch?v=zNOEeXceyGo) *(ilCirox)*: 
 * [**POOP SQUAD**](https://www.youtube.com/watch?v=HUp7qFE32SA) *(RT Poop)*
 * [**YTP - Lo chef tony è un maniaco incestuoso [ITA]**](https://www.youtube.com/watch?v=L83llpim7Vs) *(AssoDiDenari)*
 
@@ -270,8 +270,8 @@ Inizia l'**Adpocalypse** (termine coniato da PewDiePie): inserzionisti ritirano 
 
 **2018**
 * [**POOP SQUAD 2: AGE OF TRUMP**](https://www.youtube.com/watch?v=lWKerlHcNIU) *(RT Poop)*
-* [**YTP - POOP FICTION**](https://www.youtube.com/watch?v=1kL192HeJlw) *(Capra Strabica feat. Nocoldiz)*: Maxi-progetto in stile Tarantino; una delle collaborazioni più ambiziose dell'era.
-* [**YTP - Gommacoglione (feat. Ale199) [ITA]**](https://www.youtube.com/watch?v=LliK20AjFso) *(Davvo)*: Tra i primissimi video di Davvo, che inizia a costruirsi una reputazione nella community.
+* [**YTP - POOP FICTION**](https://www.youtube.com/watch?v=1kL192HeJlw) *(Collab)*: 
+* [**YTP - Gommacoglione (feat. Ale199) [ITA]**](https://www.youtube.com/watch?v=LliK20AjFso) *(Davvo)*:
 * **Vendettatori: La Guerra dell'Infinito** *(Nocoldiz)*
 
 Frederick Frankestein conia il termine "Youtube Graft"
