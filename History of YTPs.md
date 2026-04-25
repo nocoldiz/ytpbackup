@@ -1,24 +1,24 @@
 # Timeline delle YouTube Poop
 
 
-## 🔷 Era 0 — Le Radici Concettuali (1916 - anni '60)
+## 🔷 Era 0 - Le Radici Concettuali (1916 - anni '60)
 
 ### Il Dada come antenato comune
 
 Tutto parte dal **Cabaret Voltaire di Zurigo (1916)**, dove un gruppo di artisti (Tzara, Ball, Janco, Arp, Hennings, Huelsenbeck) inaugura un movimento che farà del **caso, del nonsense e del collage** i propri principi fondamentali. La poesia onomatopeica di Hugo Ball (*O Gadji Beri Bimba*, 1917) e i poemi-ritaglio di Tzara, ottenuti dissezionando una pagina di giornale e ricomponendola a caso, sono i veri **prototipi concettuali del sentence mixing**.
 
-> *"Dada è il fondamento di tutte le arti. Dada è per la mancanza di un senso nell'Arte, il che non significa non senso. Dada è senza senso, come la natura."* — Tristan Tzara
+> *"Dada è il fondamento di tutte le arti. Dada è per la mancanza di un senso nell'Arte, il che non significa non senso. Dada è senza senso, come la natura."* - Tristan Tzara
 
 **Tappe fondamentali di questa preistoria:**
 
-- **1916–1924** — Esperienza Dada (Zurigo, Berlino, Parigi, New York). Fotomontaggio politico-satirico di Heartfield e Grosz.
-- **1927** — Esfir Šub inaugura il **found footage** con *La Caduta della dinastia Romanov*: dimostra che il montaggio può creare ironia accostando materiali eterogenei.
-- **1961–1965** — Burroughs e Balch sperimentano i **cut-ups** cinematografici con formula matematica.
-- **Anni '60–'70** — Il **ready-made** di Duchamp si afferma come logica del riuso, principio che le YTP erediteranno integralmente.
+- **1916–1924** - Esperienza Dada (Zurigo, Berlino, Parigi, New York). Fotomontaggio politico-satirico di Heartfield e Grosz.
+- **1927** - Esfir Šub inaugura il **found footage** con *La Caduta della dinastia Romanov*: dimostra che il montaggio può creare ironia accostando materiali eterogenei.
+- **1961–1965** - Burroughs e Balch sperimentano i **cut-ups** cinematografici con formula matematica.
+- **Anni '60–'70** - Il **ready-made** di Duchamp si afferma come logica del riuso, principio che le YTP erediteranno integralmente.
 
 ---
 
-## 🔷 Era 1 — La Preistoria Mediatica (1963 - 2003)
+## 🔷 Era 1 - La Preistoria Mediatica (1963 - 2003)
 
 ### I precursori televisivi e radiofonici
 
@@ -28,21 +28,21 @@ Prima ancora che esistesse YouTube, alcuni esperimenti **anticipavano formalment
 ---
 
 
-**1964** — ***La verifica incerta* (Gianfranco Baruchello e Alberto Grifi)**: Un'opera fondamentale dell'avanguardia italiana ([qui la pagina Wikipedia](https://it.wikipedia.org/wiki/Verifica_incerta?useskin=vector)). I due registi acquistano letteralmente chilometri di pellicola di scarto da Hollywood (spezzoni di kolossal, western, melodrammi) e li rimontano in un'orgia visiva che destruttura i cliché del cinema commerciale. I gesti degli attori vengono ripetuti, interrotti e accostati per creare un *nonsense* assoluto. È un perfetto antenato intellettuale, in ambito artistico, del *pooping* contemporaneo.
+**1964** - ***La verifica incerta* (Gianfranco Baruchello e Alberto Grifi)**: Un'opera fondamentale dell'avanguardia italiana ([qui la pagina Wikipedia](https://it.wikipedia.org/wiki/Verifica_incerta?useskin=vector)). I due registi acquistano letteralmente chilometri di pellicola di scarto da Hollywood (spezzoni di kolossal, western, melodrammi) e li rimontano in un'orgia visiva che destruttura i cliché del cinema commerciale. I gesti degli attori vengono ripetuti, interrotti e accostati per creare un *nonsense* assoluto. È un perfetto antenato intellettuale, in ambito artistico, del *pooping* contemporaneo.
 
-**1966** — ***Che fai, rubi?* (*What's Up, Tiger Lily?*, Woody Allen)**: Allen prende un oscuro e serissimo film di spionaggio giapponese e lo **ridoppia in inglese**, stravolgendone completamente la trama e i dialoghi per farne una commedia demenziale alla ricerca della ricetta perfetta per l'insalata di uova. È di fatto la prima "parodia doppiata" su larga scala, un filone che sarà centrale sia nelle YTP che nei ridoppiaggi storici del web italiano.
+**1966** - ***Che fai, rubi?* (*What's Up, Tiger Lily?*, Woody Allen)**: Allen prende un oscuro e serissimo film di spionaggio giapponese e lo **ridoppia in inglese**, stravolgendone completamente la trama e i dialoghi per farne una commedia demenziale alla ricerca della ricetta perfetta per l'insalata di uova. È di fatto la prima "parodia doppiata" su larga scala, un filone che sarà centrale sia nelle YTP che nei ridoppiaggi storici del web italiano.
 
-**1989** — **Va in onda per la prima volta BLOB (Rai)**: Ideato da Guglielmi, Ghezzi e Giusti. Per la prima volta in Italia un programma istituzionale fa del **montaggio satirico di found footage televisivo** la propria unica risorsa formale. È la versione "alta" e autoriale di ciò che le YTP faranno dal basso, mettendo a nudo i tic e i cortocircuiti dei mass media.
+**1989** - **Va in onda per la prima volta BLOB (Rai)**: Ideato da Guglielmi, Ghezzi e Giusti. Per la prima volta in Italia un programma istituzionale fa del **montaggio satirico di found footage televisivo** la propria unica risorsa formale. È la versione "alta" e autoriale di ciò che le YTP faranno dal basso, mettendo a nudo i tic e i cortocircuiti dei mass media.
 
-**1993–2023** — **Cordialmente su Radio Deejay** (Linus, Elio e le Storie Tese, Mangoni): Le rubriche dei *Corti* — Le fiabe corte, i Tg corti, le Ricette corte — sono **YTP audio ante litteram**: frasi scomposte, sillabe tagliate e ricomposte da fiabe sonore, telegiornali e spot per creare significati assurdi e volgari. Nocoldiz le indica come antenato tecnico diretto delle YTP italiane (il *sentence mixing*).
+**1993–2023** - **Cordialmente su Radio Deejay** (Linus, Elio e le Storie Tese, Mangoni): Le rubriche dei *Corti* - Le fiabe corte, i Tg corti, le Ricette corte - sono **YTP audio ante litteram**: frasi scomposte, sillabe tagliate e ricomposte da fiabe sonore, telegiornali e spot per creare significati assurdi e volgari. Nocoldiz le indica come antenato tecnico diretto delle YTP italiane (il *sentence mixing*).
 
-**Fine anni '90 - primi 2000** — **Maccio Capatonda (Marcello Macchia)**: Inizia a produrre parodie di trailer cinematografici per *Mai dire…* della Gialappa's Band. La sua sensibilità per il **nonsense surreale italiano**, i finti errori di montaggio e i nomi storpiati plasmerà in modo indelebile il gusto umoristico della futura community online italiana.
+**Fine anni '90 - primi 2000** - **Maccio Capatonda (Marcello Macchia)**: Inizia a produrre parodie di trailer cinematografici per *Mai dire…* della Gialappa's Band. La sua sensibilità per il **nonsense surreale italiano**, i finti errori di montaggio e i nomi storpiati plasmerà in modo indelebile il gusto umoristico della futura community online italiana.
 
-**Primi 2000** — **Crescono gli AMV (Anime Music Video)**: La prima vera forma internazionale di *mash-up* video condiviso attivamente in rete dalle community. Insegnano a una generazione di futuri creatori la pratica tecnica del "fare a pezzi e ricomporre a tempo di musica" prodotti culturali amati.
+**Primi 2000** - **Crescono gli AMV (Anime Music Video)**: La prima vera forma internazionale di *mash-up* video condiviso attivamente in rete dalle community. Insegnano a una generazione di futuri creatori la pratica tecnica del "fare a pezzi e ricomporre a tempo di musica" prodotti culturali amati.
 
 ---
 
-## 🔷 Era 2 — La Genesi (2004 - 2006)
+## 🔷 Era 2 - La Genesi (2004 - 2006)
 
 ### La Cronologia del "Big Bang"
 
@@ -71,26 +71,26 @@ Durante questa fase embrionale, le YTP non avevano ancora la complessità ritmic
 
 ---
 
-## 🟡 Era 3 — L'Età dell'Oro Americana (2007 - 2011)
+## 🟡 Era 3 - L'Età dell'Oro Americana (2007 - 2011)
 
 ### La "Golden Age" del Poopism
 
 Il fenomeno esplode nella comunità anglofona. Si formalizza il **Poopism**, il corpus tecnico tradizionale delle YTP, con tecniche che diventano canone:
 
-- **Sentence Mixing** — l'erede diretto della poesia dadaista di Tzara
+- **Sentence Mixing** - l'erede diretto della poesia dadaista di Tzara
 - **Sound Manipulation** (chipmunks, voci rallentate)
-- **Ear Rape** — distorsione acustica violenta
+- **Ear Rape** - distorsione acustica violenta
 - **Stutter Loop** (ripetizione extra di pochi frames)
 - **Inversione ripetuta**
 - **Distorsioni ottiche**
 
 **Sources di riferimento:** cutscene di videogiochi Nintendo per Philips CD-i (*Zelda: The Wand of Gamelon*, *Link: The Faces of Evil*, *Hotel Mario*) e cartoni animati come *The Adventures of Super Mario Bros. 3*.  *Dr. Rabbit*, *IM Meen*
 
-**2007–2008** — Periodo di massima produzione americana. Si forma una vera **subcultura** con regole, gerghi e wiki dedicati (YouChew, Chewiki).
+**2007–2008** - Periodo di massima produzione americana. Si forma una vera **subcultura** con regole, gerghi e wiki dedicati (YouChew, Chewiki).
 
-**2009** — La rivista *Consequence of Sound* pubblica la prima definizione "ufficiale" delle YTP: *"un riciclo di video, spesso costituiti da filmati nostalgici della cultura pop e da altri video meme — tagliati, avvitati, de-molecolarizzati e manipolati in un gulasch di video senza senso."*
+**2009** - La rivista *Consequence of Sound* pubblica la prima definizione "ufficiale" delle YTP: *"un riciclo di video, spesso costituiti da filmati nostalgici della cultura pop e da altri video meme - tagliati, avvitati, de-molecolarizzati e manipolati in un gulasch di video senza senso."*
 
-**2010** — Nasce il termine **Spadinner** (fusione di *spaghetti* + *dinner*) per indicare le YTP scadenti che riciclano gli stessi effetti e fonti fino allo sfinimento. È il segno che la comunità è abbastanza matura da auto-criticarsi.
+**2010** - Nasce il termine **Spadinner** (fusione di *spaghetti* + *dinner*) per indicare le YTP scadenti che riciclano gli stessi effetti e fonti fino allo sfinimento. È il segno che la comunità è abbastanza matura da auto-criticarsi.
 
 **2011**
 
@@ -107,7 +107,7 @@ Il fenomeno esplode nella comunità anglofona. Si formalizza il **Poopism**, il 
 | Yaminomalex | Yaminomalex | 
 | Conrad Slater | Conrad Slater |
 
-## 🟢 Era 4 — Le origini della community italiana (2008-2010)
+## 🟢 Era 4 - Le origini della community italiana (2008-2010)
 **Sources di riferimento:** "Zelda CD-I" "Mario's Hotel" "Richard Benson", "Prof Testoh", "Pubblicità anni 80", "Berlusconi", "Harry Potter", "Lazy Town", "Pokémon", "Yotobi","Alex l'ariete"
 ### Pooper italiani di riferimento
 
@@ -150,18 +150,18 @@ Le YTPMV ed i Tennis salgono in popolarità
 
 ---
 
-## 🟢 Era 5 — L'Età dell'Oro Italiana (2011 - 2016)
+## 🟢 Era 5 - L'Età dell'Oro Italiana (2011 - 2016)
 
 **Caratteristiche distintive del filone italiano:**
 Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperimento e diventa un vero e proprio fenomeno di culto sul web italiano, trovando la sua identità definitiva. È l'epoca dei grandi classici, delle collaborazioni (Collab) e dei tornei (Tennis).
 
-- **Manifestazione degli autori nei video** (Mastercast che interagisce con i video cameo in green screen, video-diari) — al contrario della cultura anonima americana
+- **Manifestazione degli autori nei video** (Mastercast che interagisce con i video cameo in green screen, video-diari) - al contrario della cultura anonima americana
 - Forte focus sulla **satira politica** (comizi, interviste TV)
 - Personaggi diventati famosi grazie alle YTP su di loro (Prof. Testoh, Matteo Montesi)
 - Uso massiccio del **trash televisivo italiano** (Andrea Dipré, Telemarket, Roberto Baffo, Chef Tony)
 - **Universi narrativi interni** persistenti tra video diversi
 - **Collab** tendenza a fare collab
-- **Protoni** — distorsioni cromatiche e psichedeliche su un singolo stutter
+- **Protoni** - distorsioni cromatiche e psichedeliche su un singolo stutter
 
 **Sources di riferimento:** "Matteo Montesi" "Giuseppe Simone" "Mary poppins" "Game of thrones" "Salvini" "Il risotto con l'erbette"
 
@@ -236,7 +236,7 @@ Inizio fenomeno MLG
 ---
 
 
-## 🟠 Era 6 — L'Adpocalipse ed era YTP sugli youtuber (2017 - 2022)
+## 🟠 Era 6 - L'Adpocalipse ed era YTP sugli youtuber (2017 - 2022)
 
 **Sources di riferimento:**
 Il Collegio, altri youtuber. Masterchef, Marvel
@@ -299,7 +299,7 @@ Il canale di **Nocoldiz viene bannato senza spiegazioni**
 
 ---
 
-## 🔵 Era 7 — YTP nel DNA di internet (2023 - presente)
+## 🔵 Era 7 - YTP nel DNA di internet (2023 - presente)
 
 Le YTP non sono più di tendenza, ma **sopravvivono come pratica di nicchia** portata avanti da appassionati irriducibili. I creatori storici si sono "evoluti nel proprio stile personale" e nuovi pooper iniziano a emergere imitandoli.
 Le YTP non sono più confinate a Youtube ma gemme del passato vengono ricaricate su altre piattaforme come video short, la cui popolarità ha superato quella dei video tradizionali nel frattempo.
@@ -309,7 +309,7 @@ Poopers come Mastercast, RTPoop riescono a trasformare la loro abilità di monta
 
 **L'arrivo dell'IA generativa**:
 - Il sentence mixing tradizionale può essere **tecnicamente sostituito dall'IA**, che ricrea perfettamente la voce di un politico
-- Ma — paradossalmente — l'IA *surclassa troppo*: si perde l'effetto comico del **"taglia e cuci" amatoriale**, l'impressione di artigianalità che è parte essenziale del codice estetico delle YTP
+- Ma - paradossalmente - l'IA *surclassa troppo*: si perde l'effetto comico del **"taglia e cuci" amatoriale**, l'impressione di artigianalità che è parte essenziale del codice estetico delle YTP
 - Strumenti come la trascrizione automatica di Premiere e rotoscopio After Effects con IA integrata **velocizzano di molte volte** il lavoro manuale di sentence mixing e di masking
 
 
