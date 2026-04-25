@@ -232,6 +232,7 @@ class ForumScraper:
         self.delay = args.delay
         self.embed_images = not args.no_embed_images
         self.embed_css = args.embed_css
+        self.thread_url = getattr(args, "thread_url", None)
 
         all_names = list(SECTIONS.keys())
         if args.sections is not None:
@@ -676,6 +677,8 @@ class ForumScraper:
         print(f"  Delay:        {self.delay}s")
         print(f"  Embed images: {'yes (base64 in HTML)' if self.embed_images else 'no'}")
         print(f"  Embed CSS:    {'yes' if self.embed_css else 'no'}")
+        if self.thread_url:
+            print(f"  Thread URL:   {self.thread_url}")
         print("=" * 70)
         print()
 
@@ -684,98 +687,138 @@ class ForumScraper:
         self.start_browser()
 
         try:
-            # ─── Pass 1: Fetch Home Page ───
-            home_path = os.path.join(self.output_dir, "Home.html")
-            if not self.state.get("home_done"):
-                log.info("🏠 FETCHING HOME PAGE (Priority)")
-                home_html = self.fetch_page(f"https://{BASE_DOMAIN}/", embed=True)
-                if home_html:
-                    with open(home_path, "w", encoding="utf-8") as f:
-                        f.write(home_html)
-                    self.state["home_done"] = True
-                    self.save_state()
-
-            # ─── Pass 2: Fetch Section Listing Indices (Priority) ───
-            print("\n" + "─" * 70)
-            print("  PRIORITY: DISCOVERING & SAVING SECTION INDEX PAGES")
-            print("─" * 70)
-            for sec_idx, (sec_name, sec_url) in enumerate(self.section_list):
-                ss = self.section_state(sec_name)
-                section_dir = os.path.join(self.output_dir, safe_filename(sec_name))
-                os.makedirs(section_dir, exist_ok=True)
-
-                if not ss.get("index_pages_saved") or not ss.get("threads_found"):
-                    log.info(f"  📁 [{sec_idx+1}/{len(self.section_list)}] {sec_name}")
-                    threads = self.discover_threads_and_save_index(sec_name, sec_url, section_dir)
-                    flat = []
-                    for u, t in threads:
-                        flat.extend([u, t])
-                    ss["threads_found"] = flat
-                    ss["index_pages_saved"] = True
-                    self.save_state()
-                else:
-                    log.info(f"  📁 [{sec_idx+1}/{len(self.section_list)}] {sec_name} (Indices Cached)")
-
-            # ─── Pass 2.5: Scan saved index pages for any missed threads ───
-            self.scan_saved_index_for_threads()
-
-            # ─── Pass 3: Fetch Threads ───
-            print("\n" + "─" * 70)
-            print("  FETCHING THREAD PAGES")
-            print("─" * 70)
-            for sec_idx, (sec_name, sec_url) in enumerate(self.section_list):
-                ss = self.section_state(sec_name)
-                section_dir = os.path.join(self.output_dir, safe_filename(sec_name))
-                
-                print(f"\n  📝 [{sec_idx+1}/{len(self.section_list)}] {sec_name} (Threads)")
-                
-                threads = list(zip(
-                    ss["threads_found"][::2], ss["threads_found"][1::2]
-                ))
-                
-                total = len(threads)
-                done_set = set(ss["threads_done"])
-                done = len(done_set)
-
-                if total == 0:
-                    log.info(f"  No threads found.")
-                    continue
-
-                for t_idx, (t_url, t_title) in enumerate(threads):
-                    tid = get_thread_id(t_url)
-                    if t_url in done_set:
-                        continue
-
-                    done += 1
-                    pct = done / total * 100
-                    log.info(
-                        f"    [{done}/{total}] ({pct:.0f}%) "
-                        f"Thread {tid}: {t_title[:50]}"
-                    )
-
-                    pages_saved = self.save_thread(section_dir, t_url, t_title, ss)
-                    ss["threads_done"].append(t_url)
-
-                    if pages_saved:
-                        log.info(
-                            f"      ✓ Saved ({pages_saved} "
-                            f"page{'s' if pages_saved > 1 else ''})"
-                        )
-
-                    if done % 5 == 0:
-                        self.save_state()
-
-                self.save_state()
-                pct = (done / total * 100) if total > 0 else 100
-                log.info(f"  ✅ {sec_name}: {done}/{total} ({pct:.0f}%)")
-
+            if self.thread_url:
+                self._run_single_thread_mode()
+            else:
+                self._run_full_mode()
         except KeyboardInterrupt:
             log.warning("\n\n⚠ Interrupted! Progress saved. Run again to resume.")
         finally:
             self.stop_browser()
             self.save_state()
 
-        self._print_summary()
+        if not self.thread_url:
+            self._print_summary()
+
+    def _run_single_thread_mode(self):
+        """Scrape exactly one thread URL.  Called by the local mirror server."""
+        t_url = self.thread_url
+        tid   = get_thread_id(t_url)
+        if not tid:
+            log.error(f"  ✗ Invalid --thread-url: {t_url}")
+            return
+
+        if not self.section_list:
+            log.error("  ✗ --thread-url requires --sections N to specify the target folder.")
+            return
+
+        sec_name, _ = self.section_list[0]
+        ss           = self.section_state(sec_name)
+        section_dir  = os.path.join(self.output_dir, safe_filename(sec_name))
+        os.makedirs(section_dir, exist_ok=True)
+
+        # Register in threads_found if not already there
+        known = set(ss["threads_found"][::2])
+        if t_url not in known:
+            ss["threads_found"].extend([t_url, f"Thread {tid}"])
+            self.save_state()
+
+        threads = dict(zip(ss["threads_found"][::2], ss["threads_found"][1::2]))
+        t_title = threads.get(t_url, f"Thread {tid}")
+
+        log.info(f"  🎯 Single thread [{sec_name}]: {t_title}")
+        pages_saved = self.save_thread(section_dir, t_url, t_title, ss)
+        if t_url not in ss["threads_done"]:
+            ss["threads_done"].append(t_url)
+        self.save_state()
+        log.info(f"  ✓ Saved {pages_saved} page(s)")
+
+    def _run_full_mode(self):
+        """Full multi-section scrape (original run logic)."""
+        # ─── Pass 1: Fetch Home Page ───
+        home_path = os.path.join(self.output_dir, "Home.html")
+        if not self.state.get("home_done"):
+            log.info("🏠 FETCHING HOME PAGE (Priority)")
+            home_html = self.fetch_page(f"https://{BASE_DOMAIN}/", embed=True)
+            if home_html:
+                with open(home_path, "w", encoding="utf-8") as f:
+                    f.write(home_html)
+                self.state["home_done"] = True
+                self.save_state()
+
+        # ─── Pass 2: Fetch Section Listing Indices (Priority) ───
+        print("\n" + "─" * 70)
+        print("  PRIORITY: DISCOVERING & SAVING SECTION INDEX PAGES")
+        print("─" * 70)
+        for sec_idx, (sec_name, sec_url) in enumerate(self.section_list):
+            ss = self.section_state(sec_name)
+            section_dir = os.path.join(self.output_dir, safe_filename(sec_name))
+            os.makedirs(section_dir, exist_ok=True)
+
+            if not ss.get("index_pages_saved") or not ss.get("threads_found"):
+                log.info(f"  📁 [{sec_idx+1}/{len(self.section_list)}] {sec_name}")
+                threads = self.discover_threads_and_save_index(sec_name, sec_url, section_dir)
+                flat = []
+                for u, t in threads:
+                    flat.extend([u, t])
+                ss["threads_found"] = flat
+                ss["index_pages_saved"] = True
+                self.save_state()
+            else:
+                log.info(f"  📁 [{sec_idx+1}/{len(self.section_list)}] {sec_name} (Indices Cached)")
+
+        # ─── Pass 2.5: Scan saved index pages for any missed threads ───
+        self.scan_saved_index_for_threads()
+
+        # ─── Pass 3: Fetch Threads ───
+        print("\n" + "─" * 70)
+        print("  FETCHING THREAD PAGES")
+        print("─" * 70)
+        for sec_idx, (sec_name, sec_url) in enumerate(self.section_list):
+            ss = self.section_state(sec_name)
+            section_dir = os.path.join(self.output_dir, safe_filename(sec_name))
+
+            print(f"\n  📝 [{sec_idx+1}/{len(self.section_list)}] {sec_name} (Threads)")
+
+            threads = list(zip(
+                ss["threads_found"][::2], ss["threads_found"][1::2]
+            ))
+
+            total = len(threads)
+            done_set = set(ss["threads_done"])
+            done = len(done_set)
+
+            if total == 0:
+                log.info(f"  No threads found.")
+                continue
+
+            for t_idx, (t_url, t_title) in enumerate(threads):
+                tid = get_thread_id(t_url)
+                if t_url in done_set:
+                    continue
+
+                done += 1
+                pct = done / total * 100
+                log.info(
+                    f"    [{done}/{total}] ({pct:.0f}%) "
+                    f"Thread {tid}: {t_title[:50]}"
+                )
+
+                pages_saved = self.save_thread(section_dir, t_url, t_title, ss)
+                ss["threads_done"].append(t_url)
+
+                if pages_saved:
+                    log.info(
+                        f"      ✓ Saved ({pages_saved} "
+                        f"page{'s' if pages_saved > 1 else ''})"
+                    )
+
+                if done % 5 == 0:
+                    self.save_state()
+
+            self.save_state()
+            pct = (done / total * 100) if total > 0 else 100
+            log.info(f"  ✅ {sec_name}: {done}/{total} ({pct:.0f}%)")
 
     def _print_summary(self):
         print()
@@ -820,6 +863,8 @@ def main():
     p.add_argument("--embed-css", action="store_true", help="Also inline CSS")
     p.add_argument("--sections", default=None,
                    help="Comma-separated section indices (e.g. 0,1,5)")
+    p.add_argument("--thread-url", default=None,
+                   help="Scrape a single thread URL (requires --sections N for target folder)")
     p.add_argument("--list", action="store_true", help="List sections and exit")
 
     args = p.parse_args()
