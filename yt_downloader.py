@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup
 
 # ── Sections to scan ──────────────────────────────────────────────────────────
 
-SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te"]
+SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te","YTPMV dimportazione","YTP da internet","Risorse","Old sources","Tutorial per il pooping"],
 
 DEFAULT_SITE_DIR = "./site_mirror"
 DEFAULT_VIDEO_DIR = "./videos"
@@ -322,7 +322,7 @@ def download_video(video_id, output_dir, yt_format, rate_limit,
     """
     url = canonical_yt_url(video_id)
     os.makedirs(output_dir, exist_ok=True)
-    outtmpl = os.path.join(output_dir, "%(id)s - %(title).80s.%(ext)s")
+    outtmpl = os.path.join(output_dir, "%(title).80s - %(id)s.%(ext)s")
 
     cmd = [
         "yt-dlp",
@@ -395,7 +395,7 @@ def download_video(video_id, output_dir, yt_format, rate_limit,
 
         if not local_file:
             matches = [
-                m for m in glob.glob(os.path.join(output_dir, f"{video_id} - *"))
+                m for m in glob.glob(os.path.join(output_dir, f"* - {video_id}.*"))
                 if not m.endswith((".jpg", ".png", ".webp"))
             ]
             if matches:
