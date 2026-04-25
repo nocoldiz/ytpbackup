@@ -18,21 +18,74 @@ import glob
 import shutil
 import subprocess
 import argparse
+import datetime
 from pathlib import Path
 
 from bs4 import BeautifulSoup
 
-# ── Sections to scan ────────────────────────"Risorse","Old sources","Tutorial per il pooping"──────────────────────────────────
+# ── Sections to scan ──────────────────────────────────────────────────────────
 
-SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te","YTPMV dimportazione","YTP da internet"] ##"Risorse","Old sources","Tutorial per il pooping
+SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te", "YTPMV dimportazione", "YTP da internet"]
+
+# ── Disallowed channels (never scraped; removed from index if present) ────────
+
+DISALLOWED_CHANNELS = ["Yotobi", "Croix89", "QDSS"]
+
+# ── Allowed channels (always scraped with keyword filter) ─────────────────────
+
+ALLOWED_CHANNELS = [
+    "https://www.youtube.com/@cs188",
+    "https://www.youtube.com/@KroboProductions",
+    "https://www.youtube.com/@EmperorLemon",
+    "https://www.youtube.com/@Deepercutt",
+    "https://www.youtube.com/@Hurricoaster",
+    "https://www.youtube.com/@despotaaa",
+    "https://www.youtube.com/@bassman85x",
+    "https://www.youtube.com/@ZioTok83",
+    "https://www.youtube.com/@tracFelix96trac",
+    "https://www.youtube.com/@voodoochildytp",
+    "https://www.youtube.com/@blazor67",
+    "https://www.youtube.com/@EliaForce1984ita",
+    "https://www.youtube.com/@Mario6493",
+    "https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg",
+    "https://www.youtube.com/@NocoldizTV",
+    "https://www.youtube.com/@Pennaz",
+    "https://www.youtube.com/@DarkCoffe64",
+    "https://www.youtube.com/@revergo",
+    "https://www.youtube.com/@MastercastPresident",
+    "https://www.youtube.com/@TottiBest92",
+    "https://www.youtube.com/user/StewBarzTube",
+    "https://www.youtube.com/user/PierluPoops",
+    "https://www.youtube.com/user/ChristianIce",
+    "https://www.youtube.com/@mrpoldoakbar2849",
+    "https://www.youtube.com/user/ZioMeso",
+    "https://www.youtube.com/user/julaoa",
+    "https://www.youtube.com/user/JakkoMatto",
+    "https://www.youtube.com/@Clodd",
+    "https://www.youtube.com/c/RTpoop",
+    "https://www.youtube.com/@DavvoYTP",
+    "https://www.youtube.com/user/125Replay",
+    "https://www.youtube.com/@AlePoops",
+    "https://www.youtube.com/@frederickfrankenstein5671",
+    "https://www.youtube.com/@caprastrabica2182",
+    "https://www.youtube.com/c/ilCirox",
+    "https://www.youtube.com/c/AssoDiDenari",
+    "https://www.youtube.com/c/SassoStrappato",
+    "https://www.youtube.com/c/MPYTP",
+]
+
+# NocoldizTV: scrape everything except videos whose title matches these words
+NOCOLDIZ_BLACKLIST = re.compile(
+    r'(?i)(gameplay|hypernet|devlog|gioco|em\.Path|em\.Brace)'
+)
+
+# ── Channel keywords ──────────────────────────────────────────────────────────
 
 CHANNEL_KEYWORDS = re.compile(
     r'(?i)(YTP|YTPMV|Collab|Youtube\s+poop|YT\s+Poop|Poop'
     r'|matteo\s+montesi|avventure|Zeb|Collegio|Bigazzi|Ambrogio|Risotto|ariete|Harry\s+potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu'
     r'|Dipr[eè]|Bello\s+Figo|Yotobi|He[\s-]?Man|Gourmet|The king|Link|Berlusconi|Muniz|Travaglio| Nemesis|Testo|Papa|Jack\s+Black|Super\s+Quark|Iscritti|YTM|YTG|MLG'
-    # --- New General YTP Terms ---
     r'|Sentence\s+Mix|Ear\s?rape|G-Major|Mondo emo| Sparta\s+Remix|Scad|Stutter|Zelda|Patrick|Pubblicità|Spot|Spongebob|Reverse|Masking|Pitch\s+Shift'
-    # --- New Italian Meme/YTP Icons ---
     r'|Mosconi|Benson|Brumotti|Master\s?chef|Mister\s+Lui|Pappalardo|Sgarbi|Razzi|Salvini|Renzi|Rio mare|Gerry\s+Scotti|Fazio'
     r'|Kabu|Nocoldiz|Poldo|Cloroformio|Giannino|Gianni\s+Morandi|Doraemon|Me\s+cont[ro]o\s+Te)'
 )
@@ -110,6 +163,17 @@ def clear_line():
     print("\r" + " " * cols + "\r", end="", flush=True)
 
 
+def is_disallowed_channel(channel_name):
+    if not channel_name:
+        return False
+    name_lower = channel_name.lower()
+    return any(d.lower() in name_lower for d in DISALLOWED_CHANNELS)
+
+
+def is_nocoldiz_channel(ch_url, ch_name=""):
+    return "nocoldiz" in (ch_url or "").lower() or "nocoldiz" in (ch_name or "").lower()
+
+
 # ── Video Index ───────────────────────────────────────────────────────────────
 
 class VideoIndex:
@@ -118,14 +182,20 @@ class VideoIndex:
       "VIDEO_ID": {
         "url":          "https://www.youtube.com/watch?v=...",
         "title":         str | null,
-        "description":   str | null,        ← from YouTube
-        "channel_name":  str | null,        ← from YouTube
-        "channel_url":   str | null,        ← from YouTube
+        "description":   str | null,
+        "channel_name":  str | null,
+        "channel_url":   str | null,
+        "publish_date":  str | null,
+        "view_count":    int | null,
+        "like_count":    int | null,
+        "tags":          list[str],
+        "nickname":      str | null,    <- author of first post of source thread
         "sections":      ["YTP nostrane", ...],
         "source_pages":  ["YTP nostrane/71236585_Title.html", ...],
         "thread_titles": ["In the Madonna — Tassista Romano", ...],
         "status":        "pending" | "downloaded" | "unavailable" | "failed",
-        "local_file":    str | null
+        "local_file":    str | null,
+        "mirrors":       list | null,
       }
     }
     """
@@ -145,7 +215,7 @@ class VideoIndex:
         with open(self.filepath, "w", encoding="utf-8") as f:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
 
-    def add_video(self, video_id, section, source_page, thread_title=None):
+    def add_video(self, video_id, section, source_page, thread_title=None, nickname=None):
         if video_id not in self.data:
             self.data[video_id] = {
                 "url": canonical_yt_url(video_id),
@@ -156,11 +226,14 @@ class VideoIndex:
                 "publish_date": None,
                 "view_count": None,
                 "like_count": None,
+                "tags": [],
+                "nickname": None,
                 "sections": [],
                 "source_pages": [],
                 "thread_titles": [],
                 "status": "pending",
                 "local_file": None,
+                "mirrors": None,
             }
         e = self.data[video_id]
         if section not in e["sections"]:
@@ -169,6 +242,8 @@ class VideoIndex:
             e["source_pages"].append(source_page)
         if thread_title and thread_title not in e.get("thread_titles", []):
             e.setdefault("thread_titles", []).append(thread_title)
+        if nickname and not e.get("nickname"):
+            e["nickname"] = nickname
 
     def needs_metadata(self, video_id):
         e = self.data.get(video_id, {})
@@ -183,7 +258,7 @@ class VideoIndex:
 
     def set_metadata(self, video_id, title=None, description=None,
                      channel_name=None, channel_url=None,
-                     publish_date=None, view_count=None, like_count=None):
+                     publish_date=None, view_count=None, like_count=None, tags=None):
         if video_id not in self.data:
             return
         e = self.data[video_id]
@@ -201,6 +276,8 @@ class VideoIndex:
             e["view_count"] = view_count
         if like_count is not None:
             e["like_count"] = like_count
+        if tags is not None:
+            e["tags"] = tags
 
     def is_done(self, vid):
         return self.data.get(vid, {}).get("status") in ("downloaded", "unavailable")
@@ -237,13 +314,19 @@ class VideoIndex:
             s[key] = s.get(key, 0) + 1
         return s
 
+    def remove_disallowed_channels(self):
+        to_remove = [vid for vid, e in self.data.items()
+                     if is_disallowed_channel(e.get("channel_name"))]
+        for vid in to_remove:
+            del self.data[vid]
+        return len(to_remove)
+
 
 # ── Scan Cache ───────────────────────────────────────────────────────────────
 
 class ScanCache:
     """
     Tracks which HTML pages have already been scanned.
-    Stored separately from video_index.json so it can be inspected / cleared.
     {
       "rel/path/to/page.html": {
         "scanned_at": "2025-01-01T00:00:00",
@@ -271,7 +354,6 @@ class ScanCache:
         return rel_path in self.data
 
     def mark_scanned(self, rel_path, video_ids, new_count):
-        import datetime
         self.data[rel_path] = {
             "scanned_at": datetime.datetime.now().isoformat(timespec="seconds"),
             "video_ids":  list(video_ids),
@@ -287,18 +369,23 @@ class Scanner:
         self.site_dir = site_dir
 
     def scan_file(self, filepath):
+        """Returns (set_of_video_ids, nickname_or_None)."""
         try:
             content = Path(filepath).read_text(encoding="utf-8", errors="replace")
         except Exception:
-            return set()
+            return set(), None
         ids = set()
         for pat in YT_PATTERNS:
             for m in pat.finditer(content):
                 vid = extract_video_id(m.group(0))
                 if vid:
                     ids.add(vid)
+        nickname = None
         try:
             soup = BeautifulSoup(content, "lxml")
+            nick_tag = soup.find(class_="nick")
+            if nick_tag:
+                nickname = nick_tag.get_text(strip=True)
             for tag in soup.find_all(["a", "iframe", "embed", "object", "source", "param"]):
                 for attr in ("href", "src", "data", "value"):
                     vid = extract_video_id(tag.get(attr, ""))
@@ -306,7 +393,7 @@ class Scanner:
                         ids.add(vid)
         except Exception:
             pass
-        return ids
+        return ids, nickname
 
     def scan_sections(self, index, scan_cache=None, save_fn=None, save_interval=10):
         new_found = 0
@@ -338,11 +425,11 @@ class Scanner:
                 else:
                     thread_title = thread_title_from_filename(fname)
 
-                ids = self.scan_file(fpath)
+                ids, nickname = self.scan_file(fpath)
                 new_this_file = 0
                 for vid in ids:
                     was_new = vid not in index.data
-                    index.add_video(vid, sec, rel, thread_title)
+                    index.add_video(vid, sec, rel, thread_title, nickname=nickname)
                     if was_new:
                         new_found += 1
                         new_this_file += 1
@@ -370,7 +457,7 @@ class Scanner:
 
 def fetch_yt_metadata(video_id):
     """
-    Run yt-dlp --dump-json to get title, description, channel info.
+    Run yt-dlp --dump-json to get title, description, channel info, tags.
     Returns dict | 'unavailable' | None (temp error)
     """
     url = canonical_yt_url(video_id)
@@ -400,6 +487,7 @@ def fetch_yt_metadata(video_id):
                 "publish_date": publish_date,
                 "view_count":   d.get("view_count"),
                 "like_count":   d.get("like_count"),
+                "tags":         d.get("tags") or [],
             }
         combined = (r.stdout + r.stderr).lower()
         for msg in UNAVAIL_MSGS:
@@ -416,8 +504,6 @@ def download_video(video_id, output_dir, yt_format, rate_limit,
                    current_num, total_num):
     """
     Download one video with a real-time per-video progress bar.
-    Shows:  Video:   [=====     ] 45.2%  23.4MB @ 1.5MB/s
-            Overall: [==        ] 12/80
     Returns ('ok'|'exists'|'unavailable'|'error', local_file, title)
     """
     url = canonical_yt_url(video_id)
@@ -479,9 +565,7 @@ def download_video(video_id, output_dir, yt_format, rate_limit,
                 )
                 continue
 
-            # --print outputs (filepath / title) arrive after download
             stripped = line.strip()
-            # skip Python warnings: "path/to/file.py:123: SomeWarning: msg"
             if re.match(r'.+\.py:\d+: \w+Warning:', stripped):
                 continue
             if stripped and not stripped.startswith("["):
@@ -537,14 +621,16 @@ def do_update_index(index, site_dir):
     scan_cache.save()
     print(f"  Scan cache saved → {os.path.abspath(scan_cache.filepath)}")
 
+    removed = index.remove_disallowed_channels()
+    if removed:
+        print(f"  Removed {removed} video(s) from disallowed channels.")
+        index.save()
+
     st = index.stats()
     print(f"  Total videos in index: {st['total']}  (new this run: {new_count})")
     print()
 
-    need_meta = [
-        vid for vid in index.data
-        if index.needs_metadata(vid)
-    ]
+    need_meta = [vid for vid in index.data if index.needs_metadata(vid)]
 
     if not need_meta:
         print("  All videos already have metadata.")
@@ -552,7 +638,7 @@ def do_update_index(index, site_dir):
 
     total_meta = len(need_meta)
     print(f"  Fetching YouTube metadata for {total_meta} videos")
-    print(f"  (title, description, channel link)...")
+    print(f"  (title, description, channel link, tags)...")
     print()
 
     for i, vid in enumerate(need_meta, 1):
@@ -565,7 +651,6 @@ def do_update_index(index, site_dir):
             index.set_unavailable(vid)
         elif meta:
             index.set_metadata(vid, **meta)
-        # None = temp error, leave as-is for next run
 
         if i % 20 == 0:
             index.save()
@@ -604,19 +689,16 @@ def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
 
         out_dir = os.path.join(video_dir, safe_filename(sec))
 
-        # ── header ──
         print(f"  [{i}/{total}] {thread[:60]}")
         if e.get("channel_name"):
             ch_url = e.get("channel_url", "")
             print(f"  Channel: {e['channel_name']}  {ch_url}")
         print(f"  URL:     {canonical_yt_url(vid)}")
 
-        # ── download + per-video bar ──
         status, local_file, dl_title = download_video(
             vid, out_dir, yt_format, rate_limit, i, total,
         )
 
-        # ── result ──
         if status == "ok":
             rel = os.path.relpath(local_file, ".") if local_file else None
             index.set_downloaded(vid, rel, dl_title)
@@ -639,7 +721,6 @@ def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
 
         index.save()
 
-        # ── overall bar ──
         done = ok_count + skip_count + unavail_count + err_count
         ov_pct = done / total * 100
         ov_bar = bar(ov_pct, 30)
@@ -659,11 +740,19 @@ def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
 
 
 def do_scrape_channels(index):
+    # Merge index channels with the fixed ALLOWED_CHANNELS list
     channel_urls = {}
     for e in index.data.values():
         url = e.get("channel_url")
         if url and url not in channel_urls:
             channel_urls[url] = e.get("channel_name") or url
+
+    for url in ALLOWED_CHANNELS:
+        if url not in channel_urls:
+            channel_urls[url] = url
+
+    # Remove disallowed before scraping
+    channel_urls = {u: n for u, n in channel_urls.items() if not is_disallowed_channel(n)}
 
     if not channel_urls:
         print("  No channels found in index. Run 'Update index' first.")
@@ -675,6 +764,7 @@ def do_scrape_channels(index):
     for ch_url, ch_name in channel_urls.items():
         print(f"\n  Scraping: {ch_name}")
         videos_url = channel_videos_url(ch_url)
+        nocoldiz = is_nocoldiz_channel(ch_url, ch_name)
 
         try:
             r = subprocess.run(
@@ -693,8 +783,12 @@ def do_scrape_channels(index):
                     title = d.get("title") or ""
                     if not vid_id:
                         continue
-                    if not CHANNEL_KEYWORDS.search(title):
-                        continue
+                    if nocoldiz:
+                        if NOCOLDIZ_BLACKLIST.search(title):
+                            continue
+                    else:
+                        if not CHANNEL_KEYWORDS.search(title):
+                            continue
                     was_new = vid_id not in index.data
                     index.add_video(vid_id, "Youtube", f"channel_scrape:{ch_url}", title)
                     e = index.data[vid_id]
@@ -713,6 +807,11 @@ def do_scrape_channels(index):
         except Exception as ex:
             print(f"  [!] Error: {ex}")
 
+        index.save()
+
+    removed = index.remove_disallowed_channels()
+    if removed:
+        print(f"\n  Removed {removed} video(s) from disallowed channels.")
         index.save()
 
     print(f"\n  Done. {new_total} new video(s) added to 'Youtube' section.")
@@ -800,46 +899,104 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
     print(f"  Index:       {os.path.abspath(index.filepath)}")
 
 
-def do_stats(index):
+def do_stats(index, output_path="stats.md"):
     from collections import defaultdict
 
     if not index.data:
         print("  Index is empty. Run 'Update index' first.")
         return
 
+    # Only count videos in SCAN_SECTIONS
+    filtered = {
+        vid: e for vid, e in index.data.items()
+        if any(s in SCAN_SECTIONS for s in e.get("sections", []))
+    }
+
+    if not filtered:
+        print("  No videos found in scan sections.")
+        return
+
+    # Per-section counts (a video in multiple sections is counted in each)
+    section_stats = {sec: {"total": 0, "downloaded": 0, "unavailable": 0,
+                            "pending": 0, "failed": 0}
+                     for sec in SCAN_SECTIONS}
+    for e in filtered.values():
+        status = e.get("status", "pending")
+        for sec in e.get("sections", []):
+            if sec in section_stats:
+                section_stats[sec]["total"] += 1
+                section_stats[sec][status] = section_stats[sec].get(status, 0) + 1
+
+    # Grand totals (unique video count)
+    grand = {"total": len(filtered), "downloaded": 0, "unavailable": 0,
+             "pending": 0, "failed": 0}
+    for e in filtered.values():
+        st = e.get("status", "pending")
+        grand[st] = grand.get(st, 0) + 1
+
+    grand_pct = (f"{grand['unavailable'] / grand['total'] * 100:.1f}%"
+                 if grand["total"] else "—")
+
+    # Per-channel table (only channels from SCAN_SECTIONS videos)
     channels = defaultdict(lambda: {"total": 0, "downloaded": 0, "unavailable": 0,
                                      "pending": 0, "failed": 0, "sections": set()})
-
-    for e in index.data.values():
+    for e in filtered.values():
         name = e.get("channel_name") or "(unknown)"
         ch = channels[name]
         ch["total"] += 1
         ch[e.get("status", "pending")] += 1
         for s in e.get("sections", []):
-            ch["sections"].add(s)
+            if s in SCAN_SECTIONS:
+                ch["sections"].add(s)
 
     rows = sorted(channels.items(), key=lambda x: x[1]["total"], reverse=True)
 
-    col_ch  = max(len("Channel"), max(len(n) for n, _ in rows))
-    col_ch  = min(col_ch, 40)
+    # Build markdown
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    md = [f"# YTP Backup Stats", f"", f"Generated: {now}", ""]
 
-    header = (f"  {'Channel':<{col_ch}}  {'Total':>5}  {'DL':>4}  "
-              f"{'Pend':>4}  {'N/A':>4}  {'Fail':>4}  Sections")
-    sep    = "  " + "-" * (len(header) - 2)
+    md += ["## Sections", ""]
+    md += ["| Section | Total | Downloaded | Unavailable | % N/A | Pending | Failed |"]
+    md += ["|---|---|---|---|---|---|---|"]
+    for sec in SCAN_SECTIONS:
+        s = section_stats[sec]
+        t = s["total"]
+        u = s["unavailable"]
+        pct = f"{u / t * 100:.1f}%" if t else "—"
+        md.append(f"| {sec} | {t} | {s['downloaded']} | {u} | {pct} | {s['pending']} | {s['failed']} |")
+    md.append(
+        f"| **Total** | **{grand['total']}** | **{grand['downloaded']}** | "
+        f"**{grand['unavailable']}** | **{grand_pct}** | **{grand['pending']}** | **{grand['failed']}** |"
+    )
+    md += [""]
 
-    print()
-    print(header)
-    print(sep)
+    md += ["## Channels", ""]
+    md += ["| Channel | Total | DL | N/A | % N/A | Pending | Failed | Sections |"]
+    md += ["|---|---|---|---|---|---|---|---|"]
     for name, c in rows:
-        truncated = name[:col_ch]
+        t = c["total"]
+        u = c["unavailable"]
+        pct = f"{u / t * 100:.1f}%" if t else "—"
         secs = ", ".join(sorted(c["sections"]))
-        print(f"  {truncated:<{col_ch}}  {c['total']:>5}  {c['downloaded']:>4}  "
-              f"{c['pending']:>4}  {c['unavailable']:>4}  {c['failed']:>4}  {secs}")
+        n = name.replace("|", "\\|")
+        md.append(f"| {n} | {t} | {c['downloaded']} | {u} | {pct} | {c['pending']} | {c['failed']} | {secs} |")
+    md += [""]
 
-    print(sep)
-    totals = index.stats()
-    print(f"  {'TOTAL':<{col_ch}}  {totals['total']:>5}  {totals['downloaded']:>4}  "
-          f"{totals['pending']:>4}  {totals['unavailable']:>4}  {totals.get('failed', 0):>4}")
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(md))
+    print(f"  Stats written → {os.path.abspath(output_path)}")
+
+    # Print summary to terminal
+    print(f"\n  {'Section':<32} {'Total':>5}  {'N/A':>4}  {'% N/A':>6}")
+    print("  " + "-" * 54)
+    for sec in SCAN_SECTIONS:
+        s = section_stats[sec]
+        t = s["total"]
+        u = s["unavailable"]
+        pct = f"{u / t * 100:.1f}%" if t else "—"
+        print(f"  {sec:<32} {t:>5}  {u:>4}  {pct:>6}")
+    print("  " + "-" * 54)
+    print(f"  {'TOTAL':<32} {grand['total']:>5}  {grand['unavailable']:>4}  {grand_pct:>6}")
     print()
 
 
@@ -913,8 +1070,6 @@ def do_dump_poopers(index, output_path="poopers.md"):
         print("  Index is empty. Run 'Update index' first.")
         return
 
-    # Group non-unavailable videos by channel_name
-    # 1. Group the data
     channels = defaultdict(list)
     for vid, e in index.data.items():
         ch = e.get("channel_name")
@@ -922,27 +1077,25 @@ def do_dump_poopers(index, output_path="poopers.md"):
             continue
         if not e.get("title") or e.get("title") == "warnings.warn(":
             continue
+        # Only include videos from SCAN_SECTIONS
+        if not any(s in SCAN_SECTIONS for s in e.get("sections", [])):
+            continue
         channels[ch].append((vid, e))
 
-    # 2. Define the robust sorting key
     def channel_sort_key(item):
         ch_name, entries = item
         video_count = len(entries)
-        # We also calculate total views as a secondary sort factor (tie-breaker)
         total_views = sum(e.get("view_count") or 0 for _, e in entries)
         return (video_count, total_views)
 
-    # 3. Sort: reverse=True ensures the highest counts are at the top
     sorted_channels = sorted(channels.items(), key=channel_sort_key, reverse=True)
 
-    # 4. Build the table lines
     lines = [
         "| Pooper | Canale | Video | Views totali | Primo | Ultimo | Video più visto | Altri video |",
         "|---|---|---|---|---|---|---|---|",
     ]
 
     for ch_name, entries in sorted_channels:
-        # ... (rest of your formatting logic)        
         ch_url = next((e.get("channel_url") for _, e in entries if e.get("channel_url")), None)
 
         by_views = sorted(entries, key=lambda x: x[1].get("view_count") or 0, reverse=True)
@@ -985,6 +1138,144 @@ def do_dump_poopers(index, output_path="poopers.md"):
     print(f"  {len(sorted_channels)} poopers → {os.path.abspath(output_path)}")
 
 
+def do_find_mirrors(index):
+    """Search YouTube for reuploads of unavailable videos."""
+    candidates = [
+        (vid, e) for vid, e in index.data.items()
+        if e.get("status") == "unavailable" and not e.get("mirrors")
+    ]
+
+    if not candidates:
+        print("  No unavailable videos without mirror data found.")
+        return
+
+    total = len(candidates)
+    print(f"  Searching for mirrors of {total} unavailable video(s)...")
+    print()
+
+    found_count = 0
+
+    for i, (vid, e) in enumerate(candidates, 1):
+        pct = i / total * 100
+        pb = bar(pct, 28)
+        print(f"\r  {pb}  {i}/{total}  found={found_count}  ", end="", flush=True)
+
+        title = e.get("title")
+        thread_title = (e.get("thread_titles") or [None])[0]
+
+        # Try video title first, fall back to thread title
+        queries = [q for q in [title, thread_title] if q and q.strip()]
+        if not queries:
+            e["mirrors"] = []
+            continue
+
+        mirrors = []
+        for query in queries:
+            query_safe = query[:100]
+            try:
+                r = subprocess.run(
+                    ["yt-dlp", f"ytsearch5:{query_safe}",
+                     "--flat-playlist", "--dump-json",
+                     "--no-warnings", "--socket-timeout", "20"],
+                    capture_output=True, text=True, timeout=60,
+                )
+                for line in r.stdout.splitlines():
+                    if not line.strip().startswith("{"):
+                        continue
+                    try:
+                        d = json.loads(line)
+                        found_vid = d.get("id")
+                        found_title = d.get("title") or ""
+                        if found_vid and found_vid != vid:
+                            mirrors.append({
+                                "id":           found_vid,
+                                "title":        found_title,
+                                "url":          canonical_yt_url(found_vid),
+                                "search_query": query_safe,
+                            })
+                    except json.JSONDecodeError:
+                        continue
+            except (subprocess.TimeoutExpired, Exception):
+                continue
+
+            if mirrors:
+                break  # found results on first query, no need for fallback
+
+        e["mirrors"] = mirrors
+        if mirrors:
+            found_count += 1
+
+        if i % 10 == 0:
+            index.save()
+
+    clear_line()
+    index.save()
+    print(f"  Found potential mirrors for {found_count} / {total} unavailable videos.")
+    print(f"  Mirror data stored in 'mirrors' field of video_index.json.")
+
+
+def do_scrape_comments(index, video_dir):
+    """Scrape comments for every non-unavailable video."""
+    comments_dir = os.path.join(video_dir, "comments")
+    os.makedirs(comments_dir, exist_ok=True)
+
+    videos = [(vid, e) for vid, e in index.data.items()
+              if e.get("status") != "unavailable"]
+    total = len(videos)
+
+    if not videos:
+        print("  No videos to scrape comments for.")
+        return
+
+    print(f"  Scraping comments for {total} video(s)...")
+    print(f"  Already-scraped videos will be skipped.")
+    print()
+
+    done = skipped = failed = 0
+
+    for i, (vid, e) in enumerate(videos, 1):
+        pct = i / total * 100
+        pb = bar(pct, 26)
+        print(f"\r  {pb}  {i}/{total}  done={done} skip={skipped} fail={failed}  ",
+              end="", flush=True)
+
+        comment_file = os.path.join(comments_dir, f"{vid}.json")
+        if os.path.exists(comment_file):
+            skipped += 1
+            continue
+
+        url = canonical_yt_url(vid)
+        try:
+            r = subprocess.run(
+                ["yt-dlp", "--dump-single-json", "--write-comments",
+                 "--no-warnings", "--socket-timeout", "30", url],
+                capture_output=True, text=True, timeout=120,
+            )
+            if r.returncode == 0 and r.stdout.strip():
+                raw = next(
+                    (l for l in reversed(r.stdout.splitlines()) if l.strip().startswith("{")),
+                    None,
+                )
+                if raw:
+                    d = json.loads(raw)
+                    comments = d.get("comments") or []
+                    with open(comment_file, "w", encoding="utf-8") as f:
+                        json.dump(comments, f, indent=2, ensure_ascii=False)
+                    done += 1
+                else:
+                    failed += 1
+            else:
+                failed += 1
+        except Exception:
+            failed += 1
+
+        time.sleep(0.3)
+
+    clear_line()
+    print(f"  Done. Scraped: {done}  Skipped (already done): {skipped}  Failed: {failed}")
+    print(f"  Comments saved to: {os.path.abspath(comments_dir)}")
+
+
 # ── Menu helpers ──────────────────────────────────────────────────────────────
 
 def ask(prompt, choices):
@@ -1011,24 +1302,28 @@ def main():
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
     p = argparse.ArgumentParser(add_help=False)
-    p.add_argument("--site-dir",     default=DEFAULT_SITE_DIR)
-    p.add_argument("--video-dir",    default=DEFAULT_VIDEO_DIR)
-    p.add_argument("--format",       default=DEFAULT_FORMAT)
-    p.add_argument("--rate-limit",   default=None)
-    p.add_argument("--retry-failed", action="store_true")
-    p.add_argument("--stats",        action="store_true",
-                   help="Print channel stats table and exit")
-    p.add_argument("--chronology",   action="store_true",
+    p.add_argument("--site-dir",        default=DEFAULT_SITE_DIR)
+    p.add_argument("--video-dir",       default=DEFAULT_VIDEO_DIR)
+    p.add_argument("--format",          default=DEFAULT_FORMAT)
+    p.add_argument("--rate-limit",      default=None)
+    p.add_argument("--retry-failed",    action="store_true")
+    p.add_argument("--stats",           action="store_true",
+                   help="Write stats.md and exit")
+    p.add_argument("--chronology",      action="store_true",
                    help="Print top-20 most-viewed videos by year and exit")
-    p.add_argument("--dump-poopers", metavar="OUTPUT", nargs="?", const="poopers.md",
+    p.add_argument("--dump-poopers",    metavar="OUTPUT", nargs="?", const="poopers.md",
                    help="Dump pooper table to Markdown file (default: poopers.md)")
+    p.add_argument("--find-mirrors",    action="store_true",
+                   help="Search YouTube for reuploads of unavailable videos")
+    p.add_argument("--scrape-comments", action="store_true",
+                   help="Scrape comments for all indexed videos")
     args, _ = p.parse_known_args()
 
     if not os.path.isdir(args.site_dir):
         print(f"[!] site_dir not found: {args.site_dir}")
         sys.exit(1)
 
-    if args.stats or args.chronology or args.dump_poopers:
+    if args.stats or args.chronology or args.dump_poopers or args.find_mirrors or args.scrape_comments:
         index = VideoIndex(args.video_dir)
         index.load()
         if args.stats:
@@ -1037,6 +1332,10 @@ def main():
             do_chronology(index)
         if args.dump_poopers:
             do_dump_poopers(index, args.dump_poopers)
+        if args.find_mirrors:
+            do_find_mirrors(index)
+        if args.scrape_comments:
+            do_scrape_comments(index, args.video_dir)
         return
 
     print_header()
@@ -1048,33 +1347,39 @@ def main():
     print()
     print("  1  Update YT video index")
     print("       Scan HTML pages for links, then fetch title /")
-    print("       description / channel URL from YouTube.")
+    print("       description / channel URL / tags from YouTube.")
     print()
     print("  2  Download indexed videos")
     print("       Download all pending videos in the index.")
     print()
     print("  3  Scrape channels")
-    print("       For every channel in the index, fetch all video titles")
-    print("       and add YTP / YTPMV / Collab / Youtube poop matches")
-    print("       to a new 'Youtube' section.")
+    print("       Scrape all index channels + allowed-channel list;")
+    print("       add YTP matches to 'Youtube' section.")
     print()
     print("  4  Download 'Youtube' section")
     print("       Download only videos scraped via mode 3.")
     print()
     print("  5  Both  (update index, then download all)")
     print()
-    print("  6  Stats")
-    print("       Channel table: most videos first.")
+    print("  6  Stats  →  stats.md")
+    print("       Section & channel breakdown (SCAN_SECTIONS only).")
     print()
     print("  7  Chronology")
     print("       Top 20 most-viewed videos, sorted by year.")
     print()
-    print("  8  Dump poopers")
-    print("       Write poopers.md with one row per channel.")
+    print("  8  Dump poopers  →  poopers.md")
+    print("       One row per channel (SCAN_SECTIONS only).")
+    print()
+    print("  9  Find mirror videos")
+    print("       Search YouTube for reuploads of unavailable videos.")
+    print()
+    print("  10 Scrape comments")
+    print("       Fetch comments for every indexed video.")
     print()
     print("  q  Quit")
     print()
-    choice = ask("  Choice [1/2/3/4/5/6/7/8/q]: ", {"1", "2", "3", "4", "5", "6", "7", "8", "q"})
+    choice = ask("  Choice [1-10/q]: ",
+                 {"1","2","3","4","5","6","7","8","9","10","q"})
 
     if choice == "q":
         sys.exit(0)
@@ -1093,22 +1398,10 @@ def main():
         print()
 
     if choice in ("2", "5"):
-        do_download(
-            index,
-            args.video_dir,
-            args.format,
-            args.rate_limit,
-            args.retry_failed,
-        )
+        do_download(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
 
     if choice == "4":
-        do_download_youtube(
-            index,
-            args.video_dir,
-            args.format,
-            args.rate_limit,
-            args.retry_failed,
-        )
+        do_download_youtube(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
 
     if choice == "6":
         do_stats(index)
@@ -1118,6 +1411,12 @@ def main():
 
     if choice == "8":
         do_dump_poopers(index)
+
+    if choice == "9":
+        do_find_mirrors(index)
+
+    if choice == "10":
+        do_scrape_comments(index, args.video_dir)
 
     print()
 
