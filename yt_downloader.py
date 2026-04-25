@@ -233,6 +233,47 @@ class VideoIndex:
         return s
 
 
+# ── Scan Cache ───────────────────────────────────────────────────────────────
+
+class ScanCache:
+    """
+    Tracks which HTML pages have already been scanned.
+    Stored separately from video_index.json so it can be inspected / cleared.
+    {
+      "rel/path/to/page.html": {
+        "scanned_at": "2025-01-01T00:00:00",
+        "video_ids":  ["id1", "id2"],
+        "new_count":  2
+      }
+    }
+    """
+
+    def __init__(self, video_dir):
+        self.filepath = os.path.join(video_dir, "scan_cache.json")
+        self.data = {}
+
+    def load(self):
+        if os.path.exists(self.filepath):
+            with open(self.filepath, encoding="utf-8") as f:
+                self.data = json.load(f)
+
+    def save(self):
+        os.makedirs(os.path.dirname(self.filepath), exist_ok=True)
+        with open(self.filepath, "w", encoding="utf-8") as f:
+            json.dump(self.data, f, indent=2, ensure_ascii=False)
+
+    def is_scanned(self, rel_path):
+        return rel_path in self.data
+
+    def mark_scanned(self, rel_path, video_ids, new_count):
+        import datetime
+        self.data[rel_path] = {
+            "scanned_at": datetime.datetime.now().isoformat(timespec="seconds"),
+            "video_ids":  list(video_ids),
+            "new_count":  new_count,
+        }
+
+
 # ── Scanner ───────────────────────────────────────────────────────────────────
 
 class Scanner:
@@ -262,9 +303,10 @@ class Scanner:
             pass
         return ids
 
-    def scan_sections(self, index, save_fn=None, save_interval=10):
+    def scan_sections(self, index, scan_cache=None, save_fn=None, save_interval=10):
         new_found = 0
         file_count = 0
+        skipped = 0
         for sec in SCAN_SECTIONS:
             sec_dir = os.path.join(self.site_dir, sec)
             if not os.path.isdir(sec_dir):
@@ -279,6 +321,11 @@ class Scanner:
             print(f"  {sec}: {len(html_files)} HTML files", flush=True)
             for fpath in html_files:
                 rel = os.path.relpath(fpath, self.site_dir)
+
+                if scan_cache and scan_cache.is_scanned(rel):
+                    skipped += 1
+                    continue
+
                 fname = os.path.basename(fpath)
                 if re.match(r'^page_\d+\.html$', fname):
                     parent = os.path.basename(os.path.dirname(fpath))
@@ -295,6 +342,9 @@ class Scanner:
                         new_found += 1
                         new_this_file += 1
 
+                if scan_cache:
+                    scan_cache.mark_scanned(rel, ids, new_this_file)
+
                 if ids:
                     print(f"  [scan] {rel}  → {len(ids)} video(s) found, {new_this_file} new", flush=True)
                 else:
@@ -303,7 +353,11 @@ class Scanner:
                 file_count += 1
                 if save_fn and file_count % save_interval == 0:
                     save_fn()
+                    if scan_cache:
+                        scan_cache.save()
 
+        if skipped:
+            print(f"  (skipped {skipped} already-scanned pages)")
         return new_found
 
 
@@ -466,10 +520,17 @@ def download_video(video_id, output_dir, yt_format, rate_limit,
 
 def do_update_index(index, site_dir):
     scanner = Scanner(site_dir)
+    scan_cache = ScanCache(index.video_dir)
+    scan_cache.load()
+    cached_count = len(scan_cache.data)
+    if cached_count:
+        print(f"  Scan cache: {cached_count} pages already processed — will skip them.")
 
     print("  Scanning HTML pages for YouTube links...")
-    new_count = scanner.scan_sections(index, save_fn=index.save)
+    new_count = scanner.scan_sections(index, scan_cache=scan_cache, save_fn=index.save)
     index.save()
+    scan_cache.save()
+    print(f"  Scan cache saved → {os.path.abspath(scan_cache.filepath)}")
 
     st = index.stats()
     print(f"  Total videos in index: {st['total']}  (new this run: {new_count})")
@@ -821,6 +882,101 @@ def do_chronology(index, top_n=20):
     print()
 
 
+def _fmt_views_it(n):
+    """Italian-style compact view count: 1,2 mln / 310K / 5 / —"""
+    if n is None:
+        return "—"
+    if n >= 1_000_000_000:
+        v = n / 1_000_000_000
+        s = f"{v:.1f}".replace(".", ",")
+        return f"{s} mrd" if v != int(v) else f"{int(v)} mrd"
+    if n >= 1_000_000:
+        v = n / 1_000_000
+        s = f"{v:.1f}".replace(".", ",")
+        return f"{s} mln" if v != int(v) else f"{int(v)} mln"
+    if n >= 1_000:
+        v = n / 1_000
+        s = f"{v:.1f}".replace(".", ",")
+        return f"{s}K" if v != int(v) else f"{int(v)}K"
+    return str(n)
+
+
+def do_dump_poopers(index, output_path="poopers.md"):
+    from collections import defaultdict
+
+    if not index.data:
+        print("  Index is empty. Run 'Update index' first.")
+        return
+
+    # Group non-unavailable videos by channel_name
+    channels = defaultdict(list)
+    for vid, e in index.data.items():
+        ch = e.get("channel_name")
+        if not ch or e.get("status") == "unavailable":
+            continue
+        if not e.get("title") or e.get("title") == "warnings.warn(":
+            continue
+        channels[ch].append((vid, e))
+
+    if not channels:
+        print("  No channel data. Run 'Update index' first.")
+        return
+
+    def channel_sort_key(item):
+        entries = item[1]
+        total_views = sum(e.get("view_count") or 0 for _, e in entries)
+        return total_views
+
+    sorted_channels = sorted(channels.items(), key=channel_sort_key, reverse=True)
+
+    lines = [
+        "| Pooper | Canale | Video | Views totali | Primo | Ultimo | Video più visto | Altri video |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+
+    for ch_name, entries in sorted_channels:
+        ch_url = next((e.get("channel_url") for _, e in entries if e.get("channel_url")), None)
+
+        by_views = sorted(entries, key=lambda x: x[1].get("view_count") or 0, reverse=True)
+
+        top_vid, top_e = by_views[0]
+        top_title = (top_e.get("title") or top_vid).replace("|", "\\|")
+        top_url   = top_e.get("url") or f"https://www.youtube.com/watch?v={top_vid}"
+        top_views = top_e.get("view_count")
+        if top_views is not None:
+            top_cell = f"[{top_title}]({top_url}) ({_fmt_views_it(top_views)})"
+        else:
+            top_cell = f"[{top_title}]({top_url})"
+
+        others = []
+        for vid, e in by_views[1:4]:
+            t = (e.get("title") or vid).replace("|", "\\|")
+            others.append(f'"{t}"')
+        others_cell = ", ".join(others)
+
+        video_count  = len(entries)
+        total_views  = sum(e.get("view_count") or 0 for _, e in entries)
+        views_cell   = _fmt_views_it(total_views) if total_views > 0 else "—"
+
+        dates        = sorted(e.get("publish_date") for _, e in entries if e.get("publish_date"))
+        first_cell   = dates[0][:7] if dates else "—"
+        last_cell    = dates[-1][:7] if dates else "—"
+
+        canale_cell  = f"[{ch_name}]({ch_url})" if ch_url else ch_name
+        ch_safe      = ch_name.replace("|", "\\|")
+
+        lines.append(
+            f"| {ch_safe} | {canale_cell} | {video_count} | {views_cell} "
+            f"| {first_cell} | {last_cell} | {top_cell} | {others_cell} |"
+        )
+
+    content = "\n".join(lines) + "\n"
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    print(f"  {len(sorted_channels)} poopers → {os.path.abspath(output_path)}")
+
+
 # ── Menu helpers ──────────────────────────────────────────────────────────────
 
 def ask(prompt, choices):
@@ -856,19 +1012,23 @@ def main():
                    help="Print channel stats table and exit")
     p.add_argument("--chronology",   action="store_true",
                    help="Print top-20 most-viewed videos by year and exit")
+    p.add_argument("--dump-poopers", metavar="OUTPUT", nargs="?", const="poopers.md",
+                   help="Dump pooper table to Markdown file (default: poopers.md)")
     args, _ = p.parse_known_args()
 
     if not os.path.isdir(args.site_dir):
         print(f"[!] site_dir not found: {args.site_dir}")
         sys.exit(1)
 
-    if args.stats or args.chronology:
+    if args.stats or args.chronology or args.dump_poopers:
         index = VideoIndex(args.video_dir)
         index.load()
         if args.stats:
             do_stats(index)
         if args.chronology:
             do_chronology(index)
+        if args.dump_poopers:
+            do_dump_poopers(index, args.dump_poopers)
         return
 
     print_header()
@@ -901,9 +1061,12 @@ def main():
     print("  7  Chronology")
     print("       Top 20 most-viewed videos, sorted by year.")
     print()
+    print("  8  Dump poopers")
+    print("       Write poopers.md with one row per channel.")
+    print()
     print("  q  Quit")
     print()
-    choice = ask("  Choice [1/2/3/4/5/6/7/q]: ", {"1", "2", "3", "4", "5", "6", "7", "q"})
+    choice = ask("  Choice [1/2/3/4/5/6/7/8/q]: ", {"1", "2", "3", "4", "5", "6", "7", "8", "q"})
 
     if choice == "q":
         sys.exit(0)
@@ -944,6 +1107,9 @@ def main():
 
     if choice == "7":
         do_chronology(index)
+
+    if choice == "8":
+        do_dump_poopers(index)
 
     print()
 

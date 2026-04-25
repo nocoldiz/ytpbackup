@@ -127,11 +127,12 @@ A mantenere l'ordine e a guidare la community c'era un gruppo di **admin storici
 
 | Pooper | Canale | Video più visto | Altri video |
 |---|---|---|---|
+| despotaa | [despotaa](https://www.youtube.com/@despotaaa) | — | — |
+| bassman85 | [bassman85x](https://www.youtube.com/@bassman85x) | [Youtube Poop : Mondo Emo](https://www.youtube.com/watch?v=6qXBHVssbg0) (271K) | — |
+| Ziotok83 | [ZioTok83](https://www.youtube.com/@ZioTok83/videos) | "Youtube merda : il capitano incita la ciurma a sballarsi con la vinavil" | — |
 | Felix 96 | [Felix 96](https://www.youtube.com/@tracFelix96trac) | — | — |
 | VoodooChild | — | — | — |
 | blazor67 | — | — | — |
-| bassman85 | [bassman85x](https://www.youtube.com/@bassman85x) | [Youtube Poop : Mondo Emo](https://www.youtube.com/watch?v=6qXBHVssbg0) (271K) | — |
-| Ziotok83 | [ZioTok83](https://www.youtube.com/@ZioTok83/videos) | "Youtube merda : il capitano incita la ciurma a sballarsi con la vinavil" | — |
 | mr.nintendo | Canale chiuso | — | — |
 | Elia1995 | [EliaForce1984ita](https://www.youtube.com/@EliaForce1984ita) | — | — |
 | Weegee64 | [Mario6493](https://www.youtube.com/@Mario6493) | [You dare not agree with the Mario Head?](https://www.youtube.com/watch?v=PHQWtOAGrA4) (189K) | — |
@@ -143,6 +144,7 @@ A mantenere l'ordine e a guidare la community c'era un gruppo di **admin storici
 
 **2009**
 
+Mondo Emo è la prima YTP italiana a diventare virale
 Ziotok conia la dicitura "Youtube merda" in alternativa alle YTP
 
 **2010**
@@ -183,7 +185,7 @@ Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperim
 | Clodd97 | [Clodd](https://www.youtube.com/@Clodd) | [YTP ITA - Ah non è un pezzo unico?](https://www.youtube.com/watch?v=3tQPKSPy8G4) (35K) | "YTP ITA Junior paga l'abbonamento", "Ytp ita Junior ha una mira mostruosa!" |
 
 **2011**
-* **Silvio è diventato nonno di se stesso** *(Nocoldiz)*
+* [**Silvio è diventato nonno di se stesso**](https://www.youtube.com/watch?v=ggEwv9ATvpk) *(Nocoldiz)*
 
 Nel **2011** (non 2021), divergenze interne, differenze di visione sul "purismo" delle poop e normali attriti da community portano a un vero e proprio scisma. Una fazione si distacca dal Forum Rosso per fondare un progetto rivale: nasce così **Il Forum Blu**.
 
@@ -193,24 +195,34 @@ Questa divisione dà il via a un periodo noto come la **"Guerra tra forum"**. No
 La tensione durò per mesi, fino a quando le due fazioni si resero conto che la divisione stava limitando il potenziale della community. La svolta arriva con la **[Proposta di pace](https://youtubepoopita.forumfree.it/?t=59604480)**: un momento storico di diplomazia digitale che portò a una tregua e, successivamente, a una progressiva riunificazione degli intenti. Questa pace segnò il vero inizio dell'apice dell'Età dell'Oro, permettendo ai migliori talenti di entrambe le sponde di collaborare a progetti giganteschi che hanno fatto la storia di YouTube Italia.
 
 **2012**
-* **A for Asthma** *(Revergo)*
+* [**A for Asthma**](https://www.youtube.com/watch?v=fSM_SO0GIBc) *(Revergo)*
+* [**YTPM - Super Mario Gumball Brothers**](https://www.youtube.com/watch?v=pnO7ul29qPk) *(Ziomeso)*: YTPMV su temi musicali di Super Mario; tra i primi esempi italiani di poop musicale strutturata.
 
 **2013**
-* **Mike Wazowski fa uso di bamba** *(MasterCast)*
-* **È finito il vino** *(Nocoldiz)*
+* [**Mike Wazowski fa uso di bamba**](https://www.youtube.com/watch?v=6bZzz1x_qHo) *(MasterCast)*
+* [**È finito il vino**](https://www.youtube.com/watch?v=SQWeMj48arw) *(Nocoldiz)*
+* [**YTP ITA - Carlo Conti è un po' scurrile (Prima Parte)**](https://www.youtube.com/watch?v=zOmLjk2GTkM) *(TottiBest)*: Nasce la saga sull'inconfondibile conduttore dell'Eredità; il sentence mixing su Carlo Conti diventerà uno dei filoni più longevi della YTP ITA.
+* [**YTP ITA - Richard Benson chiede ad Andrea Diprè se ha gabido**](https://www.youtube.com/watch?v=cIniZFm9SV8): Il duo Benson-Diprè, già virale di suo, viene stravvolto dal sentence mixing in un cortocircuito surreale.
 
 **2014**
-* **YEE** *(Revergo)*: Da un oscurissimo e pessimo cartone della *Dingo Pictures* (Dinosauri), Revergo estrapola un dinosauro e un motivetto ("Yee"). Il video valica i confini italiani e diventa un meme **mondiale**, citato ancora oggi su forum internazionali, Reddit e TikTok. L'Italia esporta il no-sense.
-* **Gaston ha i peli esplosivi** *(Stew Barz)*
+* [**YEE**](https://www.youtube.com/watch?v=q6EoRBvdVPQ) *(Revergo)*: Da un oscurissimo e pessimo cartone della *Dingo Pictures* (Dinosauri), Revergo estrapola un dinosauro e un motivetto ("Yee"). Il video valica i confini italiani e diventa un meme **mondiale**, citato ancora oggi su forum internazionali, Reddit e TikTok. L'Italia esporta il no-sense.
+* [**Gaston ha i peli esplosivi**](https://www.youtube.com/watch?v=Y9rLp00OU9M) *(Stew Barz)*
+* [**YTP ITA - Carlo Conti è un po' scurrile (Terza Parte)**](https://www.youtube.com/watch?v=QFOvFAJIbG4) *(TottiBest)*
 
 Inizio fenomeno MLG
 
 **2015**
-* **Ah non è un pezzo unico?** *(Clodd97)*
+* [**Ah non è un pezzo unico?**](https://www.youtube.com/watch?v=3tQPKSPy8G4) *(Clodd97)*
+* [**Enrico Pasquale Pratticò - Sono Un Ragazzo Carino**](https://www.youtube.com/watch?v=oBH7_mQY_cA) *(Christianice)*: Remix di un oscuro cantante folk pugliese; raggiungerà 5,8 milioni di visualizzazioni diventando uno dei video più visti dell'intera scena YTP ITA.
+* [**YTP: La Maledizione del Primo Ceffone**](https://www.youtube.com/watch?v=mX6-SMWUhmE) *(MasterCast)*
+* [**YTP: Peter Parker Non Paga L'Affitto**](https://www.youtube.com/watch?v=Stq6HVddYn0) *(MasterCast)*
 
 **2016**
-* **I Vendettatori** *(Nocoldiz)*
-* **Kuzco È Un Folle** *(MasterCast)*
+* [**I Vendettatori**](https://www.youtube.com/watch?v=XLnJX0E4hS8) *(Nocoldiz)*
+* [**Kuzco È Un Folle**](https://www.youtube.com/watch?v=FKVssYFf2no) *(MasterCast)*
+* [**YTP: Celentanoh Trolla Le Donne**](https://www.youtube.com/watch?v=q6gS85c-YeQ) *(Stew Barz)*
+* [**YTP: Piton Spaccia SaS Alla Scuola Di Magia E Stregoneria Di Hogwarts**](https://www.youtube.com/watch?v=Cinqy_DzupA) *(MasterCast)*
+* [**Imen e il Raggio di Morandi**](https://www.youtube.com/watch?v=7uC8W3_U3h8) *(Jakkomatto)*
 
 ---
 
@@ -229,42 +241,55 @@ Il Collegio
 | 125Replay | — | — | — |
 | Alepoops | — | — | — |
 | Frederick Frankenstein | [Frederick Frankenstein](https://www.youtube.com/@frederickfrankenstein5671) | [YTP - Applausi per Kappalicious, la ragazza perfetta](https://www.youtube.com/watch?v=njOgmE64UdU) (3,3 mln) | — |
+| Capra Strabica | [Capra Strabica 2](https://www.youtube.com/@caprastrabica2182) | — | Canale secondario dopo chiusura forzata del canale originale; collaborazione con Nocoldiz in *Poop Fiction* |
+| ilCirox | [ilCirox](https://www.youtube.com/c/ilCirox) | — | "YTP ITA - Ti faaf staas beeneh", "Don Matteo: Bizarre Adventure", "YTP ITA - Il Popaii odia gli uccelli Artigiani" |
+| AssoDiDenari | [AssoDiDenari](https://www.youtube.com/c/AssoDiDenari) | — | Partecipazione a collab (Infinity Collab, Shrek Collab); YTP su Chef Tony |
+| MP YTP | [MP YTP](https://www.youtube.com/c/MPYTP) | — | — |
 
 ---
 
 **2017**
-* **POOP SQUAD** *(_RT_ / RT Poop - fine 2017)*
+* [**YTP - Applausi per Kappalicious, la ragazza perfetta**](https://www.youtube.com/watch?v=olzaqjmWnlc) *(Frederick Frankenstein)*: Poop sulla youtuber Kappalicious; raggiungerà 3,3 milioni di visualizzazioni diventando uno dei più visti di sempre nella YTP ITA.
+* [**YTP ITA - Ti faaf staas beeneh**](https://www.youtube.com/watch?v=zNOEeXceyGo) *(ilCirox)*: Sentence mixing su dialogo televisivo; il titolo onomatopeico diventa meme interno alla community.
+* [**POOP SQUAD**](https://www.youtube.com/watch?v=HUp7qFE32SA) *(RT Poop)*
+* [**YTP - Lo chef tony è un maniaco incestuoso [ITA]**](https://www.youtube.com/watch?v=L83llpim7Vs) *(AssoDiDenari)*
 
 Fine fenomeno MLG
 Inizia l'**Adpocalypse** (termine coniato da PewDiePie): inserzionisti ritirano massicciamente le pubblicità da YouTube, i guadagni dei pochi poopers con partership crollano.
 
 **2018**
-* **POOP SQUAD 2: AGE OF TRUMP** *(RT Poop)*
+* [**POOP SQUAD 2: AGE OF TRUMP**](https://www.youtube.com/watch?v=lWKerlHcNIU) *(RT Poop)*
+* [**YTP - POOP FICTION**](https://www.youtube.com/watch?v=1kL192HeJlw) *(Capra Strabica feat. Nocoldiz)*: Maxi-progetto in stile Tarantino; una delle collaborazioni più ambiziose dell'era.
+* [**YTP - Gommacoglione (feat. Ale199) [ITA]**](https://www.youtube.com/watch?v=LliK20AjFso) *(Davvo)*: Tra i primissimi video di Davvo, che inizia a costruirsi una reputazione nella community.
 * **Vendettatori: La Guerra dell'Infinito** *(Nocoldiz)*
 
 Frederick Frankestein conia il termine "Youtube Graft"
 
 **2019**
-Poop su IlCollegio di 125Replay e Alepoops diventano virali
+* [**YTP Il Collegio - Il Collegio è pieno di drogati**](https://www.youtube.com/watch?v=AQ31vfgrn8w) *(125Replay)*
+* [**YTP Il Collegio - La situazione sta degenerando**](https://www.youtube.com/watch?v=p30mjDUmbOE) *(125Replay)*
+* [**YTP - Il Collegio si accultura sulle Youtube Poop italiane**](https://www.youtube.com/watch?v=UelCibgSsk4) *(Alepoops)*
+
+Poop su Il Collegio di 125Replay e Alepoops diventano virali; primo grande caso di YTP ITA costruita interamente attorno a un reality show contemporaneo.
 Il canale di **Nocoldiz viene bannato senza spiegazioni**
 
 **2020**
-L'utente **Davvo** pubblica **YTP - ShreKKK [ITA]** ([https://www.youtube.com/watch?v=_pOUJKK8o4Q](https://www.youtube.com/watch?v=_pOUJKK8o4Q)).
-
-L'incredibile successo di *ShreKKK* scatena un effetto: la nascita del fenomeno dei **"pooperini"**.
-Migliaia di giovanissimi utenti scoprono il formato YTP proprio tramite il video di Davvo. Entusiasti, decidono di iniziare a creare le proprie "poop".
+* [**YTP - ShreKKK [ITA]**](https://www.youtube.com/watch?v=_pOUJKK8o4Q) *(Davvo)*: Il video più importante dell'era. L'incredibile successo scatena la nascita del fenomeno dei **"pooperini"**: migliaia di giovanissimi scoprono il formato e iniziano a creare le proprie poop.
+* [**YTP - Sickwolf si incazza perché l'ho poopato [ITA]**](https://www.youtube.com/watch?v=9MdE35671VA) *(Davvo)*
+* [**YTP ITA - Me Contro Te contro Voi contro quegli altri**](https://www.youtube.com/watch?v=tk3IiPCq4Oc) *(MrPoldoAknar)*: Poop sui Me Contro Te; segnale che le YTP iniziano a raggiungere anche il pubblico dei content creator mainstream.
 
 **2021**
+* [**YTP ITA - Il Grande Festeggiatore (feat. Mastercast)**](https://www.youtube.com/watch?v=8wfGnPA4iYg) *(ilCirox)*
+* [**YTP - La Serie A 21/22 riprende malissimo**](https://www.youtube.com/watch?v=o95EiclhS6g) *(Davvo)*: Poop calcistica che consolida Davvo come il pooper più prolifico dell'era post-adpocalypse.
 
 **2022**
+* [**YTP - SFERA EBBASTA NON È ITALIANO**](https://www.youtube.com/watch?v=RfC40UeMuMA) *(Davvo)*: Basato sull'"Italiano Anthem" di Sfera Ebbasta; mescola trap e nonsense in uno stile che prefigura l'estetica della nuova generazione.
+* [**YTP - Davvo e itsDani sono stupidi (AutoPoop)**](https://www.youtube.com/watch?v=wIByUpd_Q7A) *(Davvo)*: AutoPoop in collaborazione con itsDani; segnale del progressivo avvicinamento tra poopers e streamer italiani.
 
 ---
 
 ## 🔵 Era 7 — La Sopravvivenza e l'Era IA (2023 - presente)
 
-**Pooper italiani di riferimento:**
-
-**Sources di riferimento:**
 
 Le YTP non sono più di tendenza, ma **sopravvivono come pratica di nicchia** portata avanti da appassionati irriducibili. I creatori storici si sono "evoluti nel proprio stile personale" e nuovi pooper iniziano a emergere imitandoli.
 

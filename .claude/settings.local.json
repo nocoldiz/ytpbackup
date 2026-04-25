@@ -5,7 +5,15 @@
       "Bash(python -m py_compile yt_downloader.py)",
       "Bash(py *)",
       "Bash(pip install *)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "WebSearch",
+      "WebFetch(domain:youtube.fandom.com)",
+      "WebFetch(domain:it.quora.com)",
+      "WebFetch(domain:www.socialboost.it)",
+      "WebFetch(domain:youtubepoopita.forumfree.it)",
+      "WebFetch(domain:nonciclopedia.org)",
+      "WebFetch(domain:telegram.me)",
+      "Bash(del test_out.md)"
     ]
   }
 }
