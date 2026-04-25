@@ -28,6 +28,8 @@ const SITE_MIRROR = path.join(__dirname, 'site_mirror');
 const STATE_FILE  = path.join(SITE_MIRROR, '.scraper_state.json');
 const SCRAPER     = path.join(__dirname, 'scraper.py');
 const BASE_DOMAIN = 'youtubepoopita.forumfree.it';
+const VIDEO_INDEX = path.join(__dirname, 'videos', 'video_index.json');
+const VIDEOS_DIR  = path.join(__dirname, 'videos');
 
 // ─── Forum sections — must stay in sync with scraper.py SECTIONS ─────────────
 const SECTIONS = [
@@ -101,6 +103,24 @@ function buildLookups() {
 
 buildLookups();
 
+// ─── Video index (local backup map) ──────────────────────────────────────────
+
+let videoLocalMap = {};   // videoId → '/local/...' URL
+
+function buildVideoMap() {
+  let index = {};
+  try { index = JSON.parse(fs.readFileSync(VIDEO_INDEX, 'utf8')); } catch {}
+  videoLocalMap = {};
+  for (const [id, entry] of Object.entries(index)) {
+    if (entry.local_file && entry.status === 'downloaded') {
+      const rel = entry.local_file.replace(/^videos[\\/]/, '').replace(/\\/g, '/');
+      videoLocalMap[id] = '/local/' + rel.split('/').map(encodeURIComponent).join('/');
+    }
+  }
+}
+
+buildVideoMap();
+
 // ─── File-system resolution ───────────────────────────────────────────────────
 
 /** Locate a section index page on disk. Returns absolute path or null. */
@@ -157,7 +177,10 @@ const DOMAIN_RES = [
 //   1. Overrides page_jump() for local pagination navigation.
 //   2. Removes the GDPR/consent iframe overlay (#appconsent) that blocks clicks.
 //   3. Strips remaining forum-domain hrefs missed by the static rewrite.
-const INJECT_JS = `
+//   4. Injects local <video> players next to YouTube links/embeds when available.
+function buildInjectJs(videoMap) {
+  const mapJson = JSON.stringify(videoMap);
+  return `
 <style>
 /* Remove GDPR consent overlay — it covers the full viewport with z-index max */
 #appconsent { display: none !important; }
@@ -165,16 +188,62 @@ const INJECT_JS = `
 iframe[style*="z-index: 2147483647"] { display: none !important; }
 /* Hide cookie/notification bars */
 .note { display: none !important; }
+/* Local video player */
+.ytp-local-player {
+  margin: 6px 0;
+  background: #111;
+  border: 1px solid #444;
+  border-radius: 4px;
+  overflow: hidden;
+  display: inline-block;
+  max-width: 100%;
+}
+.ytp-local-player video { display: block; max-width: 100%; }
+.ytp-local-player .ytp-local-label {
+  font-size: 10px;
+  color: #aaa;
+  background: #1a1a1a;
+  padding: 2px 6px;
+  font-family: monospace;
+}
 </style>
 <script>
 (function () {
+  var M = ${mapJson};
+
+  function ytId(url) {
+    if (!url) return null;
+    var m = url.match(/[?&]v=([A-Za-z0-9_-]{11})/)
+           || url.match(/youtu\\.be\\/([A-Za-z0-9_-]{11})/)
+           || url.match(/youtube\\.com\\/embed\\/([A-Za-z0-9_-]{11})/);
+    return m ? m[1] : null;
+  }
+
+  function makePlayer(src) {
+    var wrap  = document.createElement('div');
+    wrap.className = 'ytp-local-player';
+    var vid   = document.createElement('video');
+    vid.controls = true;
+    vid.preload  = 'none';
+    var src_el = document.createElement('source');
+    src_el.src  = src;
+    src_el.type = 'video/mp4';
+    vid.appendChild(src_el);
+    var lbl = document.createElement('div');
+    lbl.className = 'ytp-local-label';
+    lbl.textContent = 'backup locale';
+    wrap.appendChild(vid);
+    wrap.appendChild(lbl);
+    return wrap;
+  }
+
   /* Remove GDPR overlay node entirely */
   var ac = document.getElementById('appconsent');
   if (ac) ac.parentNode.removeChild(ac);
 
   /* Override page_jump for local pagination */
   window.page_jump = function (baseUrl, totalPages, perPage) {
-    var p = parseInt(window.prompt('Vai alla pagina (1–' + totalPages + '):', '1'), 10);
+    var p = parseInt(window.prompt('Vai alla pagina (1\\u2013' + totalPages + '):', '1'), 10);
     if (p >= 1 && p <= totalPages) {
       var st  = (p - 1) * perPage;
       var sep = baseUrl.indexOf('?') !== -1 ? '&' : '?';
@@ -189,8 +258,27 @@ iframe[style*="z-index: 2147483647"] { display: none !important; }
     if (re.test(h)) a.setAttribute('href', h.replace(re, '/'));
     re.lastIndex = 0;
   });
+
+  /* Inject local players next to YouTube iframes */
+  document.querySelectorAll('iframe').forEach(function (iframe) {
+    var src = iframe.getAttribute('src') || '';
+    if (!/youtube(-nocookie)?\\.com\\/embed\\//.test(src)) return;
+    var id = ytId(src);
+    if (!id || !M[id]) return;
+    iframe.parentNode.insertBefore(makePlayer(M[id]), iframe.nextSibling);
+  });
+
+  /* Inject local players next to YouTube links */
+  document.querySelectorAll('a[href]').forEach(function (a) {
+    var href = a.getAttribute('href') || '';
+    if (!/youtube\\.com|youtu\\.be/.test(href)) return;
+    var id = ytId(href);
+    if (!id || !M[id]) return;
+    a.parentNode.insertBefore(makePlayer(M[id]), a.nextSibling);
+  });
 })();
 </script>`;
+}
 
 function rewriteHtml(html) {
   // 1. Strip absolute forum domain from every href/action/src in the raw HTML.
@@ -206,11 +294,12 @@ function rewriteHtml(html) {
   html = html.replace(/<a\b([^>]*)\starget="(?!_blank")[^"]*"([^>]*)>/g,
     (_, before, after) => `<a${before}${after}>`);
 
-  // 4. Inject fixes & overrides before </body>.
+  // 4. Inject fixes, overrides, and local video players before </body>.
+  const inject = buildInjectJs(videoLocalMap);
   if (html.includes('</body>')) {
-    html = html.replace('</body>', INJECT_JS + '\n</body>');
+    html = html.replace('</body>', inject + '\n</body>');
   } else {
-    html += INJECT_JS;
+    html += inject;
   }
   return html;
 }
@@ -261,6 +350,7 @@ function triggerScrape(jobKey, sectionIdx, threadUrl) {
   proc.on('close', code => {
     activeJobs.delete(jobKey);
     buildLookups();
+    buildVideoMap();
     console.log(`[scraper] finish key="${jobKey}" (exit ${code})`);
   });
 }
@@ -324,6 +414,38 @@ function serveNotFound(res, detail) {
 </html>`);
 }
 
+// ─── Local video file serving (with range-request support for seeking) ────────
+
+function serveLocalVideo(filePath, req, res) {
+  let stat;
+  try { stat = fs.statSync(filePath); } catch {
+    res.writeHead(404); res.end('Not found'); return;
+  }
+
+  const total = stat.size;
+  const range = req.headers['range'];
+
+  if (range) {
+    const [, s, e] = range.replace(/bytes=/, '').match(/^(\d*)-(\d*)$/) || [];
+    const start = s ? parseInt(s, 10) : 0;
+    const end   = e ? parseInt(e, 10) : total - 1;
+    res.writeHead(206, {
+      'Content-Range':  `bytes ${start}-${end}/${total}`,
+      'Accept-Ranges':  'bytes',
+      'Content-Length': end - start + 1,
+      'Content-Type':   'video/mp4',
+    });
+    fs.createReadStream(filePath, { start, end }).pipe(res);
+  } else {
+    res.writeHead(200, {
+      'Content-Length': total,
+      'Content-Type':   'video/mp4',
+      'Accept-Ranges':  'bytes',
+    });
+    fs.createReadStream(filePath).pipe(res);
+  }
+}
+
 // ─── Request handler ──────────────────────────────────────────────────────────
 
 function onRequest(req, res) {
@@ -336,6 +458,18 @@ function onRequest(req, res) {
     reqUrl = new URL(req.url, `http://localhost:${PORT}`);
   } catch {
     res.writeHead(400); res.end(); return;
+  }
+
+  // ── Local video files ─────────────────────────────────────────────────────
+  if (reqUrl.pathname.startsWith('/local/')) {
+    const rel = reqUrl.pathname.slice('/local/'.length)
+      .split('/').map(decodeURIComponent).join(path.sep);
+    const filePath = path.join(VIDEOS_DIR, rel);
+    // path-traversal guard
+    if (!filePath.startsWith(VIDEOS_DIR + path.sep) && filePath !== VIDEOS_DIR) {
+      res.writeHead(403); res.end(); return;
+    }
+    return serveLocalVideo(filePath, req, res);
   }
 
   const fid     = reqUrl.searchParams.get('f');

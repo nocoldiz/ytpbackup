@@ -13,7 +13,8 @@
       "WebFetch(domain:youtubepoopita.forumfree.it)",
       "WebFetch(domain:nonciclopedia.org)",
       "WebFetch(domain:telegram.me)",
-      "Bash(del test_out.md)"
+      "Bash(del test_out.md)",
+      "Bash(python *)"
     ]
   }
 }
