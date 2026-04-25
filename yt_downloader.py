@@ -626,4 +626,14 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as exc:
+        import traceback
+        print("\n[!] Unexpected error:")
+        traceback.print_exc()
+    except KeyboardInterrupt:
+        print("\n  Interrupted.")
+    finally:
+        print()
+        input("  Press Enter to close...")

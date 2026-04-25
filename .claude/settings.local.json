@@ -3,7 +3,9 @@
     "allow": [
       "Bash(node -e ' *)",
       "Bash(python -m py_compile yt_downloader.py)",
-      "Bash(py *)"
+      "Bash(py *)",
+      "Bash(pip install *)",
+      "Bash(python3 *)"
     ]
   }
 }
