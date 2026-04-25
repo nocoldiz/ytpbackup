@@ -7,48 +7,6 @@ fetches video description + channel info from YouTube, then downloads.
 
 Requirements:
     pip install yt-dlp beautifulsoup4 lxml
-
-
-    Todo per claude:
-
-    scrape also the following channels when option 3, remove this from comment afterwards
-    https://www.youtube.com/@cs188
-    https://www.youtube.com/@KroboProductions
-    https://www.youtube.com/@EmperorLemon
-    https://www.youtube.com/@Deepercutt
-    https://www.youtube.com/@Hurricoaster
-    https://www.youtube.com/@despotaaa
-    https://www.youtube.com/@bassman85x
-    https://www.youtube.com/@ZioTok83
-    https://www.youtube.com/@tracFelix96trac
-    https://www.youtube.com/@voodoochildytp
-    https://www.youtube.com/@blazor67
-    https://www.youtube.com/@EliaForce1984ita
-    https://www.youtube.com/@Mario6493
-    https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg
-    https://www.youtube.com/@Nocoldiz
-    https://www.youtube.com/@Pennaz
-    https://www.youtube.com/@DarkCoffe64
-    https://www.youtube.com/@revergo
-    https://www.youtube.com/@MastercastPresident
-    https://www.youtube.com/@TottiBest92
-    https://www.youtube.com/user/StewBarzTube
-    https://www.youtube.com/user/PierluPoops
-    https://www.youtube.com/user/ChristianIce
-    https://www.youtube.com/@mrpoldoakbar2849
-    https://www.youtube.com/user/ZioMeso
-    https://www.youtube.com/user/julaoa
-    https://www.youtube.com/user/JakkoMatto
-    https://www.youtube.com/@Clodd
-    https://www.youtube.com/c/RTpoop
-    https://www.youtube.com/@DavvoYTP
-    https://www.youtube.com/user/125Replay
-    https://www.youtube.com/@AlePoops
-    https://www.youtube.com/@frederickfrankenstein5671
-    https://www.youtube.com/@caprastrabica2182
-    https://www.youtube.com/c/ilCirox
-    https://www.youtube.com/c/AssoDiDenari
-    https://www.youtube.com/c/MPYTP
 """
 
 import os
@@ -70,8 +28,13 @@ SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te","YTPMV dimportazione","YTP da i
 
 CHANNEL_KEYWORDS = re.compile(
     r'(?i)(YTP|YTPMV|Collab|Youtube\s+poop|YT\s+Poop|Poop'
-    r'|matteo\s+montesi|avventure|Zeb|Collegio|Harry potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu'
-    r'|Dipr[eè]|Bello\s+Figo|Yotobi|He[\s-]?Man|Berlusconi|Muniz|Nemesis|Testo|Jack Black|Super Quark|Iscritti|YTM|YTG|MLG)'
+    r'|matteo\s+montesi|avventure|Zeb|Collegio|Bigazzi|Ambrogio|Risotto|ariete|Harry\s+potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu'
+    r'|Dipr[eè]|Bello\s+Figo|Yotobi|He[\s-]?Man|Gourmet|The king|Link|Berlusconi|Muniz|Travaglio| Nemesis|Testo|Papa|Jack\s+Black|Super\s+Quark|Iscritti|YTM|YTG|MLG'
+    # --- New General YTP Terms ---
+    r'|Sentence\s+Mix|Ear\s?rape|G-Major|Mondo emo| Sparta\s+Remix|Scad|Stutter|Zelda|Patrick|Pubblicità|Spot|Spongebob|Reverse|Masking|Pitch\s+Shift'
+    # --- New Italian Meme/YTP Icons ---
+    r'|Mosconi|Benson|Brumotti|Master\s?chef|Mister\s+Lui|Pappalardo|Sgarbi|Razzi|Salvini|Renzi|Rio mare|Gerry\s+Scotti|Fazio'
+    r'|Kabu|Nocoldiz|Poldo|Cloroformio|Giannino|Gianni\s+Morandi|Doraemon|Me\s+cont[ro]o\s+Te)'
 )
 
 DEFAULT_SITE_DIR = "./site_mirror"
