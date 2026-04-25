@@ -137,7 +137,7 @@ A mantenere l'ordine e a guidare la community c'era un gruppo di **admin storici
 
 ---
 
-## 🟢 Era 5 — L'Età dell'Oro Italiana e lo Scisma (2011 - 2018)
+## 🟢 Era 5 — L'Età dell'Oro Italiana (2011 - 2018)
 **Caratteristiche distintive del filone italiano:**
 Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperimento e diventa un vero e proprio fenomeno di culto sul web italiano, trovando la sua identità definitiva. È l'epoca dei grandi classici, delle collaborazioni (Collab) e dei tornei (Tennis).
 
@@ -151,17 +151,64 @@ Con l'inizio del nuovo decennio, la YTP ITA smette di essere un semplice esperim
 
 **Pooper italiani di riferimento:**
 
-- **Revergo** — creatore del meme  **Yee** estratto da *Dinosauri* (Dingo Pictures, 2000); autore di *A for Asthma* su Roberto Baffo.
-- **MasterCast** — *Mike Wazowski fa uso di bamba*, *Kuzco È Un Folle*.
-- **TottiBest** — *La vera storia di Harry Potter* (90% delle scene del primi episodio)
-- **Stew Barz** — *Gaston ha i peli esplosivi*.
-- **PierluPoops**
-- **Christianice** — **.
-- **Ziomeso** - **.
-- **Julaoa** - 
-- **Jakkomatto** - ***
-- **Clodd97** — *Ah non è un pezzo unico?* su Alessandro Orlando di Telemarket.
 
+## 1. Revergo
+* **Canale:** [revergo](https://www.youtube.com/@revergo)
+* **Video più visto:** [Yee](https://www.youtube.com/watch?v=q6EoRBvdVPQ) (101 mln visualizzazioni)
+* **Altri video** "A for Asthma".
+
+## 2. MasterCast
+* **Canale:** [MasterCast](https://www.youtube.com/@MastercastPresident)
+* **Video più visto:** [YTP: Il Signore Del SAS](https://www.youtube.com/watch?v=RInYvE6FidY) (1,2 mln visualizzazioni)
+* **Altri video** "Mike Wazowski fa uso di bamba" "Kuzco È Un Folle".
+
+## 3. TottiBest
+* **Canale:** [TottiBest](https://www.youtube.com/@TottiBest92)
+* **Video più visto:** [La vera storia di Harry Potter (feat. Nocoldiz)](https://www.youtube.com/watch?v=iFdZxxAn5Fw) (620.000 visualizzazioni)
+* **Altri video** "A carlo conti piace appoggiarsi" "Chef Rubio e le tecniche ninja proibite
+
+## 4. Stew Barz
+* **Canale:** [StewBarzTube](https://www.youtube.com/user/StewBarzTube)
+* **Video più visto:** [YTP: Celentanoh Trolla Le Donne](https://www.youtube.com/watch?v=pAnVInh6F-U) (310.000 visualizzazioni)
+* **Altri video** "Gaston ha i peli esplosivi".
+
+## 5. PierluPoops
+* **Canale:** [Pierlu Poops](https://www.youtube.com/user/PierluPoops)
+* **Video più visto:** [Panico Paura feat. Angelo Ruoppolo](https://www.youtube.com/watch?v=8ZvWYSukIXU) (32.000 visualizzazioni)
+* **Altri video** 
+
+## 6. Christianice
+* **Canale:** [ChristianIce](https://www.youtube.com/user/ChristianIce)
+* **Video più visto:** [Enrico Pasquale Pratticò - Sono un ragazzo carino (Remix)](https://www.youtube.com/watch?v=pAnVInh6F-U) (5,8 mln visualizzazioni)
+* **Altri video** 
+
+## 7. MrPoldoAknar
+* **Canale:** [Poldo](https://www.youtube.com/@mrpoldoakbar2849)
+* **Video più visto:** 
+* **Altri video** 
+
+## 8. Ziomeso
+* **Canale:** [ZioMeso](https://www.youtube.com/user/ZioMeso)
+* **Video più visto:** [YTPM - Super Mario Gumball Brothers [Underworld Theme]](https://www.youtube.com/watch?v=pnO7ul29qPk) (18.000 visualizzazioni)
+
+## 9. Julaoa
+* **Canale:** [julaoa](https://www.youtube.com/user/julaoa)
+* **Video più visto:** [NabboCube](https://www.youtube.com/watch?v=KmPRd0lH9vk) (5.000 visualizzazioni)
+
+## 10. Jakkomatto
+* **Canale:** [JakkoMatto](https://www.youtube.com/user/JakkoMatto)
+* **Video più visto:** [Imen e il Raggio di Morandi](https://www.youtube.com/watch?v=7uC8W3_U3h8) (355.000 visualizzazioni)
+* **Altri video**
+
+## 11. Clodd97
+* **Canale:** [Clodd](https://www.youtube.com/@Clodd)
+* **Video più visto:** [Ah non è un pezzo unico?](https://www.youtube.com/watch?v=3tQPKSPy8G4)
+* **Altri video** 
+
+## 12. FREDERICK FRANKESTEIN
+* **Canale:** [Frederick Frankenstein](https://www.youtube.com/@frederickfrankenstein5671)
+* **Video più visto:** [YTP - Applausi per Kappalicious, la ragazza perfetta](https://www.youtube.com/watch?v=njOgmE64UdU) (3,3 mln visualizzazioni)
+* **Altri video** 
 
 ### La divisione: La nascita del "Forum Blu" (2011)
 Nel **2011** (non 2021), divergenze interne, differenze di visione sul "purismo" delle poop e normali attriti da community portano a un vero e proprio scisma. Una fazione si distacca dal Forum Rosso per fondare un progetto rivale: nasce così **Il Forum Blu**. 
@@ -200,9 +247,11 @@ La tensione durò per mesi, fino a quando le due fazioni si resero conto che la 
 **2017**
 * **POOP SQUAD** *(_RT_ / RT Poop - fine 2017)*: 
 
-**2018: L'Apoteosi del Crossover**
+**2018**
 * **POOP SQUAD 2: AGE OF TRUMP** *(RT Poop)*:
 * **Vendettatori: La Guerra dell'Infinito** *(Nocoldiz)*:
+PARLARE DI FREDERICK FRANKESTEIN
+FREDERICK FRANKESTEIN
 
 ---
 
@@ -211,8 +260,7 @@ MLG
 ## 🟠 Era 6 — La Stagnazione e i Ban (2019 - 2022)
 
 
-PARLARE DI FREDERICK FRANKESTEIN
-YOUTUBE GRAFT
+
 
 
 
