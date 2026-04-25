@@ -951,6 +951,7 @@ def do_dump_poopers(index, output_path="poopers.md"):
         return
 
     # Group non-unavailable videos by channel_name
+    # 1. Group the data
     channels = defaultdict(list)
     for vid, e in index.data.items():
         ch = e.get("channel_name")
@@ -960,23 +961,25 @@ def do_dump_poopers(index, output_path="poopers.md"):
             continue
         channels[ch].append((vid, e))
 
-    if not channels:
-        print("  No channel data. Run 'Update index' first.")
-        return
-
+    # 2. Define the robust sorting key
     def channel_sort_key(item):
-        entries = item[1]
+        ch_name, entries = item
+        video_count = len(entries)
+        # We also calculate total views as a secondary sort factor (tie-breaker)
         total_views = sum(e.get("view_count") or 0 for _, e in entries)
-        return total_views
+        return (video_count, total_views)
 
+    # 3. Sort: reverse=True ensures the highest counts are at the top
     sorted_channels = sorted(channels.items(), key=channel_sort_key, reverse=True)
 
+    # 4. Build the table lines
     lines = [
         "| Pooper | Canale | Video | Views totali | Primo | Ultimo | Video più visto | Altri video |",
         "|---|---|---|---|---|---|---|---|",
     ]
 
     for ch_name, entries in sorted_channels:
+        # ... (rest of your formatting logic)        
         ch_url = next((e.get("channel_url") for _, e in entries if e.get("channel_url")), None)
 
         by_views = sorted(entries, key=lambda x: x[1].get("view_count") or 0, reverse=True)
