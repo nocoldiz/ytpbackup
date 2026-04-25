@@ -61,7 +61,8 @@
     "thread_pages_done": [
       "https://youtubepoopita.forumfree.it/?t=33673732",
       "https://youtubepoopita.forumfree.it/?t=63498621"
-    ]
+    ],
+    "index_pages_saved": true
   },
   "Eventi": {
     "threads_found": [
@@ -77,7 +78,8 @@
     "thread_pages_done": [
       "https://youtubepoopita.forumfree.it/?t=33673732",
       "https://youtubepoopita.forumfree.it/?t=69098821"
-    ]
+    ],
+    "index_pages_saved": true
   },
   "Restyling": {
     "threads_found": [
@@ -207,7 +209,8 @@
       "https://youtubepoopita.forumfree.it/?t=56812498&st=15",
       "https://youtubepoopita.forumfree.it/?t=56812498&st=30",
       "https://youtubepoopita.forumfree.it/?t=56812310"
-    ]
+    ],
+    "index_pages_saved": true
   },
   "Risorse": {
     "threads_found": [
@@ -25939,5 +25942,6 @@
     "threads_found": [],
     "threads_done": [],
     "thread_pages_done": []
-  }
+  },
+  "home_done": true
 }

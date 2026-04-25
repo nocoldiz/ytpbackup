@@ -174,7 +174,6 @@ def page_filepath(section_dir, thread_id, page_num, title=None):
 
 
 def guess_mime(url, content_type=None):
-    """Guess MIME type from URL extension or content-type header."""
     if content_type:
         ct = content_type.split(";")[0].strip().lower()
         if ct in IMAGE_MIMES:
@@ -189,18 +188,15 @@ def guess_mime(url, content_type=None):
 
 
 def is_image_url(url):
-    """Check if URL looks like an image."""
     ext = os.path.splitext(urlparse(url).path)[1].lower()
     return ext in IMAGE_EXTENSIONS
 
 
-# ─── Image Cache (populated by network interception) ─────────────────────────
+# ─── Image Cache ─────────────────────────────────────────────────────────────
 
 class ImageCache:
-    """Thread-safe cache for image bytes captured from browser network."""
-
     def __init__(self):
-        self._cache = {}  # url -> (mime_type, raw_bytes)
+        self._cache = {}
         self._lock = threading.Lock()
 
     def put(self, url, mime_type, data):
@@ -258,8 +254,6 @@ class ForumScraper:
         self.state = {}
         self.state_file = os.path.join(self.output_dir, ".scraper_state.json")
 
-    # ── State ──
-
     def load_state(self):
         if os.path.exists(self.state_file):
             with open(self.state_file) as f:
@@ -279,24 +273,20 @@ class ForumScraper:
             }
         return self.state[name]
 
-    # ── Browser ──
-
     def _on_response(self, response):
-        """Playwright response handler — caches every image response."""
         try:
             url = response.url
             ct = response.headers.get("content-type", "")
             mime = ct.split(";")[0].strip().lower()
 
-            # Check if this is an image by MIME type or URL extension
             if mime in IMAGE_MIMES or is_image_url(url):
                 body = response.body()
-                if body and len(body) > 100:  # skip tiny/broken
+                if body and len(body) > 100:
                     if mime not in IMAGE_MIMES:
                         mime = guess_mime(url)
                     self._image_cache.put(url, mime, body)
         except Exception:
-            pass  # response.body() can fail for redirects etc.
+            pass
 
     def start_browser(self):
         from playwright.sync_api import sync_playwright
@@ -311,13 +301,8 @@ class ForumScraper:
             viewport={"width": 1920, "height": 1080},
         )
         self._page = self._context.new_page()
-
-        # Block video to save bandwidth
         self._page.route("**/*.{mp4,webm,ogg,avi,flv}", lambda r: r.abort())
-
-        # Intercept ALL responses to cache images
         self._page.on("response", self._on_response)
-
         log.info("✓ Browser ready (image interception active)\n")
 
     def stop_browser(self):
@@ -327,10 +312,7 @@ class ForumScraper:
         except Exception:
             pass
 
-    # ── Sync browser cookies to requests session ──
-
     def _sync_cookies(self):
-        """Copy browser cookies to the requests session for fallback downloads."""
         try:
             cookies = self._context.cookies()
             self._req_session.cookies.clear()
@@ -341,15 +323,11 @@ class ForumScraper:
         except Exception:
             pass
 
-    # ── Download image via requests (fallback) ──
-
     def _download_image_requests(self, url):
-        """Download an image via requests, return (mime, bytes) or None."""
         try:
             resp = self._req_session.get(url, timeout=15, stream=True)
             resp.raise_for_status()
             ct = resp.headers.get("Content-Type", "")
-            # Don't save HTML error pages as images
             if "text/html" in ct.lower():
                 return None
             data = resp.content
@@ -360,22 +338,13 @@ class ForumScraper:
         except Exception:
             return None
 
-    # ── Embed images into HTML (Python-side, post-load) ──
-
     def _embed_images_in_html(self, html, page_url):
-        """
-        Replace all <img src="http..."> with base64 data URIs.
-        Uses the image cache (populated by network interception) first,
-        then falls back to downloading via requests.
-        """
         soup = BeautifulSoup(html, "lxml")
         converted = 0
         fallback_downloaded = 0
 
-        # Collect all image URLs from the page
         img_tags = soup.find_all("img")
         for img in img_tags:
-            # Try multiple source attributes
             src = None
             for attr in ("src", "data-src", "data-lazy-src", "data-original",
                          "data-url", "data-image"):
@@ -387,39 +356,31 @@ class ForumScraper:
             if not src or src.startswith("data:"):
                 continue
 
-            # Resolve relative URLs
             full_src = normalize_url(src, page_url)
             if not full_src:
                 continue
 
-            # 1) Try the interception cache
             data_uri = self._image_cache.get_data_uri(full_src)
-
-            # Also try without trailing slash / query variations
             if not data_uri:
                 data_uri = self._image_cache.get_data_uri(src)
 
-            # 2) Fallback: download via requests
             if not data_uri:
                 result = self._download_image_requests(full_src)
                 if result:
                     mime, raw = result
                     b64 = base64.b64encode(raw).decode("ascii")
                     data_uri = f"data:{mime};base64,{b64}"
-                    # Cache it for future pages
                     self._image_cache.put(full_src, mime, raw)
                     fallback_downloaded += 1
 
             if data_uri:
                 img["src"] = data_uri
-                # Clean up lazy-load attributes
                 for attr in ("data-src", "data-lazy-src", "data-original",
                              "data-url", "data-image", "srcset", "loading"):
                     if img.get(attr):
                         del img[attr]
                 converted += 1
 
-        # Also handle background-image in inline styles
         bg_converted = 0
         for tag in soup.find_all(style=True):
             style = tag["style"]
@@ -438,20 +399,9 @@ class ForumScraper:
                     bg_converted += 1
             tag["style"] = style
 
-        total = converted + bg_converted
-        if total:
-            log.info(
-                f"      📷 Embedded {converted} images + {bg_converted} backgrounds"
-                f" (cache: {converted - fallback_downloaded}, "
-                f"downloaded: {fallback_downloaded})"
-            )
-
         return str(soup)
 
-    # ── Embed CSS inline ──
-
     def _embed_css_in_html(self, html, page_url):
-        """Inline all <link rel=stylesheet> into <style> tags."""
         soup = BeautifulSoup(html, "lxml")
         inlined = 0
         for link in soup.find_all("link", rel="stylesheet", href=True):
@@ -463,7 +413,6 @@ class ForumScraper:
                 resp.raise_for_status()
                 css_text = resp.text
 
-                # Inline url() inside the CSS too
                 def replace_css_url(m):
                     u = m.group(1)
                     data_uri = self._image_cache.get_data_uri(u)
@@ -481,26 +430,17 @@ class ForumScraper:
                     r'url\(["\']?(https?://[^"\')\s]+)["\']?\)',
                     replace_css_url, css_text
                 )
-
                 style_tag = soup.new_tag("style")
                 style_tag.string = css_text
                 link.replace_with(style_tag)
                 inlined += 1
             except Exception:
                 pass
-
-        if inlined:
-            log.info(f"      🎨 Inlined {inlined} stylesheets")
         return str(soup)
 
-    # ── Page fetching ──
-
     def fetch_page(self, url, embed=True):
-        """Load a page in the browser, optionally embed images."""
         try:
-            # Clear image cache for this page
             self._image_cache.clear()
-
             self._page.goto(url, wait_until="domcontentloaded", timeout=30000)
             self._page.wait_for_timeout(2000)
             try:
@@ -509,7 +449,6 @@ class ForumScraper:
                 pass
 
             if embed and self.embed_images:
-                # Scroll to trigger lazy-loaded images
                 try:
                     self._page.evaluate("""
                         () => new Promise(resolve => {
@@ -524,7 +463,6 @@ class ForumScraper:
                         })
                     """)
                     self._page.wait_for_timeout(2000)
-                    # Wait for new images to load after scrolling
                     try:
                         self._page.wait_for_load_state("networkidle", timeout=8000)
                     except Exception:
@@ -532,18 +470,11 @@ class ForumScraper:
                 except Exception:
                     pass
 
-            log.info(f"      Network captured {len(self._image_cache)} images")
-
-            # Get the full rendered HTML
             html = self._page.content()
-
-            # Sync cookies for fallback downloads
             self._sync_cookies()
 
-            # Now embed images using Python (cache + requests fallback)
             if embed and self.embed_images:
                 html = self._embed_images_in_html(html, url)
-
             if embed and self.embed_css:
                 html = self._embed_css_in_html(html, url)
 
@@ -554,20 +485,34 @@ class ForumScraper:
             log.warning(f"    ✗ Failed: {e}")
             return None
 
-    # ── Thread/section discovery ──
-
-    def discover_threads(self, section_name, section_url):
+    def discover_threads_and_save_index(self, section_name, section_url, section_dir):
+        """Discovers threads while saving the HTML layout pages natively."""
         forum_id = get_forum_id(section_url)
         threads = OrderedDict()
         page_url = section_url
         page_num = 0
 
+        index_dir = os.path.join(section_dir, "index")
+        os.makedirs(index_dir, exist_ok=True)
+
         while page_url:
             page_num += 1
-            log.info(f"    Scanning listing page {page_num}...")
-            html = self.fetch_page(page_url, embed=False)
+            log.info(f"    Scanning & saving listing page {page_num}...")
+            
+            # Fetch with embed=True to ensure offline layout cache is accurate
+            html = self.fetch_page(page_url, embed=True)
             if html is None:
                 break
+
+            # Save the index layout page
+            if page_num == 1:
+                filename = f"{safe_filename(section_name)}.html"
+            else:
+                filename = f"{safe_filename(section_name)} - pagina {page_num}.html"
+
+            filepath = os.path.join(index_dir, filename)
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write(html)
 
             soup = BeautifulSoup(html, "lxml")
             found_new = False
@@ -582,8 +527,11 @@ class ForumScraper:
                     threads[base_thread] = title
                     found_new = True
 
-            # Find next listing page
+            # Find chronologically sequential next listing page
             next_url = None
+            min_next_st = float('inf')
+            current_st = int(parse_qs(urlparse(page_url).query).get("st", [0])[0])
+
             for a in soup.find_all("a", href=True):
                 href = normalize_url(a["href"], page_url)
                 if not href:
@@ -591,10 +539,10 @@ class ForumScraper:
                 qs = parse_qs(urlparse(href).query)
                 if qs.get("f", [None])[0] == forum_id and "st" in qs:
                     st_val = int(qs["st"][0])
-                    current_st = int(parse_qs(urlparse(page_url).query).get("st", [0])[0])
-                    if st_val > current_st:
+                    # Ensure we navigate directly to the immediate next pagination count
+                    if current_st < st_val < min_next_st:
+                        min_next_st = st_val
                         next_url = href
-                        break
 
             if not found_new and not next_url:
                 break
@@ -618,8 +566,6 @@ class ForumScraper:
                 st = int(qs["st"][0])
                 pages[st] = href
         return sorted(pages.items(), key=lambda x: x[0])
-
-    # ── Save thread ──
 
     def save_thread(self, section_dir, thread_url, thread_title, ss):
         tid = get_thread_id(thread_url)
@@ -665,8 +611,6 @@ class ForumScraper:
 
             return saved
 
-    # ── Main ──
-
     def run(self):
         print()
         print("=" * 70)
@@ -684,32 +628,52 @@ class ForumScraper:
         self.start_browser()
 
         try:
+            # ─── Pass 1: Fetch Home Page ───
+            home_path = os.path.join(self.output_dir, "Home.html")
+            if not self.state.get("home_done"):
+                log.info("🏠 FETCHING HOME PAGE (Priority)")
+                home_html = self.fetch_page(f"https://{BASE_DOMAIN}/", embed=True)
+                if home_html:
+                    with open(home_path, "w", encoding="utf-8") as f:
+                        f.write(home_html)
+                    self.state["home_done"] = True
+                    self.save_state()
+
+            # ─── Pass 2: Fetch Section Listing Indices (Priority) ───
+            print("\n" + "─" * 70)
+            print("  PRIORITY: DISCOVERING & SAVING SECTION INDEX PAGES")
+            print("─" * 70)
             for sec_idx, (sec_name, sec_url) in enumerate(self.section_list):
                 ss = self.section_state(sec_name)
                 section_dir = os.path.join(self.output_dir, safe_filename(sec_name))
                 os.makedirs(section_dir, exist_ok=True)
 
-                print()
-                print(f"{'─' * 70}")
-                print(f"  📁 [{sec_idx+1}/{len(self.section_list)}] {sec_name}")
-                print(f"     {sec_url}")
-                print(f"{'─' * 70}")
-
-                # Discover threads
-                if ss["threads_found"]:
-                    threads = list(zip(
-                        ss["threads_found"][::2], ss["threads_found"][1::2]
-                    ))
-                    log.info(f"  Using cached thread list ({len(threads)} threads)")
-                else:
-                    log.info(f"  Discovering threads...")
-                    threads = self.discover_threads(sec_name, sec_url)
+                if not ss.get("index_pages_saved") or not ss.get("threads_found"):
+                    log.info(f"  📁 [{sec_idx+1}/{len(self.section_list)}] {sec_name}")
+                    threads = self.discover_threads_and_save_index(sec_name, sec_url, section_dir)
                     flat = []
                     for u, t in threads:
                         flat.extend([u, t])
                     ss["threads_found"] = flat
+                    ss["index_pages_saved"] = True
                     self.save_state()
+                else:
+                    log.info(f"  📁 [{sec_idx+1}/{len(self.section_list)}] {sec_name} (Indices Cached)")
 
+            # ─── Pass 3: Fetch Threads ───
+            print("\n" + "─" * 70)
+            print("  FETCHING THREAD PAGES")
+            print("─" * 70)
+            for sec_idx, (sec_name, sec_url) in enumerate(self.section_list):
+                ss = self.section_state(sec_name)
+                section_dir = os.path.join(self.output_dir, safe_filename(sec_name))
+                
+                print(f"\n  📝 [{sec_idx+1}/{len(self.section_list)}] {sec_name} (Threads)")
+                
+                threads = list(zip(
+                    ss["threads_found"][::2], ss["threads_found"][1::2]
+                ))
+                
                 total = len(threads)
                 done_set = set(ss["threads_done"])
                 done = len(done_set)
@@ -717,9 +681,6 @@ class ForumScraper:
                 if total == 0:
                     log.info(f"  No threads found.")
                     continue
-
-                pct = (done / total * 100) if total > 0 else 0
-                log.info(f"  Threads: {done}/{total} ({pct:.0f}%)")
 
                 for t_idx, (t_url, t_title) in enumerate(threads):
                     tid = get_thread_id(t_url)
@@ -791,8 +752,6 @@ class ForumScraper:
         print(f"  Run again to resume any incomplete sections.")
         print("=" * 70)
 
-
-# ─── CLI ──────────────────────────────────────────────────────────────────────
 
 def main():
     p = argparse.ArgumentParser(description="Scrape YTP Italian Forum by section.")
