@@ -143,7 +143,7 @@ In questa fase embrionale, i pooper nostrani iniziano imitando le tecniche ameri
 **2009**
 Mondo Emo è la prima YTP italiana a diventare virale
 Ziotok conia la dicitura "Youtube merda" in alternativa alla sigla YTP
-Molto diffusi gli sparta remix
+Sono estremamente diffusi gli sparta remix per la loro facilità di creazione
 
 **2010**
 Le YTPMV ed i Tennis salgono in popolarità
@@ -255,7 +255,7 @@ Il Collegio, altri youtuber. Masterchef, Marvel
 | **ilCirox** | [ilCirox](https://www.youtube.com/c/ilCirox) | [YTP ITA - Ti faaf staas beeneh](https://www.youtube.com/watch?v=fJwrSNrJN48) (1,5 - 2 mln) | "Don Matteo: Bizarre Adventure", "YTP ITA - Il Popaii odia gli uccelli Artigiani", "Renatino ma è più emotional" |
 | **AssoDiDenari** | [AssoDiDenari](https://www.youtube.com/c/AssoDiDenari) | [YTP - Srech la vendetta [ITA]](https://www.youtube.com/watch?v=H2waoquD3Ps) (847k) | "YTP - L'era ANALE", "YTP - Cars motori dementi", "YTP - Harry Potter e i doni dei doni" |
 | **MP YTP** | [MP YTP](https://www.youtube.com/c/MPYTP) | [YTP Masterchef 5: Il mappazzone](https://www.youtube.com/watch?v=mUaL0OxL4xw) (1 mln+) | "YTP - Masterchef 4: La vendetta di Bastianich", "YTP - Masterchef 3: Il ritorno di Cracco" |
-Sasso strappato
+| **Sasso Strappato** | [Sasso Strappato](https://www.youtube.com/@sassostrappato) | [Le diseducative avventure di Peppa Pig - YTP](https://www.youtube.com/watch?v=ey1mVgpF3Lk) (2,9 mln) | "YTP - The Uneducational Adventures of Peppa Pig EP. 6", "The College 5 ep 2 - YTP", "I diEFFE amano i LIFE HACKS - YTP" |
 
 ---
 
