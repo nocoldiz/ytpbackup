@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup
 
 # ── Sections to scan ──────────────────────────────────────────────────────────
 
-SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te","YTPMV dimportazione","YTP da internet","Risorse","Old sources","Tutorial per il pooping"],
+SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te","YTPMV dimportazione","YTP da internet","Risorse","Old sources","Tutorial per il pooping"]
 
 DEFAULT_SITE_DIR = "./site_mirror"
 DEFAULT_VIDEO_DIR = "./videos"
@@ -152,7 +152,11 @@ class VideoIndex:
 
     def needs_metadata(self, video_id):
         e = self.data.get(video_id, {})
-        return e.get("description") is None and e.get("status") != "unavailable"
+        if e.get("status") == "unavailable":
+            return False
+        return (e.get("title") is None or
+                e.get("description") is None or
+                e.get("channel_name") is None)
 
     def set_metadata(self, video_id, title=None, description=None,
                      channel_name=None, channel_url=None):
@@ -293,7 +297,12 @@ def fetch_yt_metadata(video_id):
             capture_output=True, text=True, timeout=60,
         )
         if r.returncode == 0 and r.stdout.strip():
-            raw = r.stdout.strip().splitlines()[-1]
+            raw = next(
+                (l for l in reversed(r.stdout.splitlines()) if l.strip().startswith("{")),
+                None,
+            )
+            if raw is None:
+                return None
             d = json.loads(raw)
             return {
                 "title":        d.get("title"),
@@ -381,6 +390,9 @@ def download_video(video_id, output_dir, yt_format, rate_limit,
 
             # --print outputs (filepath / title) arrive after download
             stripped = line.strip()
+            # skip Python warnings: "path/to/file.py:123: SomeWarning: msg"
+            if re.match(r'.+\.py:\d+: \w+Warning:', stripped):
+                continue
             if stripped and not stripped.startswith("["):
                 if (os.sep in stripped or "/" in stripped) and any(
                     stripped.endswith(e)
