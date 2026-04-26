@@ -29,7 +29,7 @@ SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te", "YTPMV dimportazione", "YTP da
 
 # ── Disallowed channels (never scraped; removed from index if present) ────────
 
-DISALLOWED_CHANNELS = ["Yotobi", "Croix89", "QDSS"]
+DISALLOWED_CHANNELS = ["Yotobi", "Croix89", "QDSS","Skillet","PeendulumLive","twkmedia","Valerio Salsero"]
 
 # ── Allowed channels (always scraped with keyword filter) ─────────────────────
 
