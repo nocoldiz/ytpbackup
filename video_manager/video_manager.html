@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Manager - YTP Archive</title>
+  <link rel="stylesheet" href="/docs/style.css">
+  <style>
+    body { padding: 20px; }
+    .manager-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .selection-info {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .btn-ban {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .btn-ban:hover { background: #bb2d3b; }
+    .btn-ban:disabled { background: #6c757d; cursor: not-allowed; }
+    
+    .select-col { width: 40px; text-align: center; }
+    input[type="checkbox"] { transform: scale(1.2); }
+    
+    /* Adapt some index.html styles that might be missing or scoped */
+    #video-table { width: 100%; border-collapse: collapse; }
+    .page { display: block !important; }
+  </style>
+</head>
+<body>
+  <div class="manager-header">
+    <div>
+      <h1>Video Manager</h1>
+      <p class="selection-info" id="selection-summary">0 videos selected</p>
+    </div>
+    <div>
+      <button id="btn-ban-selected" class="btn-ban" disabled>Ban Selected Videos</button>
+      <a href="/" class="nav-tab" style="display:inline-block; margin-left:10px; text-decoration:none; padding:8px 15px; border:1px solid var(--border); border-radius:6px; color:var(--text)">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="page" id="page-videos">
+    <div class="section-header">
+      <h2>Video Search</h2>
+      <span class="count-badge" id="videos-count-label"></span>
+    </div>
+    
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Search title, channel, tags, thread, description, video ID...">
+      <select id="filter-status">
+        <option value="">All statuses</option>
+        <option value="available">Available</option>
+        <option value="pending">Pending</option>
+        <option value="unavailable">Unavailable</option>
+        <option value="downloaded">Downloaded</option>
+      </select>
+      <select id="filter-section">
+        <option value="">All sections</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table id="video-table">
+        <thead>
+          <tr>
+            <th class="select-col"><input type="checkbox" id="select-all"></th>
+            <th data-field="title">Title / ID</th>
+            <th data-field="channel_name">Channel</th>
+            <th data-field="publish_date">Date</th>
+            <th data-field="status">Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="video-tbody">
+          <tr><td colspan="6" class="empty">Loading videos...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="scroll-sentinel" style="height: 1px;"></div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <script src="/video_manager_client.js"></script>
+</body>
+</html>

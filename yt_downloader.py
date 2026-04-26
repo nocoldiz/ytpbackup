@@ -933,11 +933,16 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
     print(f"  Index:       {os.path.abspath(index.filepath)}")
 
 
-def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed):
+def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed, year_limit=2016):
     def is_italian(e):
+        # Must match keywords
+        title = e.get("title") or ""
+        if not CHANNEL_KEYWORDS.search(title):
+            return False
+
         secs = e.get("sections", [])
-        #TODO: reenable this after scraping all historic ones in secs or "Scraped Channel" in secs or "Youtube"
-        if "YTP fai da te" in secs or "YTP nostrane"  in secs:
+        #TODO: reenable this after scraping all historic ones in secs 
+        if "YTP fai da te" in secs or "YTP nostrane" in secs or "Scraped Channel" in secs or "Youtube" in secs:
             return True
         ch_url = e.get("channel_url", "")
         if ch_url:
@@ -948,24 +953,37 @@ def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed):
                     return True
         return False
 
+    def is_in_year_range(e):
+        if year_limit is None:
+            return True
+        pub_date = e.get("publish_date")
+        if not pub_date:
+            return False
+        try:
+            # publish_date is "YYYY-MM-DD"
+            year = int(pub_date.split("-")[0])
+            return year <= year_limit
+        except (ValueError, IndexError):
+            return False
+
     if retry_failed:
         for e in index.data.values():
-            if is_italian(e) and e["status"] == "failed":
+            if is_italian(e) and is_in_year_range(e) and e["status"] == "failed":
                 e["status"] = "pending"
         index.save()
-        print("  Cleared failed status for Italian YTPs — will retry.\n")
+        print(f"  Cleared failed status for Italian YTPs (until {year_limit}) — will retry.\n")
 
     pending = [
         vid for vid, e in index.data.items()
-        if is_italian(e) and e["status"] == "pending"
+        if is_italian(e) and is_in_year_range(e) and e["status"] == "pending"
     ]
 
     if not pending:
-        print("  Nothing to download for Italian YTPs.")
+        print(f"  Nothing to download for Italian YTPs (until {year_limit}).")
         return
 
     total = len(pending)
-    print(f"  {total} Italian YTP video(s) pending.\n")
+    print(f"  {total} Italian YTP video(s) pending (until {year_limit}).\n")
 
     ok_count = skip_count = unavail_count = err_count = 0
 
@@ -1592,6 +1610,8 @@ def main():
                    help="Scrape comments for all indexed videos")
     p.add_argument("--scrape-profiles", action="store_true",
                    help="Scrape channel profiles and save to docs/ytpoopers.json")
+    p.add_argument("--year-limit",      type=int, default=2016,
+                   help="Limit downloads to videos published until this year (for Italian mode)")
     args, _ = p.parse_known_args()
 
     if not os.path.isdir(args.site_dir):
@@ -1646,16 +1666,14 @@ def main():
     print("  8  Chronology")
     print("       Top 20 most-viewed videos, sorted by year.")
     print()
-    print("  9  Dump poopers  →  poopers.md")
-    print("       One row per channel (SCAN_SECTIONS only).")
     print()
-    print("  10 Find mirror videos")
+    print("  9 Find mirror videos")
     print("       Search YouTube for reuploads of unavailable videos.")
     print()
-    print("  11 Scrape comments")
+    print("  10 Scrape comments")
     print("       Fetch comments for every indexed video.")
     print()
-    print("  12 Scrape channel profiles")
+    print("  11/12 Scrape channel profiles")
     print("       Scrape name, description, thumbnail, subscribers,")
     print("       creation date for every channel → docs/ytpoopers.json")
     print()
@@ -1690,7 +1708,7 @@ def main():
         do_download_youtube(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
 
     if choice == "6":
-        do_download_italian(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
+        do_download_italian(index, args.video_dir, args.format, args.rate_limit, args.retry_failed, year_limit=args.year_limit)
 
     if choice == "7":
         do_stats(index)

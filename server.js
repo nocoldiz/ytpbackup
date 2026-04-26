@@ -28,8 +28,10 @@ const SITE_MIRROR = path.join(__dirname, 'site_mirror');
 const STATE_FILE  = path.join(SITE_MIRROR, '.scraper_state.json');
 const SCRAPER     = path.join(__dirname, 'scraper.py');
 const BASE_DOMAIN = 'youtubepoopita.forumfree.it';
-const VIDEO_INDEX = path.join(__dirname, 'videos', 'video_index.json');
+const VIDEO_INDEX = path.join(__dirname, 'docs', 'video_index.json');
+const EXCLUDED_VIDEOS = path.join(__dirname, 'excluded_videos.json');
 const VIDEOS_DIR  = path.join(__dirname, 'videos');
+const VM_LOGIC    = require('./video_manager.js');
 
 // ─── Forum sections — must stay in sync with scraper.py SECTIONS ─────────────
 const SECTIONS = [
@@ -470,6 +472,69 @@ function onRequest(req, res) {
       res.writeHead(403); res.end(); return;
     }
     return serveLocalVideo(filePath, req, res);
+  }
+
+  // ── Static files from docs ────────────────────────────────────────────────
+  if (reqUrl.pathname.startsWith('/docs/')) {
+    const rel = reqUrl.pathname.slice('/docs/'.length)
+      .split('/').map(decodeURIComponent).join(path.sep);
+    const filePath = path.join(__dirname, 'docs', rel);
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      const ext = path.extname(filePath).toLowerCase();
+      const mime = {
+        '.html': 'text/html',
+        '.js':   'application/javascript',
+        '.css':  'text/css',
+        '.json': 'application/json',
+        '.png':  'image/png',
+        '.jpg':  'image/jpeg',
+        '.webm': 'video/webm',
+      }[ext] || 'application/octet-stream';
+      res.writeHead(200, { 'Content-Type': mime });
+      return fs.createReadStream(filePath).pipe(res);
+    }
+  }
+
+  // ── Video Manager ────────────────────────────────────────────────────────
+  if (reqUrl.pathname === '/video_manager') {
+    const p = path.join(__dirname, 'video_manager', 'video_manager.html');
+    if (fs.existsSync(p)) {
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      return res.end(fs.readFileSync(p));
+    }
+    return serveNotFound(res, 'video_manager.html non trovato.');
+  }
+
+  // ── Video Manager Static Assets ──────────────────────────────────────────
+  if (reqUrl.pathname === '/video_manager_client.js') {
+    const p = path.join(__dirname, 'video_manager', 'video_manager_client.js');
+    if (fs.existsSync(p)) {
+      res.writeHead(200, { 'Content-Type': 'application/javascript' });
+      return res.end(fs.readFileSync(p));
+    }
+    return res.writeHead(404).end();
+  }
+
+  // ── Ban API ──────────────────────────────────────────────────────────────
+  if (reqUrl.pathname === '/api/ban' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const { videoIds } = JSON.parse(body);
+        if (!Array.isArray(videoIds)) throw new Error('Invalid videoIds');
+        
+        const result = VM_LOGIC.banVideos(videoIds, VIDEO_INDEX, EXCLUDED_VIDEOS, VIDEOS_DIR);
+        buildVideoMap(); // Rebuild server-side map if needed (though it's for mirror)
+        
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
   }
 
   const fid     = reqUrl.searchParams.get('f');
