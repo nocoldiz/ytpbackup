@@ -569,7 +569,7 @@ fetch('video_index.json')
   .catch(() => {}); // silently fail if not found
 
 // ─── INIT ─────────────────────────────────────────────────────────────────
-const ALLOWED_SECTIONS = new Set(["YTP nostrane","YTP fai da te","YTPMV dimportazione","YTP da internet","Internet"]);
+const ALLOWED_SECTIONS = new Set(["YTP nostrane","YTP fai da te","YTPMV dimportazione","YTP da internet","Internet","Youtube"]);
 const SOURCES_SECTIONS = new Set(["Risorse","Tutorial per il pooping","Old Sources"]);
 
 function initApp(raw) {
@@ -699,23 +699,28 @@ function renderTable() {
       const label = (v.thread_titles || [])[i] || sp;
       return `<a class="btn-thread" href="${path}" target="_blank" title="${escHtml(label)}">📄 ${escHtml(label.length > 22 ? label.slice(0,22)+'…' : label)}</a>`;
     }).join(' ');
-    const sections = (v.sections || []).map(s => `<span class="tag-pill">${escHtml(s)}</span>`).join('');
-    return `<tr>
-      <td class="title-cell">
-        ${v.title ? `<a href="${v.url}" target="_blank">${escHtml(v.title)}</a>` : `<span class="vid-id">${v.id}</span>`}
-        <div class="vid-id">${v.id}</div>
-      </td>
-      <td>${v.channel_name ? `<a href="${v.channel_url||'#'}" target="_blank" style="color:var(--text-muted);text-decoration:none">${escHtml(v.channel_name)}</a>` : '<span style="opacity:.4">—</span>'}</td>
-      <td class="num" style="white-space:nowrap">${v.publish_date || '—'}</td>
-      <td class="num">${v.view_count != null ? fmtNum(v.view_count) : '—'}</td>
-      <td class="num">${v.like_count != null ? fmtNum(v.like_count) : '—'}</td>
-      <td><span class="status-dot ${statusClass}"></span><span class="status-text">${v.status || '—'}</span></td>
-      <td>${sections}</td>
-      <td style="white-space:nowrap">
-        <a class="btn-yt" href="${v.url}" target="_blank">▶ YT</a>
-        ${threads}
-      </td>
-    </tr>`;
+const sections = (v.sections || []).map(s => `<span class="tag-pill">${escHtml(s)}</span>`).join('');
+
+        // Determine the title to display, falling back to the first thread title if v.title is missing
+        const fallbackTitle = (v.thread_titles && v.thread_titles[0]) ? v.thread_titles[0] : null;
+        const titleContent = v.title 
+          ? `<a href="${v.url}" target="_blank">${escHtml(v.title)}</a>` 
+          : (fallbackTitle ? `<a href="${v.url}" target="_blank"><em>${escHtml(fallbackTitle)}</em></a>` : `<span class="vid-id">${v.id}</span>`);
+
+        return `<tr>
+          <td class="title-cell">
+            ${titleContent}
+            <div class="vid-id">${v.id}</div>
+          </td>
+          <td>${v.channel_name ? `<a href="${v.channel_url||'#'}" target="_blank" style="color:var(--text-muted);text-decoration:none">${escHtml(v.channel_name)}</a>` : '—'}</td>
+          <td>${v.publish_date ? v.publish_date.slice(0,10) : '—'}</td>
+          <td><span class="status-dot status-${statusClass}"></span><span class="status-text">${v.status || '—'}</span></td>
+          <td class="num">${fmtNum(v.view_count)}</td>
+          <td class="num">${fmtNum(v.like_count)}</td>
+          <td>${sections || '—'}</td>
+          <td>${threads || '—'}</td>
+          <td><a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
+        </tr>`;
   }).join('') || `<tr><td colspan="8" class="empty">No videos match your filters</td></tr>`;
 
   renderPagination(total);
