@@ -596,6 +596,8 @@ def download_video(video_id, output_dir, yt_format, rate_limit,
             stripped = line.strip()
             if re.match(r'.+\.py:\d+: \w+Warning:', stripped):
                 continue
+            if stripped.startswith("warnings.warn("):
+                continue
             if stripped and not stripped.startswith("["):
                 if (os.sep in stripped or "/" in stripped) and any(
                     stripped.endswith(e)
@@ -711,6 +713,13 @@ def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
 
     for i, vid in enumerate(pending, 1):
         e = index.data[vid]
+        
+        if e.get("title") == "warnings.warn(":
+            meta = fetch_yt_metadata(vid)
+            if isinstance(meta, dict) and meta.get("title"):
+                e["title"] = meta["title"]
+                index.save()
+                
         sec = e["sections"][0] if e["sections"] else "Unknown"
         thread = (e.get("thread_titles") or [""])[0] or vid
         yt_title = e.get("title") or vid
@@ -866,6 +875,13 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
 
     for i, vid in enumerate(pending, 1):
         e = index.data[vid]
+        
+        if e.get("title") == "warnings.warn(":
+            meta = fetch_yt_metadata(vid)
+            if isinstance(meta, dict) and meta.get("title"):
+                e["title"] = meta["title"]
+                index.save()
+                
         label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
 
         ch_name = e.get("channel_name")
@@ -920,7 +936,7 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
 def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed):
     def is_italian(e):
         secs = e.get("sections", [])
-        if "YTP fai da te" in secs or "YTP nostrane" in secs:
+        if "YTP fai da te" in secs or "YTP nostrane" in secs or "Scraped Channel" in secs or "Youtube" in secs:
             return True
         ch_url = e.get("channel_url", "")
         if ch_url:
@@ -954,6 +970,13 @@ def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed):
 
     for i, vid in enumerate(pending, 1):
         e = index.data[vid]
+        
+        if e.get("title") == "warnings.warn(":
+            meta = fetch_yt_metadata(vid)
+            if isinstance(meta, dict) and meta.get("title"):
+                e["title"] = meta["title"]
+                index.save()
+                
         sec = e["sections"][0] if e["sections"] else "Unknown"
         label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
         
@@ -1006,7 +1029,90 @@ def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed):
     print(f"  Index:       {os.path.abspath(index.filepath)}")
 
 
+
+def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
+    target_sections = {"Risorse", "Old sources"}
+    
+    if retry_failed:
+        for e in index.data.values():
+            if any(s in target_sections for s in e.get("sections", [])) and e["status"] == "failed":
+                e["status"] = "pending"
+        index.save()
+        print("  Cleared failed status for 'Risorse' & 'Old sources' — will retry.\n")
+
+    pending = [
+        vid for vid, e in index.data.items()
+        if any(s in target_sections for s in e.get("sections", [])) and e["status"] == "pending"
+    ]
+
+    if not pending:
+        print("  Nothing to download in 'Risorse' or 'Old sources' sections.")
+        return
+
+    total = len(pending)
+    print(f"  {total} Risorse/Old sources video(s) pending.\n")
+
+    # For these sections, we put everything in a single folder
+    out_dir = os.path.join(video_dir, "Risorse")
+    os.makedirs(out_dir, exist_ok=True)
+
+    ok_count = skip_count = unavail_count = err_count = 0
+
+    for i, vid in enumerate(pending, 1):
+        e = index.data[vid]
+        
+        if e.get("title") == "warnings.warn(":
+            meta = fetch_yt_metadata(vid)
+            if isinstance(meta, dict) and meta.get("title"):
+                e["title"] = meta["title"]
+                index.save()
+                
+        label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
+
+        print(f"  [{i}/{total}] {label[:60]}")
+        if e.get("channel_name"):
+            print(f"  Channel: {e['channel_name']}  {e.get('channel_url', '')}")
+        print(f"  URL:     {canonical_yt_url(vid)}")
+
+        status, local_file, dl_title = download_video(
+            vid, out_dir, yt_format, rate_limit, i, total,
+        )
+
+        if status == "ok":
+            rel = os.path.relpath(local_file, ".") if local_file else None
+            index.set_downloaded(vid, rel, dl_title)
+            print(f"  ✓ {os.path.basename(local_file or '')}")
+            ok_count += 1
+        elif status == "exists":
+            if not index.is_done(vid):
+                rel = os.path.relpath(local_file, ".") if local_file else None
+                index.set_downloaded(vid, rel, dl_title)
+            print(f"  = already downloaded")
+            skip_count += 1
+        elif status == "unavailable":
+            index.set_unavailable(vid)
+            print("  ⊘ Unavailable (removed / private)")
+            unavail_count += 1
+        else:
+            index.set_failed(vid)
+            print("  ✗ Failed")
+            err_count += 1
+
+        index.save()
+
+        if status == "ok":
+            time.sleep(1)
+
+    print("─" * 54)
+    print(f"  Downloaded:  {ok_count}")
+    print(f"  Skipped:     {skip_count}  (already on disk)")
+    print(f"  Unavailable: {unavail_count}  (removed / private)")
+    print(f"  Failed:      {err_count}  (re-run to retry)")
+    print(f"  Index:       {os.path.abspath(index.filepath)}")
+
+
 def do_stats(index, output_path="stats.md"):
+
     from collections import defaultdict
 
     if not index.data:
@@ -1552,10 +1658,13 @@ def main():
     print("       Scrape name, description, thumbnail, subscribers,")
     print("       creation date for every channel → docs/ytpoopers.json")
     print()
+    print("  13 Download 'Risorse' & 'Old sources'")
+    print("       Download only videos from these sections into a single folder.")
+    print()
     print("  q  Quit")
     print()
-    choice = ask("  Choice [1-12/q]: ",
-                 {"1","2","3","4","5","6","7","8","9","10","11","12","q"})
+    choice = ask("  Choice [1-13/q]: ",
+                 {"1","2","3","4","5","6","7","8","9","10","11","12","13","q"})
 
     if choice == "q":
         sys.exit(0)
@@ -1599,6 +1708,9 @@ def main():
 
     if choice == "12":
         do_scrape_profiles(index, args.docs_dir)
+
+    if choice == "13":
+        do_download_risorse(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
 
     print()
 

@@ -118,7 +118,20 @@ function setViewMode(mode) {
 function loadFacade(id) {
   const el = document.getElementById('facade-' + id);
   if (!el) return;
-  el.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  
+  // Find video in allVideos or rawVideos
+  const v = allVideos.find(x => x.id === id) || rawVideos.find(x => x.id === id);
+  
+  if (v && v.status === 'downloaded' && v.local_file) {
+    // Determine path relative to docs/ folder
+    const src = v.local_file.startsWith('videos/') ? '../' + v.local_file : v.local_file;
+    el.innerHTML = `<video controls autoplay style="width:100%; height:100%; object-fit:contain; background:#000;">
+      <source src="${src}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>`;
+  } else {
+    el.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  }
 }
 
 function applyFilters() {
@@ -290,7 +303,7 @@ function renderTable(append = false) {
       const chText = v.channel_name || '-';
       
       const thumbUrl = `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`;
-      const facadeHtml = v.status === 'available' || v.status === 'pending'
+      const facadeHtml = v.status === 'available' || v.status === 'pending' || v.status === 'downloaded'
         ? `<div class="yt-facade" id="facade-${v.id}" onclick="loadFacade('${v.id}')">
              <img src="${thumbUrl}" alt="Thumbnail" loading="lazy">
              <div class="play-btn"></div>

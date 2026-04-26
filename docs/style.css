@@ -317,7 +317,7 @@
   .yt-facade .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(0,0,0,0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background .2s; pointer-events: none; }
   .yt-facade:hover .play-btn { background: #ff0000; }
   .yt-facade .play-btn::after { content: ''; display: block; border-style: solid; border-width: 10px 0 10px 16px; border-color: transparent transparent transparent #fff; margin-left: 4px; }
-  .yt-facade iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 2; background: #000; }
+  .yt-facade iframe, .yt-facade video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 2; background: #000; }
 
   .vid-card-info { padding: 14px; flex: 1; display: flex; flex-direction: column; }
   .vid-card-title { font-size: .95rem; font-weight: 700; color: var(--text); text-decoration: none; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 6px; }
