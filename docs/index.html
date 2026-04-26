@@ -569,7 +569,7 @@ fetch('video_index.json')
   .catch(() => {}); // silently fail if not found
 
 // ─── INIT ─────────────────────────────────────────────────────────────────
-const ALLOWED_SECTIONS = new Set(["YTP nostrane","YTP fai da te","YTPMV dimportazione","YTP da internet","Internet","Youtube"]);
+const ALLOWED_SECTIONS = new Set(["YTP nostrane","YTP fai da te","YTPMV dimportazione","YTP da internet","Internet","Youtube","Scraped Channel"]);
 const SOURCES_SECTIONS = new Set(["Risorse","Tutorial per il pooping","Old Sources"]);
 
 function initApp(raw) {
