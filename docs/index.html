@@ -400,7 +400,7 @@
       <span class="count-badge" id="videos-count-label"></span>
     </div>
     <div class="search-bar">
-      <input type="text" id="search-input" placeholder="Search title, channel, thread, description..." oninput="applyFilters()">
+      <input type="text" id="search-input" placeholder="Search title, channel, tags, thread, description..." oninput="applyFilters()">
       <select id="filter-status" onchange="applyFilters()">
         <option value="">All statuses</option>
         <option value="available">Available</option>
@@ -638,7 +638,7 @@ let sortField = null;
 let sortDir = 1;
 
 function applyFilters() {
-  const q = document.getElementById('search-input').value.toLowerCase();
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
   const status = document.getElementById('filter-status').value;
   const section = document.getElementById('filter-section').value;
   const channel = document.getElementById('filter-channel').value;
@@ -648,19 +648,38 @@ function applyFilters() {
   const sortBy = document.getElementById('sort-by').value;
 
   filteredVideos = allVideos.filter(v => {
+    // 1. IMPROVED SEARCH BAR LOGIC
     if (q) {
-      const haystack = [v.title, v.channel_name, v.description, ...(v.thread_titles || []), ...(v.tags || [])].join(' ').toLowerCase();
-      if (!haystack.includes(q)) return false;
+      // Gather all searchable fields into one lowercase string
+      const haystack = [
+        v.title, 
+        v.channel_name, 
+        v.description, 
+        ...(v.thread_titles || []), 
+        ...(v.tags || [])
+      ].join(' ').toLowerCase();
+
+      // Split the query into individual words (ignoring extra spaces)
+      const searchTerms = q.split(/\s+/);
+
+      // Ensure EVERY typed word is found somewhere in the video's data
+      const matchesAllTerms = searchTerms.every(term => haystack.includes(term));
+      
+      if (!matchesAllTerms) return false;
     }
+
+    // 2. Exact Match Filters
     if (status && v.status !== status) return false;
     if (section && !(v.sections || []).includes(section)) return false;
     if (channel && v.channel_name !== channel) return false;
     if (viewsMin && (v.view_count || 0) < viewsMin) return false;
     if (likesMin && (v.like_count || 0) < likesMin) return false;
     if (year && (!v.publish_date || !v.publish_date.startsWith(year))) return false;
+    
     return true;
   });
 
+  // 3. Sorting Logic
   if (sortBy) {
     const [f, dir] = sortBy.split('_');
     filteredVideos.sort((a, b) => {
@@ -694,9 +713,18 @@ function renderTable() {
 
   tbody.innerHTML = slice.map(v => {
     const statusClass = 'status-' + (v.status || 'unavailable');
-    const threads = (v.source_pages || []).map((sp, i) => {
-      const path = 'site_mirror/' + sp.replace(/\\/g, '/');
+    
+    const threads = (v.source_pages || [])
+      // 1. Check if the string includes 'channel_scrape' and exclude it if it does
+      .filter(sp => !sp.includes('channel_scrape'))
+      // 2. Map over whatever is left to create your links
+      .map((sp, i) => {
+        const path = 'https://github.com/nocoldiz/ytpbackup/blob/main/site_mirror/' + sp.replace(/\\/g, '/');
+      
+      
       const label = (v.thread_titles || [])[i] || sp;
+
+
       return `<a class="btn-thread" href="${path}" target="_blank" title="${escHtml(label)}">📄 ${escHtml(label.length > 22 ? label.slice(0,22)+'…' : label)}</a>`;
     }).join(' ');
 const sections = (v.sections || []).map(s => `<span class="tag-pill">${escHtml(s)}</span>`).join('');
