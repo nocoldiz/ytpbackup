@@ -1,4 +1,4 @@
-# YTP Italian Forum Backup
+# YTP Scraper & YTP Italian Forum Backup
 <img width="1401" height="907" alt="immagine" src="https://github.com/user-attachments/assets/c54df216-636b-4b21-a322-79e58b38829b" />
 
 Offline scraper and local mirror server for the YouTube Poop Italian Forum
