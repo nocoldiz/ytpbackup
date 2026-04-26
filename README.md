@@ -3,6 +3,8 @@
 Offline scraper and local mirror server for the YouTube Poop Italian Forum
 (`youtubepoopita.forumfree.it`).
 
+Check data and analytics breakdown here
+([https://nocoldiz.github.io/ytpbackup/](https://nocoldiz.github.io/ytpbackup/)) 
 ---
 
 ## Structure
