@@ -936,7 +936,8 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
 def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed):
     def is_italian(e):
         secs = e.get("sections", [])
-        if "YTP fai da te" in secs or "YTP nostrane" in secs or "Scraped Channel" in secs or "Youtube" in secs:
+        #TODO: reenable this after scraping all historic ones in secs or "Scraped Channel" in secs or "Youtube"
+        if "YTP fai da te" in secs or "YTP nostrane"  in secs:
             return True
         ch_url = e.get("channel_url", "")
         if ch_url:

@@ -4,19 +4,25 @@
 Offline scraper for YTP videos and local mirror server for the historic YouTube Poop Italian Forum
 (`youtubepoopita.forumfree.it`).
 
-
-
 Check data and analytics breakdown here
 ([https://nocoldiz.github.io/ytpbackup/](https://nocoldiz.github.io/ytpbackup/)) 
 ---
 
 ## Structure
 
-```
+```text
 ytpbackup/
 ├── scraper.py          # Downloads forum sections, index pages, threads
+├── yt_downloader.py    # Scans for YouTube links and downloads videos
 ├── server.js           # Node.js local mirror server
 ├── package.json
+├── docs/               # JSON indexes and web dashboard
+├── videos/             # Downloaded YouTube videos organized by channel
+│   ├── Sources/        # Source videos for YTPs, not organized by channel
+│   ├── despotaaa/
+│   ├── ZioTok83/
+│   └── bassman85x/
+│       └── Youtube Poop ： Mondo Emo (La parodia che ha dato inizio a TUTTO) - 6qXBHVssbg0.mkv
 └── site_mirror/
     ├── Home.html
     ├── .scraper_state.json
@@ -121,3 +127,29 @@ Run again at any time to resume — already-scraped pages are skipped automatica
 
 Progress is saved in `site_mirror/.scraper_state.json` after every few threads.
 
+---
+
+## YouTube Downloader
+
+The `yt_downloader.py` script is an interactive CLI tool that scans the scraped forum pages (or a predefined list of allowed YouTube channels) to find and archive YouTube videos. It relies on `yt-dlp` to fetch metadata and download the video files.
+
+### How it works
+
+1. **Index Update**: The script scans all local HTML files in the `site_mirror/` directory (specifically sections like *YTP nostrane*, *YTP fai da te*, etc.) for YouTube links. It extracts the video IDs and builds a JSON database (`docs/video_index.json`).
+2. **Channel Scraping**: Optionally, it can directly scrape a list of whitelisted YouTube channels for new videos matching specific YTP-related keywords.
+3. **Metadata Fetching**: For newly found videos, it queries YouTube via `yt-dlp` to retrieve the title, description, channel name, view count, and publish date. It automatically skips unavailable videos or videos from blacklisted channels.
+4. **Downloading**: It downloads the pending videos in the best available quality (up to 720p) along with their thumbnails, organizing them into `videos/{Channel Name}/`.
+
+### Requirements
+
+```bash
+pip install yt-dlp beautifulsoup4 lxml
+```
+
+### Usage
+
+Launch the interactive menu:
+
+```bash
+python yt_downloader.py
+```
