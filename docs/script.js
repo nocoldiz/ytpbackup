@@ -123,8 +123,10 @@ function loadFacade(id) {
   const v = allVideos.find(x => x.id === id) || rawVideos.find(x => x.id === id);
   
   if (v && v.status === 'downloaded' && v.local_file) {
-    // Determine path relative to docs/ folder
-    const src = v.local_file.startsWith('videos/') ? '../' + v.local_file : v.local_file;
+    // Determine path relative to docs/ folder and normalize slashes
+    let src = v.local_file.replace(/\\/g, '/');
+    src = src.startsWith('videos/') ? '../' + src : src;
+    
     el.innerHTML = `<video controls autoplay style="width:100%; height:100%; object-fit:contain; background:#000;">
       <source src="${src}" type="video/mp4">
       Your browser does not support the video tag.
@@ -272,6 +274,10 @@ function renderTable(append = false) {
       ? `<a href="${v.url}" target="_blank">${escHtml(v.title)}</a>`
       : (fallbackTitle ? `<a href="${v.url}" target="_blank"><em>${escHtml(fallbackTitle)}</em></a>` : `<span class="vid-id">${v.id}</span>`);
 
+    const playAction = (v.status === 'downloaded' && v.local_file)
+      ? `<a class="btn-play" href="${v.local_file.replace(/\\/g, '/').startsWith('videos/') ? '../' + v.local_file.replace(/\\/g, '/') : v.local_file.replace(/\\/g, '/')}" target="_blank" title="Play local file">▶</a>`
+      : '';
+
     return `<tr>
           <td class="title-cell">
             ${titleContent}
@@ -284,7 +290,7 @@ function renderTable(append = false) {
           <td class="num">${fmtNum(v.like_count)}</td>
           <td>${sections || '-'}</td>
           <td>${threads || '-'}</td>
-          <td><a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
+          <td>${playAction} <a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
         </tr>`;
   }).join('') || (append ? '' : `<tr><td colspan="8" class="empty">No videos match your filters</td></tr>`);
 
@@ -418,13 +424,17 @@ function selectChannel(name) {
   // Build video list HTML
   const videoListHtml = sortedVideos.map(v => {
     const statusClass = 'status-' + (v.status || 'unavailable');
+    const playAction = (v.status === 'downloaded' && v.local_file)
+      ? `<a class="btn-play" href="${v.local_file.replace(/\\/g, '/').startsWith('videos/') ? '../' + v.local_file.replace(/\\/g, '/') : v.local_file.replace(/\\/g, '/')}" target="_blank" title="Play local file">▶</a>`
+      : '';
+
     return `<tr>
       <td class="title-cell"><a href="${v.url}" target="_blank" style="color:var(--text);text-decoration:none">${escHtml(v.title || v.id)}</a></td>
       <td>${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
       <td><span class="status-dot ${statusClass}"></span><span class="status-text">${v.status || '-'}</span></td>
       <td class="num">${fmtNum(v.view_count)}</td>
       <td class="num">${fmtNum(v.like_count)}</td>
-      <td><a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
+      <td>${playAction} <a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
     </tr>`;
   }).join('');
 

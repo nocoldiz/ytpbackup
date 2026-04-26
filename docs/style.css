@@ -124,6 +124,12 @@
     display: inline-block; transition: opacity .15s;
   }
   .btn-yt:hover { opacity: .8; }
+  .btn-play {
+    background: var(--accent3); border: none; border-radius: 6px; color: #000;
+    padding: 4px 10px; font-size: .75rem; cursor: pointer; text-decoration: none;
+    display: inline-block; transition: opacity .15s; font-weight: 700; margin-right: 4px;
+  }
+  .btn-play:hover { opacity: .8; }
 
   /* SEARCH */
   .search-bar {

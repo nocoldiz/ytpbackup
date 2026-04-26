@@ -95,7 +95,90 @@ ALLOWED_CHANNELS = [
     "https://youtube.com/@aureliogame99",
     "https://youtube.com/@giusepoop"
 ]
+ITALIAN_CHANNELS = [
+    "https://www.youtube.com/@mrpoldoakbar2849",
+    "https://www.youtube.com/@TottiBest92",
+    "https://www.youtube.com/@despotaaa",
+    "https://www.youtube.com/@bassman85x",
+    "https://www.youtube.com/@ZioTok83",
+    "https://www.youtube.com/@tracFelix96trac",
+    "https://www.youtube.com/@voodoochildytp",
+    "https://www.youtube.com/@blazor67",
+    "https://www.youtube.com/@EliaForce1984ita",
+    "https://www.youtube.com/@Mario6493",
+    "https://www.youtube.com/channel/UCZV0SS8CSHVWN8X6tKf4ANg",
+    "https://www.youtube.com/@Pennaz",
+    "https://www.youtube.com/@DarkCoffe64",
+    "https://www.youtube.com/@revergo",
+    "https://www.youtube.com/@MastercastPresident",
+    "https://www.youtube.com/user/StewBarzTube",
+    "https://www.youtube.com/user/PierluPoops",
+    "https://www.youtube.com/user/ChristianIce",
+    "https://www.youtube.com/user/ZioMeso",
+    "https://www.youtube.com/user/julaoa",
+    "https://www.youtube.com/user/JakkoMatto",
+    "https://www.youtube.com/@Clodd",
+    "https://www.youtube.com/c/RTpoop",
+    "https://www.youtube.com/@DavvoYTP",
+    "https://www.youtube.com/user/125Replay",
+    "https://www.youtube.com/@AlePoops",
+    "https://www.youtube.com/@frederickfrankenstein5671",
+    "https://www.youtube.com/@caprastrabica2182",
+    "https://www.youtube.com/c/ilCirox",
+    "https://www.youtube.com/c/AssoDiDenari",
+    "https://www.youtube.com/c/SassoStrappato",
+    "https://www.youtube.com/c/MPYTP",
+    "https://www.youtube.com/@Alel_",
+    "https://www.youtube.com/@IdiotCamel",
+    "https://youtube.com/@ilfilincazzatoytp",
+    "https://www.youtube.com/@CerealKillzYTP",
+    "https://youtube.com/@ItalianHousePoop",
+    "https://youtube.com/@Tj8w",
+    "https://youtube.com/@p00pbuster",
+    "https://www.youtube.com/channel/UCsZ-gR0qOy4fCNG2G8Swuhw",
+    "https://www.youtube.com/@rohan_ytp/featured",
+    "https://www.youtube.com/@vry-dab",
+    "https://youtube.com/@AssoDiDenari",
+    "https://youtube.com/@RanaBastarda",
+    "https://www.youtube.com/channel/UC7Y-kAwZdFELamgM31alpPg",
+    "https://youtube.com/@TheGabryOfficial",
+    "https://www.youtube.com/channel/UCULCU79tkDsZYaVCBF0Lmhw",
+    "https://youtube.com/@cristianpoops2.0",
+    "https://youtube.com/truocolo",
+    "https://youtube.com/truocolo",
+    "https://www.youtube.com/c/allafacciatua_xd",
+    "https://www.youtube.com/@Loller97",
+    "https://youtube.com/@xeduss.",
+    "https://www.youtube.com/@francoytp",
+    "https://youtube.com/@antchannel",
+    "https://www.youtube.com/@Ge%C9%9Bg",
+    "https://youtube.com/@aureliogame99",
+    "https://youtube.com/@giusepoop"
+]
+ENGLISH_CHANELS = [
+    "https://www.youtube.com/@cs188",
+    "https://www.youtube.com/@KroboProductions",
+    "https://www.youtube.com/@EmperorLemon",
+    "https://www.youtube.com/@Deepercutt",
+    "https://www.youtube.com/@Hurricoaster",
+    "https://www.youtube.com/@DaThings",
+]
 
+SPANISH_CHANNELS = [
+    "https://www.youtube.com/@ParodiadorAnimado",
+    "https://www.youtube.com/@HDLuigi",
+    "https://www.youtube.com/@Catdany",
+    "https://www.youtube.com/@NinterYT",
+    "https://www.youtube.com/@Reloxard",
+]
+
+GERMAN_CHANNELS = [
+    "https://www.youtube.com/@PetersKotstube",
+    "https://www.youtube.com/@Sostrator",
+    "https://www.youtube.com/@YTKFactory",
+    "https://www.youtube.com/@FanboyAllianz",
+    "https://www.youtube.com/@MinerMorsel",
+]
 # NocoldizTV: scrape everything except videos whose title matches these words
 NOCOLDIZ_BLACKLIST = re.compile(
     r'(?i)(gameplay|hypernet|devlog|gioco|em\.Path|em\.Brace)'
@@ -105,11 +188,23 @@ NOCOLDIZ_BLACKLIST = re.compile(
 
 CHANNEL_KEYWORDS = re.compile(
     r'(?i)(YTP|YTPMV|Collab|Youtube\s+poop|YT\s+Poop|Poop|Speciale'
-    r'|matteo\s+montesi|avventure|Zeb|Collegio|Bigazzi|Soccer|Ganon|Billy Mays||Branduardi|Luigi|Ambrogio|Risotto|ariete|Harry\s+potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu'
-    r'|Dipr[eè]|Bello\s+Figo|Germano|Grillo|Gesù|Nabbo|Yotobi|He[\s-]?Man|Gourmet|The king|Berlusconi|Muniz|Travaglio| Nemesis|Testo|Papa|Jack\s+Black|Super\s+Quark|Iscritti|YTM|YTG|MLG'
-    r'|Sentence\s+Mix|Ear\s?rape|G-Major|Mondo emo| Sparta\s+Remix|Scad|Stutter|Patrick|Pubblicità|Spot|Spongebob|Reverse|Masking|Pitch\s+Shift'
-    r'|Mosconi|Benson|Brumotti|Master\s?chef|Mister\s+Lui|Pappalardo|Sgarbi|Razzi|Salvini|Renzi|Rio mare|Gerry\s+Scotti|Fazio'
-    r'|Kabu|Nocoldiz|Poldo|Cloroformio|Giannino|Gianni\s+Morandi|Doraemon|Me\s+cont[ro]o\s+Te)'
+    
+    # --- YTPITA (ITALIAN) ---
+    r'|matteo\s+montesi|avventure|Zeb|Collegio|Bigazzi|Soccer|Ganon|Billy\s+Mays|Branduardi|Luigi|Ambrogio|Risotto|ariete|Harry\s+potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu'
+    r'|Dipr[eè]|Bello\s+Figo|Germano|Grillo|Gesù|Nabbo|Yotobi|He[\s-]?Man|Gourmet|The\s+king|Berlusconi|Muniz|Travaglio|Nemesis|Testo|Papa|Jack\s+Black|Super\s+Quark|Iscritti|YTM|YTG|MLG|YTK'
+    r'|Sentence\s+Mix|Ear\s?rape|G-Major|Mondo\s+emo|Sparta\s+Remix|Scad|Stutter|Patrick|Pubblicità|Spot|Spongebob|Reverse|Masking|Pitch\s+Shift'
+    r'|Mosconi|Benson|Brumotti|Master\s?chef|Mister\s+Lui|Pappalardo|Sgarbi|Razzi|Salvini|Renzi|Rio\s+mare|Gerry\s+Scotti|Fazio'
+    r'|Kabu|Nocoldiz|Poldo|Cloroformio|Giannino|Gianni\s+Morandi|Doraemon|Me\s+cont[ro]o\s+Te'
+    # --- GLOBAL & ENGLISH CLASSICS ---
+    r'|Pingas|CD-i|Morshu|Mah\s+Boi|Weegee|Spadinner|Michael\s+Rosen|Viacom|Skooks|Flex\s+Tape|Phil\s+Swift|Slap\s+Chop|Hotel\s+Mario|Hank\s+Hill|King\s+Harkinian|Zelda\s+CD-i'
+    # --- YTPH (SPANISH) ---
+    r'|YTPH|Chavo\s+del\s+8|Loquendo|Pelea\s+de\s+invalidos|Vete\s+a\s+la\s+Versh|Pooppa[ñn]ol'
+    # --- YTP FR (FRENCH) ---
+    r'|YTPFR|YTP\s+FR|Brocante|Joueur\s+du\s+Grenier|JDG|Koh\s+Lanta|Denis\s+Brogniart|David\s+Goodenough'
+    # --- YTK (GERMAN / YOUTUBE KACKE) ---
+    r'|YouTube\s+Kacke|Marcell\s+D\'Avis|Peter\s+Zwegat|Kinski|Löwenzahn|Peter\s+Lustig|1&1'
+    # --- RYTP (RUSSIAN) ---
+    r'|RYTP|РУТП|Поцык|Повар|Сашко|Гамаз|Пенек)'
 )
 
 DEFAULT_SITE_DIR = "./site_mirror"
@@ -238,9 +333,14 @@ class VideoIndex:
                 self.data = json.load(f)
 
     def save(self):
-        os.makedirs(self.docs_dir, exist_ok=True)
-        with open(self.filepath, "w", encoding="utf-8") as f:
-            json.dump(self.data, f, indent=2, ensure_ascii=False)
+        try:
+            os.makedirs(self.docs_dir, exist_ok=True)
+            # Use Path to normalize/resolve the path to avoid "Invalid argument" errors on Windows
+            path = Path(self.filepath).resolve()
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(self.data, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"\n  [!] Error saving index to {self.filepath}: {e}")
 
     def add_video(self, video_id, section, source_page, thread_title=None, nickname=None):
         if video_id not in self.data:
@@ -712,59 +812,60 @@ def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
     ok_count = skip_count = unavail_count = err_count = 0
 
     for i, vid in enumerate(pending, 1):
-        e = index.data[vid]
-        
-        if e.get("title") == "warnings.warn(":
-            meta = fetch_yt_metadata(vid)
-            if isinstance(meta, dict) and meta.get("title"):
-                e["title"] = meta["title"]
-                index.save()
-                
-        sec = e["sections"][0] if e["sections"] else "Unknown"
-        thread = (e.get("thread_titles") or [""])[0] or vid
-        yt_title = e.get("title") or vid
+        try:
+            e = index.data[vid]
+            
+            if e.get("title") == "warnings.warn(":
+                meta = fetch_yt_metadata(vid)
+                if isinstance(meta, dict) and meta.get("title"):
+                    e["title"] = meta["title"]
+                    index.save()
+                    
+            sec = e["sections"][0] if e["sections"] else "Unknown"
+            thread = (e.get("thread_titles") or [""])[0] or vid
+            yt_title = e.get("title") or vid
 
-        ch_name = e.get("channel_name")
-        folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
-        out_dir = os.path.join(video_dir, folder_name)
+            ch_name = e.get("channel_name")
+            folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
+            out_dir = os.path.join(video_dir, folder_name)
 
-        print(f"  [{i}/{total}] {thread[:60]}")
-        if e.get("channel_name"):
-            ch_url = e.get("channel_url", "")
-            print(f"  Channel: {e['channel_name']}  {ch_url}")
-        print(f"  URL:     {canonical_yt_url(vid)}")
+            print(f"  [{i}/{total}] {thread[:60]}")
+            if e.get("channel_name"):
+                ch_url = e.get("channel_url", "")
+                print(f"  Channel: {e['channel_name']}  {ch_url}")
+            print(f"  URL:     {canonical_yt_url(vid)}")
 
-        status, local_file, dl_title = download_video(
-            vid, out_dir, yt_format, rate_limit, i, total,
-        )
+            status, local_file, dl_title = download_video(
+                vid, out_dir, yt_format, rate_limit, i, total,
+            )
 
-        if status == "ok":
-            rel = os.path.relpath(local_file, ".") if local_file else None
-            index.set_downloaded(vid, rel, dl_title)
-            print(f"  ✓ {os.path.basename(local_file or '')}")
-            ok_count += 1
-        elif status == "exists":
-            if not index.is_done(vid):
+            if status == "ok":
                 rel = os.path.relpath(local_file, ".") if local_file else None
                 index.set_downloaded(vid, rel, dl_title)
-            print(f"  = already downloaded")
-            skip_count += 1
-        elif status == "unavailable":
-            index.set_unavailable(vid)
-            print("  ⊘ Unavailable (removed / private)")
-            unavail_count += 1
-        else:
-            index.set_failed(vid)
-            print("  ✗ Failed")
+                print(f"  ✓ {os.path.basename(local_file or '')}")
+                ok_count += 1
+            elif status == "exists":
+                if not index.is_done(vid):
+                    rel = os.path.relpath(local_file, ".") if local_file else None
+                    index.set_downloaded(vid, rel, dl_title)
+                print(f"  = already downloaded")
+                skip_count += 1
+            elif status == "unavailable":
+                index.set_unavailable(vid)
+                print("  ⊘ Unavailable (removed / private)")
+                unavail_count += 1
+            else:
+                index.set_failed(vid)
+                print("  ✗ Failed")
+                err_count += 1
+
+            index.save()
+
+            if status == "ok":
+                time.sleep(1)
+        except Exception as ex:
+            print(f"\n  [!] Unexpected error processing {vid}: {ex}")
             err_count += 1
-
-        index.save()
-
-        done = ok_count + skip_count + unavail_count + err_count
-
-
-        if status == "ok":
-            time.sleep(1)
 
     print("─" * 54)
     print(f"  Downloaded:  {ok_count}")
@@ -874,56 +975,57 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
     ok_count = skip_count = unavail_count = err_count = 0
 
     for i, vid in enumerate(pending, 1):
-        e = index.data[vid]
-        
-        if e.get("title") == "warnings.warn(":
-            meta = fetch_yt_metadata(vid)
-            if isinstance(meta, dict) and meta.get("title"):
-                e["title"] = meta["title"]
-                index.save()
-                
-        label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
+        try:
+            e = index.data[vid]
+            
+            if e.get("title") == "warnings.warn(":
+                meta = fetch_yt_metadata(vid)
+                if isinstance(meta, dict) and meta.get("title"):
+                    e["title"] = meta["title"]
+                    index.save()
+                    
+            label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
 
-        ch_name = e.get("channel_name")
-        folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
-        out_dir = os.path.join(video_dir, folder_name)
+            ch_name = e.get("channel_name")
+            folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
+            out_dir = os.path.join(video_dir, folder_name)
 
-        print(f"  [{i}/{total}] {label[:60]}")
-        if e.get("channel_name"):
-            print(f"  Channel: {e['channel_name']}  {e.get('channel_url', '')}")
-        print(f"  URL:     {canonical_yt_url(vid)}")
+            print(f"  [{i}/{total}] {label[:60]}")
+            if e.get("channel_name"):
+                print(f"  Channel: {e['channel_name']}  {e.get('channel_url', '')}")
+            print(f"  URL:     {canonical_yt_url(vid)}")
 
-        status, local_file, dl_title = download_video(
-            vid, out_dir, yt_format, rate_limit, i, total,
-        )
+            status, local_file, dl_title = download_video(
+                vid, out_dir, yt_format, rate_limit, i, total,
+            )
 
-        if status == "ok":
-            rel = os.path.relpath(local_file, ".") if local_file else None
-            index.set_downloaded(vid, rel, dl_title)
-            print(f"  ✓ {os.path.basename(local_file or '')}")
-            ok_count += 1
-        elif status == "exists":
-            if not index.is_done(vid):
+            if status == "ok":
                 rel = os.path.relpath(local_file, ".") if local_file else None
                 index.set_downloaded(vid, rel, dl_title)
-            print(f"  = already downloaded")
-            skip_count += 1
-        elif status == "unavailable":
-            index.set_unavailable(vid)
-            print("  ⊘ Unavailable (removed / private)")
-            unavail_count += 1
-        else:
-            index.set_failed(vid)
-            print("  ✗ Failed")
+                print(f"  ✓ {os.path.basename(local_file or '')}")
+                ok_count += 1
+            elif status == "exists":
+                if not index.is_done(vid):
+                    rel = os.path.relpath(local_file, ".") if local_file else None
+                    index.set_downloaded(vid, rel, dl_title)
+                print(f"  = already downloaded")
+                skip_count += 1
+            elif status == "unavailable":
+                index.set_unavailable(vid)
+                print("  ⊘ Unavailable (removed / private)")
+                unavail_count += 1
+            else:
+                index.set_failed(vid)
+                print("  ✗ Failed")
+                err_count += 1
+
+            index.save()
+
+            if status == "ok":
+                time.sleep(1)
+        except Exception as ex:
+            print(f"\n  [!] Unexpected error processing {vid}: {ex}")
             err_count += 1
-
-        index.save()
-
-        done = ok_count + skip_count + unavail_count + err_count
-
-
-        if status == "ok":
-            time.sleep(1)
 
     print("─" * 54)
     print(f"  Downloaded:  {ok_count}")
@@ -933,7 +1035,7 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
     print(f"  Index:       {os.path.abspath(index.filepath)}")
 
 
-def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed, year_limit=2016):
+def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed, year_limit=2018):
     def is_italian(e):
         # Must match keywords
         title = e.get("title") or ""
@@ -942,6 +1044,7 @@ def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed, y
 
         secs = e.get("sections", [])
         #TODO: reenable this after scraping all historic ones in secs 
+        # 
         if "YTP fai da te" in secs or "YTP nostrane" in secs or "Scraped Channel" in secs or "Youtube" in secs:
             return True
         ch_url = e.get("channel_url", "")
@@ -988,57 +1091,58 @@ def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed, y
     ok_count = skip_count = unavail_count = err_count = 0
 
     for i, vid in enumerate(pending, 1):
-        e = index.data[vid]
-        
-        if e.get("title") == "warnings.warn(":
-            meta = fetch_yt_metadata(vid)
-            if isinstance(meta, dict) and meta.get("title"):
-                e["title"] = meta["title"]
-                index.save()
-                
-        sec = e["sections"][0] if e["sections"] else "Unknown"
-        label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
-        
-        ch_name = e.get("channel_name")
-        folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
-        out_dir = os.path.join(video_dir, folder_name)
+        try:
+            e = index.data[vid]
+            
+            if e.get("title") == "warnings.warn(":
+                meta = fetch_yt_metadata(vid)
+                if isinstance(meta, dict) and meta.get("title"):
+                    e["title"] = meta["title"]
+                    index.save()
+                    
+            sec = e["sections"][0] if e["sections"] else "Unknown"
+            label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
+            
+            ch_name = e.get("channel_name")
+            folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
+            out_dir = os.path.join(video_dir, folder_name)
 
-        print(f"  [{i}/{total}] {label[:60]}")
-        if e.get("channel_name"):
-            print(f"  Channel: {e['channel_name']}  {e.get('channel_url', '')}")
-        print(f"  URL:     {canonical_yt_url(vid)}")
+            print(f"  [{i}/{total}] {label[:60]}")
+            if e.get("channel_name"):
+                print(f"  Channel: {e['channel_name']}  {e.get('channel_url', '')}")
+            print(f"  URL:     {canonical_yt_url(vid)}")
 
-        status, local_file, dl_title = download_video(
-            vid, out_dir, yt_format, rate_limit, i, total,
-        )
+            status, local_file, dl_title = download_video(
+                vid, out_dir, yt_format, rate_limit, i, total,
+            )
 
-        if status == "ok":
-            rel = os.path.relpath(local_file, ".") if local_file else None
-            index.set_downloaded(vid, rel, dl_title)
-            print(f"  ✓ {os.path.basename(local_file or '')}")
-            ok_count += 1
-        elif status == "exists":
-            if not index.is_done(vid):
+            if status == "ok":
                 rel = os.path.relpath(local_file, ".") if local_file else None
                 index.set_downloaded(vid, rel, dl_title)
-            print(f"  = already downloaded")
-            skip_count += 1
-        elif status == "unavailable":
-            index.set_unavailable(vid)
-            print("  ⊘ Unavailable (removed / private)")
-            unavail_count += 1
-        else:
-            index.set_failed(vid)
-            print("  ✗ Failed")
+                print(f"  ✓ {os.path.basename(local_file or '')}")
+                ok_count += 1
+            elif status == "exists":
+                if not index.is_done(vid):
+                    rel = os.path.relpath(local_file, ".") if local_file else None
+                    index.set_downloaded(vid, rel, dl_title)
+                print(f"  = already downloaded")
+                skip_count += 1
+            elif status == "unavailable":
+                index.set_unavailable(vid)
+                print("  ⊘ Unavailable (removed / private)")
+                unavail_count += 1
+            else:
+                index.set_failed(vid)
+                print("  ✗ Failed")
+                err_count += 1
+
+            index.save()
+
+            if status == "ok":
+                time.sleep(1)
+        except Exception as ex:
+            print(f"\n  [!] Unexpected error processing {vid}: {ex}")
             err_count += 1
-
-        index.save()
-
-        done = ok_count + skip_count + unavail_count + err_count
-
-
-        if status == "ok":
-            time.sleep(1)
 
     print("─" * 54)
     print(f"  Downloaded:  {ok_count}")
@@ -1078,49 +1182,53 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
     ok_count = skip_count = unavail_count = err_count = 0
 
     for i, vid in enumerate(pending, 1):
-        e = index.data[vid]
-        
-        if e.get("title") == "warnings.warn(":
-            meta = fetch_yt_metadata(vid)
-            if isinstance(meta, dict) and meta.get("title"):
-                e["title"] = meta["title"]
-                index.save()
-                
-        label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
+        try:
+            e = index.data[vid]
+            
+            if e.get("title") == "warnings.warn(":
+                meta = fetch_yt_metadata(vid)
+                if isinstance(meta, dict) and meta.get("title"):
+                    e["title"] = meta["title"]
+                    index.save()
+                    
+            label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
 
-        print(f"  [{i}/{total}] {label[:60]}")
-        if e.get("channel_name"):
-            print(f"  Channel: {e['channel_name']}  {e.get('channel_url', '')}")
-        print(f"  URL:     {canonical_yt_url(vid)}")
+            print(f"  [{i}/{total}] {label[:60]}")
+            if e.get("channel_name"):
+                print(f"  Channel: {e['channel_name']}  {e.get('channel_url', '')}")
+            print(f"  URL:     {canonical_yt_url(vid)}")
 
-        status, local_file, dl_title = download_video(
-            vid, out_dir, yt_format, rate_limit, i, total,
-        )
+            status, local_file, dl_title = download_video(
+                vid, out_dir, yt_format, rate_limit, i, total,
+            )
 
-        if status == "ok":
-            rel = os.path.relpath(local_file, ".") if local_file else None
-            index.set_downloaded(vid, rel, dl_title)
-            print(f"  ✓ {os.path.basename(local_file or '')}")
-            ok_count += 1
-        elif status == "exists":
-            if not index.is_done(vid):
+            if status == "ok":
                 rel = os.path.relpath(local_file, ".") if local_file else None
                 index.set_downloaded(vid, rel, dl_title)
-            print(f"  = already downloaded")
-            skip_count += 1
-        elif status == "unavailable":
-            index.set_unavailable(vid)
-            print("  ⊘ Unavailable (removed / private)")
-            unavail_count += 1
-        else:
-            index.set_failed(vid)
-            print("  ✗ Failed")
+                print(f"  ✓ {os.path.basename(local_file or '')}")
+                ok_count += 1
+            elif status == "exists":
+                if not index.is_done(vid):
+                    rel = os.path.relpath(local_file, ".") if local_file else None
+                    index.set_downloaded(vid, rel, dl_title)
+                print(f"  = already downloaded")
+                skip_count += 1
+            elif status == "unavailable":
+                index.set_unavailable(vid)
+                print("  ⊘ Unavailable (removed / private)")
+                unavail_count += 1
+            else:
+                index.set_failed(vid)
+                print("  ✗ Failed")
+                err_count += 1
+
+            index.save()
+
+            if status == "ok":
+                time.sleep(1)
+        except Exception as ex:
+            print(f"\n  [!] Unexpected error processing {vid}: {ex}")
             err_count += 1
-
-        index.save()
-
-        if status == "ok":
-            time.sleep(1)
 
     print("─" * 54)
     print(f"  Downloaded:  {ok_count}")
