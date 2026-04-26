@@ -258,13 +258,13 @@ function renderTable(append = false) {
       .filter(sp => !sp.includes('channel_scrape'))
       // 2. Map over whatever is left to create your links
       .map((sp, i) => {
-        const path = 'https://github.com/nocoldiz/ytpbackup/blob/main/site_mirror/' + sp.replace(/\\/g, '/');
+        const path = 'https://raw.githubusercontent.com/nocoldiz/ytpbackup/main/site_mirror/' + sp.replace(/\\/g, '/');
 
 
         const label = (v.thread_titles || [])[i] || sp;
 
 
-        return `<a class="btn-thread" href="${path}" target="_blank" title="${escHtml(label)}">📄 ${escHtml(label.length > 22 ? label.slice(0, 22) + '…' : label)}</a>`;
+        return `<a class="btn-thread" href="${path}" onclick="downloadFile('${path}', '${escAttr(label)}.html')" title="${escHtml(label)}">📄 ${escHtml(label.length > 22 ? label.slice(0, 22) + '…' : label)}</a>`;
       }).join(' ');
     const sections = (v.sections || []).map(s => `<span class="tag-pill">${escHtml(s)}</span>`).join('');
 
@@ -787,7 +787,7 @@ function renderSourcesTable() {
 
   const tbody = document.getElementById('sources-tbody');
   tbody.innerHTML = slice.map(s => {
-    const filePath = 'site_mirror/' + s.path.replace(/\\/g, '/');
+    const filePath = 'https://raw.githubusercontent.com/nocoldiz/ytpbackup/main/site_mirror/' + s.path.replace(/\\/g, '/');
     const rowId = 'src-' + btoa(encodeURIComponent(s.path)).replace(/[^a-z0-9]/gi, '').slice(0, 20);
     const isOpen = expandedSources.has(s.path);
     const videoRows = isOpen ? s.videos.map(v => `
@@ -803,7 +803,7 @@ function renderSourcesTable() {
       <td style="font-weight:600">${escHtml(s.title)}</td>
       <td><span class="tag-pill">${escHtml(s.section)}</span></td>
       <td class="num">${s.videos.length}</td>
-      <td><a class="btn-thread" href="${filePath}" target="_blank">📄 Open</a></td>
+      <td><a class="btn-thread" href="${filePath}" onclick="downloadFile('${filePath}', '${escAttr(s.title)}.html')">📄 Download</a></td>
       <td><button class="src-expand-btn" onclick="toggleSource(${JSON.stringify(s.path)}, '${rowId}')">${isOpen ? '▲ Hide' : '▼ Videos'}</button></td>
     </tr>${videoRows}`;
   }).join('') || `<tr><td colspan="5" class="empty">No sources match</td></tr>`;
@@ -1031,3 +1031,22 @@ function escHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 function escAttr(s) { return String(s || '').replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
+function downloadFile(url, filename) {
+  if (event) event.preventDefault();
+  fetch(url)
+    .then(r => r.blob())
+    .then(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    })
+    .catch(err => {
+      console.error('Download failed:', err);
+      window.open(url, '_blank');
+    });
+}
