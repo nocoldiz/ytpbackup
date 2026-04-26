@@ -8,3 +8,6 @@ videos/Old sources
 videos/Tutorial per il pooping
 __pycache__
 videos/video_index.json
+/videos
+/__pycache__
+*.pyc
