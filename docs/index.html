@@ -284,7 +284,7 @@
   }
   .cloud-tag:hover { opacity: .75; }
 
-  .top-videos-year { margin-top: 18px; }
+  .top- s-year { margin-top: 18px; }
   .top-videos-year table { font-size: .82rem; }
   .top-videos-year td, .top-videos-year th { padding: 7px 12px; }
 
@@ -1360,7 +1360,7 @@ function renderTimeline() {
   // Open all links in new tab
   el.querySelectorAll('a').forEach(a => a.target = '_blank');
 }
-document.addEventListener('DOMContentLoaded', renderTimeline);
+//document.addEventListener('DOMContentLoaded', renderTimeline);
 
 function escHtml(s) {
   if (!s) return '';
@@ -1369,34 +1369,6 @@ function escHtml(s) {
 function escAttr(s) { return String(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
 
 
-// ─── INITIALIZATION ───────────────────────────────────────────────────────
-async function init() {
-  try {
-    const response = await fetch('video_index.json');
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    
-    // This assumes the JSON is the array of video data
-    const data = await response.json();
-    
-    // Store globally if your other functions (renderCharts, etc.) need it
-    window.videoData = data;
-
-    // Trigger all rendering functions
-    //renderTimeline(); // Reads from the <script type="text/markdown"> tag
-    renderStats(data);
-    renderCharts(data);
-    renderTable(data);
-    
-  } catch (error) {
-    console.error('Failed to load video_index.json:', error);
-    document.body.innerHTML += `<div style="color:var(--accent2); padding:20px; text-align:center;">
-      Error loading archive data. Ensure video_index.json exists in the same folder.
-    </div>`;
-  }
-}
-
-// Start the app when the DOM is ready
-document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
