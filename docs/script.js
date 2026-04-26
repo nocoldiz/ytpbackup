@@ -104,6 +104,22 @@ function buildFilterOptions() {
 let sortField = 'publish_date';
 let sortDir = 1;
 let scrollObserver = null;
+let viewMode = 'table';
+
+function setViewMode(mode) {
+  viewMode = mode;
+  document.getElementById('btn-view-table').classList.toggle('active', mode === 'table');
+  document.getElementById('btn-view-grid').classList.toggle('active', mode === 'grid');
+  document.getElementById('video-table-wrap').style.display = mode === 'table' ? 'block' : 'none';
+  document.getElementById('video-grid').style.display = mode === 'grid' ? 'grid' : 'none';
+  renderTable(false);
+}
+
+function loadFacade(id) {
+  const el = document.getElementById('facade-' + id);
+  if (!el) return;
+  el.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+}
 
 function applyFilters() {
   const q = document.getElementById('search-input').value.toLowerCase().trim();
@@ -211,13 +227,15 @@ function setupScrollObserver() {
 
 function renderTable(append = false) {
   const tbody = document.getElementById('video-tbody');
+  const grid = document.getElementById('video-grid');
   const total = filteredVideos.length;
   document.getElementById('videos-count-label').textContent = `${total} videos`;
 
   const start = (currentPage - 1) * PAGE_SIZE;
   const slice = filteredVideos.slice(start, start + PAGE_SIZE);
 
-  const html = slice.map(v => {
+  if (viewMode === 'table') {
+    const html = slice.map(v => {
     const statusClass = 'status-' + (v.status || 'unavailable');
 
     const threads = (v.source_pages || [])
@@ -257,10 +275,49 @@ function renderTable(append = false) {
         </tr>`;
   }).join('') || (append ? '' : `<tr><td colspan="8" class="empty">No videos match your filters</td></tr>`);
 
-  if (append) {
-    tbody.insertAdjacentHTML('beforeend', html);
+    if (append) {
+      tbody.insertAdjacentHTML('beforeend', html);
+    } else {
+      tbody.innerHTML = html;
+    }
   } else {
-    tbody.innerHTML = html;
+    const html = slice.map(v => {
+      const statusClass = 'status-' + (v.status || 'unavailable');
+      const fallbackTitle = (v.thread_titles && v.thread_titles[0]) ? v.thread_titles[0] : null;
+      const titleText = v.title || fallbackTitle || v.id;
+      const dateText = v.publish_date ? v.publish_date.slice(0, 10) : 'Unknown Date';
+      const viewsText = v.view_count != null ? fmtNum(v.view_count) + ' views' : '';
+      const chText = v.channel_name || '-';
+      
+      const thumbUrl = `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`;
+      const facadeHtml = v.status === 'available' || v.status === 'pending'
+        ? `<div class="yt-facade" id="facade-${v.id}" onclick="loadFacade('${v.id}')">
+             <img src="${thumbUrl}" alt="Thumbnail" loading="lazy">
+             <div class="play-btn"></div>
+           </div>`
+        : `<div class="yt-facade" style="background:#2a3048; display:flex; align-items:center; justify-content:center; color:var(--text-muted); cursor:default;">
+             <span style="opacity:0.5">Thumbnail Unavailable</span>
+           </div>`;
+
+      return `<div class="vid-card">
+        ${facadeHtml}
+        <div class="vid-card-info">
+          <a href="${v.url}" target="_blank" class="vid-card-title" title="${escAttr(titleText)}">${escHtml(titleText)}</a>
+          <a href="${v.channel_url || '#'}" target="_blank" class="vid-card-ch">${escHtml(chText)}</a>
+          <div class="vid-card-meta">
+            ${viewsText ? `<span>${viewsText}</span>` : ''}
+            <span>${dateText}</span>
+          </div>
+          <div class="vid-status-row">
+            <span class="status-dot ${statusClass}"></span>
+            <span class="status-text">${v.status || '-'}</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('') || (append ? '' : `<div class="empty" style="grid-column:1/-1">No videos match your filters</div>`);
+    
+    if (append) grid.insertAdjacentHTML('beforeend', html);
+    else grid.innerHTML = html;
   }
 
   renderPagination(total);
@@ -279,17 +336,29 @@ function buildChannelData() {
   allVideos.forEach(v => {
     const ch = v.channel_name;
     if (!ch) return;
-    if (!map[ch]) map[ch] = { name: ch, url: v.channel_url, videos: [], totalViews: 0, totalLikes: 0 };
+    if (!map[ch]) map[ch] = { name: ch, url: v.channel_url, videos: [], totalViews: 0, totalLikes: 0, firstYear: null };
     map[ch].videos.push(v);
     map[ch].totalViews += v.view_count || 0;
     map[ch].totalLikes += v.like_count || 0;
+    const y = v.publish_date ? parseInt(v.publish_date.slice(0, 4)) : null;
+    if (y) {
+      if (!map[ch].firstYear || y < map[ch].firstYear) map[ch].firstYear = y;
+    }
   });
   return Object.values(map).sort((a, b) => b.videos.length - a.videos.length);
 }
 
 function renderChannelGrid() {
   const q = (document.getElementById('channel-search').value || '').toLowerCase();
-  const channels = buildChannelData().filter(c => !q || c.name.toLowerCase().includes(q));
+  const minYear = parseInt(document.getElementById('channel-year-min').value) || null;
+  const maxYear = parseInt(document.getElementById('channel-year-max').value) || null;
+
+  const channels = buildChannelData().filter(c => {
+    if (q && !c.name.toLowerCase().includes(q)) return false;
+    if (minYear && (!c.firstYear || c.firstYear < minYear)) return false;
+    if (maxYear && (!c.firstYear || c.firstYear > maxYear)) return false;
+    return true;
+  });
   document.getElementById('channels-count-label').textContent = `${channels.length} channels`;
   document.getElementById('channel-grid').innerHTML = channels.map(c => `
     <div class="channel-card${selectedChannel === c.name ? ' selected' : ''}" onclick="selectChannel('${escAttr(c.name)}')">
