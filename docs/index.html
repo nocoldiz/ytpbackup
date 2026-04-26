@@ -563,7 +563,7 @@ function loadFile(file) {
 }
 
 // Auto-load from same directory
-fetch('videos/video_index.json')
+fetch('video_index.json')
   .then(r => r.json())
   .then(data => initApp(data))
   .catch(() => {}); // silently fail if not found
@@ -1367,6 +1367,36 @@ function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function escAttr(s) { return String(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+
+// ─── INITIALIZATION ───────────────────────────────────────────────────────
+async function init() {
+  try {
+    const response = await fetch('video_index.json');
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    
+    // This assumes the JSON is the array of video data
+    const data = await response.json();
+    
+    // Store globally if your other functions (renderCharts, etc.) need it
+    window.videoData = data;
+
+    // Trigger all rendering functions
+    renderTimeline(); // Reads from the <script type="text/markdown"> tag
+    renderStats(data);
+    renderCharts(data);
+    renderTable(data);
+    
+  } catch (error) {
+    console.error('Failed to load video_index.json:', error);
+    document.body.innerHTML += `<div style="color:var(--accent2); padding:20px; text-align:center;">
+      Error loading archive data. Ensure video_index.json exists in the same folder.
+    </div>`;
+  }
+}
+
+// Start the app when the DOM is ready
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
