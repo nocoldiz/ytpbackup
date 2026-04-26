@@ -562,73 +562,12 @@ function loadFile(file) {
   reader.readAsText(file);
 }
 
-// ─── DATA LOADING & INITIALIZATION ────────────────────────────────────────
+// Auto-load from same directory
+fetch('video_index.json')
+  .then(r => r.json())
+  .then(data => initApp(data))
+  .catch(() => {}); // silently fail if not found
 
-// 1. Automatic Load on Page Ready
-window.addEventListener('DOMContentLoaded', () => {
-  // Path to the JSON in the same folder
-  const jsonUrl = 'video_index.json';
-  
-  fetch(jsonUrl)
-    .then(response => {
-      if (!response.ok) throw new Error('Auto-load file not found');
-      return response.json();
-    })
-    .then(data => {
-      console.log("Success: video_index.json loaded automatically.");
-      initDashboard(data);
-    })
-    .catch(err => {
-      console.warn("Manual upload required:", err.message);
-      // If fetch fails, the user just sees the landing/drop-zone as usual
-    });
-});
-
-// 2. Manual Upload Handler (Updated to use initDashboard)
-document.getElementById('fileInput').onchange = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (event) => initApp(JSON.parse(event.target.result));
-  reader.readAsText(file);
-};
-
-// 3. Unified Initialization Function
-function initDashboard(data) {
-  // Set global data
-  allVideos = data;
-
-  // Transition UI
-  document.getElementById('landing').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-
-  // Run your existing processing logic
-  const channels = new Set(allVideos.map(v => v.channel_name).filter(Boolean));
-  const sections = new Set(allVideos.map(v => v.section).filter(Boolean));
-  
-  document.getElementById('badge-videos').textContent = allVideos.length;
-  document.getElementById('badge-channels').textContent = channels.size;
-  document.getElementById('badge-sections').textContent = sections.size;
-  
-  const years = new Set(allVideos.map(v => v.publish_date ? v.publish_date.slice(0,4) : null).filter(Boolean));
-  document.getElementById('badge-years').textContent = years.size;
-
-  // Trigger all your existing render functions
-  buildFilterOptions();
-  buildOverview();
-  applyFilters();
-  renderChannelGrid();
-  renderSectionGrid();
-  renderYearGrid();
-
-  const srcData = buildSourcesData();
-  document.getElementById('badge-sources').textContent = srcData.length;
-  initSourcesFilters(srcData);
-  renderSourcesTable();
-  
-  // Update timeline if function exists
-  if (typeof renderTimeline === 'function') renderTimeline();
-}
 // ─── INIT ─────────────────────────────────────────────────────────────────
 const ALLOWED_SECTIONS = new Set(["YTP nostrane","YTP fai da te","YTPMV dimportazione","YTP da internet","Internet"]);
 const SOURCES_SECTIONS = new Set(["Risorse","Tutorial per il pooping","Old Sources"]);
