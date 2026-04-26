@@ -30555,13 +30555,16 @@
     "channel_name": null,
     "channel_url": null,
     "sections": [
-      "YTPMV dimportazione"
+      "YTPMV dimportazione",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "YTPMV dimportazione\\41722721_NES-Roll'd.html"
+      "YTPMV dimportazione\\41722721_NES-Roll'd.html",
+      "YTP fai da te\\40715230_FRED ZONE BURGER.html"
     ],
     "thread_titles": [
-      "NES-Roll'd"
+      "NES-Roll'd",
+      "FRED ZONE BURGER"
     ],
     "status": "unavailable",
     "local_file": null,
@@ -30848,13 +30851,16 @@
     "channel_name": null,
     "channel_url": null,
     "sections": [
-      "YTPMV dimportazione"
+      "YTPMV dimportazione",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "YTPMV dimportazione\\42513560_Harkinescence - Bring King to life.html"
+      "YTPMV dimportazione\\42513560_Harkinescence - Bring King to life.html",
+      "YTP fai da te\\42108666_I.M.Caveman.html"
     ],
     "thread_titles": [
-      "Harkinescence - Bring King to life"
+      "Harkinescence - Bring King to life",
+      "I.M.Caveman"
     ],
     "status": "unavailable",
     "local_file": null,
@@ -39905,13 +39911,16 @@
     "channel_name": null,
     "channel_url": null,
     "sections": [
-      "YTP da internet"
+      "YTP da internet",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "YTP da internet\\39708396_Youtube Poop_ Mondo Emo.html"
+      "YTP da internet\\39708396_Youtube Poop_ Mondo Emo.html",
+      "YTP fai da te\\38410302_Youtube Poop _ Mondo Emo IV.html"
     ],
     "thread_titles": [
-      "Youtube Poop_ Mondo Emo"
+      "Youtube Poop_ Mondo Emo",
+      "Youtube Poop _ Mondo Emo IV"
     ],
     "status": "unavailable",
     "local_file": null,
@@ -40434,14 +40443,17 @@
     "channel_url": "https://www.youtube.com/@unhoots",
     "sections": [
       "YTP da internet",
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
       "YTP da internet\\40735081_YTP kirby ita episode 1.html",
-      "channel_scrape:https://www.youtube.com/@unhoots"
+      "channel_scrape:https://www.youtube.com/@unhoots",
+      "YTP fai da te\\35315461_i miei you tube poop.html"
     ],
     "thread_titles": [
-      "YTP kirby ita episode 1"
+      "YTP kirby ita episode 1",
+      "i miei you tube poop"
     ],
     "status": "pending",
     "local_file": null,
@@ -40623,13 +40635,16 @@
     "channel_name": null,
     "channel_url": null,
     "sections": [
-      "YTP da internet"
+      "YTP da internet",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "YTP da internet\\41224336_RED ZONE la play list + bella del mondo VENITE.html"
+      "YTP da internet\\41224336_RED ZONE la play list + bella del mondo VENITE.html",
+      "YTP fai da te\\39780090_MamaTails Zone.html"
     ],
     "thread_titles": [
-      "RED ZONE la play list + bella del mondo VENITE"
+      "RED ZONE la play list + bella del mondo VENITE",
+      "MamaTails Zone"
     ],
     "status": "unavailable",
     "local_file": null,
@@ -43907,15 +43922,18 @@
     "channel_url": "https://www.youtube.com/@briotera",
     "sections": [
       "YTP da internet",
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
       "YTP da internet\\47085360_youtube poop_Pgoldino doc ci racconta la sua vita da disturbato.html",
-      "channel_scrape:https://www.youtube.com/@briotera"
+      "channel_scrape:https://www.youtube.com/@briotera",
+      "YTP fai da te\\43925948_pigoldino doc ci racconta la sua vita da ritardato.html"
     ],
     "thread_titles": [
       "youtube poop_Pgoldino doc ci racconta la sua vita da disturbato",
-      "youtube poop:Pgoldino doc ci racconta la sua vita da disturbato"
+      "youtube poop:Pgoldino doc ci racconta la sua vita da disturbato",
+      "pigoldino doc ci racconta la sua vita da ritardato"
     ],
     "status": "pending",
     "local_file": null,
@@ -45543,13 +45561,16 @@
     "channel_name": null,
     "channel_url": null,
     "sections": [
-      "YTP da internet"
+      "YTP da internet",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "YTP da internet\\51481762_Full Metal Pingas + EXTRA.html"
+      "YTP da internet\\51481762_Full Metal Pingas + EXTRA.html",
+      "YTP fai da te\\42800126_Youtube Merda - Full Metal Pingas + Extra.html"
     ],
     "thread_titles": [
-      "Full Metal Pingas + EXTRA"
+      "Full Metal Pingas + EXTRA",
+      "Youtube Merda - Full Metal Pingas + Extra"
     ],
     "status": "unavailable",
     "local_file": null,
@@ -48209,16 +48230,20 @@
     "channel_name": null,
     "channel_url": null,
     "sections": [
-      "Risorse"
+      "Risorse",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "Risorse\\36667585_Una musica usata per alcuni poop.html"
+      "Risorse\\36667585_Una musica usata per alcuni poop.html",
+      "YTP fai da te\\41354247_Spongebob squiddi style SCARYYYYYY.html"
     ],
     "thread_titles": [
-      "Una musica usata per alcuni poop"
+      "Una musica usata per alcuni poop",
+      "Spongebob squiddi style SCARYYYYYY"
     ],
     "status": "unavailable",
-    "local_file": null
+    "local_file": null,
+    "nickname": "gianluca9333"
   },
   "WE_KZaGA5B0": {
     "url": "https://www.youtube.com/watch?v=WE_KZaGA5B0",
@@ -48299,19 +48324,23 @@
     "channel_name": "tracFelixtrac",
     "channel_url": "https://www.youtube.com/@tracFelix96trac",
     "sections": [
-      "Risorse"
+      "Risorse",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "Risorse\\38312500_Le musiche di Wand of Gamelon e Faces of Evil.html"
+      "Risorse\\38312500_Le musiche di Wand of Gamelon e Faces of Evil.html",
+      "YTP fai da te\\35710005_THIS VIDEO IS WHAT ALL TRUE WARRIORS STIVE FOR.html"
     ],
     "thread_titles": [
-      "Le musiche di Wand of Gamelon e Faces of Evil"
+      "Le musiche di Wand of Gamelon e Faces of Evil",
+      "THIS VIDEO IS WHAT ALL TRUE WARRIORS STIVE FOR"
     ],
     "status": "pending",
     "local_file": null,
     "publish_date": "2009-01-06",
     "view_count": 15316,
-    "like_count": 123
+    "like_count": 123,
+    "nickname": "Felix96"
   },
   "eOFRIWx5F9c": {
     "url": "https://www.youtube.com/watch?v=eOFRIWx5F9c",
@@ -60578,19 +60607,23 @@
     "channel_name": "Ratmus1",
     "channel_url": "https://www.youtube.com/@Ratmus1",
     "sections": [
-      "Old sources"
+      "Old sources",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "Old sources\\33370328_Hotel Mario cutscenes (Quasi tutte High-Quality).html"
+      "Old sources\\33370328_Hotel Mario cutscenes (Quasi tutte High-Quality).html",
+      "YTP fai da te\\38264996_Youtube Poop_ Super Poop Out!! Round 01 VS Link.html"
     ],
     "thread_titles": [
-      "Hotel Mario cutscenes (Quasi tutte High-Quality)"
+      "Hotel Mario cutscenes (Quasi tutte High-Quality)",
+      "Youtube Poop_ Super Poop Out!! Round 01 VS Link"
     ],
     "status": "pending",
     "local_file": null,
     "publish_date": "2008-03-27",
     "view_count": 1164026,
-    "like_count": 20803
+    "like_count": 20803,
+    "nickname": "BB64"
   },
   "0H9fuCtwCJY": {
     "url": "https://www.youtube.com/watch?v=0H9fuCtwCJY",
@@ -76129,16 +76162,20 @@
     "view_count": 95575,
     "like_count": 735,
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@DarkCoffe64"
+      "channel_scrape:https://www.youtube.com/@DarkCoffe64",
+      "YTP fai da te\\38374917_Youtube Poop_ Super Poop Out!! Round 03 VS Robotnik.html"
     ],
     "thread_titles": [
-      "Super Poop Out Round 03 VS Robotnik"
+      "Super Poop Out Round 03 VS Robotnik",
+      "Youtube Poop_ Super Poop Out!! Round 03 VS Robotnik"
     ],
     "status": "pending",
-    "local_file": null
+    "local_file": null,
+    "nickname": "BB64"
   },
   "YGEKx5Cy5wk": {
     "url": "https://www.youtube.com/watch?v=YGEKx5Cy5wk",
@@ -76150,16 +76187,20 @@
     "view_count": 80061,
     "like_count": 434,
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@DarkCoffe64"
+      "channel_scrape:https://www.youtube.com/@DarkCoffe64",
+      "YTP fai da te\\38305350_Youtube Poop_ Super Poop Out!! Round 02 VS Mario.html"
     ],
     "thread_titles": [
-      "Super Poop Out Round 02 VS Mario"
+      "Super Poop Out Round 02 VS Mario",
+      "Youtube Poop_ Super Poop Out!! Round 02 VS Mario"
     ],
     "status": "pending",
-    "local_file": null
+    "local_file": null,
+    "nickname": "BB64"
   },
   "RmNzf1finds": {
     "url": "https://www.youtube.com/watch?v=RmNzf1finds",
@@ -76171,16 +76212,20 @@
     "view_count": 62304,
     "like_count": 407,
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@DarkCoffe64"
+      "channel_scrape:https://www.youtube.com/@DarkCoffe64",
+      "YTP fai da te\\38264996_Youtube Poop_ Super Poop Out!! Round 01 VS Link.html"
     ],
     "thread_titles": [
-      "Super Poop Out Round 01 VS Link"
+      "Super Poop Out Round 01 VS Link",
+      "Youtube Poop_ Super Poop Out!! Round 01 VS Link"
     ],
     "status": "pending",
-    "local_file": null
+    "local_file": null,
+    "nickname": "BB64"
   },
   "1RUvSb1BXS8": {
     "url": "https://www.youtube.com/watch?v=1RUvSb1BXS8",
@@ -76192,16 +76237,20 @@
     "view_count": 643,
     "like_count": 6,
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@DarkCoffe64"
+      "channel_scrape:https://www.youtube.com/@DarkCoffe64",
+      "YTP fai da te\\37469045_Youtube Poop Robotnik turn the moon into spaghetti.html"
     ],
     "thread_titles": [
-      "Youtube Poop Robotnik turn the moon into spaghetti part 02"
+      "Youtube Poop Robotnik turn the moon into spaghetti part 02",
+      "Youtube Poop Robotnik turn the moon into spaghetti"
     ],
     "status": "pending",
-    "local_file": null
+    "local_file": null,
+    "nickname": "BB64"
   },
   "-jEDQck88bM": {
     "url": "https://www.youtube.com/watch?v=-jEDQck88bM",
@@ -76213,16 +76262,20 @@
     "view_count": 1239,
     "like_count": 16,
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@DarkCoffe64"
+      "channel_scrape:https://www.youtube.com/@DarkCoffe64",
+      "YTP fai da te\\37469045_Youtube Poop Robotnik turn the moon into spaghetti.html"
     ],
     "thread_titles": [
-      "Youtube Poop Robotnik turn the moon into spaghetti part 01"
+      "Youtube Poop Robotnik turn the moon into spaghetti part 01",
+      "Youtube Poop Robotnik turn the moon into spaghetti"
     ],
     "status": "pending",
-    "local_file": null
+    "local_file": null,
+    "nickname": "BB64"
   },
   "I83SkOTiydY": {
     "url": "https://www.youtube.com/watch?v=I83SkOTiydY",
@@ -76234,16 +76287,20 @@
     "view_count": 591,
     "like_count": 15,
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@DarkCoffe64"
+      "channel_scrape:https://www.youtube.com/@DarkCoffe64",
+      "YTP fai da te\\37229340_Youtube Poop_ Robo saves the day.html"
     ],
     "thread_titles": [
-      "Youtube Poop: Robo saves the day"
+      "Youtube Poop: Robo saves the day",
+      "Youtube Poop_ Robo saves the day"
     ],
     "status": "pending",
-    "local_file": null
+    "local_file": null,
+    "nickname": "BB64"
   },
   "UnsuL-5PJ1w": {
     "url": "https://www.youtube.com/watch?v=UnsuL-5PJ1w",
@@ -76255,16 +76312,19 @@
     "view_count": 7128,
     "like_count": 110,
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@DarkCoffe64"
+      "channel_scrape:https://www.youtube.com/@DarkCoffe64",
+      "YTP fai da te\\36261374_Youtube Poop Never say NO to Morshu.html"
     ],
     "thread_titles": [
       "Youtube Poop Never say NO to Morshu"
     ],
     "status": "pending",
-    "local_file": null
+    "local_file": null,
+    "nickname": "BB64"
   },
   "9mSL80RULi4": {
     "url": "https://www.youtube.com/watch?v=9mSL80RULi4",
@@ -115011,16 +115071,20 @@
     "view_count": 1836,
     "like_count": 22,
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@geogeobananarap"
+      "channel_scrape:https://www.youtube.com/@geogeobananarap",
+      "YTP fai da te\\37154630_FILLERS.html"
     ],
     "thread_titles": [
-      "BERLUSCONI HA UN IMPORTANTE MESSAGGIO PER IL POPOLO ITALIANO"
+      "BERLUSCONI HA UN IMPORTANTE MESSAGGIO PER IL POPOLO ITALIANO",
+      "FILLERS"
     ],
     "status": "pending",
-    "local_file": null
+    "local_file": null,
+    "nickname": "geogeobananarap"
   },
   "ILOefXcZbp0": {
     "url": "https://www.youtube.com/watch?v=ILOefXcZbp0",
@@ -156216,15 +156280,18 @@
     "view_count": null,
     "like_count": null,
     "tags": [],
-    "nickname": null,
+    "nickname": "Pennaz91",
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@Pennaz91"
+      "channel_scrape:https://www.youtube.com/@Pennaz91",
+      "YTP fai da te\\43990242_Dramatic Link Feels A Thing Inside!.html"
     ],
     "thread_titles": [
-      "Dramatic Link Feels A Thing Inside"
+      "Dramatic Link Feels A Thing Inside",
+      "Dramatic Link Feels A Thing Inside!"
     ],
     "status": "pending",
     "local_file": null,
@@ -156264,15 +156331,18 @@
     "view_count": null,
     "like_count": null,
     "tags": [],
-    "nickname": null,
+    "nickname": "Pennaz91",
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@Pennaz91"
+      "channel_scrape:https://www.youtube.com/@Pennaz91",
+      "YTP fai da te\\40661331_Zelda CD-IO_ Le facce del Male (INTRODUZIONE).html"
     ],
     "thread_titles": [
-      "Italian Zelda CD-I: Le facce del Male (INTRODUZIONE)"
+      "Italian Zelda CD-I: Le facce del Male (INTRODUZIONE)",
+      "Zelda CD-IO_ Le facce del Male (INTRODUZIONE)"
     ],
     "status": "pending",
     "local_file": null,
@@ -228576,15 +228646,18 @@
     "view_count": null,
     "like_count": null,
     "tags": [],
-    "nickname": null,
+    "nickname": "bassman85",
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@bassman85x"
+      "channel_scrape:https://www.youtube.com/@bassman85x",
+      "YTP fai da te\\42843018_Youtube Poop _ Mondo Emo V.html"
     ],
     "thread_titles": [
-      "Youtube Poop : Mondo Emo V"
+      "Youtube Poop : Mondo Emo V",
+      "Youtube Poop _ Mondo Emo V"
     ],
     "status": "pending",
     "local_file": null,
@@ -229752,15 +229825,18 @@
     "view_count": null,
     "like_count": null,
     "tags": [],
-    "nickname": null,
+    "nickname": "Bowser jr",
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@unhoots"
+      "channel_scrape:https://www.youtube.com/@unhoots",
+      "YTP fai da te\\35315461_i miei you tube poop.html"
     ],
     "thread_titles": [
-      "YTP hotel mario"
+      "YTP hotel mario",
+      "i miei you tube poop"
     ],
     "status": "pending",
     "local_file": null,
@@ -229776,15 +229852,18 @@
     "view_count": null,
     "like_count": null,
     "tags": [],
-    "nickname": null,
+    "nickname": "Bowser jr",
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@unhoots"
+      "channel_scrape:https://www.youtube.com/@unhoots",
+      "YTP fai da te\\35315461_i miei you tube poop.html"
     ],
     "thread_titles": [
-      "YTP kirby mama luigi"
+      "YTP kirby mama luigi",
+      "i miei you tube poop"
     ],
     "status": "pending",
     "local_file": null,
@@ -251688,15 +251767,18 @@
     "view_count": null,
     "like_count": null,
     "tags": [],
-    "nickname": null,
+    "nickname": "pivotmaster96",
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@briotera"
+      "channel_scrape:https://www.youtube.com/@briotera",
+      "YTP fai da te\\43856875_Youtube poop_Link falcon pounch DX.html"
     ],
     "thread_titles": [
-      "Youtube poop:Link falcon pounch DX"
+      "Youtube poop:Link falcon pounch DX",
+      "Youtube poop_Link falcon pounch DX"
     ],
     "status": "pending",
     "local_file": null,
@@ -251808,15 +251890,18 @@
     "view_count": null,
     "like_count": null,
     "tags": [],
-    "nickname": null,
+    "nickname": "pivotmaster96",
     "sections": [
-      "Youtube"
+      "Youtube",
+      "YTP fai da te"
     ],
     "source_pages": [
-      "channel_scrape:https://www.youtube.com/@briotera"
+      "channel_scrape:https://www.youtube.com/@briotera",
+      "YTP fai da te\\37884955_link falcon powaunch!.html"
     ],
     "thread_titles": [
-      "youtube poop:link falcon pounch!"
+      "youtube poop:link falcon pounch!",
+      "link falcon powaunch!"
     ],
     "status": "pending",
     "local_file": null,
@@ -263937,6 +264022,7232 @@
     ],
     "thread_titles": [
       "Why Not! Atto 1° [GDC] - Sarà anche razzista, ma è così ~KAWAII DESU NE~"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "F7RLq2OMfwg": {
+    "url": "https://www.youtube.com/watch?v=F7RLq2OMfwg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Mr.N",
+    "sections": [
+      "YTP nostrane"
+    ],
+    "source_pages": [
+      "YTP nostrane\\59828605_Au.html"
+    ],
+    "thread_titles": [
+      "Au"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "brLAImYGJVI": {
+    "url": "https://www.youtube.com/watch?v=brLAImYGJVI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MrSpazzaneve17",
+    "sections": [
+      "YTP nostrane"
+    ],
+    "source_pages": [
+      "YTP nostrane\\59834557_Pizza.html"
+    ],
+    "thread_titles": [
+      "Pizza"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "3T0NAleWNOI": {
+    "url": "https://www.youtube.com/watch?v=3T0NAleWNOI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Lunatic ?",
+    "sections": [
+      "YTP nostrane"
+    ],
+    "source_pages": [
+      "YTP nostrane\\59858292_YTPMV - Am I Waiting on _Vada a bordo, Cazzo!_.html"
+    ],
+    "thread_titles": [
+      "YTPMV - Am I Waiting on _Vada a bordo, Cazzo!_"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "zB458JYPnGg": {
+    "url": "https://www.youtube.com/watch?v=zB458JYPnGg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Lunatic ?",
+    "sections": [
+      "YTP nostrane"
+    ],
+    "source_pages": [
+      "YTP nostrane\\59858292_YTPMV - Am I Waiting on _Vada a bordo, Cazzo!_.html"
+    ],
+    "thread_titles": [
+      "YTPMV - Am I Waiting on _Vada a bordo, Cazzo!_"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "6RKM9OZXbbc": {
+    "url": "https://www.youtube.com/watch?v=6RKM9OZXbbc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Homer Simpson D'oh",
+    "sections": [
+      "YTP nostrane"
+    ],
+    "source_pages": [
+      "YTP nostrane\\59899202_Testoh Levels!.html"
+    ],
+    "thread_titles": [
+      "Testoh Levels!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "RuWXySZc5rU": {
+    "url": "https://www.youtube.com/watch?v=RuWXySZc5rU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Mr.N",
+    "sections": [
+      "YTP nostrane"
+    ],
+    "source_pages": [
+      "YTP nostrane\\60030679_Cameraman 7.html"
+    ],
+    "thread_titles": [
+      "Cameraman 7"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "DPy_5Yz2kY0": {
+    "url": "https://www.youtube.com/watch?v=DPy_5Yz2kY0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "ToopofthePoop",
+    "sections": [
+      "YTP nostrane"
+    ],
+    "source_pages": [
+      "YTP nostrane\\66154752_YTPMV - Tele Tylenol.html"
+    ],
+    "thread_titles": [
+      "YTPMV - Tele Tylenol"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ckIuG7VJWeI": {
+    "url": "https://www.youtube.com/watch?v=ckIuG7VJWeI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "ToopofthePoop",
+    "sections": [
+      "YTP nostrane"
+    ],
+    "source_pages": [
+      "YTP nostrane\\66154828_YTPMV - Positive Testoh.html"
+    ],
+    "thread_titles": [
+      "YTPMV - Positive Testoh"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "EBssaKtHmn4": {
+    "url": "https://www.youtube.com/watch?v=EBssaKtHmn4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "giromirr",
+    "sections": [
+      "YTP nostrane"
+    ],
+    "source_pages": [
+      "YTP nostrane\\66179206_Ytpmv - Tg Hartman.html"
+    ],
+    "thread_titles": [
+      "Ytpmv - Tg Hartman"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "3wLrdCSXeFE": {
+    "url": "https://www.youtube.com/watch?v=3wLrdCSXeFE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\33463249_It's a football.html"
+    ],
+    "thread_titles": [
+      "It's a football"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "J4R0Niy1Vvo": {
+    "url": "https://www.youtube.com/watch?v=J4R0Niy1Vvo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\33490349_Oh brother! microgames.html"
+    ],
+    "thread_titles": [
+      "Oh brother! microgames"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "lbLB6L4PKhc": {
+    "url": "https://www.youtube.com/watch?v=lbLB6L4PKhc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\33536504_Il re vuole partire.html"
+    ],
+    "thread_titles": [
+      "Il re vuole partire"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "2nyQJMjSaec": {
+    "url": "https://www.youtube.com/watch?v=2nyQJMjSaec",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\33689390_Suck Mario's balls.html"
+    ],
+    "thread_titles": [
+      "Suck Mario's balls"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "xjcHcaf1VGY": {
+    "url": "https://www.youtube.com/watch?v=xjcHcaf1VGY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MamaTails films",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\34244148_Poop Jam.html"
+    ],
+    "thread_titles": [
+      "Poop Jam"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "T50-vXm7Zj0": {
+    "url": "https://www.youtube.com/watch?v=T50-vXm7Zj0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\34250353_Yoshi's bedtime story XD.html"
+    ],
+    "thread_titles": [
+      "Yoshi's bedtime story XD"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "WlJni7NpKOM": {
+    "url": "https://www.youtube.com/watch?v=WlJni7NpKOM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\34255153_Cd-i mystery.html"
+    ],
+    "thread_titles": [
+      "Cd-i mystery"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "eYa8HGIGI3M": {
+    "url": "https://www.youtube.com/watch?v=eYa8HGIGI3M",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\34255153_Cd-i mystery.html"
+    ],
+    "thread_titles": [
+      "Cd-i mystery"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "etM8vQh6ANc": {
+    "url": "https://www.youtube.com/watch?v=etM8vQh6ANc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\34526802_I miei youtube poop.html"
+    ],
+    "thread_titles": [
+      "I miei youtube poop"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "30NkkbiikqQ": {
+    "url": "https://www.youtube.com/watch?v=30NkkbiikqQ",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MamaTails films",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\34586870_This.html"
+    ],
+    "thread_titles": [
+      "This"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "cQ6JnDLWt6U": {
+    "url": "https://www.youtube.com/watch?v=cQ6JnDLWt6U",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "geogeobananarap",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\34628865_ANDREOTTI E' ANCORA RITARDATO.html"
+    ],
+    "thread_titles": [
+      "ANDREOTTI E' ANCORA RITARDATO"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "iIL6ntvt1Pg": {
+    "url": "https://www.youtube.com/watch?v=iIL6ntvt1Pg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35034398_Orso orsini alias monaca di Monza pescatrice.html"
+    ],
+    "thread_titles": [
+      "Orso orsini alias monaca di Monza pescatrice"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "CR27kErwqxs": {
+    "url": "https://www.youtube.com/watch?v=CR27kErwqxs",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35072547_YTPS_ That's not mama Luigi to you, that's mama Mario to you Luigi.html"
+    ],
+    "thread_titles": [
+      "YTPS_ That's not mama Luigi to you, that's mama Mario to you Luigi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "vOiH_UQHCQA": {
+    "url": "https://www.youtube.com/watch?v=vOiH_UQHCQA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35156037_Hotel Mosconi.html"
+    ],
+    "thread_titles": [
+      "Hotel Mosconi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Bn7xK5Gef0s": {
+    "url": "https://www.youtube.com/watch?v=Bn7xK5Gef0s",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MamaTails films",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35199345_MamaTails_ Merry Cave Christmas.html"
+    ],
+    "thread_titles": [
+      "MamaTails_ Merry Cave Christmas"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "PkW3hjBKNLI": {
+    "url": "https://www.youtube.com/watch?v=PkW3hjBKNLI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Bowser jr",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35315461_i miei you tube poop.html"
+    ],
+    "thread_titles": [
+      "i miei you tube poop"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "5SOnSJSCv2g": {
+    "url": "https://www.youtube.com/watch?v=5SOnSJSCv2g",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35323304_This video will be flagged by a purple surgeon.html"
+    ],
+    "thread_titles": [
+      "This video will be flagged by a purple surgeon"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Fx8id4XI9RI": {
+    "url": "https://www.youtube.com/watch?v=Fx8id4XI9RI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35324150_YTP ITA - Bimbeminkie Fangherl Sclerano.html"
+    ],
+    "thread_titles": [
+      "YTP ITA - Bimbeminkie Fangherl Sclerano"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "QvpwZoZvd1U": {
+    "url": "https://www.youtube.com/watch?v=QvpwZoZvd1U",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35465191_Luffy Falcon Punches Usopp.html"
+    ],
+    "thread_titles": [
+      "Luffy Falcon Punches Usopp"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "yR0Ks6laUys": {
+    "url": "https://www.youtube.com/watch?v=yR0Ks6laUys",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35468061_YTPITA_ Il chaos control+il dottor eggman=teletrasporto.html"
+    ],
+    "thread_titles": [
+      "YTPITA_ Il chaos control+il dottor eggman=teletrasporto"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "eksfRSLI6g8": {
+    "url": "https://www.youtube.com/watch?v=eksfRSLI6g8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35520126_Altri YTP che ho fatto oggi.html"
+    ],
+    "thread_titles": [
+      "Altri YTP che ho fatto oggi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "qrZ1Agzfeeo": {
+    "url": "https://www.youtube.com/watch?v=qrZ1Agzfeeo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35520126_Altri YTP che ho fatto oggi.html"
+    ],
+    "thread_titles": [
+      "Altri YTP che ho fatto oggi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "AiVt1RyLwPk": {
+    "url": "https://www.youtube.com/watch?v=AiVt1RyLwPk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35520126_Altri YTP che ho fatto oggi.html"
+    ],
+    "thread_titles": [
+      "Altri YTP che ho fatto oggi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "vZ3TRw3XlPg": {
+    "url": "https://www.youtube.com/watch?v=vZ3TRw3XlPg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35584765_YouTube Poop ITA_ Pasquale, l'eroe del Natale, non piace a Babbo Germano.html"
+    ],
+    "thread_titles": [
+      "YouTube Poop ITA_ Pasquale, l'eroe del Natale, non piace a Babbo Germano"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "E0euycJjUd4": {
+    "url": "https://www.youtube.com/watch?v=E0euycJjUd4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MamaTails films",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35591879_YouTube p00p_ You are a Pedophile 1.2.html"
+    ],
+    "thread_titles": [
+      "YouTube p00p_ You are a Pedophile 1.2"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "BLJUTc009VU": {
+    "url": "https://www.youtube.com/watch?v=BLJUTc009VU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35651830_peace_sells.wma.html"
+    ],
+    "thread_titles": [
+      "peace_sells.wma"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "6uflG0rM_ZY": {
+    "url": "https://www.youtube.com/watch?v=6uflG0rM_ZY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35704295_GNEEEEEH.html"
+    ],
+    "thread_titles": [
+      "GNEEEEEH"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Gej1sJUzS-o": {
+    "url": "https://www.youtube.com/watch?v=Gej1sJUzS-o",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35731849_Youtube Poop_ Two girls and a fork.html"
+    ],
+    "thread_titles": [
+      "Youtube Poop_ Two girls and a fork"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "vGpJ66EsU8U": {
+    "url": "https://www.youtube.com/watch?v=vGpJ66EsU8U",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35735140_YTPITA_ Il mondo emo è alla frutta.html"
+    ],
+    "thread_titles": [
+      "YTPITA_ Il mondo emo è alla frutta"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "grdRG52w4gU": {
+    "url": "https://www.youtube.com/watch?v=grdRG52w4gU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35790570_cowboys_from_hell.omg.html"
+    ],
+    "thread_titles": [
+      "cowboys_from_hell.omg"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "xV-sbhOnTqE": {
+    "url": "https://www.youtube.com/watch?v=xV-sbhOnTqE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35833942_Youtube Poop_ KEYBOARD GET ASS RAPED!.html"
+    ],
+    "thread_titles": [
+      "Youtube Poop_ KEYBOARD GET ASS RAPED!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "X3YpTqluuCc": {
+    "url": "https://www.youtube.com/watch?v=X3YpTqluuCc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MamaTails films",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\35891972_THIS VIDEO CONTAINS OVER 9000 VIEWS.html"
+    ],
+    "thread_titles": [
+      "THIS VIDEO CONTAINS OVER 9000 VIEWS"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "IJJJEHAi4lI": {
+    "url": "https://www.youtube.com/watch?v=IJJJEHAi4lI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "-Lucario93-",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36199263_YTPShort-Who's That CD-I.html"
+    ],
+    "thread_titles": [
+      "YTPShort-Who's That CD-I"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "CSHPxgNa1rw": {
+    "url": "https://www.youtube.com/watch?v=CSHPxgNa1rw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Martizl little ninja",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36508269_Il YTP più merda del momento.html"
+    ],
+    "thread_titles": [
+      "Il YTP più merda del momento"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "9KBXcpJfmj4": {
+    "url": "https://www.youtube.com/watch?v=9KBXcpJfmj4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Martizl little ninja",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36508269_Il YTP più merda del momento.html"
+    ],
+    "thread_titles": [
+      "Il YTP più merda del momento"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "I5PMLfikxOM": {
+    "url": "https://www.youtube.com/watch?v=I5PMLfikxOM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36516017_CWADEETH RUNCH SHRILLYAH.html"
+    ],
+    "thread_titles": [
+      "CWADEETH RUNCH SHRILLYAH"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ogkBztuCdJA": {
+    "url": "https://www.youtube.com/watch?v=ogkBztuCdJA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Martizl little ninja",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36569710_Nuovo YTP xD.html"
+    ],
+    "thread_titles": [
+      "Nuovo YTP xD"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "4bRTtilBV1w": {
+    "url": "https://www.youtube.com/watch?v=4bRTtilBV1w",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Martizl little ninja",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36604142_Ytp_ Gwonam save Link.html"
+    ],
+    "thread_titles": [
+      "Ytp_ Gwonam save Link"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "vLGHuawf-NA": {
+    "url": "https://www.youtube.com/watch?v=vLGHuawf-NA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36607922_CONQUER.html"
+    ],
+    "thread_titles": [
+      "CONQUER"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Hy2HjjyGN_0": {
+    "url": "https://www.youtube.com/watch?v=Hy2HjjyGN_0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MamaTails films",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36620949_Dedicato a Pennaz91.html"
+    ],
+    "thread_titles": [
+      "Dedicato a Pennaz91"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "LsQX4cZkOF8": {
+    "url": "https://www.youtube.com/watch?v=LsQX4cZkOF8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "BB64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36749871_Robotbik botnik botnik botnik botnik botnik botnik.html"
+    ],
+    "thread_titles": [
+      "Robotbik botnik botnik botnik botnik botnik botnik"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "dK4Y9pblDiI": {
+    "url": "https://www.youtube.com/watch?v=dK4Y9pblDiI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36905685_YTP_ the king got a TV.html"
+    ],
+    "thread_titles": [
+      "YTP_ the king got a TV"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "A5Pk_SOjvqY": {
+    "url": "https://www.youtube.com/watch?v=A5Pk_SOjvqY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\36931526_Peases.html"
+    ],
+    "thread_titles": [
+      "Peases"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "cSFL0IRj8_s": {
+    "url": "https://www.youtube.com/watch?v=cSFL0IRj8_s",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37035082_Gerry Scotti is a Forced Fad.html"
+    ],
+    "thread_titles": [
+      "Gerry Scotti is a Forced Fad"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "eUcaJXqX6BU": {
+    "url": "https://www.youtube.com/watch?v=eUcaJXqX6BU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37076433_THIS VIDEO IS BETTER THAN YOU.html"
+    ],
+    "thread_titles": [
+      "THIS VIDEO IS BETTER THAN YOU"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ejfrn0ySknI": {
+    "url": "https://www.youtube.com/watch?v=ejfrn0ySknI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37091512_YTP dinner is too much expensive.html"
+    ],
+    "thread_titles": [
+      "YTP dinner is too much expensive"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "eDARj1ta_xE": {
+    "url": "https://www.youtube.com/watch?v=eDARj1ta_xE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "geogeobananarap",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37154630_FILLERS.html"
+    ],
+    "thread_titles": [
+      "FILLERS"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ND2FsKovEvY": {
+    "url": "https://www.youtube.com/watch?v=ND2FsKovEvY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37155510_Jigglypuff is a Forced Fad.html"
+    ],
+    "thread_titles": [
+      "Jigglypuff is a Forced Fad"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ppR0QV8WwmQ": {
+    "url": "https://www.youtube.com/watch?v=ppR0QV8WwmQ",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37240652_Mama Luigi SMW edition.html"
+    ],
+    "thread_titles": [
+      "Mama Luigi SMW edition"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "oWVWW9mNrbw": {
+    "url": "https://www.youtube.com/watch?v=oWVWW9mNrbw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37272511_FAD_ Zeldahcum.html"
+    ],
+    "thread_titles": [
+      "FAD_ Zeldahcum"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "w0u6AK7z2Ww": {
+    "url": "https://www.youtube.com/watch?v=w0u6AK7z2Ww",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37300421_Awesome face is a forced FAD.html"
+    ],
+    "thread_titles": [
+      "Awesome face is a forced FAD"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "QwL3chlBaeQ": {
+    "url": "https://www.youtube.com/watch?v=QwL3chlBaeQ",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37353238_SHRILLETTO VIENE TAGGATO NEI MOMENTI INOPPORTUNI.html"
+    ],
+    "thread_titles": [
+      "SHRILLETTO VIENE TAGGATO NEI MOMENTI INOPPORTUNI"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "rF_CPbx7FUM": {
+    "url": "https://www.youtube.com/watch?v=rF_CPbx7FUM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37365730_ACZebrickWW viene taggato in un momento di noia.html"
+    ],
+    "thread_titles": [
+      "ACZebrickWW viene taggato in un momento di noia"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "_kSR1zDxBGk": {
+    "url": "https://www.youtube.com/watch?v=_kSR1zDxBGk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MamaTails films",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37368041_Sono stato Taggato ma ho sonno e quindi faccio un video con i piedi visto che le.html"
+    ],
+    "thread_titles": [
+      "Sono stato Taggato ma ho sonno e quindi faccio un video con i piedi visto che le"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "nxw_6WWY3oc": {
+    "url": "https://www.youtube.com/watch?v=nxw_6WWY3oc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37495910_No.html"
+    ],
+    "thread_titles": [
+      "No"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "65_go-GZqwE": {
+    "url": "https://www.youtube.com/watch?v=65_go-GZqwE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37560666_the world's a special place.html"
+    ],
+    "thread_titles": [
+      "the world's a special place"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "a-Y-0PeUSYk": {
+    "url": "https://www.youtube.com/watch?v=a-Y-0PeUSYk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "-Lucario93-",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37612413_YTP-You call me Mama_.html"
+    ],
+    "thread_titles": [
+      "YTP-You call me Mama_"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "aVn1BpnLrXs": {
+    "url": "https://www.youtube.com/watch?v=aVn1BpnLrXs",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "BB64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37652935_SEY! SEY!.html"
+    ],
+    "thread_titles": [
+      "SEY! SEY!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "BDjMigwIKaw": {
+    "url": "https://www.youtube.com/watch?v=BDjMigwIKaw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "BB64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37652935_SEY! SEY!.html"
+    ],
+    "thread_titles": [
+      "SEY! SEY!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "XEvpgrA84bg": {
+    "url": "https://www.youtube.com/watch?v=XEvpgrA84bg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MamaTails films",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37657991_Intervallo!.html"
+    ],
+    "thread_titles": [
+      "Intervallo!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "MU9PR96iRjA": {
+    "url": "https://www.youtube.com/watch?v=MU9PR96iRjA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37830615_MR. POTATO.html"
+    ],
+    "thread_titles": [
+      "MR. POTATO"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "VBUw1G2xah4": {
+    "url": "https://www.youtube.com/watch?v=VBUw1G2xah4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\37986044_uh no non un filler ti prego.html"
+    ],
+    "thread_titles": [
+      "uh no non un filler ti prego"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ccJnlirLz_g": {
+    "url": "https://www.youtube.com/watch?v=ccJnlirLz_g",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "BB64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38195009_Punch-out_ Sconfiggere Super Macho man in 2 secondi!!!.html"
+    ],
+    "thread_titles": [
+      "Punch-out_ Sconfiggere Super Macho man in 2 secondi!!!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "imlyVV0yYKo": {
+    "url": "https://www.youtube.com/watch?v=imlyVV0yYKo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "BB64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38264996_Youtube Poop_ Super Poop Out!! Round 01 VS Link.html"
+    ],
+    "thread_titles": [
+      "Youtube Poop_ Super Poop Out!! Round 01 VS Link"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "bNpLXo55yfw": {
+    "url": "https://www.youtube.com/watch?v=bNpLXo55yfw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "BB64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38264996_Youtube Poop_ Super Poop Out!! Round 01 VS Link.html"
+    ],
+    "thread_titles": [
+      "Youtube Poop_ Super Poop Out!! Round 01 VS Link"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "KSI4gLXTaSw": {
+    "url": "https://www.youtube.com/watch?v=KSI4gLXTaSw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Masterson32",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38267287_The King is infected by Plagas.html"
+    ],
+    "thread_titles": [
+      "The King is infected by Plagas"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "7aPdD2WF5J4": {
+    "url": "https://www.youtube.com/watch?v=7aPdD2WF5J4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38282133_Zelda distrugge il mondo!.html",
+      "YTP fai da te\\40431908_Impa fa esplodere il sole.html"
+    ],
+    "thread_titles": [
+      "Zelda distrugge il mondo!",
+      "Impa fa esplodere il sole"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "qTZBsmdahRU": {
+    "url": "https://www.youtube.com/watch?v=qTZBsmdahRU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Dr.Robotnik",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38349192_The Dark Knight - YTP Version.html"
+    ],
+    "thread_titles": [
+      "The Dark Knight - YTP Version"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "eCTpuYFMBfA": {
+    "url": "https://www.youtube.com/watch?v=eCTpuYFMBfA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38368124_Dr Rabbit for Dinner, the last Squadalà.html"
+    ],
+    "thread_titles": [
+      "Dr Rabbit for Dinner, the last Squadalà"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "kMgZBww7a50": {
+    "url": "https://www.youtube.com/watch?v=kMgZBww7a50",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "iovis37",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38427105_A WELL KNOWN INTERNET FAD INVADES THE VIDEOGAME WORLD.html"
+    ],
+    "thread_titles": [
+      "A WELL KNOWN INTERNET FAD INVADES THE VIDEOGAME WORLD"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "NIiSxIh1vcI": {
+    "url": "https://www.youtube.com/watch?v=NIiSxIh1vcI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "iovis37",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38461012_Youtube Merda - Baz ha finito l'aranciata al limone.html"
+    ],
+    "thread_titles": [
+      "Youtube Merda - Baz ha finito l'aranciata al limone"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "keZfsBckJag": {
+    "url": "https://www.youtube.com/watch?v=keZfsBckJag",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MetaAndre11",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38595984_BECCATEVI QUESTO, FIGLIOLI!!!!.html"
+    ],
+    "thread_titles": [
+      "BECCATEVI QUESTO, FIGLIOLI!!!!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "qX4PfQw0aVo": {
+    "url": "https://www.youtube.com/watch?v=qX4PfQw0aVo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "BB64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38625821_QUESTO VIDEO CONTIENE IL MIO PRIMO VIDEO CON IL TITOLO_FAD_ _QUESTO VIDEO CONTIE.html"
+    ],
+    "thread_titles": [
+      "QUESTO VIDEO CONTIENE IL MIO PRIMO VIDEO CON IL TITOLO_FAD_ _QUESTO VIDEO CONTIE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "N_s1josx_0U": {
+    "url": "https://www.youtube.com/watch?v=N_s1josx_0U",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38639001_Morshu Breaks Out In Song With MMMore POWAH!.html"
+    ],
+    "thread_titles": [
+      "Morshu Breaks Out In Song With MMMore POWAH!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "B3Vh6hiB_dU": {
+    "url": "https://www.youtube.com/watch?v=B3Vh6hiB_dU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MamaTails",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38710246_YTP ITA_ Le bimbeminkia adorano SonicDude3 e pensano che sia HOT.html"
+    ],
+    "thread_titles": [
+      "YTP ITA_ Le bimbeminkia adorano SonicDude3 e pensano che sia HOT"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "AcoEWX1OjDE": {
+    "url": "https://www.youtube.com/watch?v=AcoEWX1OjDE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38836544_Sonic Fucking Sez.html"
+    ],
+    "thread_titles": [
+      "Sonic Fucking Sez"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "aGbPP--wZes": {
+    "url": "https://www.youtube.com/watch?v=aGbPP--wZes",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38836594_Dinner is lost.html"
+    ],
+    "thread_titles": [
+      "Dinner is lost"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "7OEfKYWX4sk": {
+    "url": "https://www.youtube.com/watch?v=7OEfKYWX4sk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38862713_Morshu the Fucking Shopkeeper.html"
+    ],
+    "thread_titles": [
+      "Morshu the Fucking Shopkeeper"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "A1GwR362nDA": {
+    "url": "https://www.youtube.com/watch?v=A1GwR362nDA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38895275_Dr rabbit Psichedelic Tour.html"
+    ],
+    "thread_titles": [
+      "Dr rabbit Psichedelic Tour"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "WChj-lZzDGQ": {
+    "url": "https://www.youtube.com/watch?v=WChj-lZzDGQ",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38926522_Tanti auguri, MamaTails!.html"
+    ],
+    "thread_titles": [
+      "Tanti auguri, MamaTails!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ZaE_GdECwdk": {
+    "url": "https://www.youtube.com/watch?v=ZaE_GdECwdk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\38926522_Tanti auguri, MamaTails!.html"
+    ],
+    "thread_titles": [
+      "Tanti auguri, MamaTails!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "eu9UCA6WhVw": {
+    "url": "https://www.youtube.com/watch?v=eu9UCA6WhVw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wind Føx",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39017364_Top 10 Best CommanderGwonam Moments.html"
+    ],
+    "thread_titles": [
+      "Top 10 Best CommanderGwonam Moments"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "PHQWtOAGrA4": {
+    "url": "https://www.youtube.com/watch?v=PHQWtOAGrA4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39044644_You dare not agree with Ganon_!.html"
+    ],
+    "thread_titles": [
+      "You dare not agree with Ganon_!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "_gvzzD2HOo0": {
+    "url": "https://www.youtube.com/watch?v=_gvzzD2HOo0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39044644_You dare not agree with Ganon_!.html"
+    ],
+    "thread_titles": [
+      "You dare not agree with Ganon_!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "0kWp-HskFAM": {
+    "url": "https://www.youtube.com/watch?v=0kWp-HskFAM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39044644_You dare not agree with Ganon_!.html"
+    ],
+    "thread_titles": [
+      "You dare not agree with Ganon_!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "E5doSaQXvXM": {
+    "url": "https://www.youtube.com/watch?v=E5doSaQXvXM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39044644_You dare not agree with Ganon_!.html"
+    ],
+    "thread_titles": [
+      "You dare not agree with Ganon_!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "qIyiyJDAqcw": {
+    "url": "https://www.youtube.com/watch?v=qIyiyJDAqcw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39044644_You dare not agree with Ganon_!.html"
+    ],
+    "thread_titles": [
+      "You dare not agree with Ganon_!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "nhB0v4IraPM": {
+    "url": "https://www.youtube.com/watch?v=nhB0v4IraPM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39044644_You dare not agree with Ganon_!.html"
+    ],
+    "thread_titles": [
+      "You dare not agree with Ganon_!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "kb26SzFdimE": {
+    "url": "https://www.youtube.com/watch?v=kb26SzFdimE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39087681_YTP Morshu got hurt by the king.html"
+    ],
+    "thread_titles": [
+      "YTP Morshu got hurt by the king"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "mDuCENIYBj0": {
+    "url": "https://www.youtube.com/watch?v=mDuCENIYBj0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "iovis37",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39100378_Oh noes I has been tagged!!!11!uno.html"
+    ],
+    "thread_titles": [
+      "Oh noes I has been tagged!!!11!uno"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "3O9qDOalp-k": {
+    "url": "https://www.youtube.com/watch?v=3O9qDOalp-k",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39127571_An anonimous BBBEAUTIFUL chicken have tagged me.html"
+    ],
+    "thread_titles": [
+      "An anonimous BBBEAUTIFUL chicken have tagged me"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "b_o8HGDsfc8": {
+    "url": "https://www.youtube.com/watch?v=b_o8HGDsfc8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39129967_I WILL NEVER BE TAGGED.html"
+    ],
+    "thread_titles": [
+      "I WILL NEVER BE TAGGED"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "dajQS9werDI": {
+    "url": "https://www.youtube.com/watch?v=dajQS9werDI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39130029_Some foolish fool foolishly thought to tag me.html"
+    ],
+    "thread_titles": [
+      "Some foolish fool foolishly thought to tag me"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "JqfboryX0_g": {
+    "url": "https://www.youtube.com/watch?v=JqfboryX0_g",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39219752_Tails get a Fatality.html"
+    ],
+    "thread_titles": [
+      "Tails get a Fatality"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "tQYq3UNw-OI": {
+    "url": "https://www.youtube.com/watch?v=tQYq3UNw-OI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39234503_Messaggio Importante YOUTUBE VERSION.html"
+    ],
+    "thread_titles": [
+      "Messaggio Importante YOUTUBE VERSION"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "P6iT-lMgfAI": {
+    "url": "https://www.youtube.com/watch?v=P6iT-lMgfAI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39234503_Messaggio Importante YOUTUBE VERSION.html"
+    ],
+    "thread_titles": [
+      "Messaggio Importante YOUTUBE VERSION"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ZkskU3a98m0": {
+    "url": "https://www.youtube.com/watch?v=ZkskU3a98m0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39308298_Questa è Spaghetti!.html"
+    ],
+    "thread_titles": [
+      "Questa è Spaghetti!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "jj9jMUBR-dw": {
+    "url": "https://www.youtube.com/watch?v=jj9jMUBR-dw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MamaTails",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39409794_THE LONG WAY OF EPIC FAIL (McCainmotei).html"
+    ],
+    "thread_titles": [
+      "THE LONG WAY OF EPIC FAIL (McCainmotei)"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "e7djmuDeGTw": {
+    "url": "https://www.youtube.com/watch?v=e7djmuDeGTw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39415688_Link has something VERY important to suggest to Sonic.html"
+    ],
+    "thread_titles": [
+      "Link has something VERY important to suggest to Sonic"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "8hqK56eRjhE": {
+    "url": "https://www.youtube.com/watch?v=8hqK56eRjhE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39433628_HOTEL MARIO_ MARIO'S WORDS REPLACED WITH BUBBLE BOBBLE.html"
+    ],
+    "thread_titles": [
+      "HOTEL MARIO_ MARIO'S WORDS REPLACED WITH BUBBLE BOBBLE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "6D6HRiruig4": {
+    "url": "https://www.youtube.com/watch?v=6D6HRiruig4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39458250_Metalalololcalopalosips.html"
+    ],
+    "thread_titles": [
+      "Metalalololcalopalosips"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "KWu96rLk3GA": {
+    "url": "https://www.youtube.com/watch?v=KWu96rLk3GA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39520337_MORSHU KOALA (AKA_ Morshustruck).html"
+    ],
+    "thread_titles": [
+      "MORSHU KOALA (AKA_ Morshustruck)"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Ugecoj4gjak": {
+    "url": "https://www.youtube.com/watch?v=Ugecoj4gjak",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39591847_Faces of evil reviewed by a 1.5 yr old!.html"
+    ],
+    "thread_titles": [
+      "Faces of evil reviewed by a 1.5 yr old!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Pg67STalTc0": {
+    "url": "https://www.youtube.com/watch?v=Pg67STalTc0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39601458_What is Mah Boi_ -DX Version-.html"
+    ],
+    "thread_titles": [
+      "What is Mah Boi_ -DX Version-"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "cdg8jHVFJlg": {
+    "url": "https://www.youtube.com/watch?v=cdg8jHVFJlg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39603325_THIS VIDEO CONTAINS REQUEST FOR A LIGHT.html"
+    ],
+    "thread_titles": [
+      "THIS VIDEO CONTAINS REQUEST FOR A LIGHT"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "xksmwHKs_gU": {
+    "url": "https://www.youtube.com/watch?v=xksmwHKs_gU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39691641_Morshu Wright_ Rupees and Shopkeepers.html"
+    ],
+    "thread_titles": [
+      "Morshu Wright_ Rupees and Shopkeepers"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "TCym7URyVC4": {
+    "url": "https://www.youtube.com/watch?v=TCym7URyVC4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39750568_Documentario sulla morte di un tricheco antropomorfico.html"
+    ],
+    "thread_titles": [
+      "Documentario sulla morte di un tricheco antropomorfico"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "6FgutmofHko": {
+    "url": "https://www.youtube.com/watch?v=6FgutmofHko",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39789428_EYE AM NOT SURE IF THIS VIDEO CONTAINS STAR LIGHT ZONE.html"
+    ],
+    "thread_titles": [
+      "EYE AM NOT SURE IF THIS VIDEO CONTAINS STAR LIGHT ZONE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "NHkIKz_K83s": {
+    "url": "https://www.youtube.com/watch?v=NHkIKz_K83s",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39802365_THE MMMMORSHU COLLECTION.html"
+    ],
+    "thread_titles": [
+      "THE MMMMORSHU COLLECTION"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "uTzoftnOve8": {
+    "url": "https://www.youtube.com/watch?v=uTzoftnOve8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39835606_I.M. Meen diventa una meme esageratamente usata.html"
+    ],
+    "thread_titles": [
+      "I.M. Meen diventa una meme esageratamente usata"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "5MyLn9iXK6A": {
+    "url": "https://www.youtube.com/watch?v=5MyLn9iXK6A",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39841696_(Soccer) MamaTails can defeat QuickMan without Crash Bombs.html"
+    ],
+    "thread_titles": [
+      "(Soccer) MamaTails can defeat QuickMan without Crash Bombs"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "kYBzjHuRLK8": {
+    "url": "https://www.youtube.com/watch?v=kYBzjHuRLK8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39841696_(Soccer) MamaTails can defeat QuickMan without Crash Bombs.html"
+    ],
+    "thread_titles": [
+      "(Soccer) MamaTails can defeat QuickMan without Crash Bombs"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "xnvqsSLneeE": {
+    "url": "https://www.youtube.com/watch?v=xnvqsSLneeE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39939442_VIDEO NON ADATTO AI BAMBINI.html"
+    ],
+    "thread_titles": [
+      "VIDEO NON ADATTO AI BAMBINI"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "sHYxiTg0h_Q": {
+    "url": "https://www.youtube.com/watch?v=sHYxiTg0h_Q",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\39939442_VIDEO NON ADATTO AI BAMBINI.html"
+    ],
+    "thread_titles": [
+      "VIDEO NON ADATTO AI BAMBINI"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "OmRBCHZn-CA": {
+    "url": "https://www.youtube.com/watch?v=OmRBCHZn-CA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40027889_reen ay.html"
+    ],
+    "thread_titles": [
+      "reen ay"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "xw1Ja-zG7Fo": {
+    "url": "https://www.youtube.com/watch?v=xw1Ja-zG7Fo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40117727_that's why Luigi is gay.html"
+    ],
+    "thread_titles": [
+      "that's why Luigi is gay"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Y0phaFn9Nmg": {
+    "url": "https://www.youtube.com/watch?v=Y0phaFn9Nmg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40126564_AIDS AND SPAGHETTI ARE NOW TOGHETER.html"
+    ],
+    "thread_titles": [
+      "AIDS AND SPAGHETTI ARE NOW TOGHETER"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "-OMYRhFQ7nc": {
+    "url": "https://www.youtube.com/watch?v=-OMYRhFQ7nc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40126564_AIDS AND SPAGHETTI ARE NOW TOGHETER.html"
+    ],
+    "thread_titles": [
+      "AIDS AND SPAGHETTI ARE NOW TOGHETER"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "gEczE93iN9k": {
+    "url": "https://www.youtube.com/watch?v=gEczE93iN9k",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40136154_Zebrick has discovered why the birds are singing.html"
+    ],
+    "thread_titles": [
+      "Zebrick has discovered why the birds are singing"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "-HwOtpSUDIw": {
+    "url": "https://www.youtube.com/watch?v=-HwOtpSUDIw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40146319_La reazione di Milesaaway alla vista del video di Milesaaway.html"
+    ],
+    "thread_titles": [
+      "La reazione di Milesaaway alla vista del video di Milesaaway"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "MxOY8JOPAIc": {
+    "url": "https://www.youtube.com/watch?v=MxOY8JOPAIc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "-Lucario93-",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40176871_Yesterday I found a penny and this is the result.html"
+    ],
+    "thread_titles": [
+      "Yesterday I found a penny and this is the result"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "QGFHAMrSFMM": {
+    "url": "https://www.youtube.com/watch?v=QGFHAMrSFMM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40179432_FOTTIMI.html"
+    ],
+    "thread_titles": [
+      "FOTTIMI"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "PYujGKuFtDY": {
+    "url": "https://www.youtube.com/watch?v=PYujGKuFtDY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40307820_WHO YA GONNA CALL_.html"
+    ],
+    "thread_titles": [
+      "WHO YA GONNA CALL_"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "q4fv1SEQMho": {
+    "url": "https://www.youtube.com/watch?v=q4fv1SEQMho",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40315547_50 subscribers!.html"
+    ],
+    "thread_titles": [
+      "50 subscribers!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "9h4uVLQ6w6Y": {
+    "url": "https://www.youtube.com/watch?v=9h4uVLQ6w6Y",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40333185_YOUTUBE STARTED TO CRY WHEN IT REALIZED THAT I UPLOADED THIS VIDEO.html"
+    ],
+    "thread_titles": [
+      "YOUTUBE STARTED TO CRY WHEN IT REALIZED THAT I UPLOADED THIS VIDEO"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "wMYzNSSPh8M": {
+    "url": "https://www.youtube.com/watch?v=wMYzNSSPh8M",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40338357_Yoshi has perverted thoughts + Yoshi offends Luigi.html"
+    ],
+    "thread_titles": [
+      "Yoshi has perverted thoughts + Yoshi offends Luigi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "p80bsZJR9Z8": {
+    "url": "https://www.youtube.com/watch?v=p80bsZJR9Z8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40338357_Yoshi has perverted thoughts + Yoshi offends Luigi.html"
+    ],
+    "thread_titles": [
+      "Yoshi has perverted thoughts + Yoshi offends Luigi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "q-UOIBTNB8w": {
+    "url": "https://www.youtube.com/watch?v=q-UOIBTNB8w",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Shadow the Bowser",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40374805_Tagged... again .-.html"
+    ],
+    "thread_titles": [
+      "Tagged... again .-"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "r775YP2BFNs": {
+    "url": "https://www.youtube.com/watch?v=r775YP2BFNs",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "bassman85",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40389833_Epic Fail su due ruote.html"
+    ],
+    "thread_titles": [
+      "Epic Fail su due ruote"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "H7BPuYQUGxY": {
+    "url": "https://www.youtube.com/watch?v=H7BPuYQUGxY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40395309_(Soccer) Pennaz91 crashes his Landmaster.html"
+    ],
+    "thread_titles": [
+      "(Soccer) Pennaz91 crashes his Landmaster"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "TqXrQXD9YD4": {
+    "url": "https://www.youtube.com/watch?v=TqXrQXD9YD4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40408065_I hart Morshu.html"
+    ],
+    "thread_titles": [
+      "I hart Morshu"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ZIaLByb6pvE": {
+    "url": "https://www.youtube.com/watch?v=ZIaLByb6pvE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40431908_Impa fa esplodere il sole.html"
+    ],
+    "thread_titles": [
+      "Impa fa esplodere il sole"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "hl0w76W9HzU": {
+    "url": "https://www.youtube.com/watch?v=hl0w76W9HzU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40507784_neggou.html"
+    ],
+    "thread_titles": [
+      "neggou"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "MTmn6RagICU": {
+    "url": "https://www.youtube.com/watch?v=MTmn6RagICU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Gwonam the Wizard",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40549042_How about me!.html"
+    ],
+    "thread_titles": [
+      "How about me!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "KkIcb7imXDM": {
+    "url": "https://www.youtube.com/watch?v=KkIcb7imXDM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40587801_50 Subscribers (+YTPMV Bonus).html"
+    ],
+    "thread_titles": [
+      "50 Subscribers (+YTPMV Bonus)"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "NsQJc1_dg14": {
+    "url": "https://www.youtube.com/watch?v=NsQJc1_dg14",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Gwonam the Wizard",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40591204_What is MBD.html"
+    ],
+    "thread_titles": [
+      "What is MBD"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "tf1imdlWFFE": {
+    "url": "https://www.youtube.com/watch?v=tf1imdlWFFE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Gwonam the Wizard",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40591204_What is MBD.html"
+    ],
+    "thread_titles": [
+      "What is MBD"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "eJl4-1bRSh8": {
+    "url": "https://www.youtube.com/watch?v=eJl4-1bRSh8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MetaAndre11",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40613808_WE'VE GOT TO HAVE.html"
+    ],
+    "thread_titles": [
+      "WE'VE GOT TO HAVE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "QB1DrOm7aj0": {
+    "url": "https://www.youtube.com/watch?v=QB1DrOm7aj0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40622123_Seriously, who remember about him_.html"
+    ],
+    "thread_titles": [
+      "Seriously, who remember about him_"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "BrTjTbNhAZc": {
+    "url": "https://www.youtube.com/watch?v=BrTjTbNhAZc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Gwonam the Wizard",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40635430_SHABBA DOOmsday Zone.html"
+    ],
+    "thread_titles": [
+      "SHABBA DOOmsday Zone"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "TmlHiV_r9iI": {
+    "url": "https://www.youtube.com/watch?v=TmlHiV_r9iI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Gwonam the Wizard",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40658034_Remember me_.html"
+    ],
+    "thread_titles": [
+      "Remember me_"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Csx_0sc9hps": {
+    "url": "https://www.youtube.com/watch?v=Csx_0sc9hps",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Gwonam the Wizard",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40658034_Remember me_.html"
+    ],
+    "thread_titles": [
+      "Remember me_"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Q0pWtodDTEc": {
+    "url": "https://www.youtube.com/watch?v=Q0pWtodDTEc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40665812_NUOVO CANALE.html"
+    ],
+    "thread_titles": [
+      "NUOVO CANALE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "25Tuh9KCy3Q": {
+    "url": "https://www.youtube.com/watch?v=25Tuh9KCy3Q",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40669498_Link's Face is evil.html"
+    ],
+    "thread_titles": [
+      "Link's Face is evil"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "1q3yO6eX33U": {
+    "url": "https://www.youtube.com/watch?v=1q3yO6eX33U",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40677903_Link scopre la super-potenza dell'ALTA QUALITA'.html"
+    ],
+    "thread_titles": [
+      "Link scopre la super-potenza dell'ALTA QUALITA'"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "UPQUX63iIZ4": {
+    "url": "https://www.youtube.com/watch?v=UPQUX63iIZ4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40724521_The King's PILLS.html"
+    ],
+    "thread_titles": [
+      "The King's PILLS"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "N9_GyQuUhAM": {
+    "url": "https://www.youtube.com/watch?v=N9_GyQuUhAM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40739576_Another megaman lyrics poop.html"
+    ],
+    "thread_titles": [
+      "Another megaman lyrics poop"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "lsPzBbl6B18": {
+    "url": "https://www.youtube.com/watch?v=lsPzBbl6B18",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40748734_Metallica vs. Cackletta.html"
+    ],
+    "thread_titles": [
+      "Metallica vs. Cackletta"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "s4gIzwFUbKY": {
+    "url": "https://www.youtube.com/watch?v=s4gIzwFUbKY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40757901_Cackletta's rhythm.html"
+    ],
+    "thread_titles": [
+      "Cackletta's rhythm"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "GBoYa23Alds": {
+    "url": "https://www.youtube.com/watch?v=GBoYa23Alds",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40877825_I nuovi canali di Youtube fanno vomitare.html"
+    ],
+    "thread_titles": [
+      "I nuovi canali di Youtube fanno vomitare"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "YrrK7GcrIqs": {
+    "url": "https://www.youtube.com/watch?v=YrrK7GcrIqs",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "[IF]Matteus96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\40944590_Primo poop.html"
+    ],
+    "thread_titles": [
+      "Primo poop"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "8chZnuns9Qc": {
+    "url": "https://www.youtube.com/watch?v=8chZnuns9Qc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "carmine dei gemelli",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41001356_My New Poop.html"
+    ],
+    "thread_titles": [
+      "My New Poop"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ZKhYZLxYgRs": {
+    "url": "https://www.youtube.com/watch?v=ZKhYZLxYgRs",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41037317_YTP_ Mama Luigi is on vacation so Dickson blend him.html"
+    ],
+    "thread_titles": [
+      "YTP_ Mama Luigi is on vacation so Dickson blend him"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "8dQo8NW9WGM": {
+    "url": "https://www.youtube.com/watch?v=8dQo8NW9WGM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Man-Erg",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41049103_100.html"
+    ],
+    "thread_titles": [
+      "100"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "jtmz5cCvL18": {
+    "url": "https://www.youtube.com/watch?v=jtmz5cCvL18",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41060030_Moltovmarioworld invades death egg zone.html"
+    ],
+    "thread_titles": [
+      "Moltovmarioworld invades death egg zone"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "q3nSRxMPO_M": {
+    "url": "https://www.youtube.com/watch?v=q3nSRxMPO_M",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41077971_(soccer) hotel mario is weaker against fire storm.html"
+    ],
+    "thread_titles": [
+      "(soccer) hotel mario is weaker against fire storm"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "roCE-6h6Kc4": {
+    "url": "https://www.youtube.com/watch?v=roCE-6h6Kc4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41145790_i conigli invadono il nostro forum!!!.html"
+    ],
+    "thread_titles": [
+      "i conigli invadono il nostro forum!!!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "XcxKIJTb3Hg": {
+    "url": "https://www.youtube.com/watch?v=XcxKIJTb3Hg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41145790_i conigli invadono il nostro forum!!!.html"
+    ],
+    "thread_titles": [
+      "i conigli invadono il nostro forum!!!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "5-u2rGhRIzY": {
+    "url": "https://www.youtube.com/watch?v=5-u2rGhRIzY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41161527_I rispuffi.html"
+    ],
+    "thread_titles": [
+      "I rispuffi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "iwQaHb7hkmY": {
+    "url": "https://www.youtube.com/watch?v=iwQaHb7hkmY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "bassman85",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41184898_100 subs!.html"
+    ],
+    "thread_titles": [
+      "100 subs!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "GCxEx_E-4Wk": {
+    "url": "https://www.youtube.com/watch?v=GCxEx_E-4Wk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41202829_Meet DR. ROBOTNIK.html"
+    ],
+    "thread_titles": [
+      "Meet DR. ROBOTNIK"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "uOch1a-LAF0": {
+    "url": "https://www.youtube.com/watch?v=uOch1a-LAF0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41202829_Meet DR. ROBOTNIK.html"
+    ],
+    "thread_titles": [
+      "Meet DR. ROBOTNIK"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "yvOZAPI89xY": {
+    "url": "https://www.youtube.com/watch?v=yvOZAPI89xY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41204186_YTP Intro_ WTF Bomb Style.html"
+    ],
+    "thread_titles": [
+      "YTP Intro_ WTF Bomb Style"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ic6gw3_qk7U": {
+    "url": "https://www.youtube.com/watch?v=ic6gw3_qk7U",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41207493_Oh my, the triforce seen.html"
+    ],
+    "thread_titles": [
+      "Oh my, the triforce seen"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "9eapRzkATrk": {
+    "url": "https://www.youtube.com/watch?v=9eapRzkATrk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41210497_Per fare il legno ci vuole il borotalco.html"
+    ],
+    "thread_titles": [
+      "Per fare il legno ci vuole il borotalco"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "iE7ssjoWnrM": {
+    "url": "https://www.youtube.com/watch?v=iE7ssjoWnrM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41223844_Bonk Nukem 3D.html"
+    ],
+    "thread_titles": [
+      "Bonk Nukem 3D"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ReQQgvZizoA": {
+    "url": "https://www.youtube.com/watch?v=ReQQgvZizoA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "gianluca9333",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41224083_SIMULATORE DI VOCE STILE.html"
+    ],
+    "thread_titles": [
+      "SIMULATORE DI VOCE STILE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "vxedkoZEAcc": {
+    "url": "https://www.youtube.com/watch?v=vxedkoZEAcc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "gianluca9333",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41224083_SIMULATORE DI VOCE STILE.html"
+    ],
+    "thread_titles": [
+      "SIMULATORE DI VOCE STILE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "X9n3lu6kaZY": {
+    "url": "https://www.youtube.com/watch?v=X9n3lu6kaZY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "gianluca9333",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41224083_SIMULATORE DI VOCE STILE.html"
+    ],
+    "thread_titles": [
+      "SIMULATORE DI VOCE STILE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "R_d64rsPtjc": {
+    "url": "https://www.youtube.com/watch?v=R_d64rsPtjc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "gianluca9333",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41224145_youtube poop_ farenz vs borraccia.html"
+    ],
+    "thread_titles": [
+      "youtube poop_ farenz vs borraccia"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "WBBAgE54qfo": {
+    "url": "https://www.youtube.com/watch?v=WBBAgE54qfo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "gianluca9333",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41224242_spongebob scatman è grandioso guardateli.html"
+    ],
+    "thread_titles": [
+      "spongebob scatman è grandioso guardateli"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "6WM8m6VGpC8": {
+    "url": "https://www.youtube.com/watch?v=6WM8m6VGpC8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "gianluca9333",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41224242_spongebob scatman è grandioso guardateli.html"
+    ],
+    "thread_titles": [
+      "spongebob scatman è grandioso guardateli"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "dX2b59DwbaA": {
+    "url": "https://www.youtube.com/watch?v=dX2b59DwbaA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41227873_YTPITA - Luca Giurato Madness.html"
+    ],
+    "thread_titles": [
+      "YTPITA - Luca Giurato Madness"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "KxZZBf0gqMc": {
+    "url": "https://www.youtube.com/watch?v=KxZZBf0gqMc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "StupidoArchivioNomi",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41228300_Mama Luigi tells a story.html"
+    ],
+    "thread_titles": [
+      "Mama Luigi tells a story"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "UYzHpsAwExM": {
+    "url": "https://www.youtube.com/watch?v=UYzHpsAwExM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41243110_I bimbi fiat vogliono dominare il mondo!!!.html"
+    ],
+    "thread_titles": [
+      "I bimbi fiat vogliono dominare il mondo!!!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "DpvHMK3Yf3k": {
+    "url": "https://www.youtube.com/watch?v=DpvHMK3Yf3k",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41246908_BomberBonk.html"
+    ],
+    "thread_titles": [
+      "BomberBonk"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Z2jZGG-jZco": {
+    "url": "https://www.youtube.com/watch?v=Z2jZGG-jZco",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41268636_MegaBonk V.html"
+    ],
+    "thread_titles": [
+      "MegaBonk V"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "dOr7gqBWEwM": {
+    "url": "https://www.youtube.com/watch?v=dOr7gqBWEwM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41298298_100.html"
+    ],
+    "thread_titles": [
+      "100"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "RK6pMqXMLBQ": {
+    "url": "https://www.youtube.com/watch?v=RK6pMqXMLBQ",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41330632_Morshu in the REAL LIFE.html"
+    ],
+    "thread_titles": [
+      "Morshu in the REAL LIFE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ywz8h5L0G8w": {
+    "url": "https://www.youtube.com/watch?v=ywz8h5L0G8w",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41330788_THE EARS ARE BLEEDING!!!!.html"
+    ],
+    "thread_titles": [
+      "THE EARS ARE BLEEDING!!!!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "wNX-QhcDLnE": {
+    "url": "https://www.youtube.com/watch?v=wNX-QhcDLnE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41330930_Grissini rio mare!.html"
+    ],
+    "thread_titles": [
+      "Grissini rio mare!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "rx3CgvaoJz0": {
+    "url": "https://www.youtube.com/watch?v=rx3CgvaoJz0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41361564_Pennaz created another dimension with artoonix.html"
+    ],
+    "thread_titles": [
+      "Pennaz created another dimension with artoonix"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "vjtEC0FPWGA": {
+    "url": "https://www.youtube.com/watch?v=vjtEC0FPWGA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41459318_Billy mays got plant barrier.html"
+    ],
+    "thread_titles": [
+      "Billy mays got plant barrier"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "7oC6D78MKW8": {
+    "url": "https://www.youtube.com/watch?v=7oC6D78MKW8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Nastykill",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41479654_Intro YOUTUBE POOP.html"
+    ],
+    "thread_titles": [
+      "Intro YOUTUBE POOP"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "SC-zamSAxPs": {
+    "url": "https://www.youtube.com/watch?v=SC-zamSAxPs",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41513943_iMovie 2009 Sucks for YTPs.html"
+    ],
+    "thread_titles": [
+      "iMovie 2009 Sucks for YTPs"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "d3ZYF-Zmo2E": {
+    "url": "https://www.youtube.com/watch?v=d3ZYF-Zmo2E",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "CNetwork",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41577890_The Lazer Collection 3.html"
+    ],
+    "thread_titles": [
+      "The Lazer Collection 3"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "rGT9_VRdChE": {
+    "url": "https://www.youtube.com/watch?v=rGT9_VRdChE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41584128_YTP-I bambini non fanno break con un grissino parlante.html"
+    ],
+    "thread_titles": [
+      "YTP-I bambini non fanno break con un grissino parlante"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "P-Oyvu8qtSA": {
+    "url": "https://www.youtube.com/watch?v=P-Oyvu8qtSA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41608139_YouTube Poop-Tutto cade su di noi.html"
+    ],
+    "thread_titles": [
+      "YouTube Poop-Tutto cade su di noi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "yWWKj2zvHSo": {
+    "url": "https://www.youtube.com/watch?v=yWWKj2zvHSo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wario_The King",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41671252_Dramatic Buscofen.html"
+    ],
+    "thread_titles": [
+      "Dramatic Buscofen"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "J7x6AlagvlA": {
+    "url": "https://www.youtube.com/watch?v=J7x6AlagvlA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wario_The King",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41671252_Dramatic Buscofen.html"
+    ],
+    "thread_titles": [
+      "Dramatic Buscofen"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "rN6RX-IQ1KY": {
+    "url": "https://www.youtube.com/watch?v=rN6RX-IQ1KY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41672249_YTP-Mario...ma anche no!.html"
+    ],
+    "thread_titles": [
+      "YTP-Mario...ma anche no!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Auo462lLnhM": {
+    "url": "https://www.youtube.com/watch?v=Auo462lLnhM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41680964_Mama Giygas.html"
+    ],
+    "thread_titles": [
+      "Mama Giygas"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "lKfMtGFIiHI": {
+    "url": "https://www.youtube.com/watch?v=lKfMtGFIiHI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Duke_Nume",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41714917_Il mio primo YTPMV_ Zero fuck _ Nerdols.html"
+    ],
+    "thread_titles": [
+      "Il mio primo YTPMV_ Zero fuck _ Nerdols"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "wHg11PzNrbk": {
+    "url": "https://www.youtube.com/watch?v=wHg11PzNrbk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41734454_The King plays at Combat Arms Quarantine Mode.html"
+    ],
+    "thread_titles": [
+      "The King plays at Combat Arms Quarantine Mode"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "OxjvvIF_HVA": {
+    "url": "https://www.youtube.com/watch?v=OxjvvIF_HVA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41770647_YTP-Irene Grandi Bruciaaa.html"
+    ],
+    "thread_titles": [
+      "YTP-Irene Grandi Bruciaaa"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "igaAAkVm17Y": {
+    "url": "https://www.youtube.com/watch?v=igaAAkVm17Y",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41772090_YTMerda_ Orlando Portento si fissa con i cammelli e le trivelle.html"
+    ],
+    "thread_titles": [
+      "YTMerda_ Orlando Portento si fissa con i cammelli e le trivelle"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "IEGAJzcXUL0": {
+    "url": "https://www.youtube.com/watch?v=IEGAJzcXUL0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41773572_Masked dedede joins the brawl.html"
+    ],
+    "thread_titles": [
+      "Masked dedede joins the brawl"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "F_OMJfZJ_QA": {
+    "url": "https://www.youtube.com/watch?v=F_OMJfZJ_QA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41773954_Bring mha boy BACK HOME!.html"
+    ],
+    "thread_titles": [
+      "Bring mha boy BACK HOME!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "K6LDKS1vkJc": {
+    "url": "https://www.youtube.com/watch?v=K6LDKS1vkJc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "·†°•.Mello-Kun.•°†·",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41826701_Un mio video.html"
+    ],
+    "thread_titles": [
+      "Un mio video"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "3N9w_ReYDgk": {
+    "url": "https://www.youtube.com/watch?v=3N9w_ReYDgk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41843864_IT TOOK SPONGEBOB 3 MINUTES TO MASTER THIS.html"
+    ],
+    "thread_titles": [
+      "IT TOOK SPONGEBOB 3 MINUTES TO MASTER THIS"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "bGZBqFH5igg": {
+    "url": "https://www.youtube.com/watch?v=bGZBqFH5igg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41864404_I.M. MEEN vi provocherà gravi danni celebrali.html"
+    ],
+    "thread_titles": [
+      "I.M. MEEN vi provocherà gravi danni celebrali"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "nKQxpDg9mag": {
+    "url": "https://www.youtube.com/watch?v=nKQxpDg9mag",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41864404_I.M. MEEN vi provocherà gravi danni celebrali.html"
+    ],
+    "thread_titles": [
+      "I.M. MEEN vi provocherà gravi danni celebrali"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "tEKvj5EPIxs": {
+    "url": "https://www.youtube.com/watch?v=tEKvj5EPIxs",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Scout",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41905190_Il mio primo YT Poop.html"
+    ],
+    "thread_titles": [
+      "Il mio primo YT Poop"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ICkmF1P6pDQ": {
+    "url": "https://www.youtube.com/watch?v=ICkmF1P6pDQ",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Felix96",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41914536_YTP - I'm a Force of Dragon.html"
+    ],
+    "thread_titles": [
+      "YTP - I'm a Force of Dragon"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "DxUODQdhHzw": {
+    "url": "https://www.youtube.com/watch?v=DxUODQdhHzw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wario_The King",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41944469_My first YTPMV_ Wild Regibombs appeared!.html"
+    ],
+    "thread_titles": [
+      "My first YTPMV_ Wild Regibombs appeared!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Pn9UnhqNspo": {
+    "url": "https://www.youtube.com/watch?v=Pn9UnhqNspo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41959921_Rhythm heaven story_ last remix.html"
+    ],
+    "thread_titles": [
+      "Rhythm heaven story_ last remix"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "9fxzNkfKsOU": {
+    "url": "https://www.youtube.com/watch?v=9fxzNkfKsOU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Gwonam the Wizard",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41961215_Daedreamer87 has a fetish for Link.html"
+    ],
+    "thread_titles": [
+      "Daedreamer87 has a fetish for Link"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "nv4Nyg1PuDU": {
+    "url": "https://www.youtube.com/watch?v=nv4Nyg1PuDU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Gwonam the Wizard",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41961215_Daedreamer87 has a fetish for Link.html"
+    ],
+    "thread_titles": [
+      "Daedreamer87 has a fetish for Link"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "bLtA8R_Mb9Y": {
+    "url": "https://www.youtube.com/watch?v=bLtA8R_Mb9Y",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Gwonam the Wizard",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41961215_Daedreamer87 has a fetish for Link.html"
+    ],
+    "thread_titles": [
+      "Daedreamer87 has a fetish for Link"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "sDvYcGoUqnU": {
+    "url": "https://www.youtube.com/watch?v=sDvYcGoUqnU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41983237_Kaptain K Room.html"
+    ],
+    "thread_titles": [
+      "Kaptain K Room"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "IWDYVofAMCc": {
+    "url": "https://www.youtube.com/watch?v=IWDYVofAMCc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "·†°•.Mello-Kun.•°†·",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41988081_YTPMV_Morshu MMMs Tetrtris Theme A.html"
+    ],
+    "thread_titles": [
+      "YTPMV_Morshu MMMs Tetrtris Theme A"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "x1TPcJIl2a8": {
+    "url": "https://www.youtube.com/watch?v=x1TPcJIl2a8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Wario_The King",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\41995990_YTPMV_ Revenge of MMMeta Knight.html"
+    ],
+    "thread_titles": [
+      "YTPMV_ Revenge of MMMeta Knight"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "GcDC6T-6CPQ": {
+    "url": "https://www.youtube.com/watch?v=GcDC6T-6CPQ",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "·†°•.Mello-Kun.•°†·",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42002315_YTPMV_U.N. Owen was MMM.html"
+    ],
+    "thread_titles": [
+      "YTPMV_U.N. Owen was MMM"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "OVnosEYrB-o": {
+    "url": "https://www.youtube.com/watch?v=OVnosEYrB-o",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "·†°•.Mello-Kun.•°†·",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42002360_YTPMV_Pingas Kombat.html"
+    ],
+    "thread_titles": [
+      "YTPMV_Pingas Kombat"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "osLJZrgncSU": {
+    "url": "https://www.youtube.com/watch?v=osLJZrgncSU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42108228_Too Many NOU!.html"
+    ],
+    "thread_titles": [
+      "Too Many NOU!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "WvEqbkC5w3I": {
+    "url": "https://www.youtube.com/watch?v=WvEqbkC5w3I",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42108632_YTPMV_ Objection Maze.html"
+    ],
+    "thread_titles": [
+      "YTPMV_ Objection Maze"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "MwOxRA9uhJk": {
+    "url": "https://www.youtube.com/watch?v=MwOxRA9uhJk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42108698_A whistle's oppression.html"
+    ],
+    "thread_titles": [
+      "A whistle's oppression"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "YG_rOHr6Nwo": {
+    "url": "https://www.youtube.com/watch?v=YG_rOHr6Nwo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Batandy",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42121238_YTP_ Faces of Evil Trading Card Game.html"
+    ],
+    "thread_titles": [
+      "YTP_ Faces of Evil Trading Card Game"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "yzaN3z8UOEk": {
+    "url": "https://www.youtube.com/watch?v=yzaN3z8UOEk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42127803_Snake favors the megaman series DX.html"
+    ],
+    "thread_titles": [
+      "Snake favors the megaman series DX"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "GolxdEvKk2Q": {
+    "url": "https://www.youtube.com/watch?v=GolxdEvKk2Q",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Batandy",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42142341_YTPMV _ Morshu sings the SMB3 Bowser Battle theme.html"
+    ],
+    "thread_titles": [
+      "YTPMV _ Morshu sings the SMB3 Bowser Battle theme"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "qZfc_FrcIrA": {
+    "url": "https://www.youtube.com/watch?v=qZfc_FrcIrA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Batandy",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42149620_Morshu sings the Onet Theme.html"
+    ],
+    "thread_titles": [
+      "Morshu sings the Onet Theme"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "eNl6YFx6EmM": {
+    "url": "https://www.youtube.com/watch?v=eNl6YFx6EmM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42189013_know your sources.html"
+    ],
+    "thread_titles": [
+      "know your sources"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "D0vdVdDK5jE": {
+    "url": "https://www.youtube.com/watch?v=D0vdVdDK5jE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Scout",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42197636_Fonzies.html"
+    ],
+    "thread_titles": [
+      "Fonzies"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "rU3bfqqtZY4": {
+    "url": "https://www.youtube.com/watch?v=rU3bfqqtZY4",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Batandy",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42221213_[SERIE]Looney Morshu.html"
+    ],
+    "thread_titles": [
+      "[SERIE]Looney Morshu"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "8AEtjQpvL_E": {
+    "url": "https://www.youtube.com/watch?v=8AEtjQpvL_E",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Batandy",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42221213_[SERIE]Looney Morshu.html"
+    ],
+    "thread_titles": [
+      "[SERIE]Looney Morshu"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "eh5JYDse-Aw": {
+    "url": "https://www.youtube.com/watch?v=eh5JYDse-Aw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "-Lucario93-",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42250509_Jenny is a Fucking Pikachu.html"
+    ],
+    "thread_titles": [
+      "Jenny is a Fucking Pikachu"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "DItrmETXSFc": {
+    "url": "https://www.youtube.com/watch?v=DItrmETXSFc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42265488_YTPMV-Remind me to YMCA.html"
+    ],
+    "thread_titles": [
+      "YTPMV-Remind me to YMCA"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "7e4GFC3RIH0": {
+    "url": "https://www.youtube.com/watch?v=7e4GFC3RIH0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42287770_150.html"
+    ],
+    "thread_titles": [
+      "150"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "wv3wHpVrv0c": {
+    "url": "https://www.youtube.com/watch?v=wv3wHpVrv0c",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "gianluca9333",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42397999_youtube merda _ una settimana da Dio.html"
+    ],
+    "thread_titles": [
+      "youtube merda _ una settimana da Dio"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "6nw3-nZae5Y": {
+    "url": "https://www.youtube.com/watch?v=6nw3-nZae5Y",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "gianluca9333",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42397999_youtube merda _ una settimana da Dio.html"
+    ],
+    "thread_titles": [
+      "youtube merda _ una settimana da Dio"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "UjRjHooPcjs": {
+    "url": "https://www.youtube.com/watch?v=UjRjHooPcjs",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Duke_Nume",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42402390_Heavy's New Cannon.html"
+    ],
+    "thread_titles": [
+      "Heavy's New Cannon"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ducznh1QlZo": {
+    "url": "https://www.youtube.com/watch?v=ducznh1QlZo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Duke_Nume",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42405707_When scout's have free time.html"
+    ],
+    "thread_titles": [
+      "When scout's have free time"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "bl-z8sBEvRA": {
+    "url": "https://www.youtube.com/watch?v=bl-z8sBEvRA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42415462_Phoenix Wright - Wand of Gamelon.html"
+    ],
+    "thread_titles": [
+      "Phoenix Wright - Wand of Gamelon"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "ziN0K1h7jiA": {
+    "url": "https://www.youtube.com/watch?v=ziN0K1h7jiA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Batandy",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42551868_Youtube Poop _ CD-I Random momens.html"
+    ],
+    "thread_titles": [
+      "Youtube Poop _ CD-I Random momens"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "HiqYHwIF578": {
+    "url": "https://www.youtube.com/watch?v=HiqYHwIF578",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42563847_ONE YEAR.html"
+    ],
+    "thread_titles": [
+      "ONE YEAR"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "LAvO-yeWXHY": {
+    "url": "https://www.youtube.com/watch?v=LAvO-yeWXHY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "The Scout",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42616679_flowerS.html"
+    ],
+    "thread_titles": [
+      "flowerS"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "RSPFSaUsXMk": {
+    "url": "https://www.youtube.com/watch?v=RSPFSaUsXMk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42618181_I.M.meen kills sonic.html"
+    ],
+    "thread_titles": [
+      "I.M.meen kills sonic"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "O1r1YRUPQpM": {
+    "url": "https://www.youtube.com/watch?v=O1r1YRUPQpM",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "MrApocalisse",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42625680_YTPMV_THIS VIDEO CONTAINS M&L3.html"
+    ],
+    "thread_titles": [
+      "YTPMV_THIS VIDEO CONTAINS M&L3"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "szHpJOec8ds": {
+    "url": "https://www.youtube.com/watch?v=szHpJOec8ds",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zannabluke",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42636318_YTP_APPEROH!.html"
+    ],
+    "thread_titles": [
+      "YTP_APPEROH!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "k1cBC9ArmvU": {
+    "url": "https://www.youtube.com/watch?v=k1cBC9ArmvU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "·†°•.Mello-Kun.•°†·",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42669433_Emmmmmmmmmerald Hill.html"
+    ],
+    "thread_titles": [
+      "Emmmmmmmmmerald Hill"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Ihx7pO2yvGE": {
+    "url": "https://www.youtube.com/watch?v=Ihx7pO2yvGE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "·†°•.Mello-Kun.•°†·",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42669468_Final Pingasy IX Boss Battle.html"
+    ],
+    "thread_titles": [
+      "Final Pingasy IX Boss Battle"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "qjjA5Ipwxmc": {
+    "url": "https://www.youtube.com/watch?v=qjjA5Ipwxmc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42677950_YouTube Poop-SPOT Sputtanato 2 (in olio d'oliva).html"
+    ],
+    "thread_titles": [
+      "YouTube Poop-SPOT Sputtanato 2 (in olio d'oliva)"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "LbSmIpyvmKA": {
+    "url": "https://www.youtube.com/watch?v=LbSmIpyvmKA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42750811_Get behind the pokeball.html"
+    ],
+    "thread_titles": [
+      "Get behind the pokeball"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "boe697T-FiY": {
+    "url": "https://www.youtube.com/watch?v=boe697T-FiY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42806071_Youtube Merda_ il fascionista vuole entrare a far parte nel mondo della moda man.html"
+    ],
+    "thread_titles": [
+      "Youtube Merda_ il fascionista vuole entrare a far parte nel mondo della moda man"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "fyPk9mqZmnk": {
+    "url": "https://www.youtube.com/watch?v=fyPk9mqZmnk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "blazorblazorblazor67",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42813831_ytp_weegee's dinner.html"
+    ],
+    "thread_titles": [
+      "ytp_weegee's dinner"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "djguoet1dSY": {
+    "url": "https://www.youtube.com/watch?v=djguoet1dSY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42825745_Perfect brawl taunt.html"
+    ],
+    "thread_titles": [
+      "Perfect brawl taunt"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "6PrlOMeFAWE": {
+    "url": "https://www.youtube.com/watch?v=6PrlOMeFAWE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\42985449_Caparezza vuole inforcare il verdano dai riccioli d'or.html"
+    ],
+    "thread_titles": [
+      "Caparezza vuole inforcare il verdano dai riccioli d'or"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Xaq5qABWCCk": {
+    "url": "https://www.youtube.com/watch?v=Xaq5qABWCCk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43086625_200 subbers.html"
+    ],
+    "thread_titles": [
+      "200 subbers"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Whk-3s8oJhE": {
+    "url": "https://www.youtube.com/watch?v=Whk-3s8oJhE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43125098_Maybe this video is epic.html"
+    ],
+    "thread_titles": [
+      "Maybe this video is epic"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "WJigq40mbbI": {
+    "url": "https://www.youtube.com/watch?v=WJigq40mbbI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43185444_strongbad's armadillo.html"
+    ],
+    "thread_titles": [
+      "strongbad's armadillo"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "5eg5A2bFfwc": {
+    "url": "https://www.youtube.com/watch?v=5eg5A2bFfwc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43212270_YTPMV-Kaptain K.Tomba.html"
+    ],
+    "thread_titles": [
+      "YTPMV-Kaptain K.Tomba"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "UcS8Vsms7SE": {
+    "url": "https://www.youtube.com/watch?v=UcS8Vsms7SE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43242111_YTM_ Il capitano e la sua ciurma scatenano l'ira divina.html"
+    ],
+    "thread_titles": [
+      "YTM_ Il capitano e la sua ciurma scatenano l'ira divina"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "030cegTMFJc": {
+    "url": "https://www.youtube.com/watch?v=030cegTMFJc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Batandy",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43256451_The King thinks that YOU are a Pirate.html"
+    ],
+    "thread_titles": [
+      "The King thinks that YOU are a Pirate"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "NEhLyl0GnJ8": {
+    "url": "https://www.youtube.com/watch?v=NEhLyl0GnJ8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43266248_Pennaz has created toon link.html"
+    ],
+    "thread_titles": [
+      "Pennaz has created toon link"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "DAHJgNRZNmg": {
+    "url": "https://www.youtube.com/watch?v=DAHJgNRZNmg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43303950_I.M. (insert random adjective).html"
+    ],
+    "thread_titles": [
+      "I.M. (insert random adjective)"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "JCxUZKaCw4E": {
+    "url": "https://www.youtube.com/watch?v=JCxUZKaCw4E",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43350441_Cos'è successo quando ho visto il nuovo design del mio canale.html"
+    ],
+    "thread_titles": [
+      "Cos'è successo quando ho visto il nuovo design del mio canale"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "tp5OZh1Wj4Y": {
+    "url": "https://www.youtube.com/watch?v=tp5OZh1Wj4Y",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "blazorblazorblazor67",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43356980_Hot hell mario.html"
+    ],
+    "thread_titles": [
+      "Hot hell mario"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "qHlP6NFFnAY": {
+    "url": "https://www.youtube.com/watch?v=qHlP6NFFnAY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43387849_Link in the Sky with Dinner.html"
+    ],
+    "thread_titles": [
+      "Link in the Sky with Dinner"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "MCspVwRF32c": {
+    "url": "https://www.youtube.com/watch?v=MCspVwRF32c",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43443896_LUPIN ZONE.html"
+    ],
+    "thread_titles": [
+      "LUPIN ZONE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "eXsGmj9exSo": {
+    "url": "https://www.youtube.com/watch?v=eXsGmj9exSo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43524104_Youtube merda_ meet the pirla of metin 2.html"
+    ],
+    "thread_titles": [
+      "Youtube merda_ meet the pirla of metin 2"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "z-0IGV9X7wY": {
+    "url": "https://www.youtube.com/watch?v=z-0IGV9X7wY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43552132_Can you repeat please_.html"
+    ],
+    "thread_titles": [
+      "Can you repeat please_"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "TN_alKh7JJk": {
+    "url": "https://www.youtube.com/watch?v=TN_alKh7JJk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43562731_Wright Park_ The F-Word Scene.html"
+    ],
+    "thread_titles": [
+      "Wright Park_ The F-Word Scene"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "KmtIm6xnZvE": {
+    "url": "https://www.youtube.com/watch?v=KmtIm6xnZvE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43573179_Fresh prince of wily fortress.html"
+    ],
+    "thread_titles": [
+      "Fresh prince of wily fortress"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "jOWunxv1Q84": {
+    "url": "https://www.youtube.com/watch?v=jOWunxv1Q84",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Aaron KoS",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43611288_YTP_ save the King.html"
+    ],
+    "thread_titles": [
+      "YTP_ save the King"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "4CnwNLVvKIA": {
+    "url": "https://www.youtube.com/watch?v=4CnwNLVvKIA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Death The Kid'",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43665973_【レッドゾーン】BIRD ZONE.html"
+    ],
+    "thread_titles": [
+      "【レッドゾーン】BIRD ZONE"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "fPwYEDaKC4g": {
+    "url": "https://www.youtube.com/watch?v=fPwYEDaKC4g",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43672659_I.M.Fresh (Prince).html"
+    ],
+    "thread_titles": [
+      "I.M.Fresh (Prince)"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "je0rcy_9SZ8": {
+    "url": "https://www.youtube.com/watch?v=je0rcy_9SZ8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43692568_Idiot hall.html"
+    ],
+    "thread_titles": [
+      "Idiot hall"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Yp5zWXlys5E": {
+    "url": "https://www.youtube.com/watch?v=Yp5zWXlys5E",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43700053_Weegee Party.html"
+    ],
+    "thread_titles": [
+      "Weegee Party"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "Ex995uCID60": {
+    "url": "https://www.youtube.com/watch?v=Ex995uCID60",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Zebrick",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43703398_I.M.Lawyer.html"
+    ],
+    "thread_titles": [
+      "I.M.Lawyer"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "qZgM6SAhiKs": {
+    "url": "https://www.youtube.com/watch?v=qZgM6SAhiKs",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Aaron KoS",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43703960_Save the King sequel.html"
+    ],
+    "thread_titles": [
+      "Save the King sequel"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "RnNsdYGPnk0": {
+    "url": "https://www.youtube.com/watch?v=RnNsdYGPnk0",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43791939_Youtube Poop_ Topo gigio dà consigli su come beccarsi malattie mortali.html"
+    ],
+    "thread_titles": [
+      "Youtube Poop_ Topo gigio dà consigli su come beccarsi malattie mortali"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "H1ZC0Xb9nQs": {
+    "url": "https://www.youtube.com/watch?v=H1ZC0Xb9nQs",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43830995_Youtube poop_ L'invincibile Ratzinger Z.html"
+    ],
+    "thread_titles": [
+      "Youtube poop_ L'invincibile Ratzinger Z"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "hTC5PhD_x8c": {
+    "url": "https://www.youtube.com/watch?v=hTC5PhD_x8c",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43857432_Youtube poop_ I Little Einstein vogliono uccidere Berlusconi.html"
+    ],
+    "thread_titles": [
+      "Youtube poop_ I Little Einstein vogliono uccidere Berlusconi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "CIB7W1SebwU": {
+    "url": "https://www.youtube.com/watch?v=CIB7W1SebwU",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Elia1995",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43898732_Hotel Morshu.html"
+    ],
+    "thread_titles": [
+      "Hotel Morshu"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "zd3U9hthPBw": {
+    "url": "https://www.youtube.com/watch?v=zd3U9hthPBw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43901786_hotel mario has not been appreciated.html"
+    ],
+    "thread_titles": [
+      "hotel mario has not been appreciated"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "KEPCwFr1Kuw": {
+    "url": "https://www.youtube.com/watch?v=KEPCwFr1Kuw",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43944791_Pollon vs Heidi.html"
+    ],
+    "thread_titles": [
+      "Pollon vs Heidi"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "GrIrKPxrLVg": {
+    "url": "https://www.youtube.com/watch?v=GrIrKPxrLVg",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43945686_YTM_ le ienene il presentatore dello Sconvolt quiz inala cocaina per sbaglio.html"
+    ],
+    "thread_titles": [
+      "YTM_ le ienene il presentatore dello Sconvolt quiz inala cocaina per sbaglio"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "KOODa12wsBc": {
+    "url": "https://www.youtube.com/watch?v=KOODa12wsBc",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "mr.nintendo",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43956274_Meen party.html"
+    ],
+    "thread_titles": [
+      "Meen party"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "_CgyfNUaqa8": {
+    "url": "https://www.youtube.com/watch?v=_CgyfNUaqa8",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": ".:.PoKéMaN.:.",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43956601_Il pianto disperato di un gay.html"
+    ],
+    "thread_titles": [
+      "Il pianto disperato di un gay"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "EBO8z2_JmmQ": {
+    "url": "https://www.youtube.com/watch?v=EBO8z2_JmmQ",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43986626_In Soviet Russia, Poop tubes YOU!.html"
+    ],
+    "thread_titles": [
+      "In Soviet Russia, Poop tubes YOU!"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "5swgsVnB_2k": {
+    "url": "https://www.youtube.com/watch?v=5swgsVnB_2k",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43987556_YouTube Poop-Il re di Cramalot è un topo idraulico (numero uno).html"
+    ],
+    "thread_titles": [
+      "YouTube Poop-Il re di Cramalot è un topo idraulico (numero uno)"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "gImPduU6jjk": {
+    "url": "https://www.youtube.com/watch?v=gImPduU6jjk",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "zio tok 83",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43992646_una merdata fatta in velocità.html"
+    ],
+    "thread_titles": [
+      "una merdata fatta in velocità"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "9NilZ6cmI54": {
+    "url": "https://www.youtube.com/watch?v=9NilZ6cmI54",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\43999405_Gerry Scotti fà vincere al Tartaceto un milione di euro.html"
+    ],
+    "thread_titles": [
+      "Gerry Scotti fà vincere al Tartaceto un milione di euro"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "dIJS-T4u0ZY": {
+    "url": "https://www.youtube.com/watch?v=dIJS-T4u0ZY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Batandy",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\44021245_Batandy's YTP Intro.html"
+    ],
+    "thread_titles": [
+      "Batandy's YTP Intro"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "BgsKajkDfJo": {
+    "url": "https://www.youtube.com/watch?v=BgsKajkDfJo",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Batandy",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\44021245_Batandy's YTP Intro.html"
+    ],
+    "thread_titles": [
+      "Batandy's YTP Intro"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "WyVuIksuXxQ": {
+    "url": "https://www.youtube.com/watch?v=WyVuIksuXxQ",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Batandy",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\44068285_DINNER -- Knee Deep for Dinner.html"
+    ],
+    "thread_titles": [
+      "DINNER -- Knee Deep for Dinner"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "yUfbSoahIic": {
+    "url": "https://www.youtube.com/watch?v=yUfbSoahIic",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\44079563_Youtube Poop ITA_ I calciatori vogliono farti il lavaggio del cervello.html"
+    ],
+    "thread_titles": [
+      "Youtube Poop ITA_ I calciatori vogliono farti il lavaggio del cervello"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "BX_-xRJlvHA": {
+    "url": "https://www.youtube.com/watch?v=BX_-xRJlvHA",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "lron Maiden",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\44094011_Il mio primo vero poop.html"
+    ],
+    "thread_titles": [
+      "Il mio primo vero poop"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "0nonoxW0P0c": {
+    "url": "https://www.youtube.com/watch?v=0nonoxW0P0c",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "Weegee64",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\44108297_GERMANO MAN.html"
+    ],
+    "thread_titles": [
+      "GERMANO MAN"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "icXhcvJe3lY": {
+    "url": "https://www.youtube.com/watch?v=icXhcvJe3lY",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "nocoldin",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\44146451_Youtube poop ITA_ Pubblicità malefica.html"
+    ],
+    "thread_titles": [
+      "Youtube poop ITA_ Pubblicità malefica"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "LsmM4VA17BI": {
+    "url": "https://www.youtube.com/watch?v=LsmM4VA17BI",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "lron Maiden",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\44161038_YTP Ita_ Joker racconta la storia della sua vita dopo aver abusato di Ecstasy.html"
+    ],
+    "thread_titles": [
+      "YTP Ita_ Joker racconta la storia della sua vita dopo aver abusato di Ecstasy"
+    ],
+    "status": "pending",
+    "local_file": null,
+    "mirrors": null
+  },
+  "mVyhJotephE": {
+    "url": "https://www.youtube.com/watch?v=mVyhJotephE",
+    "title": null,
+    "description": null,
+    "channel_name": null,
+    "channel_url": null,
+    "publish_date": null,
+    "view_count": null,
+    "like_count": null,
+    "tags": [],
+    "nickname": "rikimaru.HAL",
+    "sections": [
+      "YTP fai da te"
+    ],
+    "source_pages": [
+      "YTP fai da te\\44175140_YTPMV-Topo Gigio si ammala di influenza Yoshi.html"
+    ],
+    "thread_titles": [
+      "YTPMV-Topo Gigio si ammala di influenza Yoshi"
     ],
     "status": "pending",
     "local_file": null,
