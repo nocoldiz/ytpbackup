@@ -26,56 +26,6 @@ ytpbackup/
     │       └── page_2.html
     └── … (one folder per section)
 ```
-
----
-
-## Scraper
-
-### Requirements
-
-```bash
-pip install playwright beautifulsoup4 lxml requests
-playwright install chromium
-```
-
-### Usage
-
-```bash
-# Scrape everything
-python scraper.py
-
-# Slower pace
-python scraper.py --delay 2.0
-
-# Specific sections only (use --list to see indices)
-python scraper.py --sections 0,1,5
-
-# List all sections with their index
-python scraper.py --list
-
-# Skip image embedding
-python scraper.py --no-embed-images
-
-# Also inline CSS
-python scraper.py --embed-css
-
-# Scrape a single thread (used internally by the mirror server)
-python scraper.py --sections 3 --thread-url "https://youtubepoopita.forumfree.it/?t=12345678"
-```
-
-Run again at any time to resume — already-scraped pages are skipped automatically.
-
-### Scraping passes
-
-| Pass | What happens |
-|------|-------------|
-| 1    | Downloads `Home.html` |
-| 2    | Downloads all section index pages into `{Section}/index/` |
-| 2.5  | Scans saved index HTML files for any thread links missed during Pass 2 |
-| 3    | Downloads every thread page |
-
-Progress is saved in `site_mirror/.scraper_state.json` after every few threads.
-
 ---
 
 ## Mirror Server
@@ -132,3 +82,53 @@ Section index pages not yet downloaded trigger a full section index scrape
 
 Pages for thread IDs that are completely unknown (not in any section's
 `threads_found`) return a 404 with a direct link to the live forum.
+
+---
+
+## Scraper
+
+### Requirements
+
+```bash
+pip install playwright beautifulsoup4 lxml requests
+playwright install chromium
+```
+
+### Usage
+
+```bash
+# Scrape everything
+python scraper.py
+
+# Slower pace
+python scraper.py --delay 2.0
+
+# Specific sections only (use --list to see indices)
+python scraper.py --sections 0,1,5
+
+# List all sections with their index
+python scraper.py --list
+
+# Skip image embedding
+python scraper.py --no-embed-images
+
+# Also inline CSS
+python scraper.py --embed-css
+
+# Scrape a single thread (used internally by the mirror server)
+python scraper.py --sections 3 --thread-url "https://youtubepoopita.forumfree.it/?t=12345678"
+```
+
+Run again at any time to resume — already-scraped pages are skipped automatically.
+
+### Scraping passes
+
+| Pass | What happens |
+|------|-------------|
+| 1    | Downloads `Home.html` |
+| 2    | Downloads all section index pages into `{Section}/index/` |
+| 2.5  | Scans saved index HTML files for any thread links missed during Pass 2 |
+| 3    | Downloads every thread page |
+
+Progress is saved in `site_mirror/.scraper_state.json` after every few threads.
+
