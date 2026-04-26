@@ -267,14 +267,23 @@ class VideoIndex:
 
     def needs_metadata(self, video_id):
         e = self.data.get(video_id, {})
+        
+        # Don't try to fetch data for videos we know are dead/removed
         if e.get("status") == "unavailable":
             return False
+            
+        # Catch known yt-dlp error artifact
         if e.get("title") == "warnings.warn(":
             return True
+            
+        # Check if ANY of the primary metadata or stats fields are missing (None)
         return (e.get("title") is None or
                 e.get("description") is None or
                 e.get("channel_name") is None or
-                e.get("view_count") is None)
+                e.get("channel_url") is None or
+                e.get("publish_date") is None or
+                e.get("view_count") is None or
+                e.get("like_count") is None)
 
     def set_metadata(self, video_id, title=None, description=None,
                      channel_name=None, channel_url=None,
