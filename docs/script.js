@@ -123,9 +123,7 @@ function loadFacade(id) {
   const v = allVideos.find(x => x.id === id) || rawVideos.find(x => x.id === id);
   
   if (v && v.status === 'downloaded' && v.local_file) {
-    // Determine path relative to docs/ folder and normalize slashes
-    let src = v.local_file.replace(/\\/g, '/');
-    src = src.startsWith('videos/') ? '../' + src : src;
+    const src = getLocalVideoPath(v);
     
     el.innerHTML = `<video controls autoplay style="width:100%; height:100%; object-fit:contain; background:#000;">
       <source src="${src}" type="video/mp4">
@@ -275,7 +273,7 @@ function renderTable(append = false) {
       : (fallbackTitle ? `<a href="${v.url}" target="_blank"><em>${escHtml(fallbackTitle)}</em></a>` : `<span class="vid-id">${v.id}</span>`);
 
     const playAction = (v.status === 'downloaded' && v.local_file)
-      ? `<a class="btn-play" href="${v.local_file.replace(/\\/g, '/').startsWith('videos/') ? '../' + v.local_file.replace(/\\/g, '/') : v.local_file.replace(/\\/g, '/')}" target="_blank" title="Play local file">▶</a>`
+      ? `<a class="btn-play" href="${getLocalVideoPath(v)}" target="_blank" title="Play local file">▶</a>`
       : '';
 
     return `<tr>
@@ -425,7 +423,7 @@ function selectChannel(name) {
   const videoListHtml = sortedVideos.map(v => {
     const statusClass = 'status-' + (v.status || 'unavailable');
     const playAction = (v.status === 'downloaded' && v.local_file)
-      ? `<a class="btn-play" href="${v.local_file.replace(/\\/g, '/').startsWith('videos/') ? '../' + v.local_file.replace(/\\/g, '/') : v.local_file.replace(/\\/g, '/')}" target="_blank" title="Play local file">▶</a>`
+      ? `<a class="btn-play" href="${getLocalVideoPath(v)}" target="_blank" title="Play local file">▶</a>`
       : '';
 
     return `<tr>
@@ -1025,6 +1023,26 @@ function renderTimeline() {
   el.querySelectorAll('a').forEach(a => a.target = '_blank');
 }
 //document.addEventListener('DOMContentLoaded', renderTimeline);
+
+function getLocalVideoPath(v) {
+  if (!v.local_file) return '';
+  let path = v.local_file.replace(/\\/g, '/');
+
+  // If the path starts with a generic section folder, try to use the channel folder instead.
+  const genericFolders = ["Risorse", "Old sources", "Tutorial per il pooping", "Tutorial"];
+  for (const folder of genericFolders) {
+    if (path.startsWith(`videos/${folder}/`)) {
+      if (v.channel_name) {
+        let safeCh = v.channel_name.replace(/[<>:"/\\|?*]/g, '_');
+        safeCh = safeCh.replace(/\s+/g, ' ').trim().slice(0, 80);
+        path = path.replace(`videos/${folder}/`, `videos/${safeCh}/`);
+      }
+      break;
+    }
+  }
+
+  return path.startsWith('videos/') ? '../' + path : path;
+}
 
 function escHtml(s) {
   if (!s) return '';

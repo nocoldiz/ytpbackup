@@ -1175,15 +1175,17 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
     total = len(pending)
     print(f"  {total} Risorse/Old sources video(s) pending.\n")
 
-    # For these sections, we put everything in a single folder
-    out_dir = os.path.join(video_dir, "Risorse")
-    os.makedirs(out_dir, exist_ok=True)
-
     ok_count = skip_count = unavail_count = err_count = 0
 
     for i, vid in enumerate(pending, 1):
         try:
             e = index.data[vid]
+
+            # Determine output directory based on channel name
+            ch_name = e.get("channel_name")
+            folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
+            out_dir = os.path.join(video_dir, folder_name)
+            os.makedirs(out_dir, exist_ok=True)
             
             if e.get("title") == "warnings.warn(":
                 meta = fetch_yt_metadata(vid)
