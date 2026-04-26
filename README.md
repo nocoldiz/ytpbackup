@@ -1,7 +1,10 @@
 # YTP Italian Forum Backup
+<img width="1401" height="907" alt="immagine" src="https://github.com/user-attachments/assets/c54df216-636b-4b21-a322-79e58b38829b" />
 
 Offline scraper and local mirror server for the YouTube Poop Italian Forum
 (`youtubepoopita.forumfree.it`).
+
+
 
 Check data and analytics breakdown here
 ([https://nocoldiz.github.io/ytpbackup/](https://nocoldiz.github.io/ytpbackup/)) 
