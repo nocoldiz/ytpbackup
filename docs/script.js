@@ -78,7 +78,7 @@ function showPage(name) {
 // ─── FILTER OPTIONS ───────────────────────────────────────────────────────
 function buildFilterOptions() {
   const sectionSel = document.getElementById('filter-section');
-  const channelSel = document.getElementById('filter-channel');
+  const channelDatalist = document.getElementById('channel-datalist');
   const yearSel = document.getElementById('filter-year');
 
   const sections = [...new Set(allVideos.flatMap(v => v.sections || []))].sort();
@@ -89,8 +89,8 @@ function buildFilterOptions() {
 
   const channels = [...new Set(allVideos.map(v => v.channel_name).filter(Boolean))].sort();
   channels.forEach(c => {
-    const o = document.createElement('option'); o.value = c; o.textContent = c;
-    channelSel.appendChild(o);
+    const o = document.createElement('option'); o.value = c;
+    channelDatalist.appendChild(o);
   });
 
   const years = [...new Set(allVideos.map(v => v.publish_date ? v.publish_date.slice(0, 4) : null).filter(Boolean))].sort();
@@ -119,6 +119,7 @@ function applyFilters() {
     if (q) {
       // Gather all searchable fields into one lowercase string
       const haystack = [
+        v.id,
         v.title,
         v.channel_name,
         v.description,
@@ -138,7 +139,7 @@ function applyFilters() {
     // 2. Exact Match Filters
     if (status && v.status !== status) return false;
     if (section && !(v.sections || []).includes(section)) return false;
-    if (channel && v.channel_name !== channel) return false;
+    if (channel && (!v.channel_name || v.channel_name.toLowerCase() !== channel.toLowerCase())) return false;
     if (viewsMin && (v.view_count || 0) < viewsMin) return false;
     if (likesMin && (v.like_count || 0) < likesMin) return false;
     if (year && (!v.publish_date || !v.publish_date.startsWith(year))) return false;

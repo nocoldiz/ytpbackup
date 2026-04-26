@@ -91,7 +91,7 @@
         <span class="count-badge" id="videos-count-label"></span>
       </div>
       <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Search title, channel, tags, thread, description..."
+        <input type="text" id="search-input" placeholder="Search title, channel, tags, thread, description, video ID..."
           oninput="applyFilters()">
         <select id="filter-status" onchange="applyFilters()">
           <option value="">All statuses</option>
@@ -102,9 +102,9 @@
         <select id="filter-section" onchange="applyFilters()">
           <option value="">All sections</option>
         </select>
-        <select id="filter-channel" onchange="applyFilters()">
-          <option value="">All channels</option>
-        </select>
+        <input type="text" id="filter-channel" list="channel-datalist" placeholder="All channels"
+          oninput="applyFilters()">
+        <datalist id="channel-datalist"></datalist>
       </div>
       <div class="search-bar">
         <label>Views ≥</label>
