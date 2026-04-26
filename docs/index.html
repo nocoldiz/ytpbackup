@@ -1,219 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YTP Archive Visualizer</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YTP Archive Visualizer</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<!-- LANDING -->
-<div id="landing">
-  <h1>YTP Archive<br>Visualizer</h1>
-  <p>Interactive analytics dashboard for your YouTube Poop archive index.</p>
-  <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2z"/>
-    </svg>
-    <p><strong>Drop video_index.json here</strong><br>or click to browse</p>
-  </div>
-  <input type="file" id="fileInput" accept=".json">
-  <p class="auto-load">Also tries to auto-load <code>video_index.json</code> from same folder</p>
-</div>
-
-<!-- APP -->
-<div id="app">
-  <nav>
-    <h2>YTP Archive</h2>
-    <button class="nav-tab active" onclick="showPage('overview')">Overview</button>
-    <button class="nav-tab" onclick="showPage('videos')">Videos <span class="nav-badge" id="badge-videos">0</span></button>
-    <button class="nav-tab" onclick="showPage('channels')">Channels <span class="nav-badge" id="badge-channels">0</span></button>
-    <button class="nav-tab" onclick="showPage('sections')">Sections <span class="nav-badge" id="badge-sections">0</span></button>
-    <button class="nav-tab" onclick="showPage('years')">Years <span class="nav-badge" id="badge-years">0</span></button>
-    <button class="nav-tab" onclick="showPage('sources')">Sources <span class="nav-badge" id="badge-sources">0</span></button>
-    <button class="nav-tab" onclick="showPage('timeline')">Timeline</button>
-    <div class="nav-spacer"></div>
-  </nav>
-
-  <!-- OVERVIEW -->
-  <div class="page active" id="page-overview">
-    <div class="stats-grid" id="overview-stats"></div>
-    <div class="charts-row cols2">
-      <div class="chart-card">
-        <h3>Videos by Year</h3>
-        <canvas id="chart-year"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>Status Breakdown</h3>
-        <canvas id="chart-status"></canvas>
-      </div>
+  <!-- LANDING -->
+  <div id="landing">
+    <h1>YTP Archive<br>Visualizer</h1>
+    <p>Interactive analytics dashboard for your YouTube Poop archive index.</p>
+    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2z" />
+      </svg>
+      <p><strong>Drop video_index.json here</strong><br>or click to browse</p>
     </div>
-    <div class="charts-row cols2">
-      <div class="chart-card">
-        <h3>Top 15 Channels by Video Count</h3>
-        <canvas id="chart-top-channels"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>Videos per Section</h3>
-        <canvas id="chart-sections"></canvas>
-      </div>
-    </div>
-    <div class="charts-row cols3">
-      <div class="chart-card">
-        <h3>View Count Distribution</h3>
-        <canvas id="chart-views-dist"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>Top 10 by Views</h3>
-        <canvas id="chart-top-views"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>Top 10 by Likes</h3>
-        <canvas id="chart-top-likes"></canvas>
-      </div>
-    </div>
+    <input type="file" id="fileInput" accept=".json">
+    <p class="auto-load">Also tries to auto-load <code>video_index.json</code> from same folder</p>
   </div>
 
-  <!-- VIDEOS -->
-  <div class="page" id="page-videos">
-    <div class="section-header">
-      <h2>Video Search</h2>
-      <span class="count-badge" id="videos-count-label"></span>
-    </div>
-    <div class="search-bar">
-      <input type="text" id="search-input" placeholder="Search title, channel, tags, thread, description..." oninput="applyFilters()">
-      <select id="filter-status" onchange="applyFilters()">
-        <option value="">All statuses</option>
-        <option value="available">Available</option>
-        <option value="pending">Pending</option>
-        <option value="unavailable">Unavailable</option>
-      </select>
-      <select id="filter-section" onchange="applyFilters()">
-        <option value="">All sections</option>
-      </select>
-      <select id="filter-channel" onchange="applyFilters()">
-        <option value="">All channels</option>
-      </select>
-    </div>
-    <div class="search-bar">
-      <label>Views ≥</label>
-      <div class="range-group">
-        <input type="number" id="filter-views-min" placeholder="0" oninput="applyFilters()">
+  <!-- APP -->
+  <div id="app">
+    <nav>
+      <h2>YTP Archive</h2>
+      <button class="nav-tab active" onclick="showPage('overview')">Overview</button>
+      <button class="nav-tab" onclick="showPage('videos')">Videos <span class="nav-badge"
+          id="badge-videos">0</span></button>
+      <button class="nav-tab" onclick="showPage('channels')">Channels <span class="nav-badge"
+          id="badge-channels">0</span></button>
+      <button class="nav-tab" onclick="showPage('sections')">Sections <span class="nav-badge"
+          id="badge-sections">0</span></button>
+      <button class="nav-tab" onclick="showPage('years')">Years <span class="nav-badge"
+          id="badge-years">0</span></button>
+      <button class="nav-tab" onclick="showPage('sources')">Sources <span class="nav-badge"
+          id="badge-sources">0</span></button>
+      <button class="nav-tab" onclick="showPage('timeline')">Timeline</button>
+      <div class="nav-spacer"></div>
+    </nav>
+
+    <!-- OVERVIEW -->
+    <div class="page active" id="page-overview">
+      <div class="stats-grid" id="overview-stats"></div>
+      <div class="charts-row cols2">
+        <div class="chart-card">
+          <h3>Videos by Year</h3>
+          <canvas id="chart-year"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Status Breakdown</h3>
+          <canvas id="chart-status"></canvas>
+        </div>
       </div>
-      <label>Likes ≥</label>
-      <div class="range-group">
-        <input type="number" id="filter-likes-min" placeholder="0" oninput="applyFilters()">
+      <div class="charts-row cols2">
+        <div class="chart-card">
+          <h3>Top 15 Channels by Video Count</h3>
+          <canvas id="chart-top-channels"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Videos per Section</h3>
+          <canvas id="chart-sections"></canvas>
+        </div>
       </div>
-      <label>Year:</label>
-      <select id="filter-year" onchange="applyFilters()">
-        <option value="">Any year</option>
-      </select>
-      <select id="sort-by" onchange="applyFilters()">
-        <option value="">Sort: Default</option>
-        <option value="views_desc">Views ↓</option>
-        <option value="views_asc">Views ↑</option>
-        <option value="likes_desc">Likes ↓</option>
-        <option value="likes_asc">Likes ↑</option>
-        <option value="date_desc">Date ↓</option>
-        <option value="date_asc">Date ↑</option>
-        <option value="title_asc">Title A-Z</option>
-      </select>
+      <div class="charts-row cols3">
+        <div class="chart-card">
+          <h3>View Count Distribution</h3>
+          <canvas id="chart-views-dist"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Top 10 by Views</h3>
+          <canvas id="chart-top-views"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Top 10 by Likes</h3>
+          <canvas id="chart-top-likes"></canvas>
+        </div>
+      </div>
     </div>
-    <div class="table-wrap">
-      <table id="video-table">
-        <thead>
-          <tr>
-            <th>Title / ID</th>
-            <th>Channel</th>
-            <th>Date</th>
-            <th onclick="sortTable('view_count')" style="cursor:pointer">Views <span class="sort-arrow">↕</span></th>
-            <th onclick="sortTable('like_count')" style="cursor:pointer">Likes <span class="sort-arrow">↕</span></th>
-            <th>Status</th>
-            <th>Section</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="video-tbody"></tbody>
-      </table>
+
+    <!-- VIDEOS -->
+    <div class="page" id="page-videos">
+      <div class="section-header">
+        <h2>Video Search</h2>
+        <span class="count-badge" id="videos-count-label"></span>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search title, channel, tags, thread, description..."
+          oninput="applyFilters()">
+        <select id="filter-status" onchange="applyFilters()">
+          <option value="">All statuses</option>
+          <option value="available">Available</option>
+          <option value="pending">Pending</option>
+          <option value="unavailable">Unavailable</option>
+        </select>
+        <select id="filter-section" onchange="applyFilters()">
+          <option value="">All sections</option>
+        </select>
+        <select id="filter-channel" onchange="applyFilters()">
+          <option value="">All channels</option>
+        </select>
+      </div>
+      <div class="search-bar">
+        <label>Views ≥</label>
+        <div class="range-group">
+          <input type="number" id="filter-views-min" placeholder="0" oninput="applyFilters()">
+        </div>
+        <label>Likes ≥</label>
+        <div class="range-group">
+          <input type="number" id="filter-likes-min" placeholder="0" oninput="applyFilters()">
+        </div>
+        <label>Year:</label>
+        <select id="filter-year" onchange="applyFilters()">
+          <option value="">Any year</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table id="video-table">
+          <thead>
+            <tr>
+              <th data-field="title" onclick="sortTable('title')" style="cursor:pointer">Title / ID <span
+                  class="sort-arrow">↕</span></th>
+              <th data-field="channel_name" onclick="sortTable('channel_name')" style="cursor:pointer">Channel <span
+                  class="sort-arrow">↕</span></th>
+
+              <th data-field="publish_date" onclick="sortTable('publish_date')" style="cursor:pointer">Date <span
+                  class="sort-arrow">↕</span></th>
+              <th data-field="status" onclick="sortTable('status')" style="cursor:pointer">Status <span
+                  class="sort-arrow">↕</span></th>
+
+              <th data-field="view_count" onclick="sortTable('view_count')" style="cursor:pointer">Views <span
+                  class="sort-arrow">↕</span></th>
+
+              <th data-field="like_count" onclick="sortTable('like_count')" style="cursor:pointer">Likes <span
+                  class="sort-arrow">↕</span></th>
+
+              <th>Section</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="video-tbody"></tbody>
+        </table>
+      </div>
+      <div id="scroll-sentinel" style="height: 1px;"></div>
+      <div class="pagination" id="pagination"></div>
     </div>
-    <div class="pagination" id="pagination"></div>
+
+    <!-- CHANNELS -->
+    <div class="page" id="page-channels">
+      <div class="section-header">
+        <h2>Channels</h2>
+        <span class="count-badge" id="channels-count-label"></span>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="channel-search" placeholder="Search channels..." oninput="renderChannelGrid()">
+      </div>
+      <div id="channel-detail-panel" style="display:none"></div>
+      <div class="channel-grid" id="channel-grid"></div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="page" id="page-timeline">
+      <div class="tl-article" id="tl-content"></div>
+    </div>
+
+    <!-- YEARS -->
+    <div class="page" id="page-years">
+      <div class="section-header">
+        <h2>Years</h2>
+        <span class="count-badge" id="years-count-label"></span>
+      </div>
+      <div id="year-detail-panel" style="display:none"></div>
+      <div class="year-grid" id="year-grid"></div>
+    </div>
+
+    <!-- SOURCES -->
+    <div class="page" id="page-sources">
+      <div class="section-header">
+        <h2>Sources</h2>
+        <span class="count-badge" id="sources-count-label"></span>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="sources-search" placeholder="Search thread title, section…"
+          oninput="renderSourcesTable()">
+        <select id="sources-filter-section" onchange="renderSourcesTable()">
+          <option value="">All sections</option>
+        </select>
+        <select id="sources-sort" onchange="renderSourcesTable()">
+          <option value="videos_desc">Most videos</option>
+          <option value="section_asc">Section A-Z</option>
+          <option value="title_asc">Title A-Z</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table id="sources-table">
+          <thead>
+            <tr>
+              <th>Thread Title</th>
+              <th>Section</th>
+              <th>Videos</th>
+              <th>File</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="sources-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="sources-pagination"></div>
+    </div>
+
+    <!-- SECTIONS -->
+    <div class="page" id="page-sections">
+      <div class="section-header">
+        <h2>Sections</h2>
+      </div>
+      <div id="section-detail-panel" style="display:none"></div>
+      <div class="section-grid" id="section-grid"></div>
+    </div>
   </div>
 
-  <!-- CHANNELS -->
-  <div class="page" id="page-channels">
-    <div class="section-header">
-      <h2>Channels</h2>
-      <span class="count-badge" id="channels-count-label"></span>
-    </div>
-    <div class="search-bar">
-      <input type="text" id="channel-search" placeholder="Search channels..." oninput="renderChannelGrid()">
-    </div>
-    <div id="channel-detail-panel" style="display:none"></div>
-    <div class="channel-grid" id="channel-grid"></div>
-  </div>
-
-  <!-- TIMELINE -->
-  <div class="page" id="page-timeline">
-    <div class="tl-article" id="tl-content"></div>
-  </div>
-
-  <!-- YEARS -->
-  <div class="page" id="page-years">
-    <div class="section-header">
-      <h2>Years</h2>
-      <span class="count-badge" id="years-count-label"></span>
-    </div>
-    <div id="year-detail-panel" style="display:none"></div>
-    <div class="year-grid" id="year-grid"></div>
-  </div>
-
-  <!-- SOURCES -->
-  <div class="page" id="page-sources">
-    <div class="section-header">
-      <h2>Sources</h2>
-      <span class="count-badge" id="sources-count-label"></span>
-    </div>
-    <div class="search-bar">
-      <input type="text" id="sources-search" placeholder="Search thread title, section…" oninput="renderSourcesTable()">
-      <select id="sources-filter-section" onchange="renderSourcesTable()">
-        <option value="">All sections</option>
-      </select>
-      <select id="sources-sort" onchange="renderSourcesTable()">
-        <option value="videos_desc">Most videos</option>
-        <option value="section_asc">Section A-Z</option>
-        <option value="title_asc">Title A-Z</option>
-      </select>
-    </div>
-    <div class="table-wrap">
-      <table id="sources-table">
-        <thead>
-          <tr>
-            <th>Thread Title</th>
-            <th>Section</th>
-            <th>Videos</th>
-            <th>File</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="sources-tbody"></tbody>
-      </table>
-    </div>
-    <div class="pagination" id="sources-pagination"></div>
-  </div>
-
-  <!-- SECTIONS -->
-  <div class="page" id="page-sections">
-    <div class="section-header">
-      <h2>Sections</h2>
-    </div>
-    <div id="section-detail-panel" style="display:none"></div>
-    <div class="section-grid" id="section-grid"></div>
-  </div>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
+
 </html>
