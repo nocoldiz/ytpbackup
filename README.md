@@ -37,20 +37,18 @@ internal forum links rewritten to local equivalents.
 
 ### Requirements
 
-Node.js ≥ 18 (no `npm install` needed).
+Node.js ≥ 18
 
 ### Start
 
 ```bash
-node server.js          # http://localhost:3000
-PORT=8080 node server.js
+node server.js
 ```
 
 Or via npm:
 
 ```bash
 npm start
-npm run dev             # auto-restart on file changes (Node ≥ 18)
 ```
 
 ### How links are resolved
@@ -69,21 +67,6 @@ string format, so the domain-strip rewrite makes them work immediately.
 The forum's `page_jump()` function (used by the "jump to page" dialog) is
 overridden with a local implementation that navigates to the correct `?st=`
 offset.
-
-### On-demand scraping
-
-When you navigate to a page that exists in `.scraper_state.json` but has not
-been downloaded yet, the server:
-
-1. Spawns `python scraper.py --sections N --thread-url URL` in the background.
-2. Returns a **"Scraping in corso…"** page that auto-refreshes every 10 seconds.
-3. Serves the real page once the scraper finishes.
-
-Section index pages not yet downloaded trigger a full section index scrape
-(`python scraper.py --sections N`) instead.
-
-Pages for thread IDs that are completely unknown (not in any section's
-`threads_found`) return a 404 with a direct link to the live forum.
 
 ---
 
