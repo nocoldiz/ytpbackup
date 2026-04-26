@@ -29,7 +29,7 @@ SCAN_SECTIONS = ["YTP nostrane", "YTP fai da te", "YTPMV dimportazione", "YTP da
 
 # ── Disallowed channels (never scraped; removed from index if present) ────────
 
-DISALLOWED_CHANNELS = ["Yotobi", "Croix89", "QDSS","Skillet","PeendulumLive","twkmedia","Valerio Salsero"]
+DISALLOWED_CHANNELS = ["Yotobi", "Croix89","animorphy","Beeeerdman","foreverKirby","TorNis Entertainment","PineappleDisciple","DarkestIntellect" "QDSS","Skillet","PeendulumLive","twkmedia","Valerio Salsero""UCn-K7GIs62ENvdQe6ZZk9-w","FunAvenue","The Chalkeaters","Fabio Mariano","Pogo","Computron"]
 
 # ── Allowed channels (always scraped with keyword filter) ─────────────────────
 
@@ -103,9 +103,9 @@ NOCOLDIZ_BLACKLIST = re.compile(
 
 CHANNEL_KEYWORDS = re.compile(
     r'(?i)(YTP|YTPMV|Collab|Youtube\s+poop|YT\s+Poop|Poop|Speciale'
-    r'|matteo\s+montesi|avventure|Zeb|Collegio|Bigazzi|Mario|Branduardi|Luigi|Ambrogio|Risotto|ariete|Harry\s+potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu'
-    r'|Dipr[eè]|Bello\s+Figo|Germano|Grillo|Gesù|Nabbo|Yotobi|He[\s-]?Man|Gourmet|The king|Link|Berlusconi|Muniz|Travaglio| Nemesis|Testo|Papa|Jack\s+Black|Super\s+Quark|Iscritti|YTM|YTG|MLG'
-    r'|Sentence\s+Mix|Ear\s?rape|G-Major|Mondo emo| Sparta\s+Remix|Scad|Stutter|Zelda|Patrick|Pubblicità|Spot|Spongebob|Reverse|Masking|Pitch\s+Shift'
+    r'|matteo\s+montesi|avventure|Zeb|Collegio|Bigazzi|Soccer|Ganon|Billy Mays||Branduardi|Luigi|Ambrogio|Risotto|ariete|Harry\s+potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu'
+    r'|Dipr[eè]|Bello\s+Figo|Germano|Grillo|Gesù|Nabbo|Yotobi|He[\s-]?Man|Gourmet|The king|Berlusconi|Muniz|Travaglio| Nemesis|Testo|Papa|Jack\s+Black|Super\s+Quark|Iscritti|YTM|YTG|MLG'
+    r'|Sentence\s+Mix|Ear\s?rape|G-Major|Mondo emo| Sparta\s+Remix|Scad|Stutter|Patrick|Pubblicità|Spot|Spongebob|Reverse|Masking|Pitch\s+Shift'
     r'|Mosconi|Benson|Brumotti|Master\s?chef|Mister\s+Lui|Pappalardo|Sgarbi|Razzi|Salvini|Renzi|Rio mare|Gerry\s+Scotti|Fazio'
     r'|Kabu|Nocoldiz|Poldo|Cloroformio|Giannino|Gianni\s+Morandi|Doraemon|Me\s+cont[ro]o\s+Te)'
 )
@@ -760,13 +760,13 @@ def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
 
 
 def do_scrape_channels(index):
+    """Scans allowed channels for new YTP videos and logs details (tags, titles, etc.)."""
     # Merge index channels with the fixed ALLOWED_CHANNELS list
     channel_urls = {}
     for e in index.data.values():
         url = e.get("channel_url")
         if url and url not in channel_urls:
             channel_urls[url] = e.get("channel_name") or url
-
     for url in ALLOWED_CHANNELS:
         if url not in channel_urls:
             channel_urls[url] = url
@@ -775,72 +775,91 @@ def do_scrape_channels(index):
     channel_urls = {u: n for u, n in channel_urls.items() if not is_disallowed_channel(n)}
 
     if not channel_urls:
-        print("  No channels found in index. Run 'Update index' first.")
+        print(" No channels found in index. Run 'Update index' first.")
         return
 
-    print(f"  Found {len(channel_urls)} unique channel(s).")
+    print(f" Found {len(channel_urls)} unique channel(s) to scrape.")
     new_total = 0
-
+    
     for ch_url, ch_name in channel_urls.items():
-        print(f"\n  Scraping: {ch_name}")
+        print(f"\n Scraping Channel: {ch_name} ({ch_url})")
         videos_url = channel_videos_url(ch_url)
         nocoldiz = is_nocoldiz_channel(ch_url, ch_name)
-
+        
         try:
+            # Use flat-playlist to quickly get the list of video IDs
             r = subprocess.run(
-                ["yt-dlp", "--flat-playlist", "--dump-json",
-                 "--no-warnings", "--socket-timeout", "30", videos_url],
+                ["yt-dlp", "--flat-playlist", "--dump-json", "--no-warnings", "--socket-timeout", "30", videos_url],
                 capture_output=True, text=True, timeout=300,
             )
+            
             lines = [l for l in r.stdout.splitlines() if l.strip().startswith("{")]
-            print(f"  {len(lines)} videos found on channel.")
-
+            print(f" {len(lines)} videos found on channel.")
+            
             new_count = 0
             for line in lines:
                 try:
                     d = json.loads(line)
                     vid_id = d.get("id")
                     title = d.get("title") or ""
+                    
                     if not vid_id:
                         continue
+
+                    # Apply keyword filters
                     if nocoldiz:
                         if NOCOLDIZ_BLACKLIST.search(title):
                             continue
                     else:
                         if not CHANNEL_KEYWORDS.search(title):
                             continue
+                    
+                    # LOGGING: Video identified as a match
+                    print(f"  [scrape] Found match: {title} [{vid_id}]")
+                    
                     was_new = vid_id not in index.data
                     index.add_video(vid_id, "Youtube", f"channel_scrape:{ch_url}", title)
-                    e = index.data[vid_id]
-                    if not e.get("title"):
-                        index.set_metadata(vid_id, title=title,
-                                           channel_name=ch_name, channel_url=ch_url)
+                    
+                    # FETCHING & LOGGING: Full metadata (Tags, Description, etc.)
+                    if index.needs_metadata(vid_id):
+                        print(f"           Retrieving full metadata (tags, etc.)...")
+                        meta = fetch_yt_metadata(vid_id)
+                        if isinstance(meta, dict):
+                            index.set_metadata(vid_id, **meta)
+                            tags_str = ", ".join(meta.get("tags", []))
+                            print(f"           Tags: {tags_str if tags_str else 'none'}")
+                            print(f"           Views: {meta.get('view_count')} | Date: {meta.get('publish_date')}")
+                        elif meta == "unavailable":
+                            index.set_unavailable(vid_id)
+                            print(f"           ⊘ Video is unavailable")
+                    else:
+                        # Video already has metadata; log cached tags
+                        e = index.data[vid_id]
+                        tags_str = ", ".join(e.get("tags", []))
+                        print(f"           Tags (cached): {tags_str if tags_str else 'none'}")
+
                     if was_new:
                         new_count += 1
                         new_total += 1
+                        
                 except (json.JSONDecodeError, KeyError):
                     continue
-
-            print(f"  Matched: {new_count} new YTP-related video(s) added to 'Youtube' section.")
+            
+            print(f" Matched: {new_count} YTP-related video(s) processed for this channel.")
+            index.save() # Save progress after each channel
+            
         except subprocess.TimeoutExpired:
-            print(f"  [!] Timeout scraping {ch_url}")
+            print(f" [!] Timeout scraping {ch_url}")
         except Exception as ex:
-            print(f"  [!] Error: {ex}")
+            print(f" [!] Error: {ex}")
 
-        index.save()
-
+    # Final cleanup of disallowed channels if they were somehow added
     removed = index.remove_disallowed_channels()
     if removed:
-        print(f"\n  Removed {removed} video(s) from disallowed channels.")
+        print(f"\n Removed {removed} video(s) from disallowed channels.")
         index.save()
 
-    print(f"\n  Done. {new_total} new video(s) added to 'Youtube' section.")
-    st = index.stats()
-    youtube_total = sum(
-        1 for e in index.data.values() if "Youtube" in e.get("sections", [])
-    )
-    print(f"  Total videos in 'Youtube' section: {youtube_total}  (index total: {st['total']})")
-
+    print(f"\n Done. {new_total} new video(s) added/updated in 'Youtube' section.")
 
 def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
     if retry_failed:
