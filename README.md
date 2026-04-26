@@ -1,7 +1,7 @@
 # YTP Scraper & YTP Italian Forum Backup
 <img width="1401" height="907" alt="immagine" src="https://github.com/user-attachments/assets/c54df216-636b-4b21-a322-79e58b38829b" />
 
-Offline scraper and local mirror server for the YouTube Poop Italian Forum
+Offline scraper for YTP videos and local mirror server for the historic YouTube Poop Italian Forum
 (`youtubepoopita.forumfree.it`).
 
 
@@ -32,6 +32,7 @@ ytpbackup/
     └── … (one folder per section)
 ```
 ---
+<img width="1669" height="901" alt="immagine" src="https://github.com/user-attachments/assets/2500efb3-0919-4868-b82a-1d4d7b393810" />
 
 ## Mirror Server
 
