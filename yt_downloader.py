@@ -591,17 +591,7 @@ def download_video(video_id, output_dir, yt_format, rate_limit,
                 is_exists = True
                 continue
 
-            m = DL_PROGRESS_RE.search(line)
-            if m:
-                vid_pct = float(m.group(1))
-                size = m.group(2).strip()
-                speed = m.group(3).strip() if m.group(3) else "---"
-                vid_bar = bar(vid_pct, 15)
-                print(
-                    f"\r  Total {ov_bar} {current_num}/{total_num} | Vid {vid_bar} {size} @ {speed}    ",
-                    end="", flush=True,
-                )
-                continue
+
 
             stripped = line.strip()
             if re.match(r'.+\.py:\d+: \w+Warning:', stripped):
@@ -762,11 +752,7 @@ def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
         index.save()
 
         done = ok_count + skip_count + unavail_count + err_count
-        ov_pct = done / total * 100
-        ov_bar = bar(ov_pct, 30)
-        print(f"  Overall: {ov_bar}  {done}/{total}  "
-              f"dl={ok_count} skip={skip_count} err={err_count}")
-        print()
+
 
         if status == "ok":
             time.sleep(1)
@@ -918,11 +904,7 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
         index.save()
 
         done = ok_count + skip_count + unavail_count + err_count
-        ov_pct = done / total * 100
-        ov_bar = bar(ov_pct, 30)
-        print(f"  Overall: {ov_bar}  {done}/{total}  "
-              f"dl={ok_count} skip={skip_count} err={err_count}")
-        print()
+
 
         if status == "ok":
             time.sleep(1)
@@ -1011,11 +993,7 @@ def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed):
         index.save()
 
         done = ok_count + skip_count + unavail_count + err_count
-        ov_pct = done / total * 100
-        ov_bar = bar(ov_pct, 30)
-        print(f"  Overall: {ov_bar}  {done}/{total}  "
-              f"dl={ok_count} skip={skip_count} err={err_count}")
-        print()
+
 
         if status == "ok":
             time.sleep(1)
