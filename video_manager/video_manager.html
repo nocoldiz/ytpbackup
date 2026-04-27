@@ -108,13 +108,38 @@
       <button id="btn-filter-non-ytp" class="btn-filter">Non-YTP Keywords</button>
       <select id="filter-status">
         <option value="">All statuses</option>
-        <option value="available">Available</option>
+        <option value="downloaded">Downloaded</option>
         <option value="pending">Pending</option>
         <option value="unavailable">Unavailable</option>
-        <option value="downloaded">Downloaded</option>
       </select>
       <select id="filter-section">
         <option value="">All sections</option>
+      </select>
+      <select id="filter-language" class="tag-list">
+        <option value="any">Any language</option>
+        <option value="english">🇬🇧 English</option>
+        <option value="italian">🇮🇹 Italian</option>
+        <option value="spanish">🇪🇸 Spanish</option>
+        <option value="russian">🇷🇺 Russian</option>
+        <option value="french">🇫🇷 French</option>
+        <option value="german">🇩🇪 German</option>
+      </select>
+      <input type="text" id="filter-channel" list="channel-datalist" placeholder="All channels">
+      <datalist id="channel-datalist"></datalist>
+    </div>
+
+    <div class="search-bar">
+      <label>Views ≥</label>
+      <div class="range-group">
+        <input type="number" id="filter-views-min" placeholder="0">
+      </div>
+      <label>Likes ≥</label>
+      <div class="range-group">
+        <input type="number" id="filter-likes-min" placeholder="0">
+      </div>
+      <label>Year:</label>
+      <select id="filter-year">
+        <option value="">Any year</option>
       </select>
     </div>
 
@@ -123,15 +148,17 @@
         <thead>
           <tr>
             <th class="select-col"><input type="checkbox" id="select-all"></th>
-            <th data-field="title">Title / ID</th>
-            <th data-field="channel_name">Channel</th>
-            <th data-field="publish_date">Date</th>
-            <th data-field="status">Status</th>
+            <th data-field="title" onclick="sortTable('title')" style="cursor:pointer">Title / ID <span class="sort-arrow">↕</span></th>
+            <th data-field="channel_name" onclick="sortTable('channel_name')" style="cursor:pointer">Channel <span class="sort-arrow">↕</span></th>
+            <th data-field="publish_date" onclick="sortTable('publish_date')" style="cursor:pointer">Date <span class="sort-arrow">↕</span></th>
+            <th data-field="view_count" onclick="sortTable('view_count')" style="cursor:pointer">Views <span class="sort-arrow">↕</span></th>
+            <th data-field="like_count" onclick="sortTable('like_count')" style="cursor:pointer">Likes <span class="sort-arrow">↕</span></th>
+            <th data-field="status" onclick="sortTable('status')" style="cursor:pointer">Status <span class="sort-arrow">↕</span></th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody id="video-tbody">
-          <tr><td colspan="6" class="empty">Loading videos...</td></tr>
+          <tr><td colspan="8" class="empty">Loading videos...</td></tr>
         </tbody>
       </table>
     </div>

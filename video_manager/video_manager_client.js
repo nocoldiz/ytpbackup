@@ -5,6 +5,8 @@ let filteredVideos = [];
 let selectedIds = new Set();
 let currentPage = 1;
 let filterNonYtp = false;
+let sortField = 'publish_date';
+let sortOrder = 'desc';
 const PAGE_SIZE = 100;
 
 const YTP_KEYWORDS = /YTP|YTPMV|Collab|Youtube\s+poop|YT\s+Poop|Poop|Speciale|YTPH|YTPHSHORT|YTPBR|Pooppa[ñn]ol|YTPFR|YTP\s+FR|BRYTP|РУТП|Поцык|Повар|Сашко|Гамаз|Пенек/iu;
@@ -30,6 +32,11 @@ function setupEventListeners() {
   document.getElementById('search-input').addEventListener('input', () => { currentPage = 1; applyFilters(); });
   document.getElementById('filter-status').addEventListener('change', () => { currentPage = 1; applyFilters(); });
   document.getElementById('filter-section').addEventListener('change', () => { currentPage = 1; applyFilters(); });
+  document.getElementById('filter-language').addEventListener('change', () => { currentPage = 1; applyFilters(); });
+  document.getElementById('filter-channel').addEventListener('input', () => { currentPage = 1; applyFilters(); });
+  document.getElementById('filter-views-min').addEventListener('input', () => { currentPage = 1; applyFilters(); });
+  document.getElementById('filter-likes-min').addEventListener('input', () => { currentPage = 1; applyFilters(); });
+  document.getElementById('filter-year').addEventListener('change', () => { currentPage = 1; applyFilters(); });
   
   document.getElementById('btn-filter-non-ytp').addEventListener('click', e => {
     filterNonYtp = !filterNonYtp;
@@ -60,25 +67,85 @@ function buildFilterOptions() {
     const o = document.createElement('option'); o.value = s; o.textContent = s;
     sectionSel.appendChild(o);
   });
+
+  const yearSel = document.getElementById('filter-year');
+  const years = [...new Set(allVideos.map(v => v.publish_date ? v.publish_date.slice(0, 4) : null).filter(Boolean))].sort((a, b) => b - a);
+  years.forEach(y => {
+    const o = document.createElement('option'); o.value = y; o.textContent = y;
+    yearSel.appendChild(o);
+  });
+
+  const channelDatalist = document.getElementById('channel-datalist');
+  const channels = [...new Set(allVideos.map(v => v.channel_name).filter(Boolean))].sort();
+  channels.forEach(c => {
+    const o = document.createElement('option'); o.value = c;
+    channelDatalist.appendChild(o);
+  });
 }
 
 function applyFilters() {
   const q = document.getElementById('search-input').value.toLowerCase().trim();
   const status = document.getElementById('filter-status').value;
   const section = document.getElementById('filter-section').value;
+  const language = document.getElementById('filter-language').value;
+  const channel = document.getElementById('filter-channel').value.toLowerCase().trim();
+  const minViews = parseInt(document.getElementById('filter-views-min').value) || 0;
+  const minLikes = parseInt(document.getElementById('filter-likes-min').value) || 0;
+  const year = document.getElementById('filter-year').value;
 
   filteredVideos = allVideos.filter(v => {
     if (q) {
-      const haystack = [v.id, v.title, v.channel_name, ...(v.tags || [])].join(' ').toLowerCase();
+      const haystack = [v.id, v.title, v.channel_name, ...(v.tags || []), v.description, v.thread_title].join(' ').toLowerCase();
       if (!haystack.includes(q)) return false;
     }
     if (status && v.status !== status) return false;
     if (section && !(v.sections || []).includes(section)) return false;
+    if (language && language !== 'any' && v.language !== language) return false;
+    if (channel && (v.channel_name || '').toLowerCase() !== channel) return false;
+    if ((v.view_count || 0) < minViews) return false;
+    if ((v.like_count || 0) < minLikes) return false;
+    if (year && (!v.publish_date || !v.publish_date.startsWith(year))) return false;
     if (filterNonYtp && YTP_KEYWORDS.test(v.title || '')) return false;
     return true;
   });
 
+  sortVideos();
   renderTable(false);
+}
+
+window.sortTable = function(field) {
+  if (sortField === field) {
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortField = field;
+    sortOrder = (field === 'publish_date' || field === 'view_count' || field === 'like_count') ? 'desc' : 'asc';
+  }
+  
+  document.querySelectorAll('th[data-field]').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.field === sortField);
+  });
+
+  currentPage = 1;
+  applyFilters();
+};
+
+function sortVideos() {
+  filteredVideos.sort((a, b) => {
+    let va = a[sortField];
+    let vb = b[sortField];
+
+    if (sortField === 'view_count' || sortField === 'like_count') {
+      va = parseInt(va) || 0;
+      vb = parseInt(vb) || 0;
+    } else {
+      va = (va || '').toString().toLowerCase();
+      vb = (vb || '').toString().toLowerCase();
+    }
+
+    if (va < vb) return sortOrder === 'asc' ? -1 : 1;
+    if (va > vb) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  });
 }
 
 function renderTable(append = false) {
@@ -99,7 +166,9 @@ function renderTable(append = false) {
           <div class="vid-id">${v.id}</div>
         </td>
         <td>${esc(v.channel_name || '-')}</td>
-        <td>${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
+        <td class="num">${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
+        <td class="num">${(v.view_count || 0).toLocaleString()}</td>
+        <td class="num">${(v.like_count || 0).toLocaleString()}</td>
         <td>
           <span class="status-dot status-${v.status}"></span> ${v.status || '-'}
           ${v.isSource ? '<span class="badge-source">Source</span>' : ''}
@@ -112,7 +181,7 @@ function renderTable(append = false) {
   if (append) {
     tbody.insertAdjacentHTML('beforeend', html);
   } else {
-    tbody.innerHTML = html || '<tr><td colspan="6" class="empty">No videos found</td></tr>';
+    tbody.innerHTML = html || '<tr><td colspan="8" class="empty">No videos found</td></tr>';
   }
 }
 

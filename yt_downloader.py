@@ -624,7 +624,7 @@ ALLOWED_CHANNELS = (
 )
 # NocoldizTV: scrape everything except videos whose title matches these words
 NOCOLDIZ_BLACKLIST = re.compile(
-    r'(?i)(gameplay|hypernet|devlog|gioco|em\.Path|em\.Brace)'
+    r'(?i)(gameplay|hypernet|devlog|gioco|em\.Path|em\.Brace|Dwarf)'
 )
 
 # ── Channel keywords ──────────────────────────────────────────────────────────
