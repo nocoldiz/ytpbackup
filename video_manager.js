@@ -79,8 +79,68 @@ function banVideos(videoIds, videoIndexPath, excludedVideosPath, videosDir) {
   }
 }
 
+/**
+ * Flags a list of videos as sources:
+ * 1. Moves from video_index.json to sources_index.json.
+ * 
+ * @param {string[]} videoIds 
+ * @param {string} videoIndexPath 
+ * @param {string} sourcesIndexPath 
+ */
+function flagAsSource(videoIds, videoIndexPath, sourcesIndexPath) {
+  let index = {};
+  try {
+    index = JSON.parse(fs.readFileSync(videoIndexPath, 'utf8'));
+  } catch (err) {
+    console.error(`[video_manager] Error reading video index: ${err.message}`);
+    return { success: false, error: 'Failed to read video index' };
+  }
+
+  let sources = {};
+  try {
+    if (fs.existsSync(sourcesIndexPath)) {
+      sources = JSON.parse(fs.readFileSync(sourcesIndexPath, 'utf8'));
+    }
+  } catch (err) {
+    console.error(`[video_manager] Error reading sources index: ${err.message}`);
+  }
+
+  const results = {
+    moved: [],
+    skipped: []
+  };
+
+  for (const id of videoIds) {
+    if (!index[id]) {
+      results.skipped.push(id);
+      continue;
+    }
+
+    const entry = index[id];
+    
+    // Move to sources
+    sources[id] = entry;
+
+    // Remove from index
+    delete index[id];
+
+    results.moved.push(id);
+  }
+
+  // Save changes
+  try {
+    fs.writeFileSync(videoIndexPath, JSON.stringify(index, null, 2));
+    fs.writeFileSync(sourcesIndexPath, JSON.stringify(sources, null, 2));
+    return { success: true, results };
+  } catch (err) {
+    console.error(`[video_manager] Error saving JSON files: ${err.message}`);
+    return { success: false, error: 'Failed to save changes' };
+  }
+}
+
 module.exports = {
-  banVideos
+  banVideos,
+  flagAsSource
 };
 
 // ─── CLI / Standalone Server Handler ─────────────────────────────────────────
@@ -88,6 +148,7 @@ if (require.main === module) {
   const ids = process.argv.slice(2);
   const vIndex = path.join(__dirname, 'docs', 'video_index.json');
   const vExcl = path.join(__dirname, 'docs', 'excluded_videos.json');
+  const vSrc = path.join(__dirname, 'docs', 'sources_index.json');
   const vDir = path.join(__dirname, 'videos');
 
   if (ids.length > 0) {
@@ -151,7 +212,22 @@ if (require.main === module) {
         return;
       }
 
-      res.writeHead(404).end('Not Found');
+      // Flag as Source API
+      if (url.pathname === '/api/flag-source' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk; });
+        req.on('end', () => {
+          try {
+            const { videoIds } = JSON.parse(body);
+            const result = flagAsSource(videoIds, vIndex, vSrc);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(result));
+          } catch (err) {
+            res.writeHead(400).end(JSON.stringify({ success: false, error: err.message }));
+          }
+        });
+        return;
+      }
     });
 
     server.listen(PORT, () => {

@@ -36,6 +36,30 @@
     .btn-ban:hover { background: #bb2d3b; }
     .btn-ban:disabled { background: #6c757d; cursor: not-allowed; }
     
+    .btn-source {
+      background: #198754;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .btn-source:hover { background: #157347; }
+    .btn-source:disabled { background: #6c757d; cursor: not-allowed; }
+
+    .badge-source {
+      background: #198754;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    
     .select-col { width: 40px; text-align: center; }
     input[type="checkbox"] { transform: scale(1.2); }
     
@@ -67,6 +91,7 @@
       <p class="selection-info" id="selection-summary">0 videos selected</p>
     </div>
     <div>
+      <button id="btn-flag-source-selected" class="btn-source" disabled>Flag as Source</button>
       <button id="btn-ban-selected" class="btn-ban" disabled>Ban Selected Videos</button>
       <a href="/" class="nav-tab" style="display:inline-block; margin-left:10px; text-decoration:none; padding:8px 15px; border:1px solid var(--border); border-radius:6px; color:var(--text)">Back to Dashboard</a>
     </div>

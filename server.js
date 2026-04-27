@@ -29,7 +29,8 @@ const STATE_FILE  = path.join(SITE_MIRROR, '.scraper_state.json');
 const SCRAPER     = path.join(__dirname, 'scraper.py');
 const BASE_DOMAIN = 'youtubepoopita.forumfree.it';
 const VIDEO_INDEX = path.join(__dirname, 'docs', 'video_index.json');
-const EXCLUDED_VIDEOS = path.join(__dirname, 'excluded_videos.json');
+const EXCLUDED_VIDEOS = path.join(__dirname, 'docs', 'excluded_videos.json');
+const SOURCES_INDEX = path.join(__dirname, 'docs', 'sources_index.json');
 const VIDEOS_DIR  = path.join(__dirname, 'videos');
 const VM_LOGIC    = require('./video_manager.js');
 
@@ -526,6 +527,27 @@ function onRequest(req, res) {
         
         const result = VM_LOGIC.banVideos(videoIds, VIDEO_INDEX, EXCLUDED_VIDEOS, VIDEOS_DIR);
         buildVideoMap(); // Rebuild server-side map if needed (though it's for mirror)
+        
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // ── Flag as Source API ──────────────────────────────────────────────────
+  if (reqUrl.pathname === '/api/flag-source' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const { videoIds } = JSON.parse(body);
+        if (!Array.isArray(videoIds)) throw new Error('Invalid videoIds');
+        
+        const result = VM_LOGIC.flagAsSource(videoIds, VIDEO_INDEX, SOURCES_INDEX);
         
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(result));

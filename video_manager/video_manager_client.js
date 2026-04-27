@@ -10,13 +10,15 @@ const PAGE_SIZE = 100;
 const NON_YTP_KEYWORDS = /Walkthrough|Playthrough|Let's\s+Play|Gameplay|Longplay|No\s+Commentary|Speedrun|Boss\s+Fight|Achievement\s+Guide|Trophy\s+Guide|100%\s+Completion|Quest\s+Line|Partita|Giocata|Commento|Reazione|Reaction\s+ita|Dal\s+vivo|Streaming\s+ora|Migliori\s+momenti|Highlights\s+live|Torneo|Guida\s+completa|Unboxing|Review|Hands-on|Benchmark|Comparison|Specs|Tech\s+News|Setup|Hardware|Software\s+Tutorial|How\s?to\s+Install|Step\s+by\s+Step|Buying\s+Guide|Recensione|Prova|Test|Recensione\s+Onesta|Confronto|Loquendo|Cosa\s+ne\s+penso|Consigli\s+per\s+gli\s+acquisti|Scheda\s+Video|Vlog|Daily\s+Routine|GRWM|Get\s+Ready\s+With\s+Me|Haul|Q&A|Ask\s+Me\s+Anything|Lifestyle|Life\s+Updates|Day\s+in\s+the\s+life|Travel\s+Diary|La\s+mia\s+routine|Cosa\s+mangio|Vlog\s+ita|Viaggio\s+a|Domande\s+e\s+risposte|Le\s+mie\s+opinioni|Draw\s+my\s+life\s+ita|Challenge\s+ita|Official\s+Music\s+Video|Lyric\s+Video|Sountrack|OST|Official\s+Trailer|Teaser\s+Trailer|Full\s+Episode|News\s+Report|Breaking\s+News|Press\s+Conference|Short\s+Film|Behind\s+the\s+Scenes|BTS|Making\s+of|Puntata\s+intera|Episodio\s+completo|Film\s+completo|Versione\s+integrale|Video\s+ufficiale|Audio\s+ufficiale|Sigla|Testo\s+canzone|Trailer\s+italiano|Servizio|Conferenza\s+stampa|Reportage|Lecture|Webinar|Course|Seminar|Presentation|Keynote|Workshop|Tutorial\s+for\s+beginners|Masterclass|Podcast\s+Episode|TED\s?Talk|Tutorial\s+ita|Come\s+fare|Spiegazione|Lezione|Corso\s+di|ASMR|Meditation|Workout|Fitness\s+Routine|Recipe|Cooking\s+Class|DIY\s+Crafts|Fai\s+da\s+te/i;
 
 // ─── LOADING ─────────────────────────────────────────────────────────────
-fetch('/docs/video_index.json')
-  .then(r => r.json())
-  .then(data => {
-    allVideos = Object.entries(data).map(([id, v]) => ({ id, ...v }));
-    initApp();
-  })
-  .catch(err => console.error('Failed to load video index:', err));
+Promise.all([
+  fetch('/docs/video_index.json').then(r => r.json()),
+  fetch('/docs/sources_index.json').then(r => r.json())
+]).then(([videoData, sourceData]) => {
+  const v1 = Object.entries(videoData).map(([id, v]) => ({ id, ...v, isSource: false }));
+  const v2 = Object.entries(sourceData).map(([id, v]) => ({ id, ...v, isSource: true }));
+  allVideos = [...v1, ...v2];
+  initApp();
+}).catch(err => console.error('Failed to load indices:', err));
 
 function initApp() {
   buildFilterOptions();
@@ -49,6 +51,7 @@ function setupEventListeners() {
   });
 
   document.getElementById('btn-ban-selected').addEventListener('click', banSelected);
+  document.getElementById('btn-flag-source-selected').addEventListener('click', flagSourceSelected);
 }
 
 function buildFilterOptions() {
@@ -98,7 +101,10 @@ function renderTable(append = false) {
         </td>
         <td>${esc(v.channel_name || '-')}</td>
         <td>${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
-        <td><span class="status-dot status-${v.status}"></span> ${v.status || '-'}</td>
+        <td>
+          <span class="status-dot status-${v.status}"></span> ${v.status || '-'}
+          ${v.isSource ? '<span class="badge-source">Source</span>' : ''}
+        </td>
         <td><a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
       </tr>
     `;
@@ -116,11 +122,17 @@ window.toggleSelect = function(id, isChecked) {
   else selectedIds.delete(id);
   updateSelectionUI();
 };
-
 function updateSelectionUI() {
   const count = selectedIds.size;
   document.getElementById('selection-summary').textContent = `${count} videos selected`;
   document.getElementById('btn-ban-selected').disabled = count === 0;
+  
+  // Disable "Flag as Source" if any already flagged or if none selected
+  const anySourceSelected = Array.from(selectedIds).some(id => {
+    const v = allVideos.find(v => v.id === id);
+    return v && v.isSource;
+  });
+  document.getElementById('btn-flag-source-selected').disabled = count === 0 || anySourceSelected;
 }
 
 function setupScrollObserver() {
@@ -162,6 +174,36 @@ async function banSelected() {
   } finally {
     btn.disabled = false;
     btn.textContent = 'Ban Selected Videos';
+  }
+}
+
+async function flagSourceSelected() {
+  const ids = Array.from(selectedIds);
+  if (!confirm(`Are you sure you want to flag ${ids.length} videos as sources? This will move them to the sources index.`)) return;
+
+  const btn = document.getElementById('btn-flag-source-selected');
+  btn.disabled = true;
+  btn.textContent = 'Flagging...';
+
+  try {
+    const r = await fetch('/api/flag-source', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ videoIds: ids })
+    });
+    const res = await r.json();
+
+    if (res.success) {
+      alert(`Successfully flagged ${res.results.moved.length} videos as sources.`);
+      location.reload();
+    } else {
+      alert('Error: ' + res.error);
+    }
+  } catch (err) {
+    alert('Failed to connect to server.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Flag as Source';
   }
 }
 
