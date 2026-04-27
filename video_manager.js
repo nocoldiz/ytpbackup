@@ -87,7 +87,7 @@ module.exports = {
 if (require.main === module) {
   const ids = process.argv.slice(2);
   const vIndex = path.join(__dirname, 'docs', 'video_index.json');
-  const vExcl = path.join(__dirname, 'excluded_videos.json');
+  const vExcl = path.join(__dirname, 'docs', 'excluded_videos.json');
   const vDir = path.join(__dirname, 'videos');
 
   if (ids.length > 0) {

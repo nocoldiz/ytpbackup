@@ -724,7 +724,7 @@ def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, 
 
                 # Keyword Match Check
                 if CHANNEL_KEYWORDS.search(v_title):
-                    if v_id not in index.data:
+                    if v_id not in index.data and v_id not in index.excluded_ids:
                         index.add_video(
                             video_id=v_id,
                             section="Youtube",
@@ -781,6 +781,8 @@ def do_download_by_section(index, video_dir, yt_format, rate_limit):
     # Filter pending videos that belong to this section
     to_download = []
     for v_id, info in index.data.items():
+        if v_id in index.excluded_ids:
+            continue
         if info.get("status") == "pending":
             if selected_section in info.get("sections", []):
                 to_download.append((v_id, info))
@@ -867,6 +869,22 @@ class VideoIndex:
         self.docs_dir = docs_dir or DEFAULT_DOCS_DIR
         self.filepath = os.path.join(self.docs_dir, "video_index.json")
         self.data = {}
+        self.excluded_ids = set()
+        self.load_excluded()
+
+    def load_excluded(self):
+        # excluded_videos.json is expected to be in the root directory (same as script)
+        path = "excluded_videos.json"
+        if os.path.exists(path):
+            try:
+                with open(path, encoding="utf-8") as f:
+                    excluded_data = json.load(f)
+                    if isinstance(excluded_data, dict):
+                        self.excluded_ids = set(excluded_data.keys())
+                    elif isinstance(excluded_data, list):
+                        self.excluded_ids = set(excluded_data)
+            except Exception as e:
+                print(f"  [!] Error loading {path}: {e}")
 
     def load(self):
         if os.path.exists(self.filepath):
@@ -884,6 +902,10 @@ class VideoIndex:
             print(f"\n  [!] Error saving index to {self.filepath}: {e}")
 
     def add_video(self, video_id, section, source_page, thread_title=None, nickname=None):
+        if video_id in self.excluded_ids:
+            # Skip excluded videos silently during scanning
+            return
+
         if video_id not in self.data:
             self.data[video_id] = {
                 "url": canonical_yt_url(video_id),
@@ -981,7 +1003,8 @@ class VideoIndex:
                 e["status"] = "pending"
 
     def pending(self):
-        return [vid for vid, e in self.data.items() if e["status"] == "pending"]
+        return [vid for vid, e in self.data.items() 
+                if e["status"] == "pending" and vid not in self.excluded_ids]
 
     def stats(self):
         s = {"total": 0, "downloaded": 0, "unavailable": 0, "failed": 0, "pending": 0}
@@ -1291,7 +1314,7 @@ def do_update_index(index):
     print(f"  Total videos in index: {st['total']}")
     print()
 
-    need_meta = [vid for vid in index.data if index.needs_metadata(vid)]
+    need_meta = [vid for vid in index.data if index.needs_metadata(vid) and vid not in index.excluded_ids]
 
     if not need_meta:
         print("  All videos already have metadata.")
@@ -1453,8 +1476,8 @@ def do_scrape_channels(index):
                         elif CHANNEL_KEYWORDS.search(title):
                             is_match = True
 
-                        # If it matches and is not already in the index, log and add it
-                        if is_match and vid and vid not in index.data:
+                        # If it matches and is not already in the index (and not excluded), log and add it
+                        if is_match and vid and vid not in index.data and vid not in index.excluded_ids:
                             clear_line()
                             print(f"    [+] New keyword match found: {title} ({vid})")
                             index.add_video(vid, "Scraped Channel", videos_url, title)
@@ -1493,6 +1516,7 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
     pending = [
         vid for vid, e in index.data.items()
         if "Youtube" in e.get("sections", []) and e["status"] == "pending"
+        and vid not in index.excluded_ids
     ]
 
     if not pending:
@@ -1610,6 +1634,7 @@ def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed, y
     pending = [
         vid for vid, e in index.data.items()
         if is_italian(e) and is_in_year_range(e) and e["status"] == "pending"
+        and vid not in index.excluded_ids
     ]
 
     if not pending:
@@ -1697,6 +1722,7 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
     pending = [
         vid for vid, e in index.data.items()
         if any(s in target_sections for s in e.get("sections", [])) and e["status"] == "pending"
+        and vid not in index.excluded_ids
     ]
 
     if not pending:
@@ -1941,6 +1967,7 @@ def do_find_mirrors(index):
     candidates = [
         (vid, e) for vid, e in index.data.items()
         if e.get("status") == "unavailable" and not e.get("mirrors")
+        and vid not in index.excluded_ids
     ]
 
     if not candidates:
@@ -2151,7 +2178,7 @@ def do_scrape_comments(index, video_dir):
     os.makedirs(comments_dir, exist_ok=True)
 
     videos = [(vid, e) for vid, e in index.data.items()
-              if e.get("status") != "unavailable"]
+              if e.get("status") != "unavailable" and vid not in index.excluded_ids]
     total = len(videos)
 
     if not videos:
