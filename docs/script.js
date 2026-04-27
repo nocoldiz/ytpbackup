@@ -62,6 +62,7 @@ async function autoLoad() {
   initApp(vData, sData);
 }
 autoLoad();
+initDB();
 
 // ─── INIT ─────────────────────────────────────────────────────────────────
 const ALLOWED_SECTIONS = new Set(["YTP nostrane", "YTP fai da te", "YTPMV dimportazione", "YTP da internet", "Internet", "Youtube", "Scraped Channel"]);
@@ -111,7 +112,8 @@ function initApp(vRaw, sRaw) {
   renderChannelGrid();
   renderSectionGrid();
   renderYearGrid();
-
+  buildFirstUploadCache();
+  
   if (appMode === 'videos') {
     renderHomePage();
   }
@@ -144,6 +146,9 @@ function showPage(name) {
   }
   if (name === 'youtube') {
     renderHomePage();
+  }
+  if (name === 'saved') {
+    renderSavedPage();
   }
 }
 
@@ -258,6 +263,7 @@ function openVideo(vidId) {
     const moreVids = ytData.filter(x => x.channel_name === v.channel_name && x.id !== v.id).slice(0, 5);
     moreContainer.innerHTML = moreVids.map(x => renderVideoItem(x, 'list')).join('');
   }
+  updateSaveButton(vidId);
   return false;
 }
 
@@ -453,6 +459,9 @@ function renderVideoItem(v, mode = 'list') {
   const thumbUrl = `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`;
   const dur = v.duration || '';
 
+  const isFirst = window.channelFirstUploadIds && window.channelFirstUploadIds.has(v.id);
+  const starBadge = isFirst ? `<span class="tl-star" title="First upload by ${escAttr(channel)}">★</span> ` : '';
+
   if (mode === 'grid') {
     return `
     <div class="video-item grid">
@@ -461,7 +470,7 @@ function renderVideoItem(v, mode = 'list') {
         ${dur ? `<span class="video-time">${escHtml(dur)}</span>` : ''}
       </a>
       <div class="video-info">
-        <a href="#" onclick="return openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${escHtml(title)}</a>
+        <a href="#" onclick="return openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${starBadge}${escHtml(title)}</a>
         <div class="video-meta">${views ? `<span>${views}</span><br>` : ''}<a href="#" onclick="return openProfile('${escAttr(channel)}')">${escHtml(channel)}</a></div>
       </div>
     </div>`;
@@ -476,7 +485,7 @@ function renderVideoItem(v, mode = 'list') {
         </a>
       </div>
       <div class="yt-list-info">
-        <a href="#" onclick="event.stopPropagation();return openVideo('${v.id}')" class="yt-list-title">${escHtml(title)}</a>
+        <a href="#" onclick="event.stopPropagation();return openVideo('${v.id}')" class="yt-list-title">${starBadge}${escHtml(title)}</a>
         ${desc ? `<div class="yt-list-desc">${escHtml(desc)}</div>` : ''}
         <div class="yt-list-meta">
           <span class="yt-stars">${renderStars(v.view_count)}</span>
@@ -1411,7 +1420,7 @@ function buildFirstUploadCache() {
   const firsts = {};
   [...allVideos, ...allSources].forEach(v => {
     if (!v.channel_name || !v.publish_date) return;
-    if (!firsts[v.channel_name] || v.publish_date < firsts[v.channel_name]) {
+    if (!firsts[v.channel_name] || v.publish_date < firsts[v.channel_name].date) {
       firsts[v.channel_name] = { date: v.publish_date, id: v.id };
     }
   });
@@ -1466,6 +1475,18 @@ function initTimeline() {
 
     ts.initialized = true;
   }
+
+  // Populate channel datalist for timeline filter
+  const dl = document.getElementById('timeline-channel-datalist');
+  if (dl && dl.children.length === 0) {
+    const channels = [...new Set([...allVideos, ...allSources].map(v => v.channel_name).filter(Boolean))].sort();
+    channels.forEach(ch => {
+      const opt = document.createElement('option');
+      opt.value = ch;
+      dl.appendChild(opt);
+    });
+  }
+
   scheduleRender();
 }
 
@@ -1605,9 +1626,11 @@ function renderTimelineView() {
   container.appendChild(hint);
 
   // Filter + sort visible videos
+  const channelFilter = document.getElementById('timeline-channel-filter')?.value || '';
   const allVids = [...allVideos, ...allSources];
   let visible = allVids.filter(v => {
     if (!v.publish_date) return false;
+    if (channelFilter && !(v.channel_name || '').toLowerCase().includes(channelFilter.toLowerCase())) return false;
     const t = new Date(v.publish_date).getTime();
     if (t < startT || t > endT) return false;
     if (showOnlyMilestones && (v.view_count || 0) < 10_000_000) return false;
@@ -1659,3 +1682,110 @@ function renderTimelineView() {
   container.appendChild(frag);
 }
 
+
+// ─── SAVED VIDEOS (IndexedDB) ──────────────────────────────────────────────
+const dbName = 'YTPArchiveDB';
+const storeName = 'savedVideos';
+let db;
+
+function initDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(dbName, 1);
+    request.onupgradeneeded = (e) => {
+      db = e.target.result;
+      if (!db.objectStoreNames.contains(storeName)) {
+        db.createObjectStore(storeName, { keyPath: 'id' });
+      }
+    };
+    request.onsuccess = (e) => {
+      db = e.target.result;
+      updateSavedBadge();
+      resolve();
+    };
+    request.onerror = (e) => reject(e);
+  });
+}
+
+function saveVideoToDB(video) {
+  if (!db) return;
+  const transaction = db.transaction([storeName], 'readwrite');
+  const store = transaction.objectStore(storeName);
+  store.put(video);
+  transaction.oncomplete = () => {
+    updateSavedBadge();
+    updateSaveButton(video.id);
+  };
+}
+
+function removeVideoFromDB(id) {
+  if (!db) return;
+  const transaction = db.transaction([storeName], 'readwrite');
+  const store = transaction.objectStore(storeName);
+  store.delete(id);
+  transaction.oncomplete = () => {
+    updateSavedBadge();
+    updateSaveButton(id);
+    if (document.getElementById('page-saved').classList.contains('active')) {
+      renderSavedPage();
+    }
+  };
+}
+
+function getSavedVideos() {
+  return new Promise((resolve) => {
+    if (!db) return resolve([]);
+    const transaction = db.transaction([storeName], 'readonly');
+    const store = transaction.objectStore(storeName);
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => resolve([]);
+  });
+}
+
+function isVideoSaved(id) {
+  return new Promise((resolve) => {
+    if (!db) return resolve(false);
+    const transaction = db.transaction([storeName], 'readonly');
+    const store = transaction.objectStore(storeName);
+    const request = store.get(id);
+    request.onsuccess = () => resolve(!!request.result);
+    request.onerror = () => resolve(false);
+  });
+}
+
+async function updateSavedBadge() {
+  const saved = await getSavedVideos();
+  const badge = document.getElementById('badge-saved');
+  if (badge) badge.textContent = saved.length;
+}
+
+async function updateSaveButton(vidId) {
+  const btn = document.getElementById('btn-save-video');
+  if (!btn) return;
+  
+  const saved = await isVideoSaved(vidId);
+  btn.textContent = saved ? 'Unsave Video' : 'Save Video';
+  btn.onclick = () => {
+    if (saved) {
+      removeVideoFromDB(vidId);
+    } else {
+      const ytData = [...allVideos, ...allSources];
+      const v = ytData.find(x => x.id === vidId);
+      if (v) saveVideoToDB(v);
+    }
+  };
+}
+
+async function renderSavedPage() {
+  const grid = document.getElementById('saved-videos-grid');
+  if (!grid) return;
+  
+  const saved = await getSavedVideos();
+  if (saved.length === 0) {
+    grid.innerHTML = '<div class="empty">No saved videos yet.</div>';
+  } else {
+    // Sort by views or date? Let's do most recent (if we had a saved_at timestamp, but we don't yet)
+    // For now just show them.
+    grid.innerHTML = saved.map(v => renderVideoItem(v, 'grid')).join('');
+  }
+}

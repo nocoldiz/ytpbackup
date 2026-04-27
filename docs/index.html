@@ -51,6 +51,7 @@
         <a href="#" class="nav-tab" onclick="showPage('sections'); return false;">Sections <span class="nav-badge" id="badge-sections">0</span></a>
         <a href="#" class="nav-tab" onclick="showPage('years'); return false;">Years <span class="nav-badge" id="badge-years">0</span></a>
         <a href="#" class="nav-tab" onclick="showPage('timeline'); return false;">Timeline</a>
+        <a href="#" class="nav-tab" onclick="showPage('saved'); return false;">Saved <span class="nav-badge" id="badge-saved">0</span></a>
 
         <!-- Modern Mode Theme Toggles (Sidebar bottom) -->
         <div id="theme-toggles-modern" style="display: none;">
@@ -129,6 +130,9 @@
               </div>
             </div>
             <div id="watch-description"></div>
+            <div id="watch-actions" style="margin-top: 10px;">
+              <button id="btn-save-video" class="btn-thread" style="width: 100%; padding: 10px; font-weight: bold;">Save Video</button>
+            </div>
             <div class="box" style="margin-top: 15px;">
               <div class="box-header">More From This Channel</div>
               <div class="box-content" id="more-from-channel"></div>
@@ -304,6 +308,11 @@
           <h2>Interactive Timeline</h2>
           <span class="count-badge">Scroll to zoom, drag to pan</span>
         </div>
+        <div class="search-bar">
+          <input type="text" id="timeline-channel-filter" list="timeline-channel-datalist" placeholder="Filter by channel..." oninput="scheduleRender()">
+          <datalist id="timeline-channel-datalist"></datalist>
+          <button class="btn-thread" onclick="document.getElementById('timeline-channel-filter').value=''; scheduleRender();">Clear</button>
+        </div>
         <div id="timeline-container">
           <div id="timeline-track"></div>
         </div>
@@ -329,6 +338,15 @@
         </div>
         <div id="section-detail-panel" style="display:none"></div>
         <div class="section-grid" id="section-grid"></div>
+      </div>
+
+      <!-- SAVED -->
+      <div class="page" id="page-saved">
+        <div class="section-header">
+          <h2>Saved Videos</h2>
+          <span class="count-badge" id="saved-count-label">Videos saved locally in your browser</span>
+        </div>
+        <div id="saved-videos-grid" class="video-grid"></div>
       </div>
 
     </div>
