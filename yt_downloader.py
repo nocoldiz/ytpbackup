@@ -83,7 +83,6 @@ ITALIAN_CHANNELS = [
 "https://www.youtube.com/@bosch002",
 "https://www.youtube.com/@BowenKainZ",
 "https://www.youtube.com/@Breakass123",
-"https://www.youtube.com/@BrigateBenson",
 "https://www.youtube.com/@briotera",
 "https://www.youtube.com/@ButtonsTheDragon",
 "https://www.youtube.com/@cABit94",
@@ -948,14 +947,14 @@ def clear_line():
     cols = shutil.get_terminal_size((80, 24)).columns
     print("\r" + " " * cols + "\r", end="", flush=True)
 
-def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, channels_list, year_limit=None, skip_scan=False):
+def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, channels_list, language, year_limit=None, skip_scan=False):
     # Check if the skip flag is True before doing anything else
     if skip_scan:
         print(f"\n>>> Skipping Language Scan as requested.")
-        do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, limit_channels=channels_list)
+        do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, limit_channels=channels_list, language_filter=language)
         return 0  # Return 0 new entries since we skipped
     
-    print(f"\n>>> Starting Language Scan for {len(channels_list)} channels...")
+    print(f"\n>>> Starting Language Scan for {len(channels_list)} channels ({language})...")
     new_entries = 0
     for chan_url in channels_list:
         base_url = chan_url.split('/featured')[0].split('/videos')[0]
@@ -980,6 +979,8 @@ def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, 
                             thread_title=v_title,
                             channel_url=base_url
                         )
+                        # Tag with language immediately
+                        index.data[v_id]['language'] = language
                         new_entries += 1
                         print(f"    [Found] Match: {v_title}", flush=True)
                         
@@ -994,7 +995,7 @@ def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, 
     print(f"\n>>> Scraping complete. {new_entries} total matches added. Starting downloads...")
 
     # Now trigger the download for this specific set (filtered from the main index)
-    do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, limit_channels=channels_list)
+    do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, limit_channels=channels_list, language_filter=language)
 
 def is_disallowed_channel(channel_name):
     if not channel_name:
@@ -1802,10 +1803,13 @@ def do_scrape_channels(index):
         index.save()
         
     print(f"\n  Finished scraping channels. Added {new_total} new videos to the index.")
-def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, limit_channels=None):
+def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, limit_channels=None, language_filter=None):
     if retry_failed:
         for e in index.data.values():
             if "Youtube" in e.get("sections", []) and e["status"] == "failed":
+                # If language filter is active, only reset if language matches
+                if language_filter and e.get("language") != language_filter:
+                    continue
                 e["status"] = "pending"
         index.save()
         print("  Cleared failed status for 'Youtube' section — will retry.\n")
@@ -1824,11 +1828,17 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, l
                 return True
         return False
 
+    def is_language_match(e):
+        if not language_filter:
+            return True
+        return e.get("language") == language_filter
+
     pending = [
         vid for vid, e in index.data.items()
         if "Youtube" in e.get("sections", []) and e["status"] == "pending"
         and vid not in index.excluded_ids
         and is_channel_allowed(e)
+        and is_language_match(e)
     ]
 
     if not pending:
@@ -2951,24 +2961,39 @@ def main():
         print("\nSelect Language:")
         print("1. Italian")
         print("2. English")
-        print("3. German")
-        print("4. French")
-        print("5. Russian")
-        lang_choice = input("Language Choice: ").strip()
+        print("3. Spanish")
+        print("4. German")
+        print("5. French")
+        print("6. Russian")
+        lang_choice = input("Language Choice [1-6]: ").strip()
         skip_input = input("Skip the scan? (y/n): ").strip().lower()
         should_skip = skip_input == 'y'
         
         selected_list = []
-        if lang_choice == "1": selected_list = ITALIAN_CHANNELS
-        elif lang_choice == "2": selected_list = ENGLISH_CHANNELS
-        elif lang_choice == "3": selected_list = GERMAN_CHANNELS
-        elif lang_choice == "4": selected_list = FRENCH_CHANNELS
-        elif lang_choice == "5": selected_list = RUSSIAN_CHANNELS
+        lang_name = None
+        if lang_choice == "1": 
+            selected_list = ITALIAN_CHANNELS
+            lang_name = "italian"
+        elif lang_choice == "2": 
+            selected_list = ENGLISH_CHANNELS
+            lang_name = "english"
+        elif lang_choice == "3": 
+            selected_list = SPANISH_CHANNELS
+            lang_name = "spanish"
+        elif lang_choice == "4": 
+            selected_list = GERMAN_CHANNELS
+            lang_name = "german"
+        elif lang_choice == "5": 
+            selected_list = FRENCH_CHANNELS
+            lang_name = "french"
+        elif lang_choice == "6": 
+            selected_list = RUSSIAN_CHANNELS
+            lang_name = "russian"
         
-        if selected_list:
-            do_download_language(index, args.video_dir, args.format, args.rate_limit, args.retry_failed, selected_list, year_limit=args.year_limit,skip_scan=should_skip)
+        if lang_name:
+            do_download_language(index, args.video_dir, args.format, args.rate_limit, args.retry_failed, selected_list, lang_name, year_limit=args.year_limit, skip_scan=should_skip)
         else:
-            print("Invalid language selection or empty list.")
+            print("Invalid language selection.")
 
     if choice == "5":
         do_find_mirrors(index)
