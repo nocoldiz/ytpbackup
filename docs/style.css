@@ -107,9 +107,29 @@
   #baseDiv { max-width: 1400px; margin: 0 auto; padding-top: 5px; }
   body.theme-old #baseDiv { max-width: 960px; }
 
-  /* Hide old masthead in modern mode */
-  body:not(.theme-old) #masthead { display: none; }
-  body:not(.theme-old) #masthead-utility { display: none; }
+  /* Hide old masthead in modern mode, repurpose it as a top bar */
+  body:not(.theme-old) #masthead {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    padding: 0 24px;
+    align-items: center;
+  }
+  body:not(.theme-old) #masthead-utility { height: 0; overflow: visible; padding: 0; }
+  body:not(.theme-old) #masthead-utility-right > a { display: none; }
+  
+  body:not(.theme-old) #baseDiv {
+    padding-top: 56px;
+    padding-left: 240px;
+    max-width: 100%;
+    margin: 0;
+  }
 
   #masthead-utility { text-align: right; padding: 5px 24px; font-size: 12px; color: var(--text-muted); }
   body.theme-old #masthead-utility { padding: 5px 0; }
@@ -128,7 +148,7 @@
   
   body.theme-old #masthead-utility-right a { color: #03c; font-size: 12px; margin-left: 5px; }
 
-  #masthead-search { flex: 1; }
+  #masthead-search { }
   .search-form { display: flex; align-items: center; }
   .search-term { width: 100%; max-width: 400px; height: 28px; padding: 2px 8px; font-size: 14px; border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: var(--radius); }
   .search-button { height: 28px; padding: 0 15px; font-weight: bold; background-color: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); cursor: pointer; margin-left: 5px; }
@@ -143,6 +163,95 @@
   #masthead-nav a.nav-tab { display: block; color: var(--masthead-nav-text); font-weight: bold; font-size: 13px; padding: 8px 15px; text-decoration: none; border-radius: var(--radius) var(--radius) 0 0; }
   #masthead-nav a.nav-tab:hover, #masthead-nav a.nav-tab.active { background-color: var(--masthead-nav-active-bg); color: var(--masthead-nav-active-text); }
   .nav-badge { background: var(--accent); color: #ffffff; border-radius: 20px; padding: 2px 6px; font-size: 11px; margin-left: 6px; }
+
+  /* Old Mode Search Bar inside Masthead Nav */
+  body.theme-old #masthead-nav-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+  }
+  body.theme-old #masthead-search {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Modern Sidebar Navigation */
+  body:not(.theme-old) #masthead-nav {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    width: 240px;
+    height: calc(100vh - 56px);
+    flex-direction: column;
+    padding: 12px;
+    border-right: 1px solid var(--border);
+    border-bottom: none;
+    background: var(--surface);
+    z-index: 99;
+    align-items: stretch;
+    margin: 0;
+  }
+  body:not(.theme-old) #masthead-nav a.nav-tab {
+    border-radius: 8px;
+    margin-bottom: 4px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    border: none;
+  }
+  body:not(.theme-old) .nav-badge { margin-left: auto; }
+  
+  /* Modern Top Header UI */
+  body:not(.theme-old) #masthead-nav-right {
+    position: fixed;
+    top: 0;
+    left: 240px;
+    right: 24px;
+    height: 56px;
+    z-index: 101;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+  body:not(.theme-old) #masthead-search {
+    max-width: 600px;
+    width: 100%;
+    padding: 0;
+  }
+  body:not(.theme-old) #masthead-search .search-form {
+    width: 100%;
+    display: flex;
+  }
+  body:not(.theme-old) .search-term { border-radius: 40px 0 0 40px; height: 40px; padding: 0 16px; font-size: 16px; margin: 0; max-width: none; flex: 1; border-right: none; }
+  body:not(.theme-old) .search-button { border-radius: 0 40px 40px 0; height: 40px; padding: 0 24px; margin: 0; background: var(--surface2); border-left: 1px solid var(--border); }
+  body:not(.theme-old) #theme-toggles {
+    position: fixed;
+    bottom: 24px;
+    left: 12px;
+    width: 216px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--text) !important;
+    margin: 0 !important;
+  }
+  body:not(.theme-old) .theme-sep { display: none; }
+  body:not(.theme-old) #theme-toggles a {
+    padding: 8px 12px !important;
+    background: var(--surface2);
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    border: 1px solid var(--border) !important;
+    text-decoration: none;
+  }
+  body:not(.theme-old) #theme-toggles a:hover {
+    background: var(--border);
+  }
+  
   
   body.theme-old #masthead-nav { 
     background: transparent url('https://web.archive.org/web/20090310161619im_/http://s.ytimg.com/yt/img/master-vfl77641.png') repeat-x 0 -487px; 
@@ -268,8 +377,8 @@
   .layout-2col { display: flex; gap: 20px; flex-wrap: wrap; }
   .col-left { width: 300px; flex-shrink: 0; }
   .col-right { flex: 1; min-width: 0; }
-  body.theme-old .home-main { width: 640px; flex: none; order: 1; }
-  body.theme-old .home-side { width: 300px; flex: none; order: 2; float: right; margin-left: 20px; }
+  body.theme-old .home-main { width: 620px; flex: none; order: 1; }
+  body.theme-old .home-side { width: 300px; flex: none; order: 2; margin-left: 0; }
 
   .box { border: 1px solid var(--border); margin-bottom: 15px; background: var(--surface); border-radius: var(--radius); overflow: hidden; }
   .box-header { background-color: var(--surface2); border-bottom: 1px solid var(--border); padding: 8px 12px; font-weight: bold; font-size: 14px; color: var(--text); }
