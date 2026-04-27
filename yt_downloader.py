@@ -1042,95 +1042,21 @@ class VideoIndex:
 
     def cleanup_index(self):
         """
-        Removes excluded videos and moves 'Risorse'/'Old sources' to sources_index.json.
-        Also moves back videos from sources if they appear in other sections.
+        Removes excluded videos.
         """
         to_remove = []
-        sources_to_move = {}
-        sources_to_remove = []
-        target_sections = {"Risorse", "Old sources", "Old Sources"}
 
         for vid, e in list(self.data.items()):
             # 1. Check if video is actually excluded (blacklist)
             if vid in self.actually_excluded_ids:
                 to_remove.append(vid)
-                continue
-
-            # 2. Check sections
-            sections = e.get("sections", [])
-            has_target = any(s in target_sections for s in sections)
-            has_other = any(s not in target_sections for s in sections)
-
-            if has_target and not has_other:
-                # Should be in sources
-                sources_to_move[vid] = e
-                to_remove.append(vid)
-            elif has_other and vid in self.sources_ids:
-                # Should be moved back from sources
-                sources_to_remove.append(vid)
 
         if to_remove:
             print(f"  [cleanup] Removing {len(to_remove)} entries from main index...")
             for vid in to_remove:
                 if vid in self.data:
                     del self.data[vid]
-            
-            if sources_to_move:
-                print(f"  [cleanup] Moving {len(sources_to_move)} entries to sources_index.json...")
-                self.append_to_sources(sources_to_move)
-        
-        if sources_to_remove:
-            print(f"  [cleanup] Moving {len(sources_to_remove)} entries back from sources_index.json...")
-            self.remove_from_sources(sources_to_remove)
-            # Update local tracking
-            for vid in sources_to_remove:
-                self.sources_ids.discard(vid)
-            # Re-update combined set
-            self.excluded_ids = self.actually_excluded_ids | self.sources_ids
-            
-        if to_remove or sources_to_remove:
             self.save()
-
-    def append_to_sources(self, new_data):
-        src_path = os.path.join(self.docs_dir, "sources_index.json")
-        existing = {}
-        if os.path.exists(src_path):
-            try:
-                with open(src_path, encoding="utf-8") as f:
-                    existing = json.load(f)
-            except Exception:
-                existing = {}
-        
-        existing.update(new_data)
-        try:
-            with open(src_path, "w", encoding="utf-8") as f:
-                json.dump(existing, f, indent=2, ensure_ascii=False)
-            # Update local tracking
-            self.sources_ids.update(new_data.keys())
-            self.excluded_ids = self.actually_excluded_ids | self.sources_ids
-        except Exception as e:
-            print(f"  [!] Error saving sources_index.json: {e}")
-
-    def remove_from_sources(self, video_ids):
-        src_path = os.path.join(self.docs_dir, "sources_index.json")
-        if not os.path.exists(src_path):
-            return
-        
-        try:
-            with open(src_path, encoding="utf-8") as f:
-                existing = json.load(f)
-            
-            removed_count = 0
-            for vid in video_ids:
-                if vid in existing:
-                    del existing[vid]
-                    removed_count += 1
-            
-            if removed_count > 0:
-                with open(src_path, "w", encoding="utf-8") as f:
-                    json.dump(existing, f, indent=2, ensure_ascii=False)
-        except Exception as e:
-            print(f"  [!] Error updating sources_index.json for removal: {e}")
 
     def save(self):
         try:
@@ -1673,17 +1599,25 @@ def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
 
 
 def do_scrape_channels(index):
-    """Scans ALLOWED_CHANNELS for new YTP videos matching keywords and logs details with a progress bar."""
+    """Scans channels from docs/channels_to_scrape.txt for new YTP videos matching keywords and logs details with a progress bar."""
     
-    if not ALLOWED_CHANNELS:
-        print("  No allowed channels defined to scrape.")
+    channels_file = os.path.join(index.docs_dir, "channels_to_scrape.txt")
+    if not os.path.exists(channels_file):
+        print(f"  [!] {channels_file} not found.")
         return
         
-    total_channels = len(ALLOWED_CHANNELS)
-    print(f"  Found {total_channels} allowed channel(s) to scrape.")
+    with open(channels_file, "r", encoding="utf-8") as f:
+        channels_to_scrape = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+    
+    if not channels_to_scrape:
+        print("  No channels defined to scrape in channels_to_scrape.txt.")
+        return
+        
+    total_channels = len(channels_to_scrape)
+    print(f"  Found {total_channels} channel(s) to scrape from {channels_file}.")
     new_total = 0
     
-    for i, ch_url in enumerate(ALLOWED_CHANNELS, 1):
+    for i, ch_url in enumerate(channels_to_scrape, 1):
         print(f"\n  Scraping Channel [{i}/{total_channels}]: {ch_url}")
         videos_url = channel_videos_url(ch_url)
         nocoldiz = is_nocoldiz_channel(ch_url)
@@ -2000,7 +1934,7 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
             e = sources_data[vid]
 
             # --- MODIFIED: Save directly to the target directory ---
-            out_dir = video_dir
+            out_dir = os.path.join(os.path.dirname(os.path.abspath(index.filepath)), "..", "sources")
             os.makedirs(out_dir, exist_ok=True)
             # -------------------------------------------------------
             
@@ -2059,33 +1993,21 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
     print(f"  Sources:     {os.path.abspath(src_path)}")
 
 def do_stats(index, output_path="stats.md"):
-
     from collections import defaultdict
 
-    if not index.data:
-        print("  Index is empty. Run 'Update index' first.")
+    src_path = os.path.join(index.docs_dir, "sources_index.json")
+    if not os.path.exists(src_path):
+        print(f"  [!] {src_path} not found.")
         return
 
-    # Only count videos in SCAN_SECTIONS
-    filtered = {
-        vid: e for vid, e in index.data.items()
-        if any(s in SCAN_SECTIONS for s in e.get("sections", []))
-    }
+    with open(src_path, encoding="utf-8") as f:
+        sources_data = json.load(f)
 
-    if not filtered:
-        print("  No videos found in scan sections.")
+    if not sources_data:
+        print("  sources_index.json is empty.")
         return
 
-    # Per-section counts (a video in multiple sections is counted in each)
-    section_stats = {sec: {"total": 0, "downloaded": 0, "unavailable": 0,
-                            "pending": 0, "failed": 0}
-                     for sec in SCAN_SECTIONS}
-    for e in filtered.values():
-        status = e.get("status", "pending")
-        for sec in e.get("sections", []):
-            if sec in section_stats:
-                section_stats[sec]["total"] += 1
-                section_stats[sec][status] = section_stats[sec].get(status, 0) + 1
+    filtered = sources_data
 
     # Grand totals (unique video count)
     grand = {"total": len(filtered), "downloaded": 0, "unavailable": 0,
@@ -2097,49 +2019,39 @@ def do_stats(index, output_path="stats.md"):
     grand_pct = (f"{grand['unavailable'] / grand['total'] * 100:.1f}%"
                  if grand["total"] else "—")
 
-    # Per-channel table (only channels from SCAN_SECTIONS videos)
+    # Per-channel table
     channels = defaultdict(lambda: {"total": 0, "downloaded": 0, "unavailable": 0,
-                                     "pending": 0, "failed": 0, "sections": set()})
+                                     "pending": 0, "failed": 0})
     for e in filtered.values():
         name = e.get("channel_name") or "(unknown)"
         ch = channels[name]
         ch["total"] += 1
         ch[e.get("status", "pending")] += 1
-        for s in e.get("sections", []):
-            if s in SCAN_SECTIONS:
-                ch["sections"].add(s)
 
     rows = sorted(channels.items(), key=lambda x: x[1]["total"], reverse=True)
 
     # Build markdown
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    md = [f"# YTP Backup Stats", f"", f"Generated: {now}", ""]
+    md = [f"# YTP Backup Sources Stats", f"", f"Generated: {now}", ""]
 
-    md += ["## Sections", ""]
-    md += ["| Section | Total | Downloaded | Unavailable | % N/A | Pending | Failed |"]
-    md += ["|---|---|---|---|---|---|---|"]
-    for sec in SCAN_SECTIONS:
-        s = section_stats[sec]
-        t = s["total"]
-        u = s["unavailable"]
-        pct = f"{u / t * 100:.1f}%" if t else "—"
-        md.append(f"| {sec} | {t} | {s['downloaded']} | {u} | {pct} | {s['pending']} | {s['failed']} |")
+    md += ["## Totals", ""]
+    md += ["| Total | Downloaded | Unavailable | % N/A | Pending | Failed |"]
+    md += ["|---|---|---|---|---|---|"]
     md.append(
-        f"| **Total** | **{grand['total']}** | **{grand['downloaded']}** | "
+        f"| **{grand['total']}** | **{grand['downloaded']}** | "
         f"**{grand['unavailable']}** | **{grand_pct}** | **{grand['pending']}** | **{grand['failed']}** |"
     )
     md += [""]
 
     md += ["## Channels", ""]
-    md += ["| Channel | Total | DL | N/A | % N/A | Pending | Failed | Sections |"]
-    md += ["|---|---|---|---|---|---|---|---|"]
+    md += ["| Channel | Total | DL | N/A | % N/A | Pending | Failed |"]
+    md += ["|---|---|---|---|---|---|---|"]
     for name, c in rows:
         t = c["total"]
         u = c["unavailable"]
         pct = f"{u / t * 100:.1f}%" if t else "—"
-        secs = ", ".join(sorted(c["sections"]))
         n = name.replace("|", "\\|")
-        md.append(f"| {n} | {t} | {c['downloaded']} | {u} | {pct} | {c['pending']} | {c['failed']} | {secs} |")
+        md.append(f"| {n} | {t} | {c['downloaded']} | {u} | {pct} | {c['pending']} | {c['failed']} |")
     md += [""]
 
     with open(output_path, "w", encoding="utf-8") as f:
@@ -2147,16 +2059,7 @@ def do_stats(index, output_path="stats.md"):
     print(f"  Stats written → {os.path.abspath(output_path)}")
 
     # Print summary to terminal
-    print(f"\n  {'Section':<32} {'Total':>5}  {'N/A':>4}  {'% N/A':>6}")
-    print("  " + "-" * 54)
-    for sec in SCAN_SECTIONS:
-        s = section_stats[sec]
-        t = s["total"]
-        u = s["unavailable"]
-        pct = f"{u / t * 100:.1f}%" if t else "—"
-        print(f"  {sec:<32} {t:>5}  {u:>4}  {pct:>6}")
-    print("  " + "-" * 54)
-    print(f"  {'TOTAL':<32} {grand['total']:>5}  {grand['unavailable']:>4}  {grand_pct:>6}")
+    print(f"\n  {'TOTAL':<32} {grand['total']:>5}  {grand['unavailable']:>4}  {grand_pct:>6}")
     print()
 
 
@@ -2298,6 +2201,208 @@ def do_find_mirrors(index):
     index.save()
     print(f"  Found potential mirrors for {found_count} / {total} unavailable videos.")
     print(f"  Mirror data stored in 'mirrors' field of video_index.json.")
+
+
+def do_scrape_thumbnails(index, docs_dir):
+    import requests
+    from bs4 import BeautifulSoup
+    import os
+    import json
+    
+    input_file = os.path.join(docs_dir, "ytpoopers_index.json")
+    output_folder = os.path.join(docs_dir, "profile_thumbnails")
+    
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+        print(f"  Created folder: {output_folder}/")
+        
+    try:
+        with open(input_file, "r", encoding="utf-8") as f:
+            youtubers_data = json.load(f)
+    except FileNotFoundError:
+        print(f"  [!] Error: The file '{input_file}' was not found.")
+        return
+    except json.JSONDecodeError:
+        print(f"  [!] Error: The file '{input_file}' is not a valid JSON file.")
+        return
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+    }
+
+    changes_made = False
+
+    for url, info in youtubers_data.items():
+        channel_name = info.get("channel_name", "UnknownChannel")
+        print(f"  Processing {channel_name}...")
+        
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+
+            soup = BeautifulSoup(response.text, "html.parser")
+            meta_tag = soup.find("meta", property="og:image")
+            
+            if meta_tag and meta_tag.get("content"):
+                img_url = meta_tag["content"]
+                
+                img_data = requests.get(img_url, headers=headers).content
+                
+                safe_name = "".join(c for c in channel_name if c.isalnum() or c in " _-").strip()
+                filename = f"{safe_name}.jpg"
+                file_path = os.path.join(output_folder, filename)
+                
+                with open(file_path, "wb") as f:
+                    f.write(img_data)
+                    
+                info["thumbnail"] = filename
+                changes_made = True
+                    
+                print(f"   [+] Saved profile picture to {file_path}")
+            else:
+                print(f"   [-] Could not find profile picture for {channel_name}")
+                
+        except requests.exceptions.RequestException as e:
+            print(f"   [!] Network error processing {channel_name}: {e}")
+        except Exception as e:
+            print(f"   [!] Unexpected error processing {channel_name}: {e}")
+
+    if changes_made:
+        print(f"\n  Updating {input_file} with new thumbnail filenames...")
+        try:
+            with open(input_file, "w", encoding="utf-8") as f:
+                json.dump(youtubers_data, f, indent=2, ensure_ascii=False)
+            print("   [+] JSON file updated successfully.")
+        except Exception as e:
+            print(f"   [!] Error saving back to '{input_file}': {e}")
+    else:
+        print("\n  No thumbnails were downloaded, so the JSON file was not modified.")
+
+
+def do_auto_languages(index):
+    print("  Auto-tagging languages...")
+    import re
+    known_channels = {
+        "italian": [
+            "https://www.youtube.com/@mrpoldoakbar2849",
+            "https://www.youtube.com/@TottiBest92",
+            "https://www.youtube.com/@despotaaa",
+            "https://www.youtube.com/@bassman85x",
+            "https://www.youtube.com/@ZioTok83",
+            "https://www.youtube.com/@tracFelix96trac",
+        ],
+        "english": [
+            "https://www.youtube.com/@cs188",
+            "https://www.youtube.com/@KroboProductions",
+            "https://www.youtube.com/@EmperorLemon",
+            "https://www.youtube.com/@Deepercutt",
+            "https://www.youtube.com/@Hurricoaster",
+            "https://www.youtube.com/@DaThings",
+        ],
+        "spanish": [
+            "https://www.youtube.com/@ParodiadorAnimado",
+            "https://www.youtube.com/@HDLuigi",
+            "https://www.youtube.com/@Catdany",
+            "https://www.youtube.com/@NinterYT",
+            "https://www.youtube.com/@Reloxard",
+        ],
+        "german": [
+            "https://www.youtube.com/@PetersKotstube",
+            "https://www.youtube.com/@Sostrator",
+            "https://www.youtube.com/@YTKFactory",
+            "https://www.youtube.com/@FanboyAllianz",
+            "https://www.youtube.com/@MinerMorsel",
+        ],
+        "french": [],
+        "russian": []
+    }
+
+    patterns = {
+        "spanish": [
+            r'YTPH|YTPBR|Chavo\s+del\s+8|Loquendo|Pelea\s+de\s+invalidos|Vete\s+a\s+la\s+Versh|Pooppa[ñn]ol'
+        ],
+        "french": [
+            r'YTPFR|YTP\s+FR|Brocante|Joueur\s+du\s+Grenier|JDG|Koh\s+Lanta|Denis\s+Brogniart|David\s+Goodenough'
+        ],
+        "german": [
+            r'YouTube\s+Kacke|Marcell\s+D\'Avis|Peter\s+Zwegat|Kinski|Löwenzahn|Peter\s+Lustig|1&1'
+        ],
+        "russian": [
+            r'RYTP|РУТП|Поцык|Повар|Сашко|Гамаз|Пенек'
+        ],
+        "italian": [
+            r'matteo\s+montesi|avventure|Zeb|Collegio|Bigazzi|Soccer|Ganon|Billy\s+Mays|Branduardi|Luigi|Ambrogio|Risotto|ariete|Harry\s+potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu',
+            r'Dipr[eè]|Bello\s+Figo|Germano|Grillo|Gesù|Nabbo|Yotobi|Berlusconi|Muniz|Travaglio|Nemesis|Testo|Papa|Super\s+Quark|Iscritti|YTM|YTG|MLG|YTK',
+            r'Sentence\s+Mix|Ear\s?rape|G-Major|Mondo\s+emo|Pubblicità|Spot|Spongebob|Reverse|Masking|Pitch\s+Shift',
+            r'Mosconi|Benson|Brumotti|Master\s?chef|Mister\s+Lui|Pappalardo|Sgarbi|Razzi|Salvini|Renzi|Rio\s+mare|Gerry\s+Scotti|Fazio',
+            r'Kabu|Nocoldiz|Poldo|Cloroformio|Giannino|Gianni\s+Morandi|Doraemon|Me\s+cont[ro]o\s+Te'
+        ]
+    }
+
+    compiled_patterns = {}
+    for lang, p_list in patterns.items():
+        combined = '|'.join(p_list)
+        compiled_patterns[lang] = re.compile(combined, re.IGNORECASE)
+
+    count = 0
+    tagged_counts = {lang: 0 for lang in patterns}
+    tagged_counts["english"] = 0
+    
+    channels_by_lang = {lang: set(urls) for lang, urls in known_channels.items()}
+
+    for video_id, video in index.data.items():
+        title = video.get('title')
+        thread_titles = video.get('thread_titles', [])
+        channel_url = video.get('channel_url')
+        
+        matched_lang = None
+        
+        if channel_url:
+            for lang, urls in known_channels.items():
+                if channel_url in urls:
+                    matched_lang = lang
+                    break
+        
+        if not matched_lang:
+            search_text = []
+            if title:
+                search_text.append(title)
+            if thread_titles:
+                search_text.extend(thread_titles)
+            
+            full_text = " ".join(search_text)
+            
+            if full_text:
+                for lang, regex in compiled_patterns.items():
+                    if regex.search(full_text):
+                        matched_lang = lang
+                        break
+        
+        if matched_lang:
+            video['language'] = matched_lang
+            if matched_lang not in tagged_counts:
+                tagged_counts[matched_lang] = 0
+            tagged_counts[matched_lang] += 1
+            count += 1
+            
+            if channel_url:
+                channels_by_lang[matched_lang].add(channel_url)
+
+    print(f"  Finished tagging. Total videos updated: {count}")
+    for lang, c in sorted(tagged_counts.items()):
+        print(f"    - {lang}: {c}")
+
+    index.save()
+
+    channels_file = os.path.join(index.docs_dir, 'channels_by_language.txt')
+    print(f"  Exporting channels to {channels_file}...")
+    with open(channels_file, 'w', encoding='utf-8') as f:
+        for lang, urls in sorted(channels_by_lang.items()):
+            var_name = f"{lang.upper()}_CHANNELS"
+            f.write(f"{var_name} = [\n")
+            for url in sorted(list(urls)):
+                f.write(f"    \"{url}\",\n")
+            f.write("]\n\n")
 
 
 def do_scrape_profiles(index, docs_dir):
@@ -2452,13 +2557,79 @@ def do_scrape_profiles(index, docs_dir):
     print(f"  Thumbnails saved to: {os.path.abspath(thumb_dir)}")
 
 
+def do_scrape_sources_metadata(index):
+    src_path = os.path.join(index.docs_dir, "sources_index.json")
+    if not os.path.exists(src_path):
+        print(f"  [!] {src_path} not found.")
+        return
+
+    with open(src_path, encoding="utf-8") as f:
+        sources_data = json.load(f)
+
+    need_meta = [vid for vid, e in sources_data.items() if (
+        e.get("title") is None or
+        e.get("description") is None or
+        e.get("channel_name") is None or
+        e.get("channel_url") is None or
+        e.get("publish_date") is None or
+        e.get("view_count") is None or
+        e.get("like_count") is None or 
+        e.get("title") == "warnings.warn("
+    ) and e.get("status") != "unavailable"]
+
+    if not need_meta:
+        print("  All videos in sources_index.json already have metadata.")
+        return
+
+    total_meta = len(need_meta)
+    print(f"  Fetching YouTube metadata for {total_meta} sources videos")
+    print(f"  (title, description, channel link, tags)...")
+    print()
+
+    for i, vid in enumerate(need_meta, 1):
+        overall_pct = i / total_meta * 100
+        ov_bar = bar(overall_pct, 30)
+        print(f"\r  {ov_bar}  {i}/{total_meta}", end="", flush=True)
+
+        meta = fetch_yt_metadata(vid)
+        e = sources_data[vid]
+        if meta == "unavailable":
+            e["status"] = "unavailable"
+        elif meta:
+            if meta.get("title"): e["title"] = meta["title"]
+            if meta.get("description") is not None: e["description"] = meta["description"]
+            if meta.get("channel_name"): e["channel_name"] = meta["channel_name"]
+            if meta.get("channel_url"): e["channel_url"] = meta["channel_url"]
+            if meta.get("publish_date") is not None: e["publish_date"] = meta["publish_date"]
+            if meta.get("view_count") is not None: e["view_count"] = meta["view_count"]
+            if meta.get("like_count") is not None: e["like_count"] = meta["like_count"]
+            if meta.get("tags") is not None: e["tags"] = meta["tags"]
+
+        if i % 20 == 0:
+            with open(src_path, "w", encoding="utf-8") as f:
+                json.dump(sources_data, f, indent=2, ensure_ascii=False)
+
+    clear_line()
+    with open(src_path, "w", encoding="utf-8") as f:
+        json.dump(sources_data, f, indent=2, ensure_ascii=False)
+
+    print(f"  Done — sources_index.json metadata updated.")
+
 def do_scrape_comments(index, video_dir):
-    """Scrape comments for every non-unavailable video."""
+    """Scrape comments for every non-unavailable video in sources_index.json."""
     comments_dir = os.path.join(video_dir, "comments")
     os.makedirs(comments_dir, exist_ok=True)
 
-    videos = [(vid, e) for vid, e in index.data.items()
-              if e.get("status") != "unavailable" and vid not in index.excluded_ids]
+    src_path = os.path.join(index.docs_dir, "sources_index.json")
+    if not os.path.exists(src_path):
+        print(f"  [!] {src_path} not found.")
+        return
+
+    with open(src_path, encoding="utf-8") as f:
+        sources_data = json.load(f)
+
+    videos = [(vid, e) for vid, e in sources_data.items()
+              if e.get("status") != "unavailable"]
     total = len(videos)
 
     if not videos:
@@ -2591,48 +2762,37 @@ def main():
     print("  What do you want to do?")
     print()
     print("  1  Fetch missing metadata")
-    print("       Fetch missing title / description / channel URL /")
-    print("       tags from YouTube for all videos in index.")
+    print("       Fetch missing metadata. Will NOT fetch new videos.")
     print()
     print("  2  Download indexed videos")
-    print("       Download all pending videos in the index.")
+    print("       Download pending videos.")
     print()
     print("  3  Scrape channels")
     print("       Scrape all index channels + allowed-channel list;")
     print("       add YTP matches to 'Youtube' section.")
     print()
-    print("  4  Download 'Youtube' section")
-    print("       Download only videos scraped via mode 3.")
-    print()
-    print("  5  Section Download (Filter by SCAN_SECTIONS)")
-    print()
-    print("  6  Download YTPs from selected language")
+    print("  4  Download YTPs from selected language")
     print("       Download videos from ALLOWED_CHANNELS, 'YTP nostrane', or 'YTP fai da te'.")
     print()
-    print("  7  Stats  →  stats.md")
-    print("       Section & channel breakdown (SCAN_SECTIONS only).")
-    print()
-    print("  8  Chronology")
-    print("       Top 20 most-viewed videos, sorted by year.")
-    print()
-    print()
-    print("  9 Find mirror videos")
+    print("  5  Find mirror videos")
     print("       Search YouTube for reuploads of unavailable videos.")
     print()
-    print("  10 Scrape comments")
-    print("       Fetch comments for every indexed video.")
+    print("  6  Scrape comments")
+    print("       Fetch comments for every indexed video in sources_index.json.")
     print()
-    print("  11/12 Scrape channel profiles")
-    print("       Scrape name, description, thumbnail, subscribers,")
-    print("       creation date for every channel → docs/ytpoopers_index.json")
+    print("  7  Scrape thumbnails")
+    print("       Download profile pictures for channels in ytpoopers_index.json")
     print()
-    print("  13 Download 'Risorse' & 'Old sources'")
-    print("       Download only videos from these sections into a single folder.")
+    print("  8  Auto languages")
+    print("       Automatically tag languages for all videos.")
+    print()
+    print("  9  Stats  →  stats.md")
+    print("       Section & channel breakdown (sources_index.json only).")
     print()
     print("  q  Quit")
     print()
-    choice = ask("  Choice [1-13/q]: ",
-                 {"1","2","3","4","5","6","7","8","9","10","11","12","13","q"})
+    choice = ask("  Choice [1-9/q]: ",
+                 {"1","2","3","4","5","6","7","8","9","q"})
 
     if choice == "q":
         sys.exit(0)
@@ -2642,19 +2802,32 @@ def main():
     index = VideoIndex(args.video_dir, args.docs_dir)
     index.load()
 
-    if choice in ("1"):
-        do_update_index(index)
+    if choice == "1":
+        print("\nSelect what metadata to fetch:")
+        print("1. All (video_index.json & sources_index.json)")
+        print("2. Only YTP metadata (video_index.json)")
+        print("3. Only sources metadata (sources_index.json)")
+        sub = ask("Choice [1-3]: ", {"1", "2", "3"})
+        if sub in ("1", "2"):
+            do_update_index(index)
+        if sub in ("1", "3"):
+            do_scrape_sources_metadata(index)
         print()
-    if choice in ("2"):
-        do_download(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
+    if choice == "2":
+        print("\nSelect what to download:")
+        print("1. All (video_index.json & sources_index.json)")
+        print("2. Only YTP videos (video_index.json)")
+        print("3. Only sources videos (sources_index.json)")
+        sub = ask("Choice [1-3]: ", {"1", "2", "3"})
+        if sub in ("1", "2"):
+            do_download(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
+        if sub in ("1", "3"):
+            do_download_risorse(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
+        print()
     if choice == "3":
         do_scrape_channels(index)
         print()
     if choice == "4":
-        do_download_youtube(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
-    if choice == "5":
-        do_download_by_section(index, args.video_dir, args.format, args.rate_limit)
-    if choice == "6":
         print("\nSelect Language:")
         print("1. Italian")
         print("2. English")
@@ -2676,27 +2849,24 @@ def main():
             do_download_language(index, args.video_dir, args.format, args.rate_limit, args.retry_failed, selected_list, year_limit=args.year_limit,skip_scan=should_skip)
         else:
             print("Invalid language selection or empty list.")
+
+    if choice == "5":
+        do_find_mirrors(index)
+
+    if choice == "6":
+        do_scrape_comments(index, args.docs_dir)
+
     if choice == "7":
+        do_scrape_thumbnails(index, args.docs_dir)
+
+    if choice == "8":
+        do_auto_languages(index)
+
+    if choice == "9":
         do_stats(index)
         index.cleanup_index()
 
-    if choice == "8":
-        do_chronology(index)
 
-    if choice == "9":
-        do_find_mirrors(index)
-
-    if choice == "10":
-        do_scrape_comments(index, args.docs_dir)
-
-    if choice == "11":
-        do_scrape_profiles(index, args.docs_dir)
-
-    if choice == "12":
-        do_scrape_profiles(index, args.docs_dir)
-
-    if choice == "13":
-        do_download_risorse(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
 
     print()
 
