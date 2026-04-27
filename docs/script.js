@@ -11,6 +11,43 @@ let selectedChannel = null;
 let selectedSection = null;
 let charts = {};
 
+let currentVideoMode = "all"; // "all", "ytp", "sources"
+let sourceChannels = new Set();
+
+function toggleVideoMode() {
+  if (currentVideoMode === "all") currentVideoMode = "ytp";
+  else if (currentVideoMode === "ytp") currentVideoMode = "sources";
+  else currentVideoMode = "all";
+
+  const txt = currentVideoMode === "all" ? "Show all videos" : 
+              currentVideoMode === "ytp" ? "Show YTP videos" : 
+              "Show sources videos";
+              
+  document.querySelectorAll('.btn-video-mode').forEach(btn => btn.textContent = txt);
+
+  if (document.getElementById('page-youtube').classList.contains('active')) {
+    renderHomePage();
+  }
+  const q = document.getElementById('global-search-input').value.trim();
+  if (q && document.getElementById('page-search').classList.contains('active')) {
+    performSearch(q);
+  }
+}
+
+function getActiveVideos(forHome = false) {
+  const all = [...allVideos, ...allSources];
+  if (currentVideoMode === "all") return forHome ? allVideos : all;
+  
+  if (currentVideoMode === "ytp") {
+    return allVideos.filter(v => !v.channel_name || !sourceChannels.has(v.channel_name));
+  }
+  
+  if (currentVideoMode === "sources") {
+    return all.filter(v => allSources.includes(v) || (v.channel_name && sourceChannels.has(v.channel_name)));
+  }
+  return all;
+}
+
 let renderedHomeVideoIds = new Set();
 let isFetchingMoreHome = false;
 let currentModernTab = 'featured';
@@ -117,6 +154,7 @@ function initApp(vRaw, sRaw, pRaw) {
   }
   if (sRaw) {
     allSources = Object.entries(sRaw).map(([id, v]) => ({ id, ...v }));
+    sourceChannels = new Set(allSources.map(v => v.channel_name).filter(Boolean));
   }
   if (pRaw) {
     allPoopers = pRaw;
@@ -298,6 +336,7 @@ function toggleThemeMode() {
   const isOld = document.body.classList.toggle('theme-old');
   const btn = document.getElementById('toggle-modern-old');
   if (btn) btn.textContent = isOld ? 'Switch to Modern Mode' : 'Switch to Old Mode';
+  if (typeof updateVideoLayoutForTheme === 'function') updateVideoLayoutForTheme();
 }
 
 function toggleNightDay() {
@@ -340,7 +379,7 @@ function performSearch(query) {
 
   document.getElementById('search-query-display').textContent = query;
 
-  const ytData = [...allVideos, ...allSources];
+  const ytData = getActiveVideos(false);
   const qLower = query.toLowerCase();
 
   // Search Channels
@@ -394,6 +433,7 @@ function openVideo(vidId, pushToHistory = true) {
   if (pushToHistory) updateURL({ v: vidId }, '/watch');
   window.scrollTo(0, 0);
   showPage('video', false);
+  if (typeof updateVideoLayoutForTheme === 'function') updateVideoLayoutForTheme();
   const ytData = [...allVideos, ...allSources];
   const v = ytData.find(x => x.id === vidId);
   if (!v) {
@@ -602,9 +642,70 @@ function openProfile(user, pushToHistory = true) {
   return false;
 }
 
+function updateVideoLayoutForTheme() {
+  const isOld = document.body.classList.contains('theme-old');
+  const mainCol = document.querySelector('#page-video .col-right');
+  const sideCol = document.querySelector('#page-video .col-left');
+  
+  const title = document.getElementById('watch-title');
+  const video = document.getElementById('watch-video-container');
+  const stats = document.querySelector('.watch-stats');
+  const channel = document.getElementById('watch-channel-info');
+  const desc = document.getElementById('watch-description');
+  const actions = document.getElementById('watch-actions');
+  const date = document.getElementById('watch-date');
+  
+  if (!mainCol || !sideCol || !title || !video || !channel || !desc) return;
+
+  let channelRow = document.getElementById('modern-channel-row');
+
+  if (isOld) {
+    // Restore Old Mode
+    mainCol.insertBefore(title, video);
+    sideCol.insertBefore(stats, sideCol.firstChild);
+    
+    // Put date back into channel info if it was moved
+    const channelTextWrap = channel.querySelector('div');
+    if (date && channelTextWrap) {
+        channelTextWrap.appendChild(date);
+        date.style.display = 'block';
+        date.style.marginLeft = '0';
+    }
+    
+    sideCol.insertBefore(channel, stats.nextSibling);
+    sideCol.insertBefore(desc, channel.nextSibling);
+    sideCol.insertBefore(actions, desc.nextSibling);
+    if (channelRow) channelRow.style.display = 'none';
+  } else {
+    // Modern Mode
+    mainCol.insertBefore(video, mainCol.firstChild);
+    mainCol.insertBefore(title, video.nextSibling);
+    
+    if (!channelRow) {
+      channelRow = document.createElement('div');
+      channelRow.id = 'modern-channel-row';
+      channelRow.className = 'modern-channel-row';
+      mainCol.insertBefore(channelRow, title.nextSibling);
+    }
+    channelRow.style.display = 'flex';
+    channelRow.appendChild(channel);
+    channelRow.appendChild(actions);
+    
+    mainCol.insertBefore(desc, channelRow.nextSibling);
+    desc.insertBefore(stats, desc.firstChild);
+    
+    // Move date next to views in description box
+    if (date) {
+        stats.appendChild(date);
+        date.style.display = 'inline-block';
+        date.style.marginLeft = '8px';
+    }
+  }
+}
+
 function renderHomePage() {
   renderedHomeVideoIds.clear();
-  const ytData = allVideos;
+  const ytData = getActiveVideos(true);
   const featuredContainer = document.getElementById('featured-videos');
   const popularContainer = document.getElementById('popular-videos');
   const modernContainer = document.getElementById('modern-videos-grid');
@@ -645,7 +746,7 @@ function renderModernGrid() {
   const modernContainer = document.getElementById('modern-videos-grid');
   if (!modernContainer) return;
 
-  const ytData = allVideos;
+  const ytData = getActiveVideos(true);
   const validVideos = ytData.filter(v => v.status === 'downloaded' || v.status === 'available');
   if (validVideos.length === 0) return;
 
@@ -671,7 +772,7 @@ function setFeaturedTab(tab) {
   const clickedTab = document.querySelector(`.yt-tab[onclick*="${tab}"]`);
   if (clickedTab) clickedTab.classList.add('active');
 
-  const ytData = allVideos;
+  const ytData = getActiveVideos(true);
   const validVideos = ytData.filter(v => v.status === 'downloaded' || v.status === 'available');
   const featuredContainer = document.getElementById('featured-videos');
   if (!featuredContainer || validVideos.length === 0) return;
@@ -699,7 +800,7 @@ function loadMoreHomeVideos() {
   const modernContainer = document.getElementById('modern-videos-grid');
   if (!featuredContainer || !modernContainer) return;
 
-  const validVideos = allVideos.filter(v => v.status === 'downloaded' || v.status === 'available');
+  const validVideos = getActiveVideos(true).filter(v => v.status === 'downloaded' || v.status === 'available');
   const available = validVideos.filter(v => !renderedHomeVideoIds.has(v.id));
   if (available.length === 0) return;
 

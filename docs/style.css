@@ -2936,3 +2936,145 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+/* --- MODERN VIDEO PAGE LAYOUT --- */
+body:not(.theme-old) #page-video {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+body:not(.theme-old) #page-video .layout-2col {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  flex-direction: row; /* ensure it stays row */
+}
+body:not(.theme-old) #page-video .col-right {
+  flex: 1;
+  width: auto !important;
+  min-width: 0;
+}
+body:not(.theme-old) #page-video .col-left {
+  width: 400px !important;
+  flex-shrink: 0;
+}
+
+body:not(.theme-old) #watch-video-container {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+body:not(.theme-old) #watch-video-container iframe,
+body:not(.theme-old) #watch-video-container video {
+  width: 100% !important;
+  height: 100% !important;
+}
+body:not(.theme-old) #watch-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 16px;
+  color: var(--text);
+}
+body:not(.theme-old) .modern-channel-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  margin-bottom: 16px;
+}
+body:not(.theme-old) #watch-channel-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+body:not(.theme-old) #watch-channel-info img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+body:not(.theme-old) #watch-actions {
+  margin-top: 0 !important;
+}
+body:not(.theme-old) #watch-actions button {
+  background: var(--surface2);
+  color: var(--text);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+  width: auto !important;
+}
+body:not(.theme-old) #watch-actions button:hover {
+  background: var(--border);
+}
+body:not(.theme-old) #watch-description {
+  background: var(--surface2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+body:not(.theme-old) .watch-stats {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+/* Sidebar adjustments */
+body:not(.theme-old) #page-video .col-left .box {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-top: 0 !important;
+}
+body:not(.theme-old) #page-video .col-left .box-header {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  padding: 0 0 16px 0;
+}
+body:not(.theme-old) #page-video .col-left .box-content {
+  padding: 0;
+}
+
+body:not(.theme-old) #page-video .col-left .video-item.list {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 0;
+}
+body:not(.theme-old) #page-video .col-left .yt-list-thumb img {
+  width: 168px;
+  height: 94px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+body:not(.theme-old) #page-video .col-left .yt-list-info {
+  flex: 1;
+  min-width: 0;
+}
+body:not(.theme-old) #page-video .col-left .yt-list-title {
+  font-size: 14px;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+body:not(.theme-old) #page-video .col-left .yt-list-desc {
+  display: none;
+}
+body:not(.theme-old) #page-video .col-left .yt-channel,
+body:not(.theme-old) #page-video .col-left .yt-views,
+body:not(.theme-old) #page-video .col-left .yt-stars {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+}
