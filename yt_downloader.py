@@ -766,9 +766,14 @@ def clear_line():
     cols = shutil.get_terminal_size((80, 24)).columns
     print("\r" + " " * cols + "\r", end="", flush=True)
 
-def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, channels_list, year_limit=None):
-    print(f"\n>>> Starting Language Scan for {len(channels_list)} channels...")
+def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, channels_list, year_limit=None, skip_scan=False):
+    # Check if the skip flag is True before doing anything else
+    if skip_scan:
+        print(f"\n>>> Skipping Language Scan as requested.")
+        do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed)
+        return 0  # Return 0 new entries since we skipped
     
+    print(f"\n>>> Starting Language Scan for {len(channels_list)} channels...")
     new_entries = 0
     for chan_url in channels_list:
         base_url = chan_url.split('/featured')[0].split('/videos')[0]
@@ -2577,6 +2582,8 @@ def main():
         print("4. French")
         print("5. Russian")
         lang_choice = input("Language Choice: ").strip()
+        skip_input = input("Skip the scan? (y/n): ").strip().lower()
+        should_skip = skip_input == 'y'
         
         selected_list = []
         if lang_choice == "1": selected_list = ITALIAN_CHANNELS
@@ -2586,7 +2593,7 @@ def main():
         elif lang_choice == "5": selected_list = RUSSIAN_CHANNELS
         
         if selected_list:
-            do_download_language(index, args.video_dir, args.format, args.rate_limit, args.retry_failed, selected_list, year_limit=args.year_limit)
+            do_download_language(index, args.video_dir, args.format, args.rate_limit, args.retry_failed, selected_list, year_limit=args.year_limit,skip_scan=should_skip)
         else:
             print("Invalid language selection or empty list.")
     if choice == "7":
