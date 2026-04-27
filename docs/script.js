@@ -416,8 +416,43 @@ function openVideo(vidId, pushToHistory = true) {
     moreContainer.innerHTML = moreVids.map(x => renderVideoItem(x, 'list')).join('');
   }
   updateSaveButton(vidId);
+  loadVideoResponses(v);
   loadComments(vidId);
   return false;
+}
+
+function loadVideoResponses(video) {
+  const container = document.getElementById('video-responses');
+  const section = document.getElementById('video-responses-section');
+  if (!container || !section) return;
+
+  const desc = video.description || '';
+  // Match 11-char YouTube IDs from various link formats
+  const ids = [...new Set([...desc.matchAll(/(?:v=|vi\/|shorts\/|be\/|embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/g)].map(m => m[1]))];
+  
+  // Filter out the current video ID itself if it's linked
+  const filteredIds = ids.filter(id => id !== video.id);
+
+  if (filteredIds.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  const ytData = [...allVideos, ...allSources];
+  const matched = filteredIds.map(id => ytData.find(v => v.id === id)).filter(Boolean);
+
+  if (matched.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  section.style.display = 'block';
+  document.getElementById('responses-count-title').textContent = `Video Responses (${matched.length})`;
+  
+  // Render responses in a grid-like layout
+  container.innerHTML = `<div class="video-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 10px;">
+    ${matched.map(v => renderVideoItem(v, 'grid')).join('')}
+  </div>`;
 }
 
 async function loadComments(vidId) {

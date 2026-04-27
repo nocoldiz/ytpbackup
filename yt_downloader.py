@@ -569,7 +569,7 @@ ITALIAN_CHANNELS = [
 
 
 ]
-ENGLISH_CHANELS = [
+ENGLISH_CHANNELS = [
     "https://www.youtube.com/@cs188",
     "https://www.youtube.com/@KroboProductions",
     "https://www.youtube.com/@EmperorLemon",
@@ -577,7 +577,25 @@ ENGLISH_CHANELS = [
     "https://www.youtube.com/@Hurricoaster",
     "https://www.youtube.com/@DaThings",
     "https://www.youtube.com/user/YTPandmore",
-
+    "https://www.youtube.com/@TheMasterPoop",
+    "https://www.youtube.com/@15SS25",
+    "https://www.youtube.com/@kitty0706",
+    "https://www.youtube.com/@Stegblob",
+    "https://www.youtube.com/@Kajetokun",
+    "https://www.youtube.com/@Captpan6",
+    "https://www.youtube.com/@Paperking99",
+    "https://www.youtube.com/@PeppaPigParodies",
+    "https://www.youtube.com/@SchaffrillasProductions",
+    "https://www.youtube.com/@Bosh",
+    "https://www.youtube.com/@RoscoeMcGillicuddy",
+    "https://www.youtube.com/@NPCarlsson",
+    "https://www.youtube.com/@SwagPikachu",
+    "https://www.youtube.com/@klystron2010",
+    "https://www.youtube.com/@CoryTheNorm",
+    "https://www.youtube.com/@MoBrosStudios",
+    "https://www.youtube.com/@Waltman13",
+    "https://www.youtube.com/@LinHeartAttack",
+    "https://www.youtube.com/@Shrekardo",
 ]
 
 SPANISH_CHANNELS = [
@@ -586,13 +604,31 @@ SPANISH_CHANNELS = [
     "https://www.youtube.com/@Catdany",
     "https://www.youtube.com/@NinterYT",
     "https://www.youtube.com/@Reloxard",
-    "https://www.youtube.com/@Catdany",
-    "https://www.youtube.com/@HDLuigi",
-    "https://www.youtube.com/@NinterYT",
-    "https://www.youtube.com/@Reloxard",
     "https://www.youtube.com/@SLBysusparidas",
     "https://www.youtube.com/@SimixF1",
-    "https://www.youtube.com/@Tachin1994"
+    "https://www.youtube.com/@Tachin1994",
+    "https://www.youtube.com/@SLAPJACK23",
+    "https://www.youtube.com/@Ayuwoki",
+    "https://www.youtube.com/@Fistroman",
+    "https://www.youtube.com/@MФRDO",
+    "https://www.youtube.com/@Cristeve",
+    "https://www.youtube.com/@SuperM",
+    "https://www.youtube.com/@Gokusan925",
+    "https://www.youtube.com/@DarkSchool",
+    "https://www.youtube.com/@CriticalShock",
+    "https://www.youtube.com/@SatanJaguar",
+    "https://www.youtube.com/@Iluminatus",
+    "https://www.youtube.com/@JochusPlay",
+    "https://www.youtube.com/@Jaguer91",
+    "https://www.youtube.com/@DeTounPoop",
+    "https://www.youtube.com/@Cacamojadaman",
+    "https://www.youtube.com/@AnzhyraPOOPS",
+    "https://www.youtube.com/@DragonSouru",
+    "https://www.youtube.com/@AlexParodiadorChileno",
+    "https://www.youtube.com/@Bolivianopooper",
+    "https://www.youtube.com/@Davasato",
+    "https://www.youtube.com/@Davuuwart",
+    "https://www.youtube.com/@DeepWeeb"
 ]
 
 GERMAN_CHANNELS = [
@@ -602,23 +638,42 @@ GERMAN_CHANNELS = [
     "https://www.youtube.com/@FanboyAllianz",
     "https://www.youtube.com/@MinerMorsel",
     "https://www.youtube.com/@CorruptionSound",
-    "https://www.youtube.com/@PetersKotstube",
     "https://www.youtube.com/@ShroomheadOne",
-    "https://www.youtube.com/@Sostrator",
-    "https://www.youtube.com/@YTKFactory",
-
+    "https://www.youtube.com/@GANOVENHABICHT",
+    "https://www.youtube.com/@JuckKek"
 ]
 FRENCH_CHANNELS = [
     "https://www.youtube.com/@PoopSlammer",
     "https://www.youtube.com/@USBduck",
-    "https://youtube.com/@Tj8w",
-
+    "https://www.youtube.com/@Tj8w",
+    "https://www.youtube.com/@123lunatic",
+    "https://www.youtube.com/@Chuiapoil",
+    "https://www.youtube.com/@GUGUSlaPoop",
+    "https://www.youtube.com/@jefaischierlesgens",
+    "https://www.youtube.com/@Maxlefoulevrai",
+    "https://www.youtube.com/@MopTheMoss",
+    "https://www.youtube.com/@MystR076",
+    "https://www.youtube.com/@ParodyOfStephane",
+    "https://www.youtube.com/@YoonnsNewkarlottay",
+    "https://www.youtube.com/@Quentingrd"
 ]
 
 RUSSIAN_CHANNELS = [
     "https://www.youtube.com/@Whyimnotfat",
     "https://www.youtube.com/@gfoint",
-
+    "https://www.youtube.com/@Shootlife2008",
+    "https://www.youtube.com/@Multiprogramm",
+    "https://www.youtube.com/@GTHO",
+    "https://www.youtube.com/@FureonNectarmoon",
+    "https://www.youtube.com/@Bezboltenko",
+    "https://www.youtube.com/@Shpigun",
+    "https://www.youtube.com/@SPIDEN",
+    "https://www.youtube.com/@SgBash",
+    "https://www.youtube.com/@SenyaLyutyy",
+    "https://www.youtube.com/@iMiles",
+    "https://www.youtube.com/@Inex",
+    "https://www.youtube.com/@Zverobox",
+    "https://www.youtube.com/@TRALLPUKANOW"
 ]
 
 ALLOWED_CHANNELS = (
@@ -626,7 +681,8 @@ ALLOWED_CHANNELS = (
     GERMAN_CHANNELS + 
     FRENCH_CHANNELS + 
     SPANISH_CHANNELS + 
-    ITALIAN_CHANNELS
+    ITALIAN_CHANNELS +
+    ENGLISH_CHANNELS
 )
 # NocoldizTV: scrape everything except videos whose title matches these words
 NOCOLDIZ_BLACKLIST = re.compile(
@@ -2593,7 +2649,7 @@ def main():
         
         selected_list = []
         if lang_choice == "1": selected_list = ITALIAN_CHANNELS
-        elif lang_choice == "2": selected_list = ENGLISH_CHANELS
+        elif lang_choice == "2": selected_list = ENGLISH_CHANNELS
         elif lang_choice == "3": selected_list = GERMAN_CHANNELS
         elif lang_choice == "4": selected_list = FRENCH_CHANNELS
         elif lang_choice == "5": selected_list = RUSSIAN_CHANNELS
