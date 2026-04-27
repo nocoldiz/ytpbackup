@@ -832,7 +832,7 @@ def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, 
     # Check if the skip flag is True before doing anything else
     if skip_scan:
         print(f"\n>>> Skipping Language Scan as requested.")
-        do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed)
+        do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, limit_channels=channels_list)
         return 0  # Return 0 new entries since we skipped
     
     print(f"\n>>> Starting Language Scan for {len(channels_list)} channels...")
@@ -857,7 +857,8 @@ def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, 
                             video_id=v_id,
                             section="Youtube",
                             source_page=f"Language Scrape ({base_url})",
-                            thread_title=v_title
+                            thread_title=v_title,
+                            channel_url=base_url
                         )
                         new_entries += 1
                         print(f"    [Found] Match: {v_title}", flush=True)
@@ -873,7 +874,7 @@ def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, 
     print(f"\n>>> Scraping complete. {new_entries} total matches added. Starting downloads...")
 
     # Now trigger the download for this specific set (filtered from the main index)
-    do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed)
+    do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, limit_channels=channels_list)
 
 def is_disallowed_channel(channel_name):
     if not channel_name:
@@ -1141,7 +1142,7 @@ class VideoIndex:
         except Exception as e:
             print(f"\n  [!] Error saving index to {self.filepath}: {e}")
 
-    def add_video(self, video_id, section, source_page, thread_title=None, nickname=None):
+    def add_video(self, video_id, section, source_page, thread_title=None, nickname=None, channel_url=None):
         if video_id in self.actually_excluded_ids:
             # Skip only hard-blacklisted videos during scanning
             return
@@ -1152,7 +1153,7 @@ class VideoIndex:
                 "title": None,
                 "description": None,
                 "channel_name": None,
-                "channel_url": None,
+                "channel_url": channel_url,
                 "publish_date": None,
                 "view_count": None,
                 "like_count": None,
@@ -1166,6 +1167,8 @@ class VideoIndex:
                 "mirrors": None,
             }
         e = self.data[video_id]
+        if channel_url and not e.get("channel_url"):
+            e["channel_url"] = channel_url
         if section not in e["sections"]:
             e["sections"].append(section)
         if source_page not in e["source_pages"]:
@@ -1745,7 +1748,7 @@ def do_scrape_channels(index):
         index.save()
         
     print(f"\n  Finished scraping channels. Added {new_total} new videos to the index.")
-def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
+def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, limit_channels=None):
     if retry_failed:
         for e in index.data.values():
             if "Youtube" in e.get("sections", []) and e["status"] == "failed":
@@ -1753,10 +1756,25 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed):
         index.save()
         print("  Cleared failed status for 'Youtube' section — will retry.\n")
 
+    def is_channel_allowed(e):
+        if not limit_channels:
+            return True
+        ch_url = e.get("channel_url")
+        if not ch_url:
+            return False
+        # Normalize and compare
+        ch_url_norm = ch_url.split('/featured')[0].split('/videos')[0].rstrip('/')
+        for allowed in limit_channels:
+            allowed_norm = allowed.split('/featured')[0].split('/videos')[0].rstrip('/')
+            if ch_url_norm == allowed_norm:
+                return True
+        return False
+
     pending = [
         vid for vid, e in index.data.items()
         if "Youtube" in e.get("sections", []) and e["status"] == "pending"
         and vid not in index.excluded_ids
+        and is_channel_allowed(e)
     ]
 
     if not pending:
@@ -2301,7 +2319,7 @@ def do_scrape_profiles(index, docs_dir):
         return
 
     # Load existing data to allow incremental updates
-    output_path = os.path.join(docs_dir, "ytpoopers.json")
+    output_path = os.path.join(docs_dir, "ytpoopers_index.json")
     existing = {}
     if os.path.exists(output_path):
         try:
@@ -2310,7 +2328,7 @@ def do_scrape_profiles(index, docs_dir):
         except Exception:
             existing = {}
 
-    # Initial population: ensure every channel in index is in ytpoopers.json
+    # Initial population: ensure every channel in index is in ytpoopers_index.json
     added_new = False
     for ch_url, ch_name in channel_map.items():
         if ch_url not in existing:
@@ -2539,7 +2557,7 @@ def main():
     p.add_argument("--scrape-comments", action="store_true",
                    help="Scrape comments for all indexed videos")
     p.add_argument("--scrape-profiles", action="store_true",
-                   help="Scrape channel profiles and save to docs/ytpoopers.json")
+                   help="Scrape channel profiles and save to docs/ytpoopers_index.json")
     p.add_argument("--year-limit",      type=int, default=2016,
                    help="Limit downloads to videos published until this year (for language mode)")
     args, _ = p.parse_known_args()
@@ -2606,7 +2624,7 @@ def main():
     print()
     print("  11/12 Scrape channel profiles")
     print("       Scrape name, description, thumbnail, subscribers,")
-    print("       creation date for every channel → docs/ytpoopers.json")
+    print("       creation date for every channel → docs/ytpoopers_index.json")
     print()
     print("  13 Download 'Risorse' & 'Old sources'")
     print("       Download only videos from these sections into a single folder.")

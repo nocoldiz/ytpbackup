@@ -3,7 +3,7 @@ import json
 import requests
 from bs4 import BeautifulSoup
 
-INPUT_FILE = "./docs/ytpoopers.json"
+INPUT_FILE = "./docs/ytpoopers_index.json"
 OUTPUT_FOLDER = "./docs/profile_thumbnails"
 
 def main():

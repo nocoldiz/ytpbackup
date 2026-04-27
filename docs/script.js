@@ -1,6 +1,6 @@
 let allVideos = [];       // from video_index.json
 let allSources = [];      // from sources_index.json
-let allPoopers = {};      // from ytpoopers.json
+let allPoopers = {};      // from ytpoopers_index.json
 let pooperMap = {};       // channel_name -> pooper data
 let filteredVideos = [];
 let appMode = 'videos';   // 'videos' or 'sources'
@@ -55,6 +55,13 @@ async function loadMultipleFiles(files) {
 
 // Auto-load from same directory
 async function autoLoad() {
+  const isHttp = window.location.protocol.startsWith('http');
+  if (isHttp) {
+    // Skip landing page immediately if on a server
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  }
+
   let vData = null;
   let sData = null;
   let pData = null;
@@ -67,22 +74,22 @@ async function autoLoad() {
     if (rs.ok) sData = await rs.json();
   } catch (e) { }
   try {
-    const rp = await fetch('ytpoopers.json');
+    const rp = await fetch('ytpoopers_index.json'); // fixed path
     if (rp.ok) pData = await rp.json();
   } catch (e) { }
-  initApp(vData, sData, pData);
   
-  // Detect server mode
-  if (window.location.protocol.startsWith('http')) {
+  initApp(vData, sData, pData);
+
+  // Detect server mode for management features
+  if (isHttp) {
     try {
       const r = await fetch('/api/ban', { method: 'POST', body: JSON.stringify({ videoIds: [] }) });
       if (r.ok || r.status === 400) {
         isServerMode = true;
-        const mgmt = document.getElementById('management-actions');
-        if (mgmt) mgmt.style.display = 'flex';
         console.log("Server mode detected: Management features enabled.");
+        document.getElementById('management-actions').style.display = 'flex';
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 }
 autoLoad();
@@ -121,10 +128,20 @@ function initApp(vRaw, sRaw, pRaw) {
     });
   }
 
-  if (!vRaw && !sRaw) return;
+  if (!vRaw && !sRaw) {
+    if (!window.location.protocol.startsWith('http')) {
+      document.getElementById('landing').style.display = 'flex';
+      document.getElementById('app').style.display = 'none';
+    }
+    return;
+  }
 
   document.getElementById('landing').style.display = 'none';
   document.getElementById('app').style.display = 'block';
+  
+  // Hide all loaders
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('is-loading'));
+  document.querySelectorAll('.page-loader').forEach(el => el.style.display = 'none');
 
   // badges
   const totalVideos = allVideos.length;
@@ -257,7 +274,7 @@ function showPage(name, pushToHistory = true) {
   });
 
   document.getElementById('page-' + targetPage).classList.add('active');
-  
+
   // Close sidebar on navigation (mobile)
   document.body.classList.remove('sidebar-open');
 
@@ -314,13 +331,13 @@ function getChannelAvatar(channelName) {
 
 function performSearch(query) {
   if (!query) return;
-  
+
   // Only switch page if we aren't already on the search results page
   const searchPage = document.getElementById('page-search');
   if (searchPage && !searchPage.classList.contains('active')) {
     showPage('search');
   }
-  
+
   document.getElementById('search-query-display').textContent = query;
 
   const ytData = [...allVideos, ...allSources];
@@ -429,7 +446,7 @@ function loadVideoResponses(video) {
   const desc = video.description || '';
   // Match 11-char YouTube IDs from various link formats
   const ids = [...new Set([...desc.matchAll(/(?:v=|vi\/|shorts\/|be\/|embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/g)].map(m => m[1]))];
-  
+
   // Filter out the current video ID itself if it's linked
   const filteredIds = ids.filter(id => id !== video.id);
 
@@ -448,7 +465,7 @@ function loadVideoResponses(video) {
 
   section.style.display = 'block';
   document.getElementById('responses-count-title').textContent = `Video Responses (${matched.length})`;
-  
+
   // Render responses in a grid-like layout
   container.innerHTML = `<div class="video-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 10px;">
     ${matched.map(v => renderVideoItem(v, 'grid')).join('')}
@@ -460,7 +477,7 @@ async function loadComments(vidId) {
   const title = document.getElementById('comments-count-title');
   if (!container) return;
   container.innerHTML = '<p class="empty" style="padding:10px;">Loading comments...</p>';
-  
+
   try {
     const r = await fetch(`comments/${vidId}.json`);
     if (!r.ok) throw new Error("Not found");
@@ -470,7 +487,7 @@ async function loadComments(vidId) {
       title.textContent = "Comments";
       return;
     }
-    
+
     title.textContent = `${fmtNum(comments.length)} Comments`;
     renderCommentTree(comments);
   } catch (e) {
@@ -481,11 +498,11 @@ async function loadComments(vidId) {
 
 function renderCommentTree(allComments) {
   const container = document.getElementById('watch-comments');
-  
+
   // Build a map of replies
   const repliesMap = {};
   const rootComments = [];
-  
+
   allComments.forEach(c => {
     if (c.parent === 'root' || !allComments.some(x => x.id === c.parent)) {
       rootComments.push(c);
@@ -510,7 +527,7 @@ function renderCommentItem(c, repliesMap) {
   const pinnedHtml = c.is_pinned ? `<div class="comment-pinned">📌 Pinned by ${escHtml(c.author_is_uploader ? 'uploader' : 'someone')}</div>` : '';
   const authorIcon = c.author_thumbnail || 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
   const timeText = c._time_text || (c.timestamp ? new Date(c.timestamp * 1000).toLocaleDateString() : '');
-  
+
   return `
     <div class="comment-item">
       <img src="${authorIcon}" class="comment-avatar" alt="" loading="lazy">
@@ -587,7 +604,7 @@ function openProfile(user, pushToHistory = true) {
 
 function renderHomePage() {
   renderedHomeVideoIds.clear();
-  const ytData = [...allVideos, ...allSources];
+  const ytData = allVideos;
   const featuredContainer = document.getElementById('featured-videos');
   const popularContainer = document.getElementById('popular-videos');
   const modernContainer = document.getElementById('modern-videos-grid');
@@ -628,7 +645,7 @@ function renderModernGrid() {
   const modernContainer = document.getElementById('modern-videos-grid');
   if (!modernContainer) return;
 
-  const ytData = [...allVideos, ...allSources];
+  const ytData = allVideos;
   const validVideos = ytData.filter(v => v.status === 'downloaded' || v.status === 'available');
   if (validVideos.length === 0) return;
 
@@ -654,7 +671,7 @@ function setFeaturedTab(tab) {
   const clickedTab = document.querySelector(`.yt-tab[onclick*="${tab}"]`);
   if (clickedTab) clickedTab.classList.add('active');
 
-  const ytData = [...allVideos, ...allSources];
+  const ytData = allVideos;
   const validVideos = ytData.filter(v => v.status === 'downloaded' || v.status === 'available');
   const featuredContainer = document.getElementById('featured-videos');
   if (!featuredContainer || validVideos.length === 0) return;
@@ -682,7 +699,7 @@ function loadMoreHomeVideos() {
   const modernContainer = document.getElementById('modern-videos-grid');
   if (!featuredContainer || !modernContainer) return;
 
-  const validVideos = [...allVideos, ...allSources].filter(v => v.status === 'downloaded' || v.status === 'available');
+  const validVideos = allVideos.filter(v => v.status === 'downloaded' || v.status === 'available');
   const available = validVideos.filter(v => !renderedHomeVideoIds.has(v.id));
   if (available.length === 0) return;
 
@@ -1026,8 +1043,8 @@ function renderTable(append = false) {
         ? `<a class="btn-play" href="${getLocalVideoPath(v)}" target="_blank" title="Play local file">▶</a>`
         : '';
 
-      const checkbox = isServerMode 
-        ? `<td onclick="event.stopPropagation();"><input type="checkbox" class="manage-check" data-id="${v.id}"></td>`
+      const checkbox = isServerMode
+        ? `<td onclick="event.stopPropagation();"><input type="checkbox" class="manage-check" data-id="${v.id}" onchange="updateManagementVisibility()"></td>`
         : '';
 
       return `<tr onclick="openVideo('${v.id}')" style="cursor:pointer">
@@ -1045,7 +1062,7 @@ function renderTable(append = false) {
             ` : '-'}
           </td>
           <td data-label="Date">${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
-          <td data-label="Status"><span class="status-dot status-${statusClass}"></span><span class="status-text">${v.status || '-'}</span></td>
+          <td data-label="Status" title="${v.status || '-'}">${getStatusEmoji(v.status)}</td>
           <td class="num" data-label="Views">${fmtNum(v.view_count)}</td>
           <td class="num" data-label="Likes">${fmtNum(v.like_count)}</td>
           <td data-label="Section">${sections || '-'}</td>
@@ -1079,7 +1096,7 @@ function renderTable(append = false) {
            </div>`;
 
       const checkbox = isServerMode
-        ? `<div class="vid-card-check" onclick="event.stopPropagation();"><input type="checkbox" class="manage-check" data-id="${v.id}"></div>`
+        ? `<div class="vid-card-check" onclick="event.stopPropagation();"><input type="checkbox" class="manage-check" data-id="${v.id}" onchange="updateManagementVisibility()"></div>`
         : '';
 
       return `<div class="vid-card">
@@ -1092,9 +1109,8 @@ function renderTable(append = false) {
             ${viewsText ? `<span>${viewsText}</span>` : ''}
             <span>${dateText}</span>
           </div>
-          <div class="vid-status-row">
-            <span class="status-dot ${statusClass}"></span>
-            <span class="status-text">${v.status || '-'}</span>
+          <div class="vid-status-row" title="${v.status || '-'}">
+            ${getStatusEmoji(v.status)}
           </div>
         </div>
       </div>`;
@@ -1105,10 +1121,12 @@ function renderTable(append = false) {
   }
 
   renderPagination(total);
-  
+
   // Show/hide management column header
   const thManage = document.getElementById('th-manage');
   if (thManage) thManage.style.display = isServerMode && viewMode === 'table' ? 'table-cell' : 'none';
+
+  updateManagementVisibility();
 }
 
 function renderPagination(total) {
@@ -1207,7 +1225,7 @@ function selectChannel(name) {
     return `<tr>
       <td class="title-cell"><a href="${v.url}" target="_blank" style="color:var(--text);text-decoration:none">${escHtml(v.title || v.id)}</a></td>
       <td>${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
-      <td><span class="status-dot ${statusClass}"></span><span class="status-text">${v.status || '-'}</span></td>
+      <td title="${v.status || '-'}">${getStatusEmoji(v.status)}</td>
       <td class="num">${fmtNum(v.view_count)}</td>
       <td class="num">${fmtNum(v.like_count)}</td>
       <td>${playAction} <a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
@@ -1682,6 +1700,12 @@ function fmtBig(n) {
   if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
   return String(n);
 }
+function getStatusEmoji(status) {
+  if (status === 'downloaded' || status === 'available') return '🟢';
+  if (status === 'pending') return '🟡';
+  if (status === 'unavailable') return '🔴';
+  return '⚪';
+}
 // ─── TIMELINE ─────────────────────────────────────────────────────────────
 function renderTimeline() {
   const raw = document.getElementById('tl-md').textContent;
@@ -1768,7 +1792,7 @@ let ts = {
 function buildFirstUploadCache() {
   window.channelFirstUploadIds = new Set();
   const firsts = {};
-  [...allVideos, ...allSources].forEach(v => {
+  allVideos.forEach(v => {
     if (!v.channel_name || !v.publish_date) return;
     if (!firsts[v.channel_name] || v.publish_date < firsts[v.channel_name].date) {
       firsts[v.channel_name] = { date: v.publish_date, id: v.id };
@@ -1969,7 +1993,7 @@ function renderTimelineView() {
 
   // Filter + sort visible videos
   const channelFilter = document.getElementById('timeline-channel-filter')?.value || '';
-  const allVids = [...allVideos, ...allSources];
+  const allVids = allVideos;
   let visible = allVids.filter(v => {
     if (!v.publish_date) return false;
     if (channelFilter && !(v.channel_name || '').toLowerCase().includes(channelFilter.toLowerCase())) return false;
@@ -2133,14 +2157,22 @@ async function renderSavedPage() {
 }
 
 // ─── MANAGEMENT ───────────────────────────────────────────────────────────
+function updateManagementVisibility() {
+  const mgmt = document.getElementById('management-actions');
+  if (!mgmt) return;
+  const anyChecked = document.querySelectorAll('.manage-check:checked').length > 0;
+  mgmt.style.display = (isServerMode && anyChecked) ? 'flex' : 'none';
+}
+
 function toggleAllManage(checked) {
   document.querySelectorAll('.manage-check').forEach(cb => cb.checked = checked);
+  updateManagementVisibility();
 }
 
 async function bulkAction(type) {
   const checks = document.querySelectorAll('.manage-check:checked');
   const ids = Array.from(checks).map(cb => cb.getAttribute('data-id'));
-  
+
   if (ids.length === 0) return alert("Select at least one video.");
   if (!confirm(`Are you sure you want to ${type === 'ban' ? 'BAN' : 'FLAG AS SOURCE'} ${ids.length} videos?`)) return;
 

@@ -20,10 +20,13 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <path d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2z" />
       </svg>
-      <p><strong>Drop video_index.json, sources_index.json & ytpoopers.json here</strong><br>or click to browse</p>
+      <p><strong>Drop video_index.json, sources_index.json & ytpoopers_index.json here</strong><br>or click to browse
+      </p>
     </div>
     <input type="file" id="fileInput" accept=".json" multiple>
-    <p class="auto-load">Also tries to auto-load <code>video_index.json</code>, <code>sources_index.json</code> & <code>ytpoopers.json</code></p>
+    <p class="auto-load">Also tries to auto-load <code>video_index.json</code>, <code>sources_index.json</code> &
+      <code>ytpoopers_index.json</code>
+    </p>
   </div>
 
   <!-- APP -->
@@ -32,8 +35,11 @@
       <div id="masthead-utility">
         <div id="masthead-utility-right" style="float: right;">
           <div id="theme-toggles" style="display:inline-block; margin-right: 15px; font-size: 12px; color: inherit;">
-            <a href="#" id="toggle-modern-old" onclick="toggleThemeMode(); return false;" style="color: inherit; border: none; padding: 0;">Switch to Modern Mode</a> <span class="theme-sep">|</span> 
-            <a href="#" id="toggle-night-day" onclick="toggleNightDay(); return false;" style="color: inherit; border: none; padding: 0;">Switch to Night Mode</a>
+            <a href="#" id="toggle-modern-old" onclick="toggleThemeMode(); return false;"
+              style="color: inherit; border: none; padding: 0;">Switch to Modern Mode</a> <span
+              class="theme-sep">|</span>
+            <a href="#" id="toggle-night-day" onclick="toggleNightDay(); return false;"
+              style="color: inherit; border: none; padding: 0;">Switch to Night Mode</a>
           </div>
           <a href="#">Help</a>
         </div>
@@ -42,27 +48,35 @@
       <div id="masthead">
         <button id="burger-menu" onclick="toggleSidebar(); return false;" style="display:none">☰</button>
         <a id="logo" href="#" onclick="showPage('youtube'); return false;">YouTube</a>
-        <div id="masthead-search">
-          <div class="search-form">
-            <input type="text" class="search-term" id="global-search-input" placeholder="Search" oninput="onGlobalSearch()">
-            <button class="search-button" onclick="performSearch(document.getElementById('global-search-input').value)">Search</button>
-          </div>
-        </div>
+
         <div id="masthead-nav-right">
-           <!-- Placeholder for utility links in modern mode if needed -->
+          <!-- Placeholder for utility links in modern mode if needed -->
         </div>
       </div>
       <div id="masthead-nav">
         <a href="#" class="nav-tab active" onclick="showPage('youtube'); return false;">Home</a>
         <a href="#" class="nav-tab" onclick="showPage('overview'); return false;">Overview</a>
-        <a href="#" class="nav-tab" onclick="showPage('videos'); return false;">Videos <span class="nav-badge" id="badge-videos">0</span></a>
-        <a href="#" class="nav-tab" onclick="showPage('sources'); return false;">Sources <span class="nav-badge" id="badge-sources">0</span></a>
-        <a href="#" class="nav-tab" onclick="showPage('channels'); return false;">Channels <span class="nav-badge" id="badge-channels">0</span></a>
-        <a href="#" class="nav-tab" onclick="showPage('sections'); return false;">Sections <span class="nav-badge" id="badge-sections">0</span></a>
-        <a href="#" class="nav-tab" onclick="showPage('years'); return false;">Years <span class="nav-badge" id="badge-years">0</span></a>
+        <a href="#" class="nav-tab" onclick="showPage('videos'); return false;">Videos <span class="nav-badge"
+            id="badge-videos">0</span></a>
+        <a href="#" class="nav-tab" onclick="showPage('sources'); return false;">Sources <span class="nav-badge"
+            id="badge-sources">0</span></a>
+        <a href="#" class="nav-tab" onclick="showPage('channels'); return false;">Channels <span class="nav-badge"
+            id="badge-channels">0</span></a>
+        <a href="#" class="nav-tab" onclick="showPage('sections'); return false;">Sections <span class="nav-badge"
+            id="badge-sections">0</span></a>
+        <a href="#" class="nav-tab" onclick="showPage('years'); return false;">Years <span class="nav-badge"
+            id="badge-years">0</span></a>
         <a href="#" class="nav-tab" onclick="showPage('timeline'); return false;">Timeline</a>
-        <a href="#" class="nav-tab" onclick="showPage('saved'); return false;">Saved <span class="nav-badge" id="badge-saved">0</span></a>
-
+        <a href="#" class="nav-tab" onclick="showPage('saved'); return false;">Saved <span class="nav-badge"
+            id="badge-saved">0</span></a>
+        <div id="masthead-search">
+          <div class="search-form">
+            <input type="text" class="search-term" id="global-search-input" placeholder="Search"
+              oninput="onGlobalSearch()">
+            <button class="search-button"
+              onclick="performSearch(document.getElementById('global-search-input').value)">Search</button>
+          </div>
+        </div>
         <!-- Modern Mode Theme Toggles (Sidebar bottom) -->
         <div id="theme-toggles-modern" style="display: none;">
           <a href="#" onclick="toggleThemeMode(); return false;">Switch to Old Mode</a>
@@ -72,13 +86,14 @@
       <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
       <!-- YOUTUBE HOME -->
-      <div class="page active" id="page-youtube">
+      <div class="page active is-loading" id="page-youtube">
+        <div class="page-loader"><div class="spinner"></div>Loading archive data...</div>
         <div class="layout-2col" id="youtube-old-layout">
           <div class="home-main">
             <div id="homepage-featured-heading">
               <h2 class="yt-featured-title">Featured Videos</h2>
               <div class="yt-tab-bar">
-                <a href="#" class="yt-tab active" onclick="setFeaturedTab('featured');return false;">Featured</a>
+                <a href="#" class="yt-tab active" onclick="setFeaturedTab('featured');return false;">Random</a>
                 <span class="yt-tab-sep">|</span>
                 <a href="#" class="yt-tab" onclick="setFeaturedTab('downloaded');return false;">Downloaded</a>
                 <span class="yt-tab-sep">|</span>
@@ -120,11 +135,15 @@
               <div id="watch-player"></div>
             </div>
             <div id="video-responses-section" style="margin-top: 20px; display: none;">
-              <h3 id="responses-count-title" style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px; font-size: 16px;">Video Responses</h3>
+              <h3 id="responses-count-title"
+                style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px; font-size: 16px;">
+                Video Responses</h3>
               <div id="video-responses"></div>
             </div>
             <div id="watch-comments-section" style="margin-top: 20px;">
-              <h3 id="comments-count-title" style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px; font-size: 16px;">Comments</h3>
+              <h3 id="comments-count-title"
+                style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px; font-size: 16px;">
+                Comments</h3>
               <div id="watch-comments"></div>
             </div>
           </div>
@@ -134,7 +153,8 @@
               views
             </div>
             <div id="watch-channel-info">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="Channel Icon">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+                alt="Channel Icon">
               <div>
                 Added: <strong id="watch-date"></strong><br>
                 From: <a href="#" id="watch-channel" onclick="return false;">Unknown</a>
@@ -142,7 +162,8 @@
             </div>
             <div id="watch-description"></div>
             <div id="watch-actions" style="margin-top: 10px;">
-              <button id="btn-save-video" class="btn-thread" style="width: 100%; padding: 10px; font-weight: bold;">Save Video</button>
+              <button id="btn-save-video" class="btn-thread" style="width: 100%; padding: 10px; font-weight: bold;">Save
+                Video</button>
             </div>
             <div class="box" style="margin-top: 15px;">
               <div class="box-header">More From This Channel</div>
@@ -181,7 +202,8 @@
       </div>
 
       <!-- SEARCH PAGE -->
-      <div class="page" id="page-search">
+      <div class="page is-loading" id="page-search">
+        <div class="page-loader"><div class="spinner"></div>Searching archive...</div>
         <div class="box">
           <div class="box-header">Search Results for "<span id="search-query-display"></span>"</div>
           <div class="box-content">
@@ -194,7 +216,8 @@
       </div>
 
       <!-- OVERVIEW -->
-      <div class="page" id="page-overview">
+      <div class="page is-loading" id="page-overview">
+        <div class="page-loader"><div class="spinner"></div>Loading analytics...</div>
         <div class="stats-grid" id="overview-stats"></div>
         <div class="charts-row cols2">
           <div class="chart-card">
@@ -233,21 +256,26 @@
       </div>
 
       <!-- VIDEOS -->
-      <div class="page" id="page-videos">
+      <div class="page is-loading" id="page-videos">
+        <div class="page-loader"><div class="spinner"></div>Loading videos...</div>
         <div class="section-header">
           <h2>Video Search</h2>
           <span class="count-badge" id="videos-count-label"></span>
           <div id="management-actions" style="display:none; margin-left: 15px; gap: 8px;">
-            <button class="btn-thread" style="background:#d33; color:#fff;" onclick="bulkAction('ban')">Ban Selected</button>
-            <button class="btn-thread" style="background:#28a745; color:#fff;" onclick="bulkAction('flag-source')">Flag as Source</button>
+            <button class="btn-thread" style="background:#d33; color:#fff;" onclick="bulkAction('ban')">Ban
+              Selected</button>
+            <button class="btn-thread" style="background:#28a745; color:#fff;" onclick="bulkAction('flag-source')">Flag
+              as Source</button>
           </div>
           <div class="view-toggle" style="margin-left: auto;">
-            <button id="btn-view-table" class="view-btn active" onclick="setViewMode('table')" title="Table View">≡</button>
+            <button id="btn-view-table" class="view-btn active" onclick="setViewMode('table')"
+              title="Table View">≡</button>
             <button id="btn-view-grid" class="view-btn" onclick="setViewMode('grid')" title="Grid View">⊞</button>
           </div>
         </div>
         <div class="search-bar">
-          <input type="text" id="search-input" placeholder="Search title, channel, tags, thread, description, video ID..." oninput="applyFilters()">
+          <input type="text" id="search-input"
+            placeholder="Search title, channel, tags, thread, description, video ID..." oninput="applyFilters()">
           <select id="filter-status" onchange="applyFilters()">
             <option value="">All statuses</option>
             <option value="downloaded">Downloaded</option>
@@ -266,29 +294,41 @@
             <option value="french">🇫🇷 French</option>
             <option value="german">🇩🇪 German</option>
           </select>
-          <input type="text" id="filter-channel" list="channel-datalist" placeholder="All channels" oninput="applyFilters()">
+          <input type="text" id="filter-channel" list="channel-datalist" placeholder="All channels"
+            oninput="applyFilters()">
           <datalist id="channel-datalist"></datalist>
         </div>
         <div class="search-bar">
           <label>Views ≥</label>
-          <div class="range-group"><input type="number" id="filter-views-min" placeholder="0" oninput="applyFilters()"></div>
+          <div class="range-group"><input type="number" id="filter-views-min" placeholder="0" oninput="applyFilters()">
+          </div>
           <label>Likes ≥</label>
-          <div class="range-group"><input type="number" id="filter-likes-min" placeholder="0" oninput="applyFilters()"></div>
+          <div class="range-group"><input type="number" id="filter-likes-min" placeholder="0" oninput="applyFilters()">
+          </div>
           <label>Year:</label>
-          <select id="filter-year" onchange="applyFilters()"><option value="">Any year</option></select>
+          <select id="filter-year" onchange="applyFilters()">
+            <option value="">Any year</option>
+          </select>
         </div>
         <div id="video-grid" class="video-grid" style="display:none"></div>
         <div class="table-wrap" id="video-table-wrap">
           <table id="video-table">
             <thead>
               <tr>
-                <th id="th-manage" style="display:none"><input type="checkbox" onchange="toggleAllManage(this.checked)"></th>
-                <th data-field="title" onclick="sortTable('title')" style="cursor:pointer">Title / ID <span class="sort-arrow">↕</span></th>
-                <th data-field="channel_name" onclick="sortTable('channel_name')" style="cursor:pointer">Channel <span class="sort-arrow">↕</span></th>
-                <th data-field="publish_date" onclick="sortTable('publish_date')" style="cursor:pointer">Date <span class="sort-arrow">↕</span></th>
-                <th data-field="status" onclick="sortTable('status')" style="cursor:pointer">Status <span class="sort-arrow">↕</span></th>
-                <th data-field="view_count" onclick="sortTable('view_count')" style="cursor:pointer">Views <span class="sort-arrow">↕</span></th>
-                <th data-field="like_count" onclick="sortTable('like_count')" style="cursor:pointer">Likes <span class="sort-arrow">↕</span></th>
+                <th id="th-manage" style="display:none"><input type="checkbox" onchange="toggleAllManage(this.checked)">
+                </th>
+                <th data-field="title" onclick="sortTable('title')" style="cursor:pointer">Title / ID <span
+                    class="sort-arrow">↕</span></th>
+                <th data-field="channel_name" onclick="sortTable('channel_name')" style="cursor:pointer">Channel <span
+                    class="sort-arrow">↕</span></th>
+                <th data-field="publish_date" onclick="sortTable('publish_date')" style="cursor:pointer">Date <span
+                    class="sort-arrow">↕</span></th>
+                <th data-field="status" onclick="sortTable('status')" style="cursor:pointer">Status <span
+                    class="sort-arrow">↕</span></th>
+                <th data-field="view_count" onclick="sortTable('view_count')" style="cursor:pointer">Views <span
+                    class="sort-arrow">↕</span></th>
+                <th data-field="like_count" onclick="sortTable('like_count')" style="cursor:pointer">Likes <span
+                    class="sort-arrow">↕</span></th>
                 <th>Section</th>
                 <th>Threads</th>
                 <th>Actions</th>
@@ -302,7 +342,8 @@
       </div>
 
       <!-- CHANNELS -->
-      <div class="page" id="page-channels">
+      <div class="page is-loading" id="page-channels">
+        <div class="page-loader"><div class="spinner"></div>Loading channels...</div>
         <div class="section-header">
           <h2>Channels</h2>
           <span class="count-badge" id="channels-count-label"></span>
@@ -310,9 +351,11 @@
         <div class="search-bar">
           <input type="text" id="channel-search" placeholder="Search channels..." oninput="renderChannelGrid()">
           <label>First Video ≥</label>
-          <div class="range-group"><input type="number" id="channel-year-min" placeholder="YYYY" oninput="renderChannelGrid()"></div>
+          <div class="range-group"><input type="number" id="channel-year-min" placeholder="YYYY"
+              oninput="renderChannelGrid()"></div>
           <label>First Video ≤</label>
-          <div class="range-group"><input type="number" id="channel-year-max" placeholder="YYYY" oninput="renderChannelGrid()"></div>
+          <div class="range-group"><input type="number" id="channel-year-max" placeholder="YYYY"
+              oninput="renderChannelGrid()"></div>
         </div>
         <div id="channel-detail-panel" style="display:none"></div>
         <div class="channel-grid" id="channel-grid"></div>
@@ -325,9 +368,11 @@
           <span class="count-badge">Scroll to zoom, drag to pan</span>
         </div>
         <div class="search-bar">
-          <input type="text" id="timeline-channel-filter" list="timeline-channel-datalist" placeholder="Filter by channel..." oninput="scheduleRender()">
+          <input type="text" id="timeline-channel-filter" list="timeline-channel-datalist"
+            placeholder="Filter by channel..." oninput="scheduleRender()">
           <datalist id="timeline-channel-datalist"></datalist>
-          <button class="btn-thread" onclick="document.getElementById('timeline-channel-filter').value=''; scheduleRender();">Clear</button>
+          <button class="btn-thread"
+            onclick="document.getElementById('timeline-channel-filter').value=''; scheduleRender();">Clear</button>
         </div>
         <div id="timeline-container">
           <div id="timeline-track"></div>
