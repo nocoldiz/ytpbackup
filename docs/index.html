@@ -41,6 +41,15 @@
       </div>
       <div id="masthead">
         <a id="logo" href="#" onclick="showPage('youtube'); return false;">YouTube</a>
+        <div id="masthead-search">
+          <div class="search-form">
+            <input type="text" class="search-term" id="global-search-input" placeholder="Search" oninput="onGlobalSearch()">
+            <button class="search-button" onclick="performSearch(document.getElementById('global-search-input').value)">Search</button>
+          </div>
+        </div>
+        <div id="masthead-nav-right">
+           <!-- Placeholder for utility links in modern mode if needed -->
+        </div>
       </div>
       <div id="masthead-nav">
         <a href="#" class="nav-tab active" onclick="showPage('youtube'); return false;">Home</a>
@@ -58,15 +67,6 @@
           <a href="#" onclick="toggleThemeMode(); return false;">Switch to Old Mode</a>
           <a href="#" onclick="toggleNightDay(); return false;">Switch to Night Mode</a>
         </div>
-
-        <div id="masthead-nav-right">
-          <div id="masthead-search">
-            <div class="search-form">
-              <input type="text" class="search-term" id="global-search-input" value="">
-              <button class="search-button">Search</button>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- YOUTUBE HOME -->
@@ -77,6 +77,8 @@
               <h2 class="yt-featured-title">Featured Videos</h2>
               <div class="yt-tab-bar">
                 <a href="#" class="yt-tab active" onclick="setFeaturedTab('featured');return false;">Featured</a>
+                <span class="yt-tab-sep">|</span>
+                <a href="#" class="yt-tab" onclick="setFeaturedTab('downloaded');return false;">Downloaded</a>
                 <span class="yt-tab-sep">|</span>
                 <a href="#" class="yt-tab" onclick="setFeaturedTab('views');return false;">Most Viewed</a>
                 <span class="yt-tab-sep">|</span>
@@ -97,12 +99,11 @@
 
         <div id="youtube-modern-layout">
           <div id="home-chips" class="home-chips-container">
-            <button class="chip active">All</button>
-            <button class="chip">Music</button>
-            <button class="chip">Gaming</button>
-            <button class="chip">News</button>
-            <button class="chip">Live</button>
-            <button class="chip">Recently uploaded</button>
+            <button class="chip active" onclick="setModernHomeTab('featured', this)">Featured</button>
+            <button class="chip" onclick="setModernHomeTab('downloaded', this)">Downloaded</button>
+            <button class="chip" onclick="setModernHomeTab('views', this)">Most Viewed</button>
+            <button class="chip" onclick="setModernHomeTab('discussed', this)">Most Discussed</button>
+            <button class="chip" onclick="setModernHomeTab('favorited', this)">Top Favorited</button>
           </div>
           <div id="modern-videos-grid"></div>
         </div>

@@ -555,14 +555,18 @@ ITALIAN_CHANNELS = [
 "https://youtube.com/@xeduss.",
 "https://youtube.com/@YTPRohan",
 "https://youtube.com/truocolo",
-    "https://www.youtube.com/"
-    "https://www.youtube.com/"
-    "https://www.youtube.com/"
-    "https://www.youtube.com/"
-    "https://www.youtube.com/"
-    "https://www.youtube.com/"
-    "https://www.youtube.com/"
-    "https://www.youtube.com/"
+"https://www.youtube.com/@shitmultiverse1404",
+"https://www.youtube.com/user/RaptorArk",
+"https://www.youtube.com/@",
+"https://www.youtube.com/@",
+"https://www.youtube.com/@",
+"https://www.youtube.com/@",
+"https://www.youtube.com/@",
+"https://www.youtube.com/@",
+"https://www.youtube.com/@",
+"https://www.youtube.com/@",
+"https://www.youtube.com/@"
+
 
 ]
 ENGLISH_CHANELS = [
@@ -572,6 +576,8 @@ ENGLISH_CHANELS = [
     "https://www.youtube.com/@Deepercutt",
     "https://www.youtube.com/@Hurricoaster",
     "https://www.youtube.com/@DaThings",
+    "https://www.youtube.com/user/YTPandmore",
+
 ]
 
 SPANISH_CHANNELS = [

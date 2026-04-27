@@ -10,6 +10,7 @@ let charts = {};
 
 let renderedHomeVideoIds = new Set();
 let isFetchingMoreHome = false;
+let currentModernTab = 'featured';
 
 function shuffleArray(array) {
   const arr = [...array];
@@ -113,7 +114,7 @@ function initApp(vRaw, sRaw) {
   renderSectionGrid();
   renderYearGrid();
   buildFirstUploadCache();
-  
+
   if (appMode === 'videos') {
     renderHomePage();
   }
@@ -121,6 +122,10 @@ function initApp(vRaw, sRaw) {
 
 // ─── NAVIGATION ──────────────────────────────────────────────────────────
 function showPage(name) {
+  if (name !== 'video') {
+    const player = document.getElementById('watch-player');
+    if (player) player.innerHTML = '';
+  }
   let targetPage = name;
   if (name === 'sources' || name === 'videos') {
     appMode = name;
@@ -166,19 +171,29 @@ function toggleNightDay() {
   if (btn) btn.textContent = isLight ? 'Switch to Night Mode' : 'Switch to Day Mode';
 }
 
-document.querySelector('.search-button').addEventListener('click', () => {
-  const q = document.getElementById('global-search-input').value.trim();
-  if (q) performSearch(q);
-});
 document.getElementById('global-search-input').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
     const q = e.target.value.trim();
-    if (q) performSearch(q);
+    performSearch(q);
   }
 });
 
+function onGlobalSearch() {
+  const q = document.getElementById('global-search-input').value.trim();
+  if (q.length > 0) {
+    performSearch(q);
+  }
+}
+
 function performSearch(query) {
-  showPage('search');
+  if (!query) return;
+  
+  // Only switch page if we aren't already on the search results page
+  const searchPage = document.getElementById('page-search');
+  if (searchPage && !searchPage.classList.contains('active')) {
+    showPage('search');
+  }
+  
   document.getElementById('search-query-display').textContent = query;
 
   const ytData = [...allVideos, ...allSources];
@@ -228,6 +243,7 @@ function performSearch(query) {
 
 // ─── YOUTUBE LOGIC ───────────────────────────────────────────────────────
 function openVideo(vidId) {
+  window.scrollTo(0, 0);
   showPage('video');
   const ytData = [...allVideos, ...allSources];
   const v = ytData.find(x => x.id === vidId);
@@ -246,7 +262,7 @@ function openVideo(vidId) {
   document.getElementById('watch-date').textContent = v.publish_date ? v.publish_date.slice(0, 10) : '';
 
   let desc = v.description || 'No description available.';
-  document.getElementById('watch-description').textContent = desc;
+  document.getElementById('watch-description').innerHTML = linkify(escHtml(desc));
 
   const playerContainer = document.getElementById('watch-player');
   if (v.status === 'downloaded' && v.local_file) {
@@ -339,13 +355,42 @@ function renderHomePage() {
   popularContainer.innerHTML = popularVideos.map(v => renderVideoItem(v, 'grid')).join('');
 
   if (modernContainer) {
-    const modernInitial = sortedByViews.slice(0, 24);
-    modernContainer.innerHTML = modernInitial.map(v => renderModernHomeCard(v)).join('');
-    renderedHomeVideoIds.clear();
-    featuredVideos.forEach(v => renderedHomeVideoIds.add(v.id));
-    popularVideos.forEach(v => renderedHomeVideoIds.add(v.id));
-    modernInitial.forEach(v => renderedHomeVideoIds.add(v.id));
+    renderModernGrid();
   }
+}
+
+function setModernHomeTab(tab, btn) {
+  currentModernTab = tab;
+  const chips = document.getElementById('home-chips');
+  if (chips) {
+    chips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+  }
+  renderModernGrid();
+}
+
+function renderModernGrid() {
+  const modernContainer = document.getElementById('modern-videos-grid');
+  if (!modernContainer) return;
+
+  const ytData = [...allVideos, ...allSources];
+  const validVideos = ytData.filter(v => v.status === 'downloaded' || v.status === 'available');
+  if (validVideos.length === 0) return;
+
+  let videos;
+  if (currentModernTab === 'featured') {
+    videos = shuffleArray(validVideos).slice(0, 24);
+  } else if (currentModernTab === 'downloaded') {
+    videos = shuffleArray(validVideos.filter(v => v.status === 'downloaded')).slice(0, 24);
+  } else if (currentModernTab === 'views') {
+    videos = [...validVideos].sort((a, b) => (b.view_count || 0) - (a.view_count || 0)).slice(0, 24);
+  } else if (currentModernTab === 'discussed') {
+    videos = [...validVideos].sort((a, b) => (b.comment_count || b.view_count || 0) - (a.comment_count || a.view_count || 0)).slice(0, 24);
+  } else if (currentModernTab === 'favorited') {
+    videos = [...validVideos].sort((a, b) => (b.like_count || 0) - (a.like_count || 0)).slice(0, 24);
+  }
+
+  modernContainer.innerHTML = videos.map(v => renderModernHomeCard(v)).join('');
 }
 
 function setFeaturedTab(tab) {
@@ -369,6 +414,8 @@ function setFeaturedTab(tab) {
     videos = [...validVideos].sort((a, b) => (b.comment_count || b.view_count || 0) - (a.comment_count || a.view_count || 0)).slice(0, 8);
   } else if (tab === 'favorited') {
     videos = [...validVideos].sort((a, b) => (b.like_count || 0) - (a.like_count || 0)).slice(0, 8);
+  } else if (tab === 'downloaded') {
+    videos = shuffleArray(validVideos.filter(v => v.status === 'downloaded')).slice(0, 12);
   }
 
   featuredContainer.innerHTML = videos.map(v => renderVideoItem(v, 'list')).join('');
@@ -1378,6 +1425,12 @@ function escHtml(s) {
   if (!s) return '';
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+function linkify(text) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, function (url) {
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: var(--link-color); text-decoration: underline;">${url}</a>`;
+  });
+}
 function escAttr(s) { return String(s || '').replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
 
 function downloadFile(url, filename) {
@@ -1616,14 +1669,6 @@ function renderTimelineView() {
 
   const showOnlyMilestones = (zoom === 'years');
 
-  const hint = document.createElement('div');
-  hint.className = 'tl-hint';
-  hint.textContent = zoom === 'years'
-    ? '🔭 Years view — only videos >10M views shown. Scroll to zoom in.'
-    : zoom === 'months'
-      ? '📅 Months view — scroll to zoom into individual days.'
-      : '📌 Days view';
-  container.appendChild(hint);
 
   // Filter + sort visible videos
   const channelFilter = document.getElementById('timeline-channel-filter')?.value || '';
@@ -1762,7 +1807,7 @@ async function updateSavedBadge() {
 async function updateSaveButton(vidId) {
   const btn = document.getElementById('btn-save-video');
   if (!btn) return;
-  
+
   const saved = await isVideoSaved(vidId);
   btn.textContent = saved ? 'Unsave Video' : 'Save Video';
   btn.onclick = () => {
@@ -1779,7 +1824,7 @@ async function updateSaveButton(vidId) {
 async function renderSavedPage() {
   const grid = document.getElementById('saved-videos-grid');
   if (!grid) return;
-  
+
   const saved = await getSavedVideos();
   if (saved.length === 0) {
     grid.innerHTML = '<div class="empty">No saved videos yet.</div>';
