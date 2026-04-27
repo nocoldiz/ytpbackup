@@ -761,21 +761,21 @@ function renderTable(append = false) {
         ? `<a class="btn-play" href="${getLocalVideoPath(v)}" target="_blank" title="Play local file">▶</a>`
         : '';
 
-      return `<tr>
-          <td class="title-cell">
+      return `<tr onclick="openVideo('${v.id}')" style="cursor:pointer">
+          <td class="title-cell" data-label="Title">
             ${titleContent}
             <div class="vid-id">${v.id}</div>
           </td>
-          <td>${v.channel_name ? `<a href="${v.channel_url || '#'}" target="_blank" style="color:var(--text-muted);text-decoration:none">${escHtml(v.channel_name)}</a>` : '-'}</td>
-          <td>${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
-          <td><span class="status-dot status-${statusClass}"></span><span class="status-text">${v.status || '-'}</span></td>
-          <td class="num">${fmtNum(v.view_count)}</td>
-          <td class="num">${fmtNum(v.like_count)}</td>
-          <td>${sections || '-'}</td>
-          <td>${threads || '-'}</td>
-          <td>${playAction} <a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
+          <td data-label="Channel">${v.channel_name ? `<a href="${v.channel_url || '#'}" target="_blank" onclick="event.stopPropagation();" style="color:var(--text-muted);text-decoration:none">${escHtml(v.channel_name)}</a>` : '-'}</td>
+          <td data-label="Date">${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
+          <td data-label="Status"><span class="status-dot status-${statusClass}"></span><span class="status-text">${v.status || '-'}</span></td>
+          <td class="num" data-label="Views">${fmtNum(v.view_count)}</td>
+          <td class="num" data-label="Likes">${fmtNum(v.like_count)}</td>
+          <td data-label="Section">${sections || '-'}</td>
+          <td data-label="Threads">${threads || '-'}</td>
+          <td data-label="Actions" onclick="event.stopPropagation();">${playAction} <a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
         </tr>`;
-    }).join('') || (append ? '' : `<tr><td colspan="8" class="empty">No videos match your filters</td></tr>`);
+    }).join('') || (append ? '' : `<tr><td colspan="9" class="empty">No videos match your filters</td></tr>`);
 
     if (append) {
       tbody.insertAdjacentHTML('beforeend', html);
