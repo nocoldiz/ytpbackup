@@ -32,7 +32,68 @@ const VIDEO_INDEX = path.join(__dirname, 'docs', 'video_index.json');
 const EXCLUDED_VIDEOS = path.join(__dirname, 'docs', 'excluded_videos.json');
 const SOURCES_INDEX = path.join(__dirname, 'docs', 'sources_index.json');
 const VIDEOS_DIR  = path.join(__dirname, 'videos');
-const VM_LOGIC    = require('./video_manager.js');
+
+// ─── Video Management Logic ──────────────────────────────────────────────────
+
+function banVideos(videoIds, videoIndexPath, excludedVideosPath, videosDir) {
+  let index = {};
+  try { index = JSON.parse(fs.readFileSync(videoIndexPath, 'utf8')); } catch (err) {
+    return { success: false, error: 'Failed to read video index' };
+  }
+  let excluded = {};
+  try {
+    if (fs.existsSync(excludedVideosPath)) {
+      excluded = JSON.parse(fs.readFileSync(excludedVideosPath, 'utf8'));
+    }
+  } catch (err) {}
+  const results = { deleted: [], failed: [], skipped: [] };
+  for (const id of videoIds) {
+    if (!index[id]) { results.skipped.push(id); continue; }
+    const entry = index[id];
+    if (entry.local_file) {
+      const filePath = path.join(__dirname, entry.local_file);
+      try { if (fs.existsSync(filePath)) fs.unlinkSync(filePath); } catch (err) {}
+    }
+    excluded[id] = entry;
+    delete index[id];
+    results.deleted.push(id);
+  }
+  try {
+    fs.writeFileSync(videoIndexPath, JSON.stringify(index, null, 2));
+    fs.writeFileSync(excludedVideosPath, JSON.stringify(excluded, null, 2));
+    return { success: true, results };
+  } catch (err) {
+    return { success: false, error: 'Failed to save changes' };
+  }
+}
+
+function flagAsSource(videoIds, videoIndexPath, sourcesIndexPath) {
+  let index = {};
+  try { index = JSON.parse(fs.readFileSync(videoIndexPath, 'utf8')); } catch (err) {
+    return { success: false, error: 'Failed to read video index' };
+  }
+  let sources = {};
+  try {
+    if (fs.existsSync(sourcesIndexPath)) {
+      sources = JSON.parse(fs.readFileSync(sourcesIndexPath, 'utf8'));
+    }
+  } catch (err) {}
+  const results = { moved: [], skipped: [] };
+  for (const id of videoIds) {
+    if (!index[id]) { results.skipped.push(id); continue; }
+    const entry = index[id];
+    sources[id] = entry;
+    delete index[id];
+    results.moved.push(id);
+  }
+  try {
+    fs.writeFileSync(videoIndexPath, JSON.stringify(index, null, 2));
+    fs.writeFileSync(sourcesIndexPath, JSON.stringify(sources, null, 2));
+    return { success: true, results };
+  } catch (err) {
+    return { success: false, error: 'Failed to save changes' };
+  }
+}
 
 // ─── Forum sections — must stay in sync with scraper.py SECTIONS ─────────────
 const SECTIONS = [
@@ -525,7 +586,7 @@ function onRequest(req, res) {
         const { videoIds } = JSON.parse(body);
         if (!Array.isArray(videoIds)) throw new Error('Invalid videoIds');
         
-        const result = VM_LOGIC.banVideos(videoIds, VIDEO_INDEX, EXCLUDED_VIDEOS, VIDEOS_DIR);
+        const result = banVideos(videoIds, VIDEO_INDEX, EXCLUDED_VIDEOS, VIDEOS_DIR);
         buildVideoMap(); // Rebuild server-side map if needed (though it's for mirror)
         
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -547,7 +608,7 @@ function onRequest(req, res) {
         const { videoIds } = JSON.parse(body);
         if (!Array.isArray(videoIds)) throw new Error('Invalid videoIds');
         
-        const result = VM_LOGIC.flagAsSource(videoIds, VIDEO_INDEX, SOURCES_INDEX);
+        const result = flagAsSource(videoIds, VIDEO_INDEX, SOURCES_INDEX);
         
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(result));

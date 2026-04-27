@@ -61,6 +61,7 @@
         <a href="#" class="nav-tab" onclick="showPage('years'); return false;">Years <span class="nav-badge" id="badge-years">0</span></a>
         <a href="#" class="nav-tab" onclick="showPage('timeline'); return false;">Timeline</a>
         <a href="#" class="nav-tab" onclick="showPage('saved'); return false;">Saved <span class="nav-badge" id="badge-saved">0</span></a>
+        <a href="#" class="nav-tab" id="nav-manage" style="display:none" onclick="showPage('manage'); return false;">Manage</a>
 
         <!-- Modern Mode Theme Toggles (Sidebar bottom) -->
         <div id="theme-toggles-modern" style="display: none;">
@@ -352,6 +353,32 @@
           <span class="count-badge" id="saved-count-label">Videos saved locally in your browser</span>
         </div>
         <div id="saved-videos-grid" class="video-grid"></div>
+      </div>
+
+      <!-- MANAGE -->
+      <div class="page" id="page-manage">
+        <div class="section-header">
+          <h2>Archive Management</h2>
+          <div style="margin-left:auto;">
+            <button class="btn-thread" style="background:#d33; color:#fff;" onclick="bulkAction('ban')">Ban Selected</button>
+            <button class="btn-thread" style="background:#28a745; color:#fff;" onclick="bulkAction('flag-source')">Flag as Source</button>
+          </div>
+        </div>
+        <p style="margin-bottom:15px; color:var(--text-muted);">Select videos from the table below to perform bulk actions.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" onchange="toggleAllManage(this.checked)"></th>
+                <th>Title / ID</th>
+                <th>Channel</th>
+                <th>Status</th>
+                <th>Section</th>
+              </tr>
+            </thead>
+            <tbody id="manage-tbody"></tbody>
+          </table>
+        </div>
       </div>
 
     </div>

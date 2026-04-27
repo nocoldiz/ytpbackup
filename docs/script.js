@@ -70,6 +70,17 @@ async function autoLoad() {
     if (rp.ok) pData = await rp.json();
   } catch (e) { }
   initApp(vData, sData, pData);
+  
+  // Detect server mode
+  if (window.location.protocol.startsWith('http')) {
+    try {
+      const r = await fetch('/api/ban', { method: 'POST', body: JSON.stringify({ videoIds: [] }) });
+      if (r.ok || r.status === 400) { // 400 is expected for empty videoIds
+        document.getElementById('nav-manage').style.display = 'inline-block';
+        console.log("Server mode detected: Management features enabled.");
+      }
+    } catch (e) {}
+  }
 }
 autoLoad();
 initDB();
@@ -172,6 +183,9 @@ function showPage(name) {
   }
   if (name === 'saved') {
     renderSavedPage();
+  }
+  if (name === 'manage') {
+    renderManageTable();
   }
 }
 
@@ -1973,5 +1987,55 @@ async function renderSavedPage() {
     // Sort by views or date? Let's do most recent (if we had a saved_at timestamp, but we don't yet)
     // For now just show them.
     grid.innerHTML = saved.map(v => renderVideoItem(v, 'grid')).join('');
+  }
+}
+
+// ─── MANAGEMENT ───────────────────────────────────────────────────────────
+function renderManageTable() {
+  const tbody = document.getElementById('manage-tbody');
+  if (!tbody) return;
+  
+  const ytData = [...allVideos]; // Management usually only for main videos
+  tbody.innerHTML = ytData.slice(0, 500).map(v => `
+    <tr>
+      <td><input type="checkbox" class="manage-check" data-id="${v.id}"></td>
+      <td>
+        <div style="font-weight:bold;">${escHtml(v.title || v.id)}</div>
+        <div style="font-size:10px; color:var(--text-muted);">${v.id}</div>
+      </td>
+      <td>${escHtml(v.channel_name || '-')}</td>
+      <td><span class="status-badge status-${v.status}">${v.status}</span></td>
+      <td>${escHtml((v.sections || []).join(', '))}</td>
+    </tr>
+  `).join('');
+}
+
+function toggleAllManage(checked) {
+  document.querySelectorAll('.manage-check').forEach(cb => cb.checked = checked);
+}
+
+async function bulkAction(type) {
+  const checks = document.querySelectorAll('.manage-check:checked');
+  const ids = Array.from(checks).map(cb => cb.getAttribute('data-id'));
+  
+  if (ids.length === 0) return alert("Select at least one video.");
+  if (!confirm(`Are you sure you want to ${type === 'ban' ? 'BAN' : 'FLAG AS SOURCE'} ${ids.length} videos?`)) return;
+
+  const endpoint = type === 'ban' ? '/api/ban' : '/api/flag-source';
+  try {
+    const r = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ videoIds: ids })
+    });
+    const res = await r.json();
+    if (res.success) {
+      alert("Action completed successfully. Reloading data...");
+      location.reload();
+    } else {
+      alert("Error: " + (res.error || "Unknown error"));
+    }
+  } catch (e) {
+    alert("Request failed: " + e.message);
   }
 }

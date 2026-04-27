@@ -24,7 +24,90 @@ const VIDEO_INDEX = path.join(DOCS_DIR, 'video_index.json');
 const EXCLUDED_VIDEOS = path.join(DOCS_DIR, 'excluded_videos.json');
 const SOURCES_INDEX = path.join(DOCS_DIR, 'sources_index.json');
 
-const VM_LOGIC    = require('./video_manager.js');
+
+// ─── Video Management Logic ──────────────────────────────────────────────────
+
+/**
+ * Bans a list of videos:
+ * 1. Removes local files.
+ * 2. Adds to excluded_videos.json.
+ * 3. Removes from video_index.json.
+ */
+function banVideos(videoIds, videoIndexPath, excludedVideosPath, videosDir) {
+  let index = {};
+  try { index = JSON.parse(fs.readFileSync(videoIndexPath, 'utf8')); } catch (err) {
+    return { success: false, error: 'Failed to read video index' };
+  }
+
+  let excluded = {};
+  try {
+    if (fs.existsSync(excludedVideosPath)) {
+      excluded = JSON.parse(fs.readFileSync(excludedVideosPath, 'utf8'));
+    }
+  } catch (err) {}
+
+  const results = { deleted: [], failed: [], skipped: [] };
+
+  for (const id of videoIds) {
+    if (!index[id]) { results.skipped.push(id); continue; }
+    const entry = index[id];
+
+    if (entry.local_file) {
+      const filePath = path.join(__dirname, entry.local_file);
+      try {
+        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      } catch (err) {}
+    }
+
+    excluded[id] = entry;
+    delete index[id];
+    results.deleted.push(id);
+  }
+
+  try {
+    fs.writeFileSync(videoIndexPath, JSON.stringify(index, null, 2));
+    fs.writeFileSync(excludedVideosPath, JSON.stringify(excluded, null, 2));
+    return { success: true, results };
+  } catch (err) {
+    return { success: false, error: 'Failed to save changes' };
+  }
+}
+
+/**
+ * Flags a list of videos as sources:
+ * 1. Moves from video_index.json to sources_index.json.
+ */
+function flagAsSource(videoIds, videoIndexPath, sourcesIndexPath) {
+  let index = {};
+  try { index = JSON.parse(fs.readFileSync(videoIndexPath, 'utf8')); } catch (err) {
+    return { success: false, error: 'Failed to read video index' };
+  }
+
+  let sources = {};
+  try {
+    if (fs.existsSync(sourcesIndexPath)) {
+      sources = JSON.parse(fs.readFileSync(sourcesIndexPath, 'utf8'));
+    }
+  } catch (err) {}
+
+  const results = { moved: [], skipped: [] };
+
+  for (const id of videoIds) {
+    if (!index[id]) { results.skipped.push(id); continue; }
+    const entry = index[id];
+    sources[id] = entry;
+    delete index[id];
+    results.moved.push(id);
+  }
+
+  try {
+    fs.writeFileSync(videoIndexPath, JSON.stringify(index, null, 2));
+    fs.writeFileSync(sourcesIndexPath, JSON.stringify(sources, null, 2));
+    return { success: true, results };
+  } catch (err) {
+    return { success: false, error: 'Failed to save changes' };
+  }
+}
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -94,7 +177,7 @@ function onRequest(req, res) {
     req.on('end', () => {
       try {
         const { videoIds } = JSON.parse(body);
-        const result = VM_LOGIC.banVideos(videoIds, VIDEO_INDEX, EXCLUDED_VIDEOS, VIDEOS_DIR);
+        const result = banVideos(videoIds, VIDEO_INDEX, EXCLUDED_VIDEOS, VIDEOS_DIR);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(result));
       } catch (err) {
@@ -112,7 +195,7 @@ function onRequest(req, res) {
     req.on('end', () => {
       try {
         const { videoIds } = JSON.parse(body);
-        const result = VM_LOGIC.flagAsSource(videoIds, VIDEO_INDEX, SOURCES_INDEX);
+        const result = flagAsSource(videoIds, VIDEO_INDEX, SOURCES_INDEX);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(result));
       } catch (err) {
@@ -138,12 +221,6 @@ function onRequest(req, res) {
   let relPath = pathname === '/' ? 'index.html' : pathname.replace(/^\//, '');
   let filePath = path.join(DOCS_DIR, relPath);
 
-  // Fallback for video_manager path
-  if (pathname === '/video_manager') {
-    filePath = path.join(__dirname, 'video_manager', 'video_manager.html');
-  } else if (pathname === '/video_manager_client.js') {
-    filePath = path.join(__dirname, 'video_manager', 'video_manager_client.js');
-  }
 
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     const ext = path.extname(filePath).toLowerCase();
