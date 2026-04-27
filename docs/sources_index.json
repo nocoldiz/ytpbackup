@@ -39325,5 +39325,32 @@
     "status": "pending",
     "local_file": null,
     "mirrors": null
+  },
+  "K80SgVxPx00": {
+    "url": "https://www.youtube.com/watch?v=K80SgVxPx00",
+    "title": "Super Mario Bros Soundtrack",
+    "description": "Colonna sonora del videogioco: Super Mario Bros\r\n\r\nSoundtrack videogame: Super Mario Bros",
+    "channel_name": "The Delta Channel",
+    "channel_url": "https://www.youtube.com/@DeltaHF89",
+    "sections": [
+      "YTP nostrane",
+      "Youtube"
+    ],
+    "source_pages": [
+      "YTP nostrane\\57790216_Basi!\\page_1.html",
+      "YTP nostrane\\57790216_Basi!\\page_2.html",
+      "channel_scrape:https://www.youtube.com/@DeltaHF89"
+    ],
+    "thread_titles": [
+      "Basi!",
+      "Super Mario Bros Soundtrack"
+    ],
+    "status": "downloaded",
+    "local_file": "videos\\YTP nostrane\\Super Mario Bros Soundtrack - K80SgVxPx00.mkv",
+    "publish_date": "2008-10-30",
+    "view_count": 270161,
+    "like_count": 1277,
+    "nickname": "»Kappa«",
+    "post_date": "13/9/2011, 15:52"
   }
 }
