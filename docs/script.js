@@ -200,14 +200,17 @@ function applyFilters() {
   });
 
   // 3. Sorting Logic
-  filteredVideos.sort((a, b) => {
-    let av = a[sortField] || '';
-    let bv = b[sortField] || '';
-    if (typeof av === 'string') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
-    if (av > bv) return sortDir;
-    if (av < bv) return -sortDir;
-    return 0;
-  });
+filteredVideos.sort((a, b) => {
+  let av = a[sortField] || '';
+  let bv = b[sortField] || '';
+  // Fix: Check types independently
+  if (typeof av === 'string') av = av.toLowerCase();
+  if (typeof bv === 'string') bv = bv.toLowerCase();
+  
+  if (av > bv) return sortDir;
+  if (av < bv) return -sortDir;
+  return 0;
+});
 
   currentPage = 1;
   renderTable(false);
@@ -234,7 +237,8 @@ function sortTable(field) {
   filteredVideos.sort((a, b) => {
     let av = a[sortField] || '';
     let bv = b[sortField] || '';
-    if (typeof av === 'string') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+if (typeof av === 'string') av = av.toLowerCase();
+if (typeof bv === 'string') bv = bv.toLowerCase();
     if (av > bv) return sortDir;
     if (av < bv) return -sortDir;
     return 0;
