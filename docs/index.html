@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YTP Archive Visualizer</title>
+  <title>YTP Archive</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="theme-old theme-light">
 
   <!-- LANDING -->
   <div id="landing">
@@ -28,198 +28,291 @@
 
   <!-- APP -->
   <div id="app">
-    <nav>
-      <h2>YTP Archive</h2>
-      <button class="nav-tab active" onclick="showPage('overview')">Overview</button>
-      <button class="nav-tab" onclick="showPage('videos')">Videos <span class="nav-badge"
-          id="badge-videos">0</span></button>
-      <button class="nav-tab" onclick="showPage('sources')">Sources <span class="nav-badge"
-          id="badge-sources">0</span></button>
-      <button class="nav-tab" onclick="showPage('channels')">Channels <span class="nav-badge"
-          id="badge-channels">0</span></button>
-      <button class="nav-tab" onclick="showPage('sections')">Sections <span class="nav-badge"
-          id="badge-sections">0</span></button>
-      <button class="nav-tab" onclick="showPage('years')">Years <span class="nav-badge"
-          id="badge-years">0</span></button>
-      <button class="nav-tab" onclick="showPage('timeline')">Timeline</button>
-      <div class="nav-spacer"></div>
-    </nav>
+    <div id="baseDiv">
+      <div id="masthead-utility">
+        <a href="#">Help</a>
+      </div>
+      <div id="masthead">
+        <a id="logo" href="#" onclick="showPage('youtube'); return false;">YouTube</a>
+      </div>
+      <div id="masthead-nav">
+        <a href="#" class="nav-tab active" onclick="showPage('youtube'); return false;">Home</a>
+        <a href="#" class="nav-tab" onclick="showPage('overview'); return false;">Overview</a>
+        <a href="#" class="nav-tab" onclick="showPage('videos'); return false;">Videos <span class="nav-badge" id="badge-videos">0</span></a>
+        <a href="#" class="nav-tab" onclick="showPage('sources'); return false;">Sources <span class="nav-badge" id="badge-sources">0</span></a>
+        <a href="#" class="nav-tab" onclick="showPage('channels'); return false;">Channels <span class="nav-badge" id="badge-channels">0</span></a>
+        <a href="#" class="nav-tab" onclick="showPage('sections'); return false;">Sections <span class="nav-badge" id="badge-sections">0</span></a>
+        <a href="#" class="nav-tab" onclick="showPage('years'); return false;">Years <span class="nav-badge" id="badge-years">0</span></a>
+        <a href="#" class="nav-tab" onclick="showPage('timeline'); return false;">Timeline</a>
 
-    <!-- OVERVIEW -->
-    <div class="page active" id="page-overview">
-      <div class="stats-grid" id="overview-stats"></div>
-      <div class="charts-row cols2">
-        <div class="chart-card">
-          <h3>Videos by Year</h3>
-          <canvas id="chart-year"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3>Status Breakdown</h3>
-          <canvas id="chart-status"></canvas>
-        </div>
-      </div>
-      <div class="charts-row cols2">
-        <div class="chart-card">
-          <h3>Top 15 Channels by Video Count</h3>
-          <canvas id="chart-top-channels"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3>Videos per Section</h3>
-          <canvas id="chart-sections"></canvas>
+        <div id="masthead-nav-right" style="margin-left:auto; display:flex; align-items:center;">
+          <div id="theme-toggles" style="margin-right: 15px; font-size: 12px; color: var(--masthead-nav-text);">
+            <a href="#" id="toggle-modern-old" onclick="toggleThemeMode(); return false;" style="color: inherit; border: none; padding: 0;">Switch to Modern Mode</a> | 
+            <a href="#" id="toggle-night-day" onclick="toggleNightDay(); return false;" style="color: inherit; border: none; padding: 0;">Switch to Night Mode</a>
+          </div>
+          <div id="masthead-search" style="padding-right:10px; display:flex; align-items:center;">
+            <div class="search-form">
+              <input type="text" class="search-term" id="global-search-input" value="">
+              <button class="search-button">Search</button>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="charts-row cols3">
-        <div class="chart-card">
-          <h3>View Count Distribution</h3>
-          <canvas id="chart-views-dist"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3>Top 10 by Views</h3>
-          <canvas id="chart-top-views"></canvas>
-        </div>
-        <div class="chart-card">
-          <h3>Top 10 by Likes</h3>
-          <canvas id="chart-top-likes"></canvas>
-        </div>
-      </div>
-    </div>
 
-    <!-- VIDEOS -->
-    <div class="page" id="page-videos">
-      <div class="section-header">
-        <h2>Video Search</h2>
-        <span class="count-badge" id="videos-count-label"></span>
-        <div class="view-toggle" style="margin-left: auto;">
-          <button id="btn-view-table" class="view-btn active" onclick="setViewMode('table')"
-            title="Table View">≡</button>
-          <button id="btn-view-grid" class="view-btn" onclick="setViewMode('grid')" title="Grid View">⊞</button>
+      <!-- YOUTUBE HOME -->
+      <div class="page active" id="page-youtube">
+        <div class="layout-2col" id="youtube-old-layout">
+          <div class="col-right home-main">
+            <div id="homepage-featured-heading" style="border-bottom:1px solid var(--border); margin-bottom:10px; padding-bottom:5px;">
+              <h1 style="font-size:16px; margin:0;">Featured Videos</h1>
+            </div>
+            <div class="box-content" id="featured-videos" style="padding:0;"></div>
+          </div>
+          <div class="col-left home-side">
+            <div class="box">
+              <div class="box-header">Most Popular</div>
+              <div class="box-content" id="popular-videos"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="youtube-modern-layout">
+          <div id="home-chips" class="home-chips-container">
+            <button class="chip active">All</button>
+            <button class="chip">Music</button>
+            <button class="chip">Gaming</button>
+            <button class="chip">News</button>
+            <button class="chip">Live</button>
+            <button class="chip">Recently uploaded</button>
+          </div>
+          <div id="modern-videos-grid"></div>
         </div>
       </div>
-      <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Search title, channel, tags, thread, description, video ID..."
-          oninput="applyFilters()">
-        <select id="filter-status" onchange="applyFilters()">
-          <option value="">All statuses</option>
-          <option value="downloaded">Downloaded</option>
-          <option value="pending">Pending</option>
-          <option value="unavailable">Unavailable</option>
-        </select>
-        <select id="filter-section" onchange="applyFilters()">
-          <option value="">All sections</option>
-        </select>
-        <select id="filter-language" class="tag-list" onchange="applyFilters()">
-          <option value="any">Any language</option>
-          <option value="english">🇬🇧 English</option>
-          <option value="italian">🇮🇹 Italian</option>
-          <option value="spanish">🇪🇸 Spanish</option>
-          <option value="russian">🇷🇺 Russian</option>
-          <option value="french">🇫🇷 French</option>
-          <option value="german">🇩🇪 German</option>
-        </select>
-        <input type="text" id="filter-channel" list="channel-datalist" placeholder="All channels"
-          oninput="applyFilters()">
-        <datalist id="channel-datalist"></datalist>
-      </div>
-      <div class="search-bar">
-        <label>Views ≥</label>
-        <div class="range-group">
-          <input type="number" id="filter-views-min" placeholder="0" oninput="applyFilters()">
-        </div>
-        <label>Likes ≥</label>
-        <div class="range-group">
-          <input type="number" id="filter-likes-min" placeholder="0" oninput="applyFilters()">
-        </div>
-        <label>Year:</label>
-        <select id="filter-year" onchange="applyFilters()">
-          <option value="">Any year</option>
-        </select>
-      </div>
-      <div id="video-grid" class="video-grid" style="display:none"></div>
-      <div class="table-wrap" id="video-table-wrap">
-        <table id="video-table">
-          <thead>
-            <tr>
-              <th data-field="title" onclick="sortTable('title')" style="cursor:pointer">Title / ID <span
-                  class="sort-arrow">↕</span></th>
-              <th data-field="channel_name" onclick="sortTable('channel_name')" style="cursor:pointer">Channel <span
-                  class="sort-arrow">↕</span></th>
 
-              <th data-field="publish_date" onclick="sortTable('publish_date')" style="cursor:pointer">Date <span
-                  class="sort-arrow">↕</span></th>
-              <th data-field="status" onclick="sortTable('status')" style="cursor:pointer">Status <span
-                  class="sort-arrow">↕</span></th>
-
-              <th data-field="view_count" onclick="sortTable('view_count')" style="cursor:pointer">Views <span
-                  class="sort-arrow">↕</span></th>
-
-              <th data-field="like_count" onclick="sortTable('like_count')" style="cursor:pointer">Likes <span
-                  class="sort-arrow">↕</span></th>
-
-              <th>Section</th>
-              <th>Threads</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="video-tbody"></tbody>
-        </table>
-      </div>
-      <div id="scroll-sentinel" style="height: 1px;"></div>
-      <div class="pagination" id="pagination"></div>
-    </div>
-
-    <!-- CHANNELS -->
-    <div class="page" id="page-channels">
-      <div class="section-header">
-        <h2>Channels</h2>
-        <span class="count-badge" id="channels-count-label"></span>
-      </div>
-      <div class="search-bar">
-        <input type="text" id="channel-search" placeholder="Search channels..." oninput="renderChannelGrid()">
-        <label>First Video ≥</label>
-        <div class="range-group">
-          <input type="number" id="channel-year-min" placeholder="YYYY" oninput="renderChannelGrid()">
-        </div>
-        <label>First Video ≤</label>
-        <div class="range-group">
-          <input type="number" id="channel-year-max" placeholder="YYYY" oninput="renderChannelGrid()">
+      <!-- YOUTUBE VIDEO -->
+      <div class="page" id="page-video">
+        <div class="layout-2col">
+          <div class="col-right" style="width: 640px;">
+            <div id="watch-title">Loading...</div>
+            <div id="watch-video-container">
+              <div id="watch-player"></div>
+            </div>
+          </div>
+          <div class="col-left" style="width: 300px;">
+            <div class="watch-stats">
+              <div class="watch-views" id="watch-views-count">0</div>
+              views
+            </div>
+            <div id="watch-channel-info">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png" alt="Channel Icon">
+              <div>
+                Added: <strong id="watch-date"></strong><br>
+                From: <a href="#" id="watch-channel" onclick="return false;">Unknown</a>
+              </div>
+            </div>
+            <div id="watch-description"></div>
+            <div class="box" style="margin-top: 15px;">
+              <div class="box-header">More From This Channel</div>
+              <div class="box-content" id="more-from-channel"></div>
+            </div>
+          </div>
         </div>
       </div>
-      <div id="channel-detail-panel" style="display:none"></div>
-      <div class="channel-grid" id="channel-grid"></div>
-    </div>
 
-    <!-- TIMELINE -->
-    <div class="page" id="page-timeline">
-      <div class="section-header">
-        <h2>Interactive Timeline</h2>
-        <span class="count-badge">Scroll to zoom, drag to pan</span>
+      <!-- YOUTUBE PROFILE -->
+      <div class="page" id="page-profile">
+        <div id="profile-header">
+          <div id="profile-title">Channel Name</div>
+        </div>
+        <div id="profile-nav">
+          <a href="#" class="active" onclick="return false;">Channel</a>
+          <a href="#" onclick="return false;">Videos</a>
+        </div>
+        <div class="layout-2col" style="margin-top: 20px;">
+          <div class="col-left">
+            <div class="box">
+              <div class="box-header">Profile</div>
+              <div class="box-content" id="profile-stats"></div>
+            </div>
+          </div>
+          <div class="col-right">
+            <div class="box">
+              <div class="box-content" id="profile-featured"></div>
+            </div>
+            <div class="box">
+              <div class="box-header">Recent Videos</div>
+              <div class="box-content" id="profile-videos"></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div id="timeline-container">
-        <div id="timeline-track"></div>
-      </div>
-    </div>
 
-    <!-- YEARS -->
-    <div class="page" id="page-years">
-      <div class="section-header">
-        <h2>Years</h2>
-        <span class="count-badge" id="years-count-label"></span>
+      <!-- SEARCH PAGE -->
+      <div class="page" id="page-search">
+        <div class="box">
+          <div class="box-header">Search Results for "<span id="search-query-display"></span>"</div>
+          <div class="box-content">
+            <h3 style="margin-bottom: 15px; color: var(--text);">Channels</h3>
+            <div id="search-channels-results" style="margin-bottom: 30px;"></div>
+            <h3 style="margin-bottom: 15px; color: var(--text);">Videos</h3>
+            <div id="search-videos-results"></div>
+          </div>
+        </div>
       </div>
-      <div id="year-detail-panel" style="display:none"></div>
-      <div class="year-grid" id="year-grid"></div>
-    </div>
 
-    <!-- SOURCES (Placeholder, will reuse #page-videos structure) -->
-    <div class="page" id="page-sources">
-    </div>
-
-    <!-- SECTIONS -->
-    <div class="page" id="page-sections">
-      <div class="section-header">
-        <h2>Sections</h2>
+      <!-- OVERVIEW -->
+      <div class="page" id="page-overview">
+        <div class="stats-grid" id="overview-stats"></div>
+        <div class="charts-row cols2">
+          <div class="chart-card">
+            <h3>Videos by Year</h3>
+            <canvas id="chart-year"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Status Breakdown</h3>
+            <canvas id="chart-status"></canvas>
+          </div>
+        </div>
+        <div class="charts-row cols2">
+          <div class="chart-card">
+            <h3>Top 15 Channels by Video Count</h3>
+            <canvas id="chart-top-channels"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Videos per Section</h3>
+            <canvas id="chart-sections"></canvas>
+          </div>
+        </div>
+        <div class="charts-row cols3">
+          <div class="chart-card">
+            <h3>View Count Distribution</h3>
+            <canvas id="chart-views-dist"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Top 10 by Views</h3>
+            <canvas id="chart-top-views"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Top 10 by Likes</h3>
+            <canvas id="chart-top-likes"></canvas>
+          </div>
+        </div>
       </div>
-      <div id="section-detail-panel" style="display:none"></div>
-      <div class="section-grid" id="section-grid"></div>
+
+      <!-- VIDEOS -->
+      <div class="page" id="page-videos">
+        <div class="section-header">
+          <h2>Video Search</h2>
+          <span class="count-badge" id="videos-count-label"></span>
+          <div class="view-toggle" style="margin-left: auto;">
+            <button id="btn-view-table" class="view-btn active" onclick="setViewMode('table')" title="Table View">≡</button>
+            <button id="btn-view-grid" class="view-btn" onclick="setViewMode('grid')" title="Grid View">⊞</button>
+          </div>
+        </div>
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Search title, channel, tags, thread, description, video ID..." oninput="applyFilters()">
+          <select id="filter-status" onchange="applyFilters()">
+            <option value="">All statuses</option>
+            <option value="downloaded">Downloaded</option>
+            <option value="pending">Pending</option>
+            <option value="unavailable">Unavailable</option>
+          </select>
+          <select id="filter-section" onchange="applyFilters()">
+            <option value="">All sections</option>
+          </select>
+          <select id="filter-language" class="tag-list" onchange="applyFilters()">
+            <option value="any">Any language</option>
+            <option value="english">🇬🇧 English</option>
+            <option value="italian">🇮🇹 Italian</option>
+            <option value="spanish">🇪🇸 Spanish</option>
+            <option value="russian">🇷🇺 Russian</option>
+            <option value="french">🇫🇷 French</option>
+            <option value="german">🇩🇪 German</option>
+          </select>
+          <input type="text" id="filter-channel" list="channel-datalist" placeholder="All channels" oninput="applyFilters()">
+          <datalist id="channel-datalist"></datalist>
+        </div>
+        <div class="search-bar">
+          <label>Views ≥</label>
+          <div class="range-group"><input type="number" id="filter-views-min" placeholder="0" oninput="applyFilters()"></div>
+          <label>Likes ≥</label>
+          <div class="range-group"><input type="number" id="filter-likes-min" placeholder="0" oninput="applyFilters()"></div>
+          <label>Year:</label>
+          <select id="filter-year" onchange="applyFilters()"><option value="">Any year</option></select>
+        </div>
+        <div id="video-grid" class="video-grid" style="display:none"></div>
+        <div class="table-wrap" id="video-table-wrap">
+          <table id="video-table">
+            <thead>
+              <tr>
+                <th data-field="title" onclick="sortTable('title')" style="cursor:pointer">Title / ID <span class="sort-arrow">↕</span></th>
+                <th data-field="channel_name" onclick="sortTable('channel_name')" style="cursor:pointer">Channel <span class="sort-arrow">↕</span></th>
+                <th data-field="publish_date" onclick="sortTable('publish_date')" style="cursor:pointer">Date <span class="sort-arrow">↕</span></th>
+                <th data-field="status" onclick="sortTable('status')" style="cursor:pointer">Status <span class="sort-arrow">↕</span></th>
+                <th data-field="view_count" onclick="sortTable('view_count')" style="cursor:pointer">Views <span class="sort-arrow">↕</span></th>
+                <th data-field="like_count" onclick="sortTable('like_count')" style="cursor:pointer">Likes <span class="sort-arrow">↕</span></th>
+                <th>Section</th>
+                <th>Threads</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="video-tbody"></tbody>
+          </table>
+        </div>
+        <div id="scroll-sentinel" style="height: 1px;"></div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+
+      <!-- CHANNELS -->
+      <div class="page" id="page-channels">
+        <div class="section-header">
+          <h2>Channels</h2>
+          <span class="count-badge" id="channels-count-label"></span>
+        </div>
+        <div class="search-bar">
+          <input type="text" id="channel-search" placeholder="Search channels..." oninput="renderChannelGrid()">
+          <label>First Video ≥</label>
+          <div class="range-group"><input type="number" id="channel-year-min" placeholder="YYYY" oninput="renderChannelGrid()"></div>
+          <label>First Video ≤</label>
+          <div class="range-group"><input type="number" id="channel-year-max" placeholder="YYYY" oninput="renderChannelGrid()"></div>
+        </div>
+        <div id="channel-detail-panel" style="display:none"></div>
+        <div class="channel-grid" id="channel-grid"></div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="page" id="page-timeline">
+        <div class="section-header">
+          <h2>Interactive Timeline</h2>
+          <span class="count-badge">Scroll to zoom, drag to pan</span>
+        </div>
+        <div id="timeline-container">
+          <div id="timeline-track"></div>
+        </div>
+      </div>
+
+      <!-- YEARS -->
+      <div class="page" id="page-years">
+        <div class="section-header">
+          <h2>Years</h2>
+          <span class="count-badge" id="years-count-label"></span>
+        </div>
+        <div id="year-detail-panel" style="display:none"></div>
+        <div class="year-grid" id="year-grid"></div>
+      </div>
+
+      <!-- SOURCES -->
+      <div class="page" id="page-sources"></div>
+
+      <!-- SECTIONS -->
+      <div class="page" id="page-sections">
+        <div class="section-header">
+          <h2>Sections</h2>
+        </div>
+        <div id="section-detail-panel" style="display:none"></div>
+        <div class="section-grid" id="section-grid"></div>
+      </div>
+
     </div>
   </div>
 

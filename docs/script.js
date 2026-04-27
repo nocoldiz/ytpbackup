@@ -99,6 +99,10 @@ function initApp(vRaw, sRaw) {
   renderChannelGrid();
   renderSectionGrid();
   renderYearGrid();
+  
+  if (appMode === 'videos') {
+    renderHomePage();
+  }
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────────────
@@ -126,6 +130,239 @@ function showPage(name) {
   if (name === 'timeline' && typeof initTimeline === 'function') {
     initTimeline();
   }
+  if (name === 'youtube') {
+    renderHomePage();
+  }
+}
+
+// ─── THEME TOGGLES & SEARCH ────────────────────────────────────────────────
+function toggleThemeMode() {
+  const isOld = document.body.classList.toggle('theme-old');
+  const btn = document.getElementById('toggle-modern-old');
+  if (btn) btn.textContent = isOld ? 'Switch to Modern Mode' : 'Switch to Old Mode';
+}
+
+function toggleNightDay() {
+  const isLight = document.body.classList.toggle('theme-light');
+  document.body.classList.toggle('theme-dark', !isLight);
+  const btn = document.getElementById('toggle-night-day');
+  if (btn) btn.textContent = isLight ? 'Switch to Night Mode' : 'Switch to Day Mode';
+}
+
+document.querySelector('.search-button').addEventListener('click', () => {
+  const q = document.getElementById('global-search-input').value.trim();
+  if (q) performSearch(q);
+});
+document.getElementById('global-search-input').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    const q = e.target.value.trim();
+    if (q) performSearch(q);
+  }
+});
+
+function performSearch(query) {
+  showPage('search');
+  document.getElementById('search-query-display').textContent = query;
+  
+  const ytData = [...allVideos, ...allSources];
+  const qLower = query.toLowerCase();
+  
+  // Search Channels
+  const allChannels = [...new Set(ytData.map(v => v.channel_name).filter(Boolean))];
+  const matchedChannels = allChannels.filter(c => c.toLowerCase().includes(qLower));
+  
+  const channelsContainer = document.getElementById('search-channels-results');
+  if (matchedChannels.length === 0) {
+    channelsContainer.innerHTML = '<p class="empty" style="padding:10px;">No channels found.</p>';
+  } else {
+    channelsContainer.innerHTML = matchedChannels.map(c => {
+      const chVideos = ytData.filter(v => v.channel_name === c);
+      const totalViews = chVideos.reduce((s, v) => s + (v.view_count || 0), 0);
+      return `
+        <div class="channel-card" style="display:inline-block; margin-right:15px; margin-bottom:15px; vertical-align:top; width:220px;" onclick="openProfile('${escAttr(c)}')">
+          <h4>${escHtml(c)}</h4>
+          <div class="ch-stats" style="margin-top:8px;">
+            <span><strong>${chVideos.length}</strong> videos</span><br>
+            <span><strong>${fmtNum(totalViews)}</strong> views</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  // Search Videos
+  const matchedVideos = ytData.filter(v => {
+    const titleMatch = (v.title || '').toLowerCase().includes(qLower);
+    const idMatch = (v.id || '').toLowerCase().includes(qLower);
+    const descMatch = (v.description || '').toLowerCase().includes(qLower);
+    const tagMatch = (v.tags || []).some(t => t.toLowerCase().includes(qLower));
+    return titleMatch || idMatch || descMatch || tagMatch;
+  });
+  
+  matchedVideos.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
+  
+  const videosContainer = document.getElementById('search-videos-results');
+  if (matchedVideos.length === 0) {
+    videosContainer.innerHTML = '<p class="empty" style="padding:10px;">No videos found.</p>';
+  } else {
+    videosContainer.innerHTML = matchedVideos.slice(0, 50).map(v => renderVideoItem(v, 'list')).join('');
+  }
+}
+
+// ─── YOUTUBE LOGIC ───────────────────────────────────────────────────────
+function openVideo(vidId) {
+  showPage('video');
+  const ytData = [...allVideos, ...allSources];
+  const v = ytData.find(x => x.id === vidId);
+  if (!v) {
+    document.getElementById('watch-title').textContent = "Video not found";
+    return false;
+  }
+
+  const title = v.title || v.id;
+  const channel = v.channel_name || 'Unknown Channel';
+  
+  document.getElementById('watch-title').textContent = title;
+  document.getElementById('watch-channel').textContent = channel;
+  document.getElementById('watch-channel').onclick = () => openProfile(channel);
+  document.getElementById('watch-views-count').textContent = fmtNum(v.view_count || 0);
+  document.getElementById('watch-date').textContent = v.publish_date ? v.publish_date.slice(0,10) : '';
+  
+  let desc = v.description || 'No description available.';
+  document.getElementById('watch-description').textContent = desc;
+
+  const playerContainer = document.getElementById('watch-player');
+  if (v.status === 'downloaded' && v.local_file) {
+    const src = getLocalVideoPath(v);
+    playerContainer.innerHTML = `<video controls autoplay style="width:100%; height:390px; background:#000;">
+      <source src="${src}" type="video/mp4">
+    </video>`;
+  } else {
+    playerContainer.innerHTML = `<iframe width="100%" height="390" src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="border:none;"></iframe>`;
+  }
+
+  const moreContainer = document.getElementById('more-from-channel');
+  if (moreContainer) {
+    const moreVids = ytData.filter(x => x.channel_name === v.channel_name && x.id !== v.id).slice(0, 5);
+    moreContainer.innerHTML = moreVids.map(x => renderVideoItem(x, 'list')).join('');
+  }
+  return false;
+}
+
+function openProfile(user) {
+  showPage('profile');
+  const ytData = [...allVideos, ...allSources];
+  document.getElementById('profile-title').textContent = user;
+  
+  const userVideos = ytData.filter(v => v.channel_name === user);
+  const sorted = [...userVideos].sort((a, b) => {
+    return (b.publish_date || '').localeCompare(a.publish_date || '');
+  });
+
+  const statsEl = document.getElementById('profile-stats');
+  if (statsEl) {
+    const totalViews = userVideos.reduce((sum, v) => sum + (v.view_count || 0), 0);
+    statsEl.innerHTML = `
+      <strong>Channel Views:</strong> ${fmtNum(totalViews)}<br>
+      <strong>Total Uploads:</strong> ${userVideos.length}<br>
+      <strong>Joined:</strong> ${sorted.length > 0 && sorted[sorted.length-1].publish_date ? sorted[sorted.length-1].publish_date.slice(0,10) : 'Unknown'}
+    `;
+  }
+
+  const featContainer = document.getElementById('profile-featured');
+  const gridContainer = document.getElementById('profile-videos');
+  
+  if (sorted.length > 0) {
+    const feat = sorted[0];
+    featContainer.innerHTML = `
+      <h3 style="margin-top:0;">${escHtml(feat.title || feat.id)}</h3>
+      <iframe width="100%" height="295" src="https://www.youtube-nocookie.com/embed/${feat.id}" allow="autoplay; encrypted-media" allowfullscreen style="border:none;"></iframe>
+      <p style="margin-top:10px;">${escHtml(feat.description ? feat.description.slice(0,200) + '...' : '')}</p>
+    `;
+    
+    const others = sorted.slice(1, 13);
+    gridContainer.innerHTML = others.map(v => renderVideoItem(v, 'grid')).join('');
+  } else {
+    featContainer.innerHTML = '';
+    gridContainer.innerHTML = '';
+  }
+  return false;
+}
+
+function renderHomePage() {
+  const ytData = [...allVideos, ...allSources];
+  const featuredContainer = document.getElementById('featured-videos');
+  const popularContainer = document.getElementById('popular-videos');
+  const modernContainer = document.getElementById('modern-videos-grid');
+  if (!featuredContainer || !popularContainer) return;
+
+  const validVideos = ytData.filter(v => v.status === 'downloaded' || v.status === 'available');
+  const sortedByDate = [...validVideos].sort((a, b) => {
+    return (b.publish_date || '').localeCompare(a.publish_date || '');
+  });
+  const sortedByViews = [...validVideos].sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
+
+  featuredContainer.innerHTML = sortedByDate.slice(0, 5).map(v => renderVideoItem(v, 'list')).join('');
+  popularContainer.innerHTML = sortedByViews.slice(0, 12).map(v => renderVideoItem(v, 'grid')).join('');
+  
+  if (modernContainer) {
+    modernContainer.innerHTML = sortedByViews.slice(0, 24).map(v => renderModernHomeCard(v)).join('');
+  }
+}
+
+function renderModernHomeCard(v) {
+  const fallbackTitle = (v.thread_titles && v.thread_titles[0]) ? v.thread_titles[0] : null;
+  const titleText = v.title || fallbackTitle || v.id;
+  const dateText = v.publish_date ? v.publish_date.slice(0, 10) : 'Unknown Date';
+  const viewsText = v.view_count != null ? fmtNum(v.view_count) + ' views' : '';
+  const chText = v.channel_name || '-';
+  const thumbUrl = `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`;
+  const channelAvatar = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
+
+  return `
+    <div class="modern-home-card" onclick="openVideo('${v.id}')">
+      <div class="yt-facade">
+        <img src="${thumbUrl}" alt="Thumbnail" loading="lazy">
+        <div class="play-btn"></div>
+      </div>
+      <div class="modern-home-info">
+        <img class="channel-avatar" src="${channelAvatar}" alt="Avatar" onclick="event.stopPropagation(); openProfile('${escAttr(chText)}')">
+        <div class="modern-home-text">
+          <h3 class="modern-home-title" title="${escAttr(titleText)}">${escHtml(titleText)}</h3>
+          <a href="#" class="modern-home-ch" onclick="event.stopPropagation(); openProfile('${escAttr(chText)}')">${escHtml(chText)}</a>
+          <div class="modern-home-meta">
+            ${viewsText ? `<span>${viewsText}</span><span class="dot-sep">•</span>` : ''}
+            <span>${dateText}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderVideoItem(v, mode = 'list') {
+  const title = v.title || v.id;
+  const channel = v.channel_name || 'Unknown Channel';
+  const views = fmtNum(v.view_count || 0) + ' views';
+  const date = v.publish_date ? v.publish_date.slice(0, 10) : 'Unknown Date';
+  const thumbUrl = `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`;
+
+  return `
+    <div class="video-item ${mode}">
+      <a href="#" onclick="return openVideo('${v.id}')" class="video-thumb">
+        <img src="${thumbUrl}" alt="Thumbnail">
+        <span class="video-time">▶</span>
+      </a>
+      <div class="video-info">
+        <a href="#" onclick="return openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${escHtml(title)}</a>
+        <div class="video-meta">
+          From: <a href="#" onclick="return openProfile('${escAttr(channel)}')">${escHtml(channel)}</a><br>
+          Views: ${views}<br>
+          Added: ${date}
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 // ─── FILTER OPTIONS ───────────────────────────────────────────────────────

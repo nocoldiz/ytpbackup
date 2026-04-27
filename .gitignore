@@ -10,5 +10,6 @@ __pycache__
 videos/video_index.json
 processed_cache.json
 /videos
+/reference
 /__pycache__
 *.pyc
