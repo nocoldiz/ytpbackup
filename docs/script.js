@@ -8,6 +8,18 @@ let selectedChannel = null;
 let selectedSection = null;
 let charts = {};
 
+let renderedHomeVideoIds = new Set();
+let isFetchingMoreHome = false;
+
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 document.getElementById('fileInput').addEventListener('change', e => {
   const files = Array.from(e.target.files);
   loadMultipleFiles(files);
@@ -42,11 +54,11 @@ async function autoLoad() {
   try {
     const rv = await fetch('video_index.json');
     if (rv.ok) vData = await rv.json();
-  } catch(e) {}
+  } catch (e) { }
   try {
     const rs = await fetch('sources_index.json');
     if (rs.ok) sData = await rs.json();
-  } catch(e) {}
+  } catch (e) { }
   initApp(vData, sData);
 }
 autoLoad();
@@ -84,7 +96,7 @@ function initApp(vRaw, sRaw) {
   const totalVideos = allVideos.length;
   const channels = new Set(allVideos.map(v => v.channel_name).filter(Boolean));
   const sections = new Set(allVideos.flatMap(v => v.sections || []));
-  
+
   document.getElementById('badge-videos').textContent = totalVideos;
   document.getElementById('badge-sources').textContent = allSources.length;
   document.getElementById('badge-channels').textContent = channels.size;
@@ -99,7 +111,7 @@ function initApp(vRaw, sRaw) {
   renderChannelGrid();
   renderSectionGrid();
   renderYearGrid();
-  
+
   if (appMode === 'videos') {
     renderHomePage();
   }
@@ -118,7 +130,7 @@ function showPage(name) {
 
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  
+
   // Find the correct nav tab even if targetPage is 'videos' but name is 'sources'
   const tabs = document.querySelectorAll('.nav-tab');
   tabs.forEach(t => {
@@ -126,7 +138,7 @@ function showPage(name) {
   });
 
   document.getElementById('page-' + targetPage).classList.add('active');
-  
+
   if (name === 'timeline' && typeof initTimeline === 'function') {
     initTimeline();
   }
@@ -163,14 +175,14 @@ document.getElementById('global-search-input').addEventListener('keypress', (e) 
 function performSearch(query) {
   showPage('search');
   document.getElementById('search-query-display').textContent = query;
-  
+
   const ytData = [...allVideos, ...allSources];
   const qLower = query.toLowerCase();
-  
+
   // Search Channels
   const allChannels = [...new Set(ytData.map(v => v.channel_name).filter(Boolean))];
   const matchedChannels = allChannels.filter(c => c.toLowerCase().includes(qLower));
-  
+
   const channelsContainer = document.getElementById('search-channels-results');
   if (matchedChannels.length === 0) {
     channelsContainer.innerHTML = '<p class="empty" style="padding:10px;">No channels found.</p>';
@@ -189,7 +201,7 @@ function performSearch(query) {
       `;
     }).join('');
   }
-  
+
   // Search Videos
   const matchedVideos = ytData.filter(v => {
     const titleMatch = (v.title || '').toLowerCase().includes(qLower);
@@ -198,9 +210,9 @@ function performSearch(query) {
     const tagMatch = (v.tags || []).some(t => t.toLowerCase().includes(qLower));
     return titleMatch || idMatch || descMatch || tagMatch;
   });
-  
+
   matchedVideos.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
-  
+
   const videosContainer = document.getElementById('search-videos-results');
   if (matchedVideos.length === 0) {
     videosContainer.innerHTML = '<p class="empty" style="padding:10px;">No videos found.</p>';
@@ -221,13 +233,13 @@ function openVideo(vidId) {
 
   const title = v.title || v.id;
   const channel = v.channel_name || 'Unknown Channel';
-  
+
   document.getElementById('watch-title').textContent = title;
   document.getElementById('watch-channel').textContent = channel;
   document.getElementById('watch-channel').onclick = () => openProfile(channel);
   document.getElementById('watch-views-count').textContent = fmtNum(v.view_count || 0);
-  document.getElementById('watch-date').textContent = v.publish_date ? v.publish_date.slice(0,10) : '';
-  
+  document.getElementById('watch-date').textContent = v.publish_date ? v.publish_date.slice(0, 10) : '';
+
   let desc = v.description || 'No description available.';
   document.getElementById('watch-description').textContent = desc;
 
@@ -235,10 +247,10 @@ function openVideo(vidId) {
   if (v.status === 'downloaded' && v.local_file) {
     const src = getLocalVideoPath(v);
     playerContainer.innerHTML = `<video controls autoplay style="width:100%; height:390px; background:#000;">
-      <source src="${src}" type="video/mp4">
+      <source src="${src}" type="video/mp4" onerror="fallbackToYoutube('${v.id}')">
     </video>`;
   } else {
-    playerContainer.innerHTML = `<iframe width="100%" height="390" src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="border:none;"></iframe>`;
+    fallbackToYoutube(v.id);
   }
 
   const moreContainer = document.getElementById('more-from-channel');
@@ -249,11 +261,18 @@ function openVideo(vidId) {
   return false;
 }
 
+function fallbackToYoutube(vidId) {
+  const playerContainer = document.getElementById('watch-player');
+  if (playerContainer) {
+    playerContainer.innerHTML = `<iframe width="100%" height="390" src="https://www.youtube-nocookie.com/embed/${vidId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen style="border:none;"></iframe>`;
+  }
+}
+
 function openProfile(user) {
   showPage('profile');
   const ytData = [...allVideos, ...allSources];
   document.getElementById('profile-title').textContent = user;
-  
+
   const userVideos = ytData.filter(v => v.channel_name === user);
   const sorted = [...userVideos].sort((a, b) => {
     return (b.publish_date || '').localeCompare(a.publish_date || '');
@@ -265,21 +284,21 @@ function openProfile(user) {
     statsEl.innerHTML = `
       <strong>Channel Views:</strong> ${fmtNum(totalViews)}<br>
       <strong>Total Uploads:</strong> ${userVideos.length}<br>
-      <strong>Joined:</strong> ${sorted.length > 0 && sorted[sorted.length-1].publish_date ? sorted[sorted.length-1].publish_date.slice(0,10) : 'Unknown'}
+      <strong>Joined:</strong> ${sorted.length > 0 && sorted[sorted.length - 1].publish_date ? sorted[sorted.length - 1].publish_date.slice(0, 10) : 'Unknown'}
     `;
   }
 
   const featContainer = document.getElementById('profile-featured');
   const gridContainer = document.getElementById('profile-videos');
-  
+
   if (sorted.length > 0) {
     const feat = sorted[0];
     featContainer.innerHTML = `
       <h3 style="margin-top:0;">${escHtml(feat.title || feat.id)}</h3>
       <iframe width="100%" height="295" src="https://www.youtube-nocookie.com/embed/${feat.id}" allow="autoplay; encrypted-media" allowfullscreen style="border:none;"></iframe>
-      <p style="margin-top:10px;">${escHtml(feat.description ? feat.description.slice(0,200) + '...' : '')}</p>
+      <p style="margin-top:10px;">${escHtml(feat.description ? feat.description.slice(0, 200) + '...' : '')}</p>
     `;
-    
+
     const others = sorted.slice(1, 13);
     gridContainer.innerHTML = others.map(v => renderVideoItem(v, 'grid')).join('');
   } else {
@@ -290,6 +309,7 @@ function openProfile(user) {
 }
 
 function renderHomePage() {
+  renderedHomeVideoIds.clear();
   const ytData = [...allVideos, ...allSources];
   const featuredContainer = document.getElementById('featured-videos');
   const popularContainer = document.getElementById('popular-videos');
@@ -297,18 +317,95 @@ function renderHomePage() {
   if (!featuredContainer || !popularContainer) return;
 
   const validVideos = ytData.filter(v => v.status === 'downloaded' || v.status === 'available');
-  const sortedByDate = [...validVideos].sort((a, b) => {
-    return (b.publish_date || '').localeCompare(a.publish_date || '');
-  });
-  const sortedByViews = [...validVideos].sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
+  if (validVideos.length === 0) return;
 
-  featuredContainer.innerHTML = sortedByDate.slice(0, 5).map(v => renderVideoItem(v, 'list')).join('');
-  popularContainer.innerHTML = sortedByViews.slice(0, 12).map(v => renderVideoItem(v, 'grid')).join('');
-  
+  // Randomize featured videos
+  const shuffledFeatured = shuffleArray(validVideos);
+  const featuredVideos = shuffledFeatured.slice(0, 8);
+  featuredVideos.forEach(v => renderedHomeVideoIds.add(v.id));
+
+  // Popular videos (by views)
+  const sortedByViews = [...validVideos].sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
+  const popularVideos = sortedByViews.filter(v => !renderedHomeVideoIds.has(v.id)).slice(0, 12);
+  popularVideos.forEach(v => renderedHomeVideoIds.add(v.id));
+
+  featuredContainer.innerHTML = featuredVideos.map(v => renderVideoItem(v, 'list')).join('');
+  popularContainer.innerHTML = popularVideos.map(v => renderVideoItem(v, 'grid')).join('');
+
   if (modernContainer) {
-    modernContainer.innerHTML = sortedByViews.slice(0, 24).map(v => renderModernHomeCard(v)).join('');
+    const modernInitial = sortedByViews.slice(0, 24);
+    modernContainer.innerHTML = modernInitial.map(v => renderModernHomeCard(v)).join('');
+    renderedHomeVideoIds.clear();
+    featuredVideos.forEach(v => renderedHomeVideoIds.add(v.id));
+    popularVideos.forEach(v => renderedHomeVideoIds.add(v.id));
+    modernInitial.forEach(v => renderedHomeVideoIds.add(v.id));
   }
 }
+
+function setFeaturedTab(tab) {
+  // Update active tab UI
+  document.querySelectorAll('.yt-tab').forEach(t => t.classList.remove('active'));
+  const clickedTab = document.querySelector(`.yt-tab[onclick*="${tab}"]`);
+  if (clickedTab) clickedTab.classList.add('active');
+
+  const ytData = [...allVideos, ...allSources];
+  const validVideos = ytData.filter(v => v.status === 'downloaded' || v.status === 'available');
+  const featuredContainer = document.getElementById('featured-videos');
+  if (!featuredContainer || validVideos.length === 0) return;
+
+  let videos;
+  if (tab === 'featured') {
+    videos = shuffleArray(validVideos).slice(0, 8);
+  } else if (tab === 'views') {
+    videos = [...validVideos].sort((a, b) => (b.view_count || 0) - (a.view_count || 0)).slice(0, 8);
+  } else if (tab === 'discussed') {
+    // Use comment count if available, else fall back to views
+    videos = [...validVideos].sort((a, b) => (b.comment_count || b.view_count || 0) - (a.comment_count || a.view_count || 0)).slice(0, 8);
+  } else if (tab === 'favorited') {
+    videos = [...validVideos].sort((a, b) => (b.like_count || 0) - (a.like_count || 0)).slice(0, 8);
+  }
+
+  featuredContainer.innerHTML = videos.map(v => renderVideoItem(v, 'list')).join('');
+}
+
+function loadMoreHomeVideos() {
+  const featuredContainer = document.getElementById('featured-videos');
+  const popularContainer = document.getElementById('popular-videos');
+  const modernContainer = document.getElementById('modern-videos-grid');
+  if (!featuredContainer || !modernContainer) return;
+
+  const validVideos = [...allVideos, ...allSources].filter(v => v.status === 'downloaded' || v.status === 'available');
+  const available = validVideos.filter(v => !renderedHomeVideoIds.has(v.id));
+  if (available.length === 0) return;
+
+  const shuffled = shuffleArray(available);
+  const newVideos = shuffled.slice(0, 12); // load 12 at a time
+
+  newVideos.forEach(v => renderedHomeVideoIds.add(v.id));
+
+  // Append 4 to featured list, 8 to popular grid (old mode)
+  const featNew = newVideos.slice(0, 4);
+  const popNew = newVideos.slice(4, 12);
+
+  if (featNew.length > 0) featuredContainer.insertAdjacentHTML('beforeend', featNew.map(v => renderVideoItem(v, 'list')).join(''));
+  if (popNew.length > 0) popularContainer.insertAdjacentHTML('beforeend', popNew.map(v => renderVideoItem(v, 'grid')).join(''));
+
+  // Append to modern grid
+  if (newVideos.length > 0) modernContainer.insertAdjacentHTML('beforeend', newVideos.map(v => renderModernHomeCard(v)).join(''));
+}
+
+window.addEventListener('scroll', () => {
+  const pageYoutube = document.getElementById('page-youtube');
+  if (pageYoutube && pageYoutube.classList.contains('active')) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+      if (!isFetchingMoreHome) {
+        isFetchingMoreHome = true;
+        loadMoreHomeVideos();
+        setTimeout(() => { isFetchingMoreHome = false; }, 300);
+      }
+    }
+  }
+});
 
 function renderModernHomeCard(v) {
   const fallbackTitle = (v.thread_titles && v.thread_titles[0]) ? v.thread_titles[0] : null;
@@ -340,29 +437,54 @@ function renderModernHomeCard(v) {
   `;
 }
 
+function renderStars(viewCount) {
+  // Rough rating estimate from view count for visual authenticity
+  const raw = Math.min(5, Math.max(1, Math.round((Math.log10(Math.max(viewCount || 1, 1)) / 8) * 5)));
+  return Array.from({ length: 5 }, (_, i) =>
+    `<span style="color:${i < raw ? '#f90' : '#ccc'}; font-size:13px;">★</span>`
+  ).join('');
+}
+
 function renderVideoItem(v, mode = 'list') {
   const title = v.title || v.id;
-  const channel = v.channel_name || 'Unknown Channel';
-  const views = fmtNum(v.view_count || 0) + ' views';
-  const date = v.publish_date ? v.publish_date.slice(0, 10) : 'Unknown Date';
+  const channel = v.channel_name || 'Unknown';
+  const views = v.view_count != null ? fmtNum(v.view_count) + ' views' : '';
+  const desc = v.description ? v.description.slice(0, 110) + (v.description.length > 110 ? '...' : '') : '';
   const thumbUrl = `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`;
+  const dur = v.duration || '';
 
-  return `
-    <div class="video-item ${mode}">
+  if (mode === 'grid') {
+    return `
+    <div class="video-item grid">
       <a href="#" onclick="return openVideo('${v.id}')" class="video-thumb">
-        <img src="${thumbUrl}" alt="Thumbnail">
-        <span class="video-time">▶</span>
+        <img src="${thumbUrl}" alt="" loading="lazy">
+        ${dur ? `<span class="video-time">${escHtml(dur)}</span>` : ''}
       </a>
       <div class="video-info">
         <a href="#" onclick="return openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${escHtml(title)}</a>
-        <div class="video-meta">
-          From: <a href="#" onclick="return openProfile('${escAttr(channel)}')">${escHtml(channel)}</a><br>
-          Views: ${views}<br>
-          Added: ${date}
+        <div class="video-meta">${views ? `<span>${views}</span><br>` : ''}<a href="#" onclick="return openProfile('${escAttr(channel)}')">${escHtml(channel)}</a></div>
+      </div>
+    </div>`;
+  }
+
+  return `
+    <div class="video-item list" onclick="openVideo('${v.id}')" style="cursor:pointer;">
+      <div class="yt-list-thumb">
+        <a href="#" onclick="event.stopPropagation();return openVideo('${v.id}')">
+          <img src="${thumbUrl}" alt="" loading="lazy">
+          ${dur ? `<span class="video-time">${escHtml(dur)}</span>` : ''}
+        </a>
+      </div>
+      <div class="yt-list-info">
+        <a href="#" onclick="event.stopPropagation();return openVideo('${v.id}')" class="yt-list-title">${escHtml(title)}</a>
+        ${desc ? `<div class="yt-list-desc">${escHtml(desc)}</div>` : ''}
+        <div class="yt-list-meta">
+          <span class="yt-stars">${renderStars(v.view_count)}</span>
+          ${views ? `<span class="yt-views">${views}</span>` : ''}
+          <a href="#" class="yt-channel" onclick="event.stopPropagation();return openProfile('${escAttr(channel)}')">${escHtml(channel)}</a>
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 // ─── FILTER OPTIONS ───────────────────────────────────────────────────────
@@ -371,7 +493,7 @@ function buildFilterOptions() {
   const sectionSel = document.getElementById('filter-section');
   const channelDatalist = document.getElementById('channel-datalist');
   const yearSel = document.getElementById('filter-year');
-  
+
   const currentData = appMode === 'sources' ? allSources : allVideos;
 
   // 1. Build Sections
@@ -379,8 +501,8 @@ function buildFilterOptions() {
     currentData.flatMap(v => v.sections || [])
       .map(s => s === 'Scraped Channel' ? 'Youtube' : s)
   )]
-  .filter(s => s !== 'Risorse' || appMode === 'sources')
-  .sort();
+    .filter(s => s !== 'Risorse' || appMode === 'sources')
+    .sort();
 
   sectionSel.innerHTML = '<option value="">All Sections</option>';
   sections.forEach(s => {
@@ -390,7 +512,7 @@ function buildFilterOptions() {
 
   // 2. Build Channels
   const channels = [...new Set(currentData.map(v => v.channel_name).filter(Boolean))].sort();
-  channelDatalist.innerHTML = ''; 
+  channelDatalist.innerHTML = '';
   channels.forEach(c => {
     const o = document.createElement('option'); o.value = c;
     channelDatalist.appendChild(o);
@@ -480,17 +602,17 @@ function applyFilters() {
   });
 
   // 3. Sorting Logic
-filteredVideos.sort((a, b) => {
-  let av = a[sortField] || '';
-  let bv = b[sortField] || '';
-  // Fix: Check types independently
-  if (typeof av === 'string') av = av.toLowerCase();
-  if (typeof bv === 'string') bv = bv.toLowerCase();
-  
-  if (av > bv) return sortDir;
-  if (av < bv) return -sortDir;
-  return 0;
-});
+  filteredVideos.sort((a, b) => {
+    let av = a[sortField] || '';
+    let bv = b[sortField] || '';
+    // Fix: Check types independently
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+
+    if (av > bv) return sortDir;
+    if (av < bv) return -sortDir;
+    return 0;
+  });
 
   currentPage = 1;
   renderTable(false);
@@ -517,8 +639,8 @@ function sortTable(field) {
   filteredVideos.sort((a, b) => {
     let av = a[sortField] || '';
     let bv = b[sortField] || '';
-if (typeof av === 'string') av = av.toLowerCase();
-if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
     if (av > bv) return sortDir;
     if (av < bv) return -sortDir;
     return 0;
@@ -1268,179 +1390,272 @@ function downloadFile(url, filename) {
     });
 }
 // ─── TIMELINE ENGINE ────────────────────────────────────────────────────────
+const TS_MIN = new Date(2006, 0, 1).getTime();
+const TS_MAX = new Date(new Date().getFullYear(), 11, 31, 23, 59, 59).getTime();
+const TS_MS_PER_DAY = 86400000;
+const TL_MAX_CARDS = 60;        // Hard cap on DOM video cards per frame
+const TL_MIN_LABEL_PX = 28;    // Min pixels between axis labels
 
 let ts = {
   initialized: false,
   msPerPixel: 0,
   centerTime: 0,
-  minTime: new Date(2007, 0, 1).getTime(),
-  maxTime: new Date(new Date().getFullYear(), 11, 31).getTime(), // End of current year
   isDragging: false,
   startY: 0,
-  startCenterTime: 0
+  startCenterTime: 0,
+  raf: null
 };
 
-function initTimeline() {
-  if (ts.initialized) return;
-  const container = document.getElementById('timeline-container');
-  if (!container || container.clientHeight === 0) return;
-
-  const height = container.clientHeight;
-
-  // Initial zoom: Fit the whole span from 2007 to Now inside the viewport
-  ts.msPerPixel = (ts.maxTime - ts.minTime) / height;
-  ts.centerTime = ts.minTime + (ts.maxTime - ts.minTime) / 2;
-
-  // Wheel Zoom Event
-  container.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    const zoomFactor = e.deltaY > 0 ? 1.1 : 0.9;
-    const rect = container.getBoundingClientRect();
-    const cursorY = e.clientY - rect.top;
-
-    // Calculate time directly under cursor to zoom into that specific point
-    const timeAtCursor = ts.centerTime + (cursorY - rect.height / 2) * ts.msPerPixel;
-
-    ts.msPerPixel *= zoomFactor;
-
-    // Zoom Limits (Max Out = Fit All, Max In = 100px per day)
-    const minMsPerPx = (1000 * 60 * 60 * 24) / 100;
-    const maxMsPerPx = (ts.maxTime - ts.minTime) / rect.height;
-    ts.msPerPixel = Math.max(minMsPerPx, Math.min(maxMsPerPx, ts.msPerPixel));
-
-    // Readjust center so the point under cursor doesn't jump
-    ts.centerTime = timeAtCursor - (cursorY - rect.height / 2) * ts.msPerPixel;
-
-    clampTimeline(rect.height);
-    renderTimelineView();
-  }, { passive: false });
-
-  // Mouse Drag Panning Events
-  container.addEventListener('mousedown', e => {
-    ts.isDragging = true;
-    ts.startY = e.clientY;
-    ts.startCenterTime = ts.centerTime;
+function buildFirstUploadCache() {
+  window.channelFirstUploadIds = new Set();
+  const firsts = {};
+  [...allVideos, ...allSources].forEach(v => {
+    if (!v.channel_name || !v.publish_date) return;
+    if (!firsts[v.channel_name] || v.publish_date < firsts[v.channel_name]) {
+      firsts[v.channel_name] = { date: v.publish_date, id: v.id };
+    }
   });
-
-  window.addEventListener('mousemove', e => {
-    if (!ts.isDragging) return;
-    const dy = e.clientY - ts.startY;
-    ts.centerTime = ts.startCenterTime - dy * ts.msPerPixel;
-    clampTimeline(container.clientHeight);
-    renderTimelineView();
-  });
-
-  window.addEventListener('mouseup', () => ts.isDragging = false);
-  window.addEventListener('mouseleave', () => ts.isDragging = false);
-
-  ts.initialized = true;
-  renderTimelineView();
+  Object.values(firsts).forEach(f => window.channelFirstUploadIds.add(f.id));
 }
 
-function clampTimeline(height) {
-  const visibleHalf = (height / 2) * ts.msPerPixel;
-  ts.centerTime = Math.max(ts.minTime + visibleHalf, Math.min(ts.maxTime - visibleHalf, ts.centerTime));
+function initTimeline() {
+  const container = document.getElementById('timeline-container');
+  if (!container) return;
+  buildFirstUploadCache();
+
+  if (!ts.initialized) {
+    const h = container.clientHeight;
+    ts.msPerPixel = (TS_MAX - TS_MIN) / h;
+    ts.centerTime = TS_MIN + (TS_MAX - TS_MIN) / 2;
+
+    container.addEventListener('wheel', e => {
+      e.preventDefault();
+      const factor = e.deltaY > 0 ? 1.15 : 0.87;
+      const rect = container.getBoundingClientRect();
+      const cursorY = e.clientY - rect.top;
+      const pivot = ts.centerTime + (cursorY - rect.height / 2) * ts.msPerPixel;
+      ts.msPerPixel = Math.max(
+        TS_MS_PER_DAY / 150,
+        Math.min((TS_MAX - TS_MIN) / rect.height, ts.msPerPixel * factor)
+      );
+      ts.centerTime = pivot - (cursorY - rect.height / 2) * ts.msPerPixel;
+      clampTimeline(rect.height);
+      scheduleRender();
+    }, { passive: false });
+
+    container.addEventListener('mousedown', e => {
+      ts.isDragging = true; ts.startY = e.clientY; ts.startCenterTime = ts.centerTime;
+    });
+    window.addEventListener('mousemove', e => {
+      if (!ts.isDragging) return;
+      ts.centerTime = ts.startCenterTime - (e.clientY - ts.startY) * ts.msPerPixel;
+      clampTimeline(container.clientHeight);
+      scheduleRender();
+    });
+    window.addEventListener('mouseup', () => { ts.isDragging = false; });
+    window.addEventListener('mouseleave', () => { ts.isDragging = false; });
+
+    let lastTY = 0;
+    container.addEventListener('touchstart', e => { lastTY = e.touches[0].clientY; }, { passive: true });
+    container.addEventListener('touchmove', e => {
+      e.preventDefault();
+      const dy = e.touches[0].clientY - lastTY; lastTY = e.touches[0].clientY;
+      ts.centerTime -= dy * ts.msPerPixel;
+      clampTimeline(container.clientHeight); scheduleRender();
+    }, { passive: false });
+
+    ts.initialized = true;
+  }
+  scheduleRender();
+}
+
+function clampTimeline(h) {
+  const half = (h / 2) * ts.msPerPixel;
+  ts.centerTime = Math.max(TS_MIN + half, Math.min(TS_MAX - half, ts.centerTime));
+}
+
+function scheduleRender() {
+  if (ts.raf) cancelAnimationFrame(ts.raf);
+  ts.raf = requestAnimationFrame(renderTimelineView);
+}
+
+function getZoomLevel() {
+  if (ts.msPerPixel > TS_MS_PER_DAY * 90) return 'years';
+  if (ts.msPerPixel > TS_MS_PER_DAY * 2.5) return 'months';
+  return 'days';
+}
+
+// ── tick interval config per zoom ──────────────────────────────────────────
+function getTickConfig(zoom) {
+  if (zoom === 'years') return {
+    start: d => { d.setMonth(0, 1); d.setHours(0, 0, 0, 0); },
+    advance: d => d.setFullYear(d.getFullYear() + 1),
+    label: d => String(d.getFullYear()),
+    isMajor: () => true
+  };
+  if (zoom === 'months') return {
+    start: d => { d.setDate(1); d.setHours(0, 0, 0, 0); },
+    advance: d => d.setMonth(d.getMonth() + 1),
+    label: d => d.toLocaleString('default', { month: 'short' }) + ' ' + d.getFullYear(),
+    isMajor: d => d.getMonth() === 0
+  };
+  // days
+  return {
+    start: d => d.setHours(0, 0, 0, 0),
+    advance: d => d.setDate(d.getDate() + 1),
+    label: d => d.getDate() === 1
+      ? d.toLocaleString('default', { month: 'short', day: 'numeric' })
+      : String(d.getDate()),
+    isMajor: d => d.getDate() === 1
+  };
 }
 
 function renderTimelineView() {
   const container = document.getElementById('timeline-container');
-  const track = document.getElementById('timeline-track');
-  const height = container.clientHeight;
-  track.innerHTML = ''; // Clear DOM nodes - lazy loading
+  if (!container) return;
 
-  // Identify exact timestamp boundaries currently visible
-  const startVisibleTime = ts.centerTime - (height / 2) * ts.msPerPixel;
-  const endVisibleTime = ts.centerTime + (height / 2) * ts.msPerPixel;
+  const W = container.clientWidth;
+  const H = container.clientHeight;
+  const half = H / 2;
+  const startT = ts.centerTime - half * ts.msPerPixel;
+  const endT = ts.centerTime + half * ts.msPerPixel;
+  const zoom = getZoomLevel();
+  const cfg = getTickConfig(zoom);
 
-  // zoomRatio: 1 is fully zoomed out (decades), near 0 is zoomed in (days)
-  const maxMsPerPx = (ts.maxTime - ts.minTime) / height;
-  const zoomRatio = ts.msPerPixel / maxMsPerPx;
+  // ── 1. Canvas grid (no DOM nodes for grid lines) ───────────────────────
+  let canvas = container.querySelector('canvas.tl-canvas');
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.className = 'tl-canvas';
+    canvas.style.cssText = 'position:absolute;top:0;left:0;pointer-events:none;z-index:1;';
+    container.appendChild(canvas);
+  }
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, W, H);
 
-  // Show only milestones (> 10M) when heavily zoomed out (> 15% of total time span visible)
-  const showOnlyMilestones = zoomRatio > 0.15;
+  const isDark = document.body.classList.contains('theme-dark') || !document.body.classList.contains('theme-light');
+  const gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
+  const majorColor = isDark ? 'rgba(255,255,255,0.20)' : 'rgba(0,0,0,0.20)';
+  const labelColor = isDark ? '#aaa' : '#555';
+  const majorLabelClr = isDark ? '#eee' : '#111';
+  const AXIS_W = 90;
 
-  drawTimelineMarkers(startVisibleTime, endVisibleTime, zoomRatio, track);
+  // Draw axis background
+  ctx.fillStyle = isDark ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.04)';
+  ctx.fillRect(0, 0, AXIS_W, H);
 
-  // 1. Filter out videos that aren't visible or lack dates
-  const visibleVideos = allVideos.filter(v => {
+  // Draw ticks & labels on canvas
+  const cur = new Date(startT);
+  cfg.start(cur);
+  let lastLabelY = -999;
+
+  while (cur.getTime() <= endT) {
+    const yPos = (cur.getTime() - startT) / ts.msPerPixel;
+    const isMaj = cfg.isMajor(cur);
+
+    // Grid line
+    ctx.beginPath();
+    ctx.moveTo(AXIS_W, yPos);
+    ctx.lineTo(W, yPos);
+    ctx.strokeStyle = isMaj ? majorColor : gridColor;
+    ctx.lineWidth = isMaj ? 1.5 : 0.8;
+    ctx.stroke();
+
+    // Spine dot
+    ctx.beginPath();
+    ctx.arc(AXIS_W + 3, yPos, isMaj ? 4 : 2, 0, Math.PI * 2);
+    ctx.fillStyle = isMaj ? (isDark ? '#4af' : '#36c') : (isDark ? '#555' : '#bbb');
+    ctx.fill();
+
+    // Label (skip if too close to previous)
+    if (yPos - lastLabelY >= TL_MIN_LABEL_PX) {
+      const label = cfg.label(cur);
+      ctx.font = isMaj ? 'bold 13px sans-serif' : '11px sans-serif';
+      ctx.fillStyle = isMaj ? majorLabelClr : labelColor;
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, AXIS_W - 8, yPos);
+      lastLabelY = yPos;
+    }
+
+    cfg.advance(cur);
+  }
+
+  // Vertical spine line
+  ctx.beginPath();
+  ctx.moveTo(AXIS_W + 1, 0); ctx.lineTo(AXIS_W + 1, H);
+  ctx.strokeStyle = isDark ? '#4af' : '#36c';
+  ctx.lineWidth = 2; ctx.stroke();
+
+  // ── 2. DOM cards – remove existing, rebuild with DocumentFragment ──────
+  // Remove old cards only (not the canvas)
+  Array.from(container.querySelectorAll('.tl-card, .tl-hint')).forEach(el => el.remove());
+
+  const showOnlyMilestones = (zoom === 'years');
+
+  const hint = document.createElement('div');
+  hint.className = 'tl-hint';
+  hint.textContent = zoom === 'years'
+    ? '🔭 Years view — only videos >10M views shown. Scroll to zoom in.'
+    : zoom === 'months'
+      ? '📅 Months view — scroll to zoom into individual days.'
+      : '📌 Days view';
+  container.appendChild(hint);
+
+  // Filter + sort visible videos
+  const allVids = [...allVideos, ...allSources];
+  let visible = allVids.filter(v => {
     if (!v.publish_date) return false;
     const t = new Date(v.publish_date).getTime();
-    return t >= startVisibleTime && t <= endVisibleTime;
+    if (t < startT || t > endT) return false;
+    if (showOnlyMilestones && (v.view_count || 0) < 10_000_000) return false;
+    return true;
   });
 
+  // Sort by views descending so most important show first when capped
+  visible.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
+  // Cap to avoid DOM explosion
+  const capped = visible.length > TL_MAX_CARDS;
+  visible = visible.slice(0, TL_MAX_CARDS);
+  // Re-sort by date for stagger
+  visible.sort((a, b) => a.publish_date.localeCompare(b.publish_date));
+
+  const frag = document.createDocumentFragment();
+  const CARD_H = 52;
   const placed = [];
-  const PIXEL_GAP = 55; // Vertical space required to prevent cards overlapping
 
-  // 2. Render visible videos
-  visibleVideos.forEach(v => {
-    // Zoom enforcement constraint
-    if (showOnlyMilestones && (v.view_count || 0) < 10000000) return;
-
+  visible.forEach(v => {
     const t = new Date(v.publish_date).getTime();
-    const yPos = (t - startVisibleTime) / ts.msPerPixel;
+    const yPos = (t - startT) / ts.msPerPixel;
+    const isMilestone = (v.view_count || 0) >= 10_000_000;
+    const isFirst = window.channelFirstUploadIds && window.channelFirstUploadIds.has(v.id);
 
-    // Layout logic: if a video shares a date with another, push it right (multi-columns)
     let col = 0;
-    while (placed.some(p => p.col === col && Math.abs(p.top - yPos) < PIXEL_GAP)) {
-      col++;
-    }
-    placed.push({ top: yPos, col });
+    while (placed.some(p => p.col === col && Math.abs(p.top - yPos) < CARD_H)) col++;
+    placed.push({ col, top: yPos });
 
-    const el = document.createElement('div');
-    const isMilestone = (v.view_count || 0) >= 10000000;
-    el.className = 'timeline-event' + (isMilestone ? ' milestone' : '');
+    const card = document.createElement('div');
+    card.className = 'tl-card' + (isMilestone ? ' tl-milestone' : '') + (isFirst ? ' tl-first' : '');
+    card.style.top = `${Math.round(yPos)}px`;
+    card.style.left = `${AXIS_W + 14 + col * 255}px`;
+    card.onclick = () => openVideo(v.id);
 
-    el.style.top = `${yPos}px`;
-    el.style.left = `${100 + col * 260}px`; // Indent based on column
-    el.onclick = () => window.open(v.url || `https://youtube.com/watch?v=${v.id}`, '_blank');
-
-    const views = v.view_count ? ` • ${fmtNum(v.view_count)} views` : '';
-    el.innerHTML = `
-      <strong>${escHtml(v.title || v.id)}</strong>
-      <small>${escHtml(v.channel_name || 'Unknown')} • ${v.publish_date.slice(0, 10)}${views}</small>
-    `;
-    track.appendChild(el);
+    const views = v.view_count ? fmtNum(v.view_count) + ' views' : '';
+    card.innerHTML =
+      `<div class="tl-card-title">${isFirst ? '<span class="tl-star">★</span>' : ''}${escHtml(v.title || v.id)}</div>` +
+      `<div class="tl-card-sub">${escHtml(v.channel_name || '?')}${views ? ' · ' + views : ''}</div>`;
+    frag.appendChild(card);
   });
-}
 
-function drawTimelineMarkers(startVisibleTime, endVisibleTime, zoomRatio, track) {
-  // Determine granularity based on zoom level
-  let intervalType = 'year';
-  if (zoomRatio < 0.02) intervalType = 'day';
-  else if (zoomRatio < 0.15) intervalType = 'month';
-
-  let current = new Date(startVisibleTime);
-
-  // Round up to nearest interval cleanly
-  if (intervalType === 'year') {
-    current.setMonth(0, 1); current.setHours(0, 0, 0, 0);
-  } else if (intervalType === 'month') {
-    current.setDate(1); current.setHours(0, 0, 0, 0);
-  } else {
-    current.setHours(0, 0, 0, 0);
+  if (capped) {
+    const cap = document.createElement('div');
+    cap.className = 'tl-hint tl-cap-notice';
+    cap.textContent = `Showing top ${TL_MAX_CARDS} of ${visible.length + (TL_MAX_CARDS - visible.length)} visible videos. Zoom in to see more.`;
+    frag.appendChild(cap);
   }
 
-  while (current.getTime() <= endVisibleTime) {
-    if (current.getTime() >= startVisibleTime) {
-      const yPos = (current.getTime() - startVisibleTime) / ts.msPerPixel;
-      const el = document.createElement('div');
-      el.className = 'timeline-marker';
-      el.style.top = `${yPos}px`;
-
-      // Scale label output
-      if (intervalType === 'year') {
-        el.textContent = current.getFullYear();
-      } else if (intervalType === 'month') {
-        el.textContent = current.toLocaleString('default', { month: 'long', year: 'numeric' });
-      } else {
-        el.textContent = current.toLocaleDateString();
-      }
-      track.appendChild(el);
-    }
-
-    // Increment cursor
-    if (intervalType === 'year') current.setFullYear(current.getFullYear() + 1);
-    else if (intervalType === 'month') current.setMonth(current.getMonth() + 1);
-    else current.setDate(current.getDate() + 1);
-  }
+  container.appendChild(frag);
 }
+

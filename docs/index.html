@@ -52,6 +52,12 @@
         <a href="#" class="nav-tab" onclick="showPage('years'); return false;">Years <span class="nav-badge" id="badge-years">0</span></a>
         <a href="#" class="nav-tab" onclick="showPage('timeline'); return false;">Timeline</a>
 
+        <!-- Modern Mode Theme Toggles (Sidebar bottom) -->
+        <div id="theme-toggles-modern" style="display: none;">
+          <a href="#" onclick="toggleThemeMode(); return false;">Switch to Old Mode</a>
+          <a href="#" onclick="toggleNightDay(); return false;">Switch to Night Mode</a>
+        </div>
+
         <div id="masthead-nav-right">
           <div id="masthead-search">
             <div class="search-form">
@@ -65,13 +71,22 @@
       <!-- YOUTUBE HOME -->
       <div class="page active" id="page-youtube">
         <div class="layout-2col" id="youtube-old-layout">
-          <div class="col-right home-main">
-            <div id="homepage-featured-heading" style="border-bottom:1px solid var(--border); margin-bottom:10px; padding-bottom:5px;">
-              <h1 style="font-size:16px; margin:0;">Featured Videos</h1>
+          <div class="home-main">
+            <div id="homepage-featured-heading">
+              <h2 class="yt-featured-title">Featured Videos</h2>
+              <div class="yt-tab-bar">
+                <a href="#" class="yt-tab active" onclick="setFeaturedTab('featured');return false;">Featured</a>
+                <span class="yt-tab-sep">|</span>
+                <a href="#" class="yt-tab" onclick="setFeaturedTab('views');return false;">Most Viewed</a>
+                <span class="yt-tab-sep">|</span>
+                <a href="#" class="yt-tab" onclick="setFeaturedTab('discussed');return false;">Most Discussed</a>
+                <span class="yt-tab-sep">|</span>
+                <a href="#" class="yt-tab" onclick="setFeaturedTab('favorited');return false;">Top Favorited</a>
+              </div>
             </div>
-            <div class="box-content" id="featured-videos" style="padding:0;"></div>
+            <div id="featured-videos"></div>
           </div>
-          <div class="col-left home-side">
+          <div class="home-side">
             <div class="box">
               <div class="box-header">Most Popular</div>
               <div class="box-content" id="popular-videos"></div>
