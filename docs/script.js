@@ -80,30 +80,42 @@ function showPage(name) {
 }
 
 // ─── FILTER OPTIONS ───────────────────────────────────────────────────────
+// ─── FILTER OPTIONS ───────────────────────────────────────────────────────
 function buildFilterOptions() {
   const sectionSel = document.getElementById('filter-section');
   const channelDatalist = document.getElementById('channel-datalist');
   const yearSel = document.getElementById('filter-year');
 
-  const sections = [...new Set(allVideos.flatMap(v => v.sections || []))].sort();
+  // 1. Map "Scraped Channels" to "Youtube", then filter out "Risorse"
+  const sections = [...new Set(
+    allVideos.flatMap(v => v.sections || [])
+      .map(s => s === 'Scraped Channel' ? 'Youtube' : s)
+  )]
+  .filter(s => s !== 'Risorse')
+  .sort();
+
+  sectionSel.innerHTML = '<option value="">All Sections</option>'; // Clear previous and add default
   sections.forEach(s => {
     const o = document.createElement('option'); o.value = s; o.textContent = s;
     sectionSel.appendChild(o);
   });
 
+  // 2. Build Channels
   const channels = [...new Set(allVideos.map(v => v.channel_name).filter(Boolean))].sort();
+  channelDatalist.innerHTML = ''; 
   channels.forEach(c => {
     const o = document.createElement('option'); o.value = c;
     channelDatalist.appendChild(o);
   });
 
+  // 3. Build Years
   const years = [...new Set(allVideos.map(v => v.publish_date ? v.publish_date.slice(0, 4) : null).filter(Boolean))].sort();
+  yearSel.innerHTML = '<option value="">All Years</option>';
   years.forEach(y => {
     const o = document.createElement('option'); o.value = y; o.textContent = y;
     yearSel.appendChild(o);
   });
 }
-
 // ─── FILTERS + TABLE ──────────────────────────────────────────────────────
 let sortField = 'publish_date';
 let sortDir = 1;

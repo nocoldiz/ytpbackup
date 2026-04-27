@@ -1914,13 +1914,13 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
         try:
             e = sources_data[vid]
 
-            ch_name = e.get("channel_name")
-            folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
-            out_dir = os.path.join(video_dir, folder_name)
+            # --- MODIFIED: Save directly to the target directory ---
+            out_dir = video_dir
             os.makedirs(out_dir, exist_ok=True)
+            # -------------------------------------------------------
             
             if e.get("title") == "warnings.warn(":
-                meta = fetch_yt_metadata(vid)
+                meta = fetch_yt_metadata(vid)  # Ensure this is defined in your scope
                 if isinstance(meta, dict) and meta.get("title"):
                     e["title"] = meta["title"]
                     
@@ -1929,7 +1929,7 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
             print(f"  [{i}/{total}] {label[:60]}")
             if e.get("channel_name"):
                 print(f"  Channel: {e['channel_name']}  {e.get('channel_url', '')}")
-            print(f"  URL:     {canonical_yt_url(vid)}")
+            print(f"  URL:     {canonical_yt_url(vid)}") # Ensure this is defined in your scope
 
             status, local_file, dl_title = download_video(
                 vid, out_dir, yt_format, rate_limit, i, total,
@@ -1972,7 +1972,6 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
     print(f"  Unavailable: {unavail_count}")
     print(f"  Failed:      {err_count}")
     print(f"  Sources:     {os.path.abspath(src_path)}")
-
 
 def do_stats(index, output_path="stats.md"):
 
