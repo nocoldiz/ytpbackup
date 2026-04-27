@@ -2243,7 +2243,26 @@ def do_scrape_profiles(index, docs_dir):
         except Exception:
             existing = {}
 
-    thumb_dir = os.path.join(docs_dir, "thumbnails")
+    # Initial population: ensure every channel in index is in ytpoopers.json
+    added_new = False
+    for ch_url, ch_name in channel_map.items():
+        if ch_url not in existing:
+            existing[ch_url] = {
+                "channel_name": ch_name,
+                "channel_url": ch_url,
+                "description": None,
+                "subscriber_count": None,
+                "creation_date": None,
+                "thumbnail": None,
+            }
+            added_new = True
+    
+    if added_new:
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(existing, f, indent=2, ensure_ascii=False)
+        print(f"  Updated {output_path} with new channels from index.")
+
+    thumb_dir = os.path.join(docs_dir, "profile_thumbnails")
     os.makedirs(thumb_dir, exist_ok=True)
 
     total = len(channel_map)
@@ -2318,7 +2337,7 @@ def do_scrape_profiles(index, docs_dir):
                         thumb_file = os.path.join(thumb_dir, f"{safe_name}.{thumb_ext}")
                         try:
                             urllib.request.urlretrieve(thumb_url, thumb_file)
-                            profile["thumbnail"] = f"thumbnails/{safe_name}.{thumb_ext}"
+                            profile["thumbnail"] = f"profile_thumbnails/{safe_name}.{thumb_ext}"
                         except Exception:
                             pass
 

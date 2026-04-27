@@ -20,10 +20,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <path d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2z" />
       </svg>
-      <p><strong>Drop video_index.json here</strong><br>or click to browse</p>
+      <p><strong>Drop video_index.json & sources_index.json here</strong><br>or click to browse</p>
     </div>
-    <input type="file" id="fileInput" accept=".json">
-    <p class="auto-load">Also tries to auto-load <code>video_index.json</code> from same folder</p>
+    <input type="file" id="fileInput" accept=".json" multiple>
+    <p class="auto-load">Also tries to auto-load <code>video_index.json</code> & <code>sources_index.json</code></p>
   </div>
 
   <!-- APP -->
@@ -33,14 +33,14 @@
       <button class="nav-tab active" onclick="showPage('overview')">Overview</button>
       <button class="nav-tab" onclick="showPage('videos')">Videos <span class="nav-badge"
           id="badge-videos">0</span></button>
+      <button class="nav-tab" onclick="showPage('sources')">Sources <span class="nav-badge"
+          id="badge-sources">0</span></button>
       <button class="nav-tab" onclick="showPage('channels')">Channels <span class="nav-badge"
           id="badge-channels">0</span></button>
       <button class="nav-tab" onclick="showPage('sections')">Sections <span class="nav-badge"
           id="badge-sections">0</span></button>
       <button class="nav-tab" onclick="showPage('years')">Years <span class="nav-badge"
           id="badge-years">0</span></button>
-      <button class="nav-tab" onclick="showPage('sources')">Sources <span class="nav-badge"
-          id="badge-sources">0</span></button>
       <button class="nav-tab" onclick="showPage('timeline')">Timeline</button>
       <div class="nav-spacer"></div>
     </nav>
@@ -209,39 +209,8 @@
       <div class="year-grid" id="year-grid"></div>
     </div>
 
-    <!-- SOURCES -->
+    <!-- SOURCES (Placeholder, will reuse #page-videos structure) -->
     <div class="page" id="page-sources">
-      <div class="section-header">
-        <h2>Sources</h2>
-        <span class="count-badge" id="sources-count-label"></span>
-      </div>
-      <div class="search-bar">
-        <input type="text" id="sources-search" placeholder="Search thread title, section…"
-          oninput="renderSourcesTable()">
-        <select id="sources-filter-section" onchange="renderSourcesTable()">
-          <option value="">All sections</option>
-        </select>
-        <select id="sources-sort" onchange="renderSourcesTable()">
-          <option value="videos_desc">Most videos</option>
-          <option value="section_asc">Section A-Z</option>
-          <option value="title_asc">Title A-Z</option>
-        </select>
-      </div>
-      <div class="table-wrap">
-        <table id="sources-table">
-          <thead>
-            <tr>
-              <th>Thread Title</th>
-              <th>Section</th>
-              <th>Videos</th>
-              <th>File</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="sources-tbody"></tbody>
-        </table>
-      </div>
-      <div class="pagination" id="sources-pagination"></div>
     </div>
 
     <!-- SECTIONS -->

@@ -1,17 +1,16 @@
-// ─── STATE ───────────────────────────────────────────────────────────────
-let allVideos = [];       // [{id, ...fields}] - filtered to ALLOWED_SECTIONS
-let rawVideos = [];       // all videos unfiltered, used by Sources tab
+let allVideos = [];       // from video_index.json
+let allSources = [];      // from sources_index.json
 let filteredVideos = [];
+let appMode = 'videos';   // 'videos' or 'sources'
 let currentPage = 1;
 const PAGE_SIZE = 50;
 let selectedChannel = null;
 let selectedSection = null;
 let charts = {};
 
-// ─── LOADING ─────────────────────────────────────────────────────────────
 document.getElementById('fileInput').addEventListener('change', e => {
-  const f = e.target.files[0];
-  if (f) loadFile(f);
+  const files = Array.from(e.target.files);
+  loadMultipleFiles(files);
 });
 
 const dz = document.getElementById('dropZone');
@@ -19,36 +18,75 @@ dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dra
 dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
 dz.addEventListener('drop', e => {
   e.preventDefault(); dz.classList.remove('drag-over');
-  const f = e.dataTransfer.files[0];
-  if (f) loadFile(f);
+  const files = Array.from(e.dataTransfer.files);
+  loadMultipleFiles(files);
 });
 
-function loadFile(file) {
-  const reader = new FileReader();
-  reader.onload = e => initApp(JSON.parse(e.target.result));
-  reader.readAsText(file);
+async function loadMultipleFiles(files) {
+  let videoData = null;
+  let sourceData = null;
+
+  for (const f of files) {
+    const text = await f.text();
+    const json = JSON.parse(text);
+    if (f.name.includes('sources')) sourceData = json;
+    else videoData = json;
+  }
+  initApp(videoData, sourceData);
 }
 
 // Auto-load from same directory
-fetch('video_index.json')
-  .then(r => r.json())
-  .then(data => initApp(data))
-  .catch(() => { }); // silently fail if not found
+async function autoLoad() {
+  let vData = null;
+  let sData = null;
+  try {
+    const rv = await fetch('video_index.json');
+    if (rv.ok) vData = await rv.json();
+  } catch(e) {}
+  try {
+    const rs = await fetch('sources_index.json');
+    if (rs.ok) sData = await rs.json();
+  } catch(e) {}
+  initApp(vData, sData);
+}
+autoLoad();
 
 // ─── INIT ─────────────────────────────────────────────────────────────────
 const ALLOWED_SECTIONS = new Set(["YTP nostrane", "YTP fai da te", "YTPMV dimportazione", "YTP da internet", "Internet", "Youtube", "Scraped Channel"]);
 const SOURCES_SECTIONS = new Set(["Risorse", "Tutorial per il pooping", "Old Sources"]);
 
-function initApp(raw) {
-  rawVideos = Object.entries(raw).map(([id, v]) => ({ id, ...v }));
-  allVideos = rawVideos.filter(v => (v.sections || []).some(s => ALLOWED_SECTIONS.has(s)));
+function resetFilters() {
+  const inputs = ['search-input', 'filter-status', 'filter-section', 'filter-channel', 'filter-views-min', 'filter-likes-min', 'filter-year', 'channel-search', 'channel-year-min', 'channel-year-max'];
+  inputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = (el.tagName === 'SELECT' ? '' : '');
+  });
+  const langSel = document.getElementById('filter-language');
+  if (langSel) langSel.value = 'any';
+}
+
+function initApp(vRaw, sRaw) {
+  resetFilters();
+  if (vRaw) {
+    allVideos = Object.entries(vRaw).map(([id, v]) => ({ id, ...v }))
+      .filter(v => (v.sections || []).some(s => ALLOWED_SECTIONS.has(s)));
+  }
+  if (sRaw) {
+    allSources = Object.entries(sRaw).map(([id, v]) => ({ id, ...v }));
+  }
+
+  if (!vRaw && !sRaw) return;
+
   document.getElementById('landing').style.display = 'none';
   document.getElementById('app').style.display = 'block';
 
   // badges
+  const totalVideos = allVideos.length;
   const channels = new Set(allVideos.map(v => v.channel_name).filter(Boolean));
   const sections = new Set(allVideos.flatMap(v => v.sections || []));
-  document.getElementById('badge-videos').textContent = allVideos.length;
+  
+  document.getElementById('badge-videos').textContent = totalVideos;
+  document.getElementById('badge-sources').textContent = allSources.length;
   document.getElementById('badge-channels').textContent = channels.size;
   document.getElementById('badge-sections').textContent = sections.size;
 
@@ -61,20 +99,31 @@ function initApp(raw) {
   renderChannelGrid();
   renderSectionGrid();
   renderYearGrid();
-  const srcData = buildSourcesData();
-  document.getElementById('badge-sources').textContent = srcData.length;
-  initSourcesFilters(srcData);
-  renderSourcesTable();
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────────────
 function showPage(name) {
+  let targetPage = name;
+  if (name === 'sources' || name === 'videos') {
+    appMode = name;
+    targetPage = 'videos';
+    document.getElementById('page-videos').querySelector('h2').textContent = appMode === 'sources' ? 'Source Search' : 'Video Search';
+    buildFilterOptions();
+    applyFilters();
+  }
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  event.target.classList.add('active');
+  
+  // Find the correct nav tab even if targetPage is 'videos' but name is 'sources'
+  const tabs = document.querySelectorAll('.nav-tab');
+  tabs.forEach(t => {
+    if (t.getAttribute('onclick').includes(`'${name}'`)) t.classList.add('active');
+  });
+
+  document.getElementById('page-' + targetPage).classList.add('active');
+  
   if (name === 'timeline' && typeof initTimeline === 'function') {
-    console.log("## init timeline")
     initTimeline();
   }
 }
@@ -85,23 +134,25 @@ function buildFilterOptions() {
   const sectionSel = document.getElementById('filter-section');
   const channelDatalist = document.getElementById('channel-datalist');
   const yearSel = document.getElementById('filter-year');
+  
+  const currentData = appMode === 'sources' ? allSources : allVideos;
 
-  // 1. Map "Scraped Channels" to "Youtube", then filter out "Risorse"
+  // 1. Build Sections
   const sections = [...new Set(
-    allVideos.flatMap(v => v.sections || [])
+    currentData.flatMap(v => v.sections || [])
       .map(s => s === 'Scraped Channel' ? 'Youtube' : s)
   )]
-  .filter(s => s !== 'Risorse')
+  .filter(s => s !== 'Risorse' || appMode === 'sources')
   .sort();
 
-  sectionSel.innerHTML = '<option value="">All Sections</option>'; // Clear previous and add default
+  sectionSel.innerHTML = '<option value="">All Sections</option>';
   sections.forEach(s => {
     const o = document.createElement('option'); o.value = s; o.textContent = s;
     sectionSel.appendChild(o);
   });
 
   // 2. Build Channels
-  const channels = [...new Set(allVideos.map(v => v.channel_name).filter(Boolean))].sort();
+  const channels = [...new Set(currentData.map(v => v.channel_name).filter(Boolean))].sort();
   channelDatalist.innerHTML = ''; 
   channels.forEach(c => {
     const o = document.createElement('option'); o.value = c;
@@ -109,7 +160,7 @@ function buildFilterOptions() {
   });
 
   // 3. Build Years
-  const years = [...new Set(allVideos.map(v => v.publish_date ? v.publish_date.slice(0, 4) : null).filter(Boolean))].sort();
+  const years = [...new Set(currentData.map(v => v.publish_date ? v.publish_date.slice(0, 4) : null).filter(Boolean))].sort();
   yearSel.innerHTML = '<option value="">All Years</option>';
   years.forEach(y => {
     const o = document.createElement('option'); o.value = y; o.textContent = y;
@@ -135,12 +186,11 @@ function loadFacade(id) {
   const el = document.getElementById('facade-' + id);
   if (!el) return;
 
-  // Find video in allVideos or rawVideos
-  const v = allVideos.find(x => x.id === id) || rawVideos.find(x => x.id === id);
+  const currentData = appMode === 'sources' ? allSources : allVideos;
+  const v = currentData.find(x => x.id === id);
 
   if (v && v.status === 'downloaded' && v.local_file) {
     const src = getLocalVideoPath(v);
-
     el.innerHTML = `<video controls autoplay style="width:100%; height:100%; object-fit:contain; background:#000;">
       <source src="${src}" type="video/mp4">
       Your browser does not support the video tag.
@@ -160,10 +210,11 @@ function applyFilters() {
   const year = document.getElementById('filter-year').value;
   const langSelect = document.getElementById('filter-language');
   const selectedLangs = Array.from(langSelect.selectedOptions).map(opt => opt.value.toLowerCase());
-  filteredVideos = allVideos.filter(v => {
+  const currentData = appMode === 'sources' ? allSources : allVideos;
+
+  filteredVideos = currentData.filter(v => {
     // 1. IMPROVED SEARCH BAR LOGIC
     if (q) {
-      // Gather all searchable fields into one lowercase string
       const haystack = [
         v.id,
         v.title,
@@ -173,28 +224,20 @@ function applyFilters() {
         ...(v.tags || [])
       ].join(' ').toLowerCase();
 
-      // Split the query into individual words (ignoring extra spaces)
       const searchTerms = q.split(/\s+/);
-
-      // Ensure EVERY typed word is found somewhere in the video's data
       const matchesAllTerms = searchTerms.every(term => haystack.includes(term));
-
       if (!matchesAllTerms) return false;
     }
 
-    // 2. Exact Match Filters
     if (status && v.status !== status) return false;
     if (section && !(v.sections || []).includes(section)) return false;
     if (channel && (!v.channel_name || v.channel_name.toLowerCase() !== channel.toLowerCase())) return false;
     if (viewsMin && (v.view_count || 0) < viewsMin) return false;
     if (likesMin && (v.like_count || 0) < likesMin) return false;
     if (year && (!v.publish_date || !v.publish_date.startsWith(year))) return false;
-    // Language Filter
     if (selectedLangs.length > 0 && !selectedLangs.includes("Any".toLocaleLowerCase())) {
       const vidLang = (v.language || "").toLowerCase();
-      if (!selectedLangs.includes(vidLang)) {
-        return false;
-      }
+      if (!selectedLangs.includes(vidLang)) return false;
     }
     return true;
   });
@@ -269,7 +312,7 @@ function renderTable(append = false) {
   const tbody = document.getElementById('video-tbody');
   const grid = document.getElementById('video-grid');
   const total = filteredVideos.length;
-  document.getElementById('videos-count-label').textContent = `${total} videos`;
+  document.getElementById('videos-count-label').textContent = `${total} ${appMode === 'sources' ? 'sources' : 'videos'}`;
 
   const start = (currentPage - 1) * PAGE_SIZE;
   const slice = filteredVideos.slice(start, start + PAGE_SIZE);
@@ -756,114 +799,6 @@ function selectYear(year) {
   }, 50);
 }
 
-// ─── SOURCES ─────────────────────────────────────────────────────────────
-let sourcesPage = 1;
-const SOURCES_PAGE_SIZE = 60;
-const expandedSources = new Set();
-
-function buildSourcesData() {
-  // Key: source_page path. Value: { path, title, section, videos[] }
-  // Uses rawVideos so source sections not in ALLOWED_SECTIONS are still visible.
-  const map = {};
-  rawVideos.forEach(v => {
-    (v.source_pages || []).forEach((sp, i) => {
-      const parts = sp.replace(/\\/g, '/').split('/');
-      const section = parts.length > 1 ? parts[0] : '';
-      if (!SOURCES_SECTIONS.has(section)) return;
-      if (!map[sp]) {
-        map[sp] = { path: sp, title: (v.thread_titles || [])[i] || sp, section, videos: [] };
-      }
-      map[sp].videos.push(v);
-    });
-  });
-  return Object.values(map);
-}
-
-function initSourcesFilters(sources) {
-  const sel = document.getElementById('sources-filter-section');
-  if (sel.options.length > 1) return;
-  const secs = [...new Set(sources.map(s => s.section).filter(Boolean))].sort();
-  secs.forEach(s => {
-    const o = document.createElement('option'); o.value = s; o.textContent = s;
-    sel.appendChild(o);
-  });
-}
-
-function renderSourcesTable() {
-  const q = document.getElementById('sources-search').value.toLowerCase();
-  const sec = document.getElementById('sources-filter-section').value;
-  const sort = document.getElementById('sources-sort').value;
-
-  let sources = buildSourcesData().filter(s => {
-    if (sec && s.section !== sec) return false;
-    if (q && !s.title.toLowerCase().includes(q) && !s.section.toLowerCase().includes(q)) return false;
-    return true;
-  });
-
-  if (sort === 'videos_desc') sources.sort((a, b) => b.videos.length - a.videos.length);
-  else if (sort === 'section_asc') sources.sort((a, b) => a.section.localeCompare(b.section) || a.title.localeCompare(b.title));
-  else if (sort === 'title_asc') sources.sort((a, b) => a.title.localeCompare(b.title));
-
-  document.getElementById('sources-count-label').textContent = `${sources.length} threads`;
-  document.getElementById('badge-sources').textContent = buildSourcesData().length;
-
-  const start = (sourcesPage - 1) * SOURCES_PAGE_SIZE;
-  const slice = sources.slice(start, start + SOURCES_PAGE_SIZE);
-
-  const tbody = document.getElementById('sources-tbody');
-  tbody.innerHTML = slice.map(s => {
-    const filePath = 'https://raw.githubusercontent.com/nocoldiz/ytpbackup/main/site_mirror/' + s.path.replace(/\\/g, '/');
-    const rowId = 'src-' + btoa(encodeURIComponent(s.path)).replace(/[^a-z0-9]/gi, '').slice(0, 20);
-    const isOpen = expandedSources.has(s.path);
-    const videoRows = isOpen ? s.videos.map(v => `
-      <tr class="src-video-list">
-        <td>${v.id}</td>
-        <td colspan="2">${v.title
-        ? `<a href="${v.url}" target="_blank" style="color:var(--text);text-decoration:none">${escHtml(v.title)}</a>`
-        : `<span style="opacity:.5">${escHtml(v.id)}</span>`}</td>
-        <td><span class="status-dot status-${v.status || 'unavailable'}"></span>${v.status || '-'}</td>
-        <td>${v.view_count != null ? fmtNum(v.view_count) + ' views' : ''}</td>
-      </tr>`).join('') : '';
-    return `<tr id="${rowId}">
-      <td style="font-weight:600">${escHtml(s.title)}</td>
-      <td><span class="tag-pill">${escHtml(s.section)}</span></td>
-      <td class="num">${s.videos.length}</td>
-      <td><a class="btn-thread" href="${filePath}" onclick="downloadFile('${filePath}', '${escAttr(s.title)}.html')">📄 Download</a></td>
-      <td><button class="src-expand-btn" onclick="toggleSource(${JSON.stringify(s.path)}, '${rowId}')">${isOpen ? '▲ Hide' : '▼ Videos'}</button></td>
-    </tr>${videoRows}`;
-  }).join('') || `<tr><td colspan="5" class="empty">No sources match</td></tr>`;
-
-  renderSourcesPagination(sources.length);
-}
-
-function toggleSource(path, rowId) {
-  if (expandedSources.has(path)) expandedSources.delete(path);
-  else expandedSources.add(path);
-  renderSourcesTable();
-  // scroll back to row
-  const el = document.getElementById(rowId);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function renderSourcesPagination(total) {
-  const pages = Math.ceil(total / SOURCES_PAGE_SIZE);
-  const el = document.getElementById('sources-pagination');
-  if (pages <= 1) { el.innerHTML = ''; return; }
-  let html = '';
-  if (sourcesPage > 1) html += `<button class="page-btn" onclick="goSourcesPage(${sourcesPage - 1})">‹</button>`;
-  const around = 2;
-  for (let p = 1; p <= pages; p++) {
-    if (p === 1 || p === pages || (p >= sourcesPage - around && p <= sourcesPage + around))
-      html += `<button class="page-btn${p === sourcesPage ? ' active' : ''}" onclick="goSourcesPage(${p})">${p}</button>`;
-    else if (p === sourcesPage - around - 1 || p === sourcesPage + around + 1)
-      html += `<span class="page-info">…</span>`;
-  }
-  if (sourcesPage < pages) html += `<button class="page-btn" onclick="goSourcesPage(${sourcesPage + 1})">›</button>`;
-  html += `<span class="page-info">${total} threads</span>`;
-  el.innerHTML = html;
-}
-
-function goSourcesPage(p) { sourcesPage = p; renderSourcesTable(); window.scrollTo(0, 200); }
 
 function yrTableRows(videos, field) {
   return videos.map((v, i) => `<tr>
