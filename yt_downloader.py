@@ -934,23 +934,83 @@ class VideoIndex:
         self.load_excluded()
 
     def load_excluded(self):
-        # excluded_videos.json is expected to be in the root directory (same as script)
-        path = "excluded_videos.json"
-        if os.path.exists(path):
+        self.excluded_ids = set()
+        
+        # 1. Load excluded_videos.json from docs dir
+        excl_path = os.path.join(self.docs_dir, "excluded_videos.json")
+        if os.path.exists(excl_path):
             try:
-                with open(path, encoding="utf-8") as f:
+                with open(excl_path, encoding="utf-8") as f:
                     excluded_data = json.load(f)
                     if isinstance(excluded_data, dict):
-                        self.excluded_ids = set(excluded_data.keys())
+                        self.excluded_ids.update(excluded_data.keys())
                     elif isinstance(excluded_data, list):
-                        self.excluded_ids = set(excluded_data)
+                        self.excluded_ids.update(excluded_data)
             except Exception as e:
-                print(f"  [!] Error loading {path}: {e}")
+                print(f"  [!] Error loading {excl_path}: {e}")
+        
+        # 2. Load sources_index.json from docs dir
+        src_path = os.path.join(self.docs_dir, "sources_index.json")
+        if os.path.exists(src_path):
+            try:
+                with open(src_path, encoding="utf-8") as f:
+                    sources_data = json.load(f)
+                    if isinstance(sources_data, dict):
+                        self.excluded_ids.update(sources_data.keys())
+            except Exception as e:
+                print(f"  [!] Error loading {src_path}: {e}")
 
     def load(self):
         if os.path.exists(self.filepath):
             with open(self.filepath, encoding="utf-8") as f:
                 self.data = json.load(f)
+            self.cleanup_index()
+
+    def cleanup_index(self):
+        """Removes excluded videos and moves 'Risorse'/'Old sources' to sources_index.json."""
+        to_remove = []
+        sources_to_move = {}
+        target_sections = {"Risorse", "Old sources"}
+
+        for vid, e in list(self.data.items()):
+            # 1. Check if video is excluded
+            if vid in self.excluded_ids:
+                to_remove.append(vid)
+                continue
+
+            # 2. Check if video belongs to sources
+            if any(s in target_sections for s in e.get("sections", [])):
+                sources_to_move[vid] = e
+                to_remove.append(vid)
+
+        if to_remove:
+            print(f"  [cleanup] Removing {len(to_remove)} entries from main index...")
+            for vid in to_remove:
+                if vid in self.data:
+                    del self.data[vid]
+            
+            if sources_to_move:
+                print(f"  [cleanup] Moving {len(sources_to_move)} entries to sources_index.json...")
+                self.append_to_sources(sources_to_move)
+            
+            self.save()
+
+    def append_to_sources(self, new_data):
+        src_path = os.path.join(self.docs_dir, "sources_index.json")
+        existing = {}
+        if os.path.exists(src_path):
+            try:
+                with open(src_path, encoding="utf-8") as f:
+                    existing = json.load(f)
+            except Exception:
+                existing = {}
+        
+        existing.update(new_data)
+        try:
+            with open(src_path, "w", encoding="utf-8") as f:
+                json.dump(existing, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"  [!] Error saving sources_index.json: {e}")
 
     def save(self):
         try:
@@ -1771,35 +1831,37 @@ def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed, y
 
 
 def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
-    target_sections = {"Risorse", "Old sources"}
-    
-    if retry_failed:
-        for e in index.data.values():
-            if any(s in target_sections for s in e.get("sections", [])) and e["status"] == "failed":
-                e["status"] = "pending"
-        index.save()
-        print("  Cleared failed status for 'Risorse' & 'Old sources' — will retry.\n")
+    src_path = os.path.join(index.docs_dir, "sources_index.json")
+    if not os.path.exists(src_path):
+        print(f"  [!] {src_path} not found.")
+        return
 
-    pending = [
-        vid for vid, e in index.data.items()
-        if any(s in target_sections for s in e.get("sections", [])) and e["status"] == "pending"
-        and vid not in index.excluded_ids
-    ]
+    with open(src_path, encoding="utf-8") as f:
+        sources_data = json.load(f)
+
+    if retry_failed:
+        for e in sources_data.values():
+            if e.get("status") == "failed":
+                e["status"] = "pending"
+        with open(src_path, "w", encoding="utf-8") as f:
+            json.dump(sources_data, f, indent=2, ensure_ascii=False)
+        print("  Cleared failed status in sources_index.json — will retry.\n")
+
+    pending = [vid for vid, e in sources_data.items() if e.get("status") == "pending"]
 
     if not pending:
-        print("  Nothing to download in 'Risorse' or 'Old sources' sections.")
+        print("  Nothing to download in sources_index.json.")
         return
 
     total = len(pending)
-    print(f"  {total} Risorse/Old sources video(s) pending.\n")
+    print(f"  {total} source video(s) pending.\n")
 
     ok_count = skip_count = unavail_count = err_count = 0
 
     for i, vid in enumerate(pending, 1):
         try:
-            e = index.data[vid]
+            e = sources_data[vid]
 
-            # Determine output directory based on channel name
             ch_name = e.get("channel_name")
             folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
             out_dir = os.path.join(video_dir, folder_name)
@@ -1809,7 +1871,6 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
                 meta = fetch_yt_metadata(vid)
                 if isinstance(meta, dict) and meta.get("title"):
                     e["title"] = meta["title"]
-                    index.save()
                     
             label = (e.get("thread_titles") or [""])[0] or e.get("title") or vid
 
@@ -1823,26 +1884,29 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
             )
 
             if status == "ok":
-                rel = os.path.relpath(local_file, ".") if local_file else None
-                index.set_downloaded(vid, rel, dl_title)
+                e["status"] = "downloaded"
+                e["local_file"] = os.path.relpath(local_file, ".") if local_file else None
+                if dl_title: e["title"] = dl_title
                 print(f"  ✓ {os.path.basename(local_file or '')}")
                 ok_count += 1
             elif status == "exists":
-                if not index.is_done(vid):
-                    rel = os.path.relpath(local_file, ".") if local_file else None
-                    index.set_downloaded(vid, rel, dl_title)
+                e["status"] = "downloaded"
+                e["local_file"] = os.path.relpath(local_file, ".") if local_file else None
+                if dl_title: e["title"] = dl_title
                 print(f"  = already downloaded")
                 skip_count += 1
             elif status == "unavailable":
-                index.set_unavailable(vid)
+                e["status"] = "unavailable"
                 print("  ⊘ Unavailable (removed / private)")
                 unavail_count += 1
             else:
-                index.set_failed(vid)
+                e["status"] = "failed"
                 print("  ✗ Failed")
                 err_count += 1
 
-            index.save()
+            # Save after each download
+            with open(src_path, "w", encoding="utf-8") as f:
+                json.dump(sources_data, f, indent=2, ensure_ascii=False)
 
             if status == "ok":
                 time.sleep(1)
@@ -1852,10 +1916,10 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
 
     print("─" * 54)
     print(f"  Downloaded:  {ok_count}")
-    print(f"  Skipped:     {skip_count}  (already on disk)")
-    print(f"  Unavailable: {unavail_count}  (removed / private)")
-    print(f"  Failed:      {err_count}  (re-run to retry)")
-    print(f"  Index:       {os.path.abspath(index.filepath)}")
+    print(f"  Skipped:     {skip_count}")
+    print(f"  Unavailable: {unavail_count}")
+    print(f"  Failed:      {err_count}")
+    print(f"  Sources:     {os.path.abspath(src_path)}")
 
 
 def do_stats(index, output_path="stats.md"):
