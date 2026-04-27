@@ -142,7 +142,8 @@ function applyFilters() {
   const viewsMin = parseInt(document.getElementById('filter-views-min').value) || 0;
   const likesMin = parseInt(document.getElementById('filter-likes-min').value) || 0;
   const year = document.getElementById('filter-year').value;
-
+  const langSelect = document.getElementById('filter-language');
+  const selectedLangs = Array.from(langSelect.selectedOptions).map(opt => opt.value.toLowerCase());
   filteredVideos = allVideos.filter(v => {
     // 1. IMPROVED SEARCH BAR LOGIC
     if (q) {
@@ -172,7 +173,13 @@ function applyFilters() {
     if (viewsMin && (v.view_count || 0) < viewsMin) return false;
     if (likesMin && (v.like_count || 0) < likesMin) return false;
     if (year && (!v.publish_date || !v.publish_date.startsWith(year))) return false;
-
+    // Language Filter
+    if (selectedLangs.length > 0) {
+      const vidLang = (v.language || "").toLowerCase();
+      if (!selectedLangs.includes(vidLang)) {
+        return false;
+      }
+    }
     return true;
   });
 

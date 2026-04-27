@@ -106,6 +106,15 @@
         <select id="filter-section" onchange="applyFilters()">
           <option value="">All sections</option>
         </select>
+        <select id="filter-language" class="tag-list" onchange="applyFilters()">
+          <option value="">International</option>
+          <option value="english">🇬🇧 English</option>
+          <option value="italian">🇮🇹 Italian</option>
+          <option value="spanish">🇪🇸 Spanish</option>
+          <option value="russian">🇷🇺 Russian</option>
+          <option value="french">🇫🇷 French</option>
+          <option value="german">🇩🇪 German</option>
+        </select>
         <input type="text" id="filter-channel" list="channel-datalist" placeholder="All channels"
           oninput="applyFilters()">
         <datalist id="channel-datalist"></datalist>
