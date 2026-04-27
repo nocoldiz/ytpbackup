@@ -314,7 +314,87 @@ function openVideo(vidId) {
     moreContainer.innerHTML = moreVids.map(x => renderVideoItem(x, 'list')).join('');
   }
   updateSaveButton(vidId);
+  loadComments(vidId);
   return false;
+}
+
+async function loadComments(vidId) {
+  const container = document.getElementById('watch-comments');
+  const title = document.getElementById('comments-count-title');
+  if (!container) return;
+  container.innerHTML = '<p class="empty" style="padding:10px;">Loading comments...</p>';
+  
+  try {
+    const r = await fetch(`comments/${vidId}.json`);
+    if (!r.ok) throw new Error("Not found");
+    const comments = await r.json();
+    if (!comments || comments.length === 0) {
+      container.innerHTML = '<p class="empty" style="padding:10px;">No comments available.</p>';
+      title.textContent = "Comments";
+      return;
+    }
+    
+    title.textContent = `${fmtNum(comments.length)} Comments`;
+    renderCommentTree(comments);
+  } catch (e) {
+    container.innerHTML = '<p class="empty" style="padding:10px;">No comments available for this video.</p>';
+    title.textContent = "Comments";
+  }
+}
+
+function renderCommentTree(allComments) {
+  const container = document.getElementById('watch-comments');
+  
+  // Build a map of replies
+  const repliesMap = {};
+  const rootComments = [];
+  
+  allComments.forEach(c => {
+    if (c.parent === 'root' || !allComments.some(x => x.id === c.parent)) {
+      rootComments.push(c);
+    } else {
+      if (!repliesMap[c.parent]) repliesMap[c.parent] = [];
+      repliesMap[c.parent].push(c);
+    }
+  });
+
+  // Sort root comments by pinned first, then by timestamp (newest first)
+  rootComments.sort((a, b) => {
+    if (a.is_pinned && !b.is_pinned) return -1;
+    if (!a.is_pinned && b.is_pinned) return 1;
+    return (b.timestamp || 0) - (a.timestamp || 0);
+  });
+
+  container.innerHTML = rootComments.map(c => renderCommentItem(c, repliesMap)).join('');
+}
+
+function renderCommentItem(c, repliesMap) {
+  const replies = repliesMap[c.id] || [];
+  const pinnedHtml = c.is_pinned ? `<div class="comment-pinned">📌 Pinned by ${escHtml(c.author_is_uploader ? 'uploader' : 'someone')}</div>` : '';
+  const authorIcon = c.author_thumbnail || 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
+  const timeText = c._time_text || (c.timestamp ? new Date(c.timestamp * 1000).toLocaleDateString() : '');
+  
+  return `
+    <div class="comment-item">
+      <img src="${authorIcon}" class="comment-avatar" alt="" loading="lazy">
+      <div class="comment-content">
+        ${pinnedHtml}
+        <div>
+          <a href="${c.author_url || '#'}" target="_blank" class="comment-author">${escHtml(c.author)}</a>
+          <span class="comment-time">${escHtml(timeText)}</span>
+        </div>
+        <div class="comment-text">${linkify(escHtml(c.text))}</div>
+        <div class="comment-actions">
+          <div class="comment-likes">👍 ${fmtNum(c.like_count || 0)}</div>
+        </div>
+        ${replies.length > 0 ? `
+          <div class="comment-replies">
+            ${replies.map(r => renderCommentItem(r, repliesMap)).join('')}
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `;
 }
 
 function fallbackToYoutube(vidId) {

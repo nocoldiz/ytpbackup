@@ -1,7 +1,7 @@
 # YTP Scraper & YTP Italian Forum Backup
 <img width="1401" height="907" alt="immagine" src="https://github.com/user-attachments/assets/c54df216-636b-4b21-a322-79e58b38829b" />
 
-Offline scraper for YTP videos and local mirror server for the historic YouTube Poop Italian Forum
+Offline scraper for YTP videos, 2009 era Youtube style dashboard and local mirror server for the historic YouTube Poop Italian Forum
 (`youtubepoopita.forumfree.it`).
 
 Check data and analytics breakdown here
@@ -14,7 +14,8 @@ Check data and analytics breakdown here
 ytpbackup/
 ├── scraper.py          # Downloads forum sections, index pages, threads
 ├── yt_downloader.py    # Scans for YouTube links and downloads videos
-├── server.js           # Node.js local mirror server
+├── server.js           # Main router & Dashboard server
+├── server_forum.js     # Legacy Forum Mirror logic
 ├── package.json
 ├── docs/               # JSON indexes and web dashboard
 ├── videos/             # Downloaded YouTube videos organized by channel
@@ -40,7 +41,26 @@ ytpbackup/
 ---
 <img width="1669" height="901" alt="immagine" src="https://github.com/user-attachments/assets/2500efb3-0919-4868-b82a-1d4d7b393810" />
 
-## Mirror Server
+## Dashboard Server
+
+The main entry point for the YTP Archive. It serves the interactive dashboard, search interface, and local video playback.
+
+> [!NOTE]
+> The dashboard (`docs/index.html`) is designed to work in two modes:
+> - **Static Mode**: Can be viewed by opening the file directly or via GitHub Pages. It allows browsing the archive and watching videos via YouTube.
+> - **Server Mode**: When running via `npm start`, it enables **local video playback** (for archived videos) and **management features** (flagging sources, banning videos).
+
+### Start
+
+```bash
+npm start
+```
+
+Runs on [http://localhost:3000](http://localhost:3000) by default.
+
+---
+
+## Forum Server
 
 A zero-dependency Node.js HTTP server that serves the scraped pages with all
 internal forum links rewritten to local equivalents.
@@ -52,13 +72,13 @@ Node.js ≥ 18
 ### Start
 
 ```bash
-node server.js
+node server_forum.js
 ```
 
 Or via npm:
 
 ```bash
-npm start
+npm start forum
 ```
 
 ### How links are resolved
