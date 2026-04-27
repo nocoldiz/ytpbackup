@@ -90,7 +90,8 @@
         <h2>Video Search</h2>
         <span class="count-badge" id="videos-count-label"></span>
         <div class="view-toggle" style="margin-left: auto;">
-          <button id="btn-view-table" class="view-btn active" onclick="setViewMode('table')" title="Table View">≡</button>
+          <button id="btn-view-table" class="view-btn active" onclick="setViewMode('table')"
+            title="Table View">≡</button>
           <button id="btn-view-grid" class="view-btn" onclick="setViewMode('grid')" title="Grid View">⊞</button>
         </div>
       </div>
@@ -107,7 +108,7 @@
           <option value="">All sections</option>
         </select>
         <select id="filter-language" class="tag-list" onchange="applyFilters()">
-          <option value="">International</option>
+          <option value="any">Any language</option>
           <option value="english">🇬🇧 English</option>
           <option value="italian">🇮🇹 Italian</option>
           <option value="spanish">🇪🇸 Spanish</option>
@@ -189,7 +190,13 @@
 
     <!-- TIMELINE -->
     <div class="page" id="page-timeline">
-      <div class="tl-article" id="tl-content"></div>
+      <div class="section-header">
+        <h2>Interactive Timeline</h2>
+        <span class="count-badge">Scroll to zoom, drag to pan</span>
+      </div>
+      <div id="timeline-container">
+        <div id="timeline-track"></div>
+      </div>
     </div>
 
     <!-- YEARS -->

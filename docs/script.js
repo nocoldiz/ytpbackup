@@ -73,6 +73,10 @@ function showPage(name) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   event.target.classList.add('active');
+  if (name === 'timeline' && typeof initTimeline === 'function') {
+    console.log("## init timeline")
+    initTimeline();
+  }
 }
 
 // ─── FILTER OPTIONS ───────────────────────────────────────────────────────
@@ -118,13 +122,13 @@ function setViewMode(mode) {
 function loadFacade(id) {
   const el = document.getElementById('facade-' + id);
   if (!el) return;
-  
+
   // Find video in allVideos or rawVideos
   const v = allVideos.find(x => x.id === id) || rawVideos.find(x => x.id === id);
-  
+
   if (v && v.status === 'downloaded' && v.local_file) {
     const src = getLocalVideoPath(v);
-    
+
     el.innerHTML = `<video controls autoplay style="width:100%; height:100%; object-fit:contain; background:#000;">
       <source src="${src}" type="video/mp4">
       Your browser does not support the video tag.
@@ -174,7 +178,7 @@ function applyFilters() {
     if (likesMin && (v.like_count || 0) < likesMin) return false;
     if (year && (!v.publish_date || !v.publish_date.startsWith(year))) return false;
     // Language Filter
-    if (selectedLangs.length > 0) {
+    if (selectedLangs.length > 0 && !selectedLangs.includes("Any".toLocaleLowerCase())) {
       const vidLang = (v.language || "").toLowerCase();
       if (!selectedLangs.includes(vidLang)) {
         return false;
@@ -256,34 +260,34 @@ function renderTable(append = false) {
 
   if (viewMode === 'table') {
     const html = slice.map(v => {
-    const statusClass = 'status-' + (v.status || 'unavailable');
+      const statusClass = 'status-' + (v.status || 'unavailable');
 
-    const threads = (v.source_pages || [])
-      // 1. Check if the string includes 'channel_scrape' and exclude it if it does
-      .filter(sp => !sp.includes('channel_scrape'))
-      // 2. Map over whatever is left to create your links
-      .map((sp, i) => {
-        const path = 'https://raw.githubusercontent.com/nocoldiz/ytpbackup/main/site_mirror/' + sp.replace(/\\/g, '/');
-
-
-        const label = (v.thread_titles || [])[i] || sp;
+      const threads = (v.source_pages || [])
+        // 1. Check if the string includes 'channel_scrape' and exclude it if it does
+        .filter(sp => !sp.includes('channel_scrape'))
+        // 2. Map over whatever is left to create your links
+        .map((sp, i) => {
+          const path = 'https://raw.githubusercontent.com/nocoldiz/ytpbackup/main/site_mirror/' + sp.replace(/\\/g, '/');
 
 
-        return `<a class="btn-thread" href="${path}" onclick="downloadFile('${path}', '${escAttr(label)}.html')" title="${escHtml(label)}">📄 ${escHtml(label.length > 22 ? label.slice(0, 22) + '…' : label)}</a>`;
-      }).join(' ');
-    const sections = (v.sections || []).map(s => `<span class="tag-pill">${escHtml(s)}</span>`).join('');
+          const label = (v.thread_titles || [])[i] || sp;
 
-    // Determine the title to display, falling back to the first thread title if v.title is missing
-    const fallbackTitle = (v.thread_titles && v.thread_titles[0]) ? v.thread_titles[0] : null;
-    const titleContent = v.title
-      ? `<a href="${v.url}" target="_blank">${escHtml(v.title)}</a>`
-      : (fallbackTitle ? `<a href="${v.url}" target="_blank"><em>${escHtml(fallbackTitle)}</em></a>` : `<span class="vid-id">${v.id}</span>`);
 
-    const playAction = (v.status === 'downloaded' && v.local_file)
-      ? `<a class="btn-play" href="${getLocalVideoPath(v)}" target="_blank" title="Play local file">▶</a>`
-      : '';
+          return `<a class="btn-thread" href="${path}" onclick="downloadFile('${path}', '${escAttr(label)}.html')" title="${escHtml(label)}">📄 ${escHtml(label.length > 22 ? label.slice(0, 22) + '…' : label)}</a>`;
+        }).join(' ');
+      const sections = (v.sections || []).map(s => `<span class="tag-pill">${escHtml(s)}</span>`).join('');
 
-    return `<tr>
+      // Determine the title to display, falling back to the first thread title if v.title is missing
+      const fallbackTitle = (v.thread_titles && v.thread_titles[0]) ? v.thread_titles[0] : null;
+      const titleContent = v.title
+        ? `<a href="${v.url}" target="_blank">${escHtml(v.title)}</a>`
+        : (fallbackTitle ? `<a href="${v.url}" target="_blank"><em>${escHtml(fallbackTitle)}</em></a>` : `<span class="vid-id">${v.id}</span>`);
+
+      const playAction = (v.status === 'downloaded' && v.local_file)
+        ? `<a class="btn-play" href="${getLocalVideoPath(v)}" target="_blank" title="Play local file">▶</a>`
+        : '';
+
+      return `<tr>
           <td class="title-cell">
             ${titleContent}
             <div class="vid-id">${v.id}</div>
@@ -297,7 +301,7 @@ function renderTable(append = false) {
           <td>${threads || '-'}</td>
           <td>${playAction} <a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
         </tr>`;
-  }).join('') || (append ? '' : `<tr><td colspan="8" class="empty">No videos match your filters</td></tr>`);
+    }).join('') || (append ? '' : `<tr><td colspan="8" class="empty">No videos match your filters</td></tr>`);
 
     if (append) {
       tbody.insertAdjacentHTML('beforeend', html);
@@ -312,7 +316,7 @@ function renderTable(append = false) {
       const dateText = v.publish_date ? v.publish_date.slice(0, 10) : 'Unknown Date';
       const viewsText = v.view_count != null ? fmtNum(v.view_count) + ' views' : '';
       const chText = v.channel_name || '-';
-      
+
       const thumbUrl = `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`;
       const facadeHtml = v.status === 'available' || v.status === 'pending' || v.status === 'downloaded'
         ? `<div class="yt-facade" id="facade-${v.id}" onclick="loadFacade('${v.id}')">
@@ -339,7 +343,7 @@ function renderTable(append = false) {
         </div>
       </div>`;
     }).join('') || (append ? '' : `<div class="empty" style="grid-column:1/-1">No videos match your filters</div>`);
-    
+
     if (append) grid.insertAdjacentHTML('beforeend', html);
     else grid.innerHTML = html;
   }
@@ -1074,4 +1078,181 @@ function downloadFile(url, filename) {
       console.error('Download failed:', err);
       window.open(url, '_blank');
     });
+}
+// ─── TIMELINE ENGINE ────────────────────────────────────────────────────────
+
+let ts = {
+  initialized: false,
+  msPerPixel: 0,
+  centerTime: 0,
+  minTime: new Date(2007, 0, 1).getTime(),
+  maxTime: new Date(new Date().getFullYear(), 11, 31).getTime(), // End of current year
+  isDragging: false,
+  startY: 0,
+  startCenterTime: 0
+};
+
+function initTimeline() {
+  if (ts.initialized) return;
+  const container = document.getElementById('timeline-container');
+  if (!container || container.clientHeight === 0) return;
+
+  const height = container.clientHeight;
+
+  // Initial zoom: Fit the whole span from 2007 to Now inside the viewport
+  ts.msPerPixel = (ts.maxTime - ts.minTime) / height;
+  ts.centerTime = ts.minTime + (ts.maxTime - ts.minTime) / 2;
+
+  // Wheel Zoom Event
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const zoomFactor = e.deltaY > 0 ? 1.1 : 0.9;
+    const rect = container.getBoundingClientRect();
+    const cursorY = e.clientY - rect.top;
+
+    // Calculate time directly under cursor to zoom into that specific point
+    const timeAtCursor = ts.centerTime + (cursorY - rect.height / 2) * ts.msPerPixel;
+
+    ts.msPerPixel *= zoomFactor;
+
+    // Zoom Limits (Max Out = Fit All, Max In = 100px per day)
+    const minMsPerPx = (1000 * 60 * 60 * 24) / 100;
+    const maxMsPerPx = (ts.maxTime - ts.minTime) / rect.height;
+    ts.msPerPixel = Math.max(minMsPerPx, Math.min(maxMsPerPx, ts.msPerPixel));
+
+    // Readjust center so the point under cursor doesn't jump
+    ts.centerTime = timeAtCursor - (cursorY - rect.height / 2) * ts.msPerPixel;
+
+    clampTimeline(rect.height);
+    renderTimelineView();
+  }, { passive: false });
+
+  // Mouse Drag Panning Events
+  container.addEventListener('mousedown', e => {
+    ts.isDragging = true;
+    ts.startY = e.clientY;
+    ts.startCenterTime = ts.centerTime;
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!ts.isDragging) return;
+    const dy = e.clientY - ts.startY;
+    ts.centerTime = ts.startCenterTime - dy * ts.msPerPixel;
+    clampTimeline(container.clientHeight);
+    renderTimelineView();
+  });
+
+  window.addEventListener('mouseup', () => ts.isDragging = false);
+  window.addEventListener('mouseleave', () => ts.isDragging = false);
+
+  ts.initialized = true;
+  renderTimelineView();
+}
+
+function clampTimeline(height) {
+  const visibleHalf = (height / 2) * ts.msPerPixel;
+  ts.centerTime = Math.max(ts.minTime + visibleHalf, Math.min(ts.maxTime - visibleHalf, ts.centerTime));
+}
+
+function renderTimelineView() {
+  const container = document.getElementById('timeline-container');
+  const track = document.getElementById('timeline-track');
+  const height = container.clientHeight;
+  track.innerHTML = ''; // Clear DOM nodes - lazy loading
+
+  // Identify exact timestamp boundaries currently visible
+  const startVisibleTime = ts.centerTime - (height / 2) * ts.msPerPixel;
+  const endVisibleTime = ts.centerTime + (height / 2) * ts.msPerPixel;
+
+  // zoomRatio: 1 is fully zoomed out (decades), near 0 is zoomed in (days)
+  const maxMsPerPx = (ts.maxTime - ts.minTime) / height;
+  const zoomRatio = ts.msPerPixel / maxMsPerPx;
+
+  // Show only milestones (> 10M) when heavily zoomed out (> 15% of total time span visible)
+  const showOnlyMilestones = zoomRatio > 0.15;
+
+  drawTimelineMarkers(startVisibleTime, endVisibleTime, zoomRatio, track);
+
+  // 1. Filter out videos that aren't visible or lack dates
+  const visibleVideos = allVideos.filter(v => {
+    if (!v.publish_date) return false;
+    const t = new Date(v.publish_date).getTime();
+    return t >= startVisibleTime && t <= endVisibleTime;
+  });
+
+  const placed = [];
+  const PIXEL_GAP = 55; // Vertical space required to prevent cards overlapping
+
+  // 2. Render visible videos
+  visibleVideos.forEach(v => {
+    // Zoom enforcement constraint
+    if (showOnlyMilestones && (v.view_count || 0) < 10000000) return;
+
+    const t = new Date(v.publish_date).getTime();
+    const yPos = (t - startVisibleTime) / ts.msPerPixel;
+
+    // Layout logic: if a video shares a date with another, push it right (multi-columns)
+    let col = 0;
+    while (placed.some(p => p.col === col && Math.abs(p.top - yPos) < PIXEL_GAP)) {
+      col++;
+    }
+    placed.push({ top: yPos, col });
+
+    const el = document.createElement('div');
+    const isMilestone = (v.view_count || 0) >= 10000000;
+    el.className = 'timeline-event' + (isMilestone ? ' milestone' : '');
+
+    el.style.top = `${yPos}px`;
+    el.style.left = `${100 + col * 260}px`; // Indent based on column
+    el.onclick = () => window.open(v.url || `https://youtube.com/watch?v=${v.id}`, '_blank');
+
+    const views = v.view_count ? ` • ${fmtNum(v.view_count)} views` : '';
+    el.innerHTML = `
+      <strong>${escHtml(v.title || v.id)}</strong>
+      <small>${escHtml(v.channel_name || 'Unknown')} • ${v.publish_date.slice(0, 10)}${views}</small>
+    `;
+    track.appendChild(el);
+  });
+}
+
+function drawTimelineMarkers(startVisibleTime, endVisibleTime, zoomRatio, track) {
+  // Determine granularity based on zoom level
+  let intervalType = 'year';
+  if (zoomRatio < 0.02) intervalType = 'day';
+  else if (zoomRatio < 0.15) intervalType = 'month';
+
+  let current = new Date(startVisibleTime);
+
+  // Round up to nearest interval cleanly
+  if (intervalType === 'year') {
+    current.setMonth(0, 1); current.setHours(0, 0, 0, 0);
+  } else if (intervalType === 'month') {
+    current.setDate(1); current.setHours(0, 0, 0, 0);
+  } else {
+    current.setHours(0, 0, 0, 0);
+  }
+
+  while (current.getTime() <= endVisibleTime) {
+    if (current.getTime() >= startVisibleTime) {
+      const yPos = (current.getTime() - startVisibleTime) / ts.msPerPixel;
+      const el = document.createElement('div');
+      el.className = 'timeline-marker';
+      el.style.top = `${yPos}px`;
+
+      // Scale label output
+      if (intervalType === 'year') {
+        el.textContent = current.getFullYear();
+      } else if (intervalType === 'month') {
+        el.textContent = current.toLocaleString('default', { month: 'long', year: 'numeric' });
+      } else {
+        el.textContent = current.toLocaleDateString();
+      }
+      track.appendChild(el);
+    }
+
+    // Increment cursor
+    if (intervalType === 'year') current.setFullYear(current.getFullYear() + 1);
+    else if (intervalType === 'month') current.setMonth(current.getMonth() + 1);
+    else current.setDate(current.getDate() + 1);
+  }
 }

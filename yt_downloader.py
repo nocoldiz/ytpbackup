@@ -930,11 +930,14 @@ class VideoIndex:
         self.docs_dir = docs_dir or DEFAULT_DOCS_DIR
         self.filepath = os.path.join(self.docs_dir, "video_index.json")
         self.data = {}
-        self.excluded_ids = set()
+        self.actually_excluded_ids = set()
+        self.sources_ids = set()
+        self.excluded_ids = set() # Combined for compatibility
         self.load_excluded()
 
     def load_excluded(self):
-        self.excluded_ids = set()
+        self.actually_excluded_ids = set()
+        self.sources_ids = set()
         
         # 1. Load excluded_videos.json from docs dir
         excl_path = os.path.join(self.docs_dir, "excluded_videos.json")
@@ -943,9 +946,9 @@ class VideoIndex:
                 with open(excl_path, encoding="utf-8") as f:
                     excluded_data = json.load(f)
                     if isinstance(excluded_data, dict):
-                        self.excluded_ids.update(excluded_data.keys())
+                        self.actually_excluded_ids.update(excluded_data.keys())
                     elif isinstance(excluded_data, list):
-                        self.excluded_ids.update(excluded_data)
+                        self.actually_excluded_ids.update(excluded_data)
             except Exception as e:
                 print(f"  [!] Error loading {excl_path}: {e}")
         
@@ -956,9 +959,12 @@ class VideoIndex:
                 with open(src_path, encoding="utf-8") as f:
                     sources_data = json.load(f)
                     if isinstance(sources_data, dict):
-                        self.excluded_ids.update(sources_data.keys())
+                        self.sources_ids.update(sources_data.keys())
             except Exception as e:
                 print(f"  [!] Error loading {src_path}: {e}")
+        
+        # Update combined set
+        self.excluded_ids = self.actually_excluded_ids | self.sources_ids
 
     def load(self):
         if os.path.exists(self.filepath):
@@ -967,21 +973,33 @@ class VideoIndex:
             self.cleanup_index()
 
     def cleanup_index(self):
-        """Removes excluded videos and moves 'Risorse'/'Old sources' to sources_index.json."""
+        """
+        Removes excluded videos and moves 'Risorse'/'Old sources' to sources_index.json.
+        Also moves back videos from sources if they appear in other sections.
+        """
         to_remove = []
         sources_to_move = {}
-        target_sections = {"Risorse", "Old sources"}
+        sources_to_remove = []
+        target_sections = {"Risorse", "Old sources", "Old Sources"}
 
         for vid, e in list(self.data.items()):
-            # 1. Check if video is excluded
-            if vid in self.excluded_ids:
+            # 1. Check if video is actually excluded (blacklist)
+            if vid in self.actually_excluded_ids:
                 to_remove.append(vid)
                 continue
 
-            # 2. Check if video belongs to sources
-            if any(s in target_sections for s in e.get("sections", [])):
+            # 2. Check sections
+            sections = e.get("sections", [])
+            has_target = any(s in target_sections for s in sections)
+            has_other = any(s not in target_sections for s in sections)
+
+            if has_target and not has_other:
+                # Should be in sources
                 sources_to_move[vid] = e
                 to_remove.append(vid)
+            elif has_other and vid in self.sources_ids:
+                # Should be moved back from sources
+                sources_to_remove.append(vid)
 
         if to_remove:
             print(f"  [cleanup] Removing {len(to_remove)} entries from main index...")
@@ -992,7 +1010,17 @@ class VideoIndex:
             if sources_to_move:
                 print(f"  [cleanup] Moving {len(sources_to_move)} entries to sources_index.json...")
                 self.append_to_sources(sources_to_move)
+        
+        if sources_to_remove:
+            print(f"  [cleanup] Moving {len(sources_to_remove)} entries back from sources_index.json...")
+            self.remove_from_sources(sources_to_remove)
+            # Update local tracking
+            for vid in sources_to_remove:
+                self.sources_ids.discard(vid)
+            # Re-update combined set
+            self.excluded_ids = self.actually_excluded_ids | self.sources_ids
             
+        if to_remove or sources_to_remove:
             self.save()
 
     def append_to_sources(self, new_data):
@@ -1009,8 +1037,32 @@ class VideoIndex:
         try:
             with open(src_path, "w", encoding="utf-8") as f:
                 json.dump(existing, f, indent=2, ensure_ascii=False)
+            # Update local tracking
+            self.sources_ids.update(new_data.keys())
+            self.excluded_ids = self.actually_excluded_ids | self.sources_ids
         except Exception as e:
             print(f"  [!] Error saving sources_index.json: {e}")
+
+    def remove_from_sources(self, video_ids):
+        src_path = os.path.join(self.docs_dir, "sources_index.json")
+        if not os.path.exists(src_path):
+            return
+        
+        try:
+            with open(src_path, encoding="utf-8") as f:
+                existing = json.load(f)
+            
+            removed_count = 0
+            for vid in video_ids:
+                if vid in existing:
+                    del existing[vid]
+                    removed_count += 1
+            
+            if removed_count > 0:
+                with open(src_path, "w", encoding="utf-8") as f:
+                    json.dump(existing, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"  [!] Error updating sources_index.json for removal: {e}")
 
     def save(self):
         try:
@@ -1023,8 +1075,8 @@ class VideoIndex:
             print(f"\n  [!] Error saving index to {self.filepath}: {e}")
 
     def add_video(self, video_id, section, source_page, thread_title=None, nickname=None):
-        if video_id in self.excluded_ids:
-            # Skip excluded videos silently during scanning
+        if video_id in self.actually_excluded_ids:
+            # Skip only hard-blacklisted videos during scanning
             return
 
         if video_id not in self.data:
@@ -2416,6 +2468,7 @@ def main():
         index.load()
         if args.stats:
             do_stats(index)
+            index.cleanup_index()
         if args.chronology:
             do_chronology(index)
         if args.find_mirrors:
@@ -2520,6 +2573,7 @@ def main():
             print("Invalid language selection or empty list.")
     if choice == "7":
         do_stats(index)
+        index.cleanup_index()
 
     if choice == "8":
         do_chronology(index)
