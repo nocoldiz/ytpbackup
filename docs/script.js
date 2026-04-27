@@ -4,6 +4,7 @@ let allPoopers = {};      // from ytpoopers.json
 let pooperMap = {};       // channel_name -> pooper data
 let filteredVideos = [];
 let appMode = 'videos';   // 'videos' or 'sources'
+let isServerMode = false;
 let currentPage = 1;
 const PAGE_SIZE = 50;
 let selectedChannel = null;
@@ -75,8 +76,10 @@ async function autoLoad() {
   if (window.location.protocol.startsWith('http')) {
     try {
       const r = await fetch('/api/ban', { method: 'POST', body: JSON.stringify({ videoIds: [] }) });
-      if (r.ok || r.status === 400) { // 400 is expected for empty videoIds
-        document.getElementById('nav-manage').style.display = 'inline-block';
+      if (r.ok || r.status === 400) {
+        isServerMode = true;
+        const mgmt = document.getElementById('management-actions');
+        if (mgmt) mgmt.style.display = 'flex';
         console.log("Server mode detected: Management features enabled.");
       }
     } catch (e) {}
@@ -147,10 +150,90 @@ function initApp(vRaw, sRaw, pRaw) {
   if (appMode === 'videos') {
     renderHomePage();
   }
+
+  handleRouting();
 }
 
+// ─── ROUTING ──────────────────────────────────────────────────────────────
+function handleRouting() {
+  const url = new URL(window.location);
+  const path = url.pathname;
+  const params = url.searchParams;
+
+  let page = params.get('page');
+  let videoId = params.get('v');
+  let user = params.get('user') || params.get('c') || params.get('channel');
+  let section = params.get('section');
+  let query = params.get('q') || params.get('search_query');
+
+  // Handle YouTube-style paths
+  if (path.startsWith('/watch')) {
+    videoId = videoId || params.get('v');
+  } else if (path.startsWith('/user/') || path.startsWith('/c/') || path.startsWith('/channel/')) {
+    user = decodeURIComponent(path.split('/')[2]);
+  } else if (path.startsWith('/@')) {
+    user = decodeURIComponent(path.slice(2));
+  } else if (path === '/videos') {
+    page = 'videos';
+  } else if (path === '/sources') {
+    page = 'sources';
+  } else if (path === '/channels') {
+    page = 'channels';
+  } else if (path === '/sections') {
+    page = 'sections';
+  } else if (path === '/overview') {
+    page = 'overview';
+  }
+
+  if (videoId) {
+    openVideo(videoId, false);
+  } else if (user) {
+    openProfile(user, false);
+  } else if (section) {
+    showPage('sections', false);
+    selectSection(section, false);
+  } else if (page) {
+    showPage(page, false);
+  } else if (query) {
+    showPage('videos', false);
+    document.getElementById('search-input').value = query;
+    applyFilters();
+  } else {
+    showPage('youtube', false);
+  }
+}
+
+function updateURL(params, path = '/') {
+  if (params === null) {
+    window.history.pushState({}, '', path);
+    return;
+  }
+  const url = new URL(window.location);
+  const newParams = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) {
+    if (v) newParams.set(k, v);
+  }
+  const newSearch = newParams.toString();
+  const newUrl = path + (newSearch ? '?' + newSearch : '');
+  window.history.pushState({ ...params }, '', newUrl);
+}
+
+window.addEventListener('popstate', () => {
+  handleRouting();
+});
+
 // ─── NAVIGATION ──────────────────────────────────────────────────────────
-function showPage(name) {
+function showPage(name, pushToHistory = true) {
+  if (pushToHistory) {
+    let path = '/';
+    if (name === 'videos') path = '/videos';
+    else if (name === 'sources') path = '/sources';
+    else if (name === 'channels') path = '/channels';
+    else if (name === 'sections') path = '/sections';
+    else if (name === 'overview') path = '/overview';
+    else if (name === 'youtube') path = '/';
+    updateURL(name === 'youtube' ? {} : { page: name }, path);
+  }
   if (name !== 'video') {
     const player = document.getElementById('watch-player');
     if (player) player.innerHTML = '';
@@ -174,6 +257,9 @@ function showPage(name) {
   });
 
   document.getElementById('page-' + targetPage).classList.add('active');
+  
+  // Close sidebar on navigation (mobile)
+  document.body.classList.remove('sidebar-open');
 
   if (name === 'timeline' && typeof initTimeline === 'function') {
     initTimeline();
@@ -184,9 +270,10 @@ function showPage(name) {
   if (name === 'saved') {
     renderSavedPage();
   }
-  if (name === 'manage') {
-    renderManageTable();
-  }
+}
+
+function toggleSidebar() {
+  document.body.classList.toggle('sidebar-open');
 }
 
 // ─── THEME TOGGLES & SEARCH ────────────────────────────────────────────────
@@ -286,9 +373,10 @@ function performSearch(query) {
 }
 
 // ─── YOUTUBE LOGIC ───────────────────────────────────────────────────────
-function openVideo(vidId) {
+function openVideo(vidId, pushToHistory = true) {
+  if (pushToHistory) updateURL({ v: vidId }, '/watch');
   window.scrollTo(0, 0);
-  showPage('video');
+  showPage('video', false);
   const ytData = [...allVideos, ...allSources];
   const v = ytData.find(x => x.id === vidId);
   if (!v) {
@@ -418,8 +506,9 @@ function fallbackToYoutube(vidId) {
   }
 }
 
-function openProfile(user) {
-  showPage('profile');
+function openProfile(user, pushToHistory = true) {
+  if (pushToHistory) updateURL({ user: user }, '/@' + encodeURIComponent(user));
+  showPage('profile', false);
   const ytData = [...allVideos, ...allSources];
   const avatar = getChannelAvatar(user);
   const userVideos = ytData.filter(v => v.channel_name === user);
@@ -902,7 +991,12 @@ function renderTable(append = false) {
         ? `<a class="btn-play" href="${getLocalVideoPath(v)}" target="_blank" title="Play local file">▶</a>`
         : '';
 
+      const checkbox = isServerMode 
+        ? `<td onclick="event.stopPropagation();"><input type="checkbox" class="manage-check" data-id="${v.id}"></td>`
+        : '';
+
       return `<tr onclick="openVideo('${v.id}')" style="cursor:pointer">
+          ${checkbox}
           <td class="title-cell" data-label="Title">
             ${titleContent}
             <div class="vid-id">${v.id}</div>
@@ -949,7 +1043,12 @@ function renderTable(append = false) {
              <span style="opacity:0.5">Thumbnail Unavailable</span>
            </div>`;
 
+      const checkbox = isServerMode
+        ? `<div class="vid-card-check" onclick="event.stopPropagation();"><input type="checkbox" class="manage-check" data-id="${v.id}"></div>`
+        : '';
+
       return `<div class="vid-card">
+        ${checkbox}
         ${facadeHtml}
         <div class="vid-card-info">
           <a href="${v.url}" target="_blank" class="vid-card-title" title="${escAttr(titleText)}">${escHtml(titleText)}</a>
@@ -971,6 +1070,10 @@ function renderTable(append = false) {
   }
 
   renderPagination(total);
+  
+  // Show/hide management column header
+  const thManage = document.getElementById('th-manage');
+  if (thManage) thManage.style.display = isServerMode && viewMode === 'table' ? 'table-cell' : 'none';
 }
 
 function renderPagination(total) {
@@ -1151,8 +1254,12 @@ function renderSectionGrid() {
     </div>`).join('');
 }
 
-function selectSection(name) {
+function selectSection(name, pushToHistory = true) {
   selectedSection = selectedSection === name ? null : name;
+  if (pushToHistory) {
+    if (selectedSection) updateURL({ section: name }, '/sections');
+    else updateURL({}, '/sections');
+  }
   renderSectionGrid();
   const panel = document.getElementById('section-detail-panel');
   if (!selectedSection) { panel.style.display = 'none'; return; }
@@ -1573,7 +1680,7 @@ function getLocalVideoPath(v) {
     }
   }
 
-  return path.startsWith('videos/') ? '../' + path : path;
+  return (path.startsWith('videos/') || path.startsWith('sources/')) ? '../' + path : path;
 }
 
 function escHtml(s) {
@@ -1991,25 +2098,6 @@ async function renderSavedPage() {
 }
 
 // ─── MANAGEMENT ───────────────────────────────────────────────────────────
-function renderManageTable() {
-  const tbody = document.getElementById('manage-tbody');
-  if (!tbody) return;
-  
-  const ytData = [...allVideos]; // Management usually only for main videos
-  tbody.innerHTML = ytData.slice(0, 500).map(v => `
-    <tr>
-      <td><input type="checkbox" class="manage-check" data-id="${v.id}"></td>
-      <td>
-        <div style="font-weight:bold;">${escHtml(v.title || v.id)}</div>
-        <div style="font-size:10px; color:var(--text-muted);">${v.id}</div>
-      </td>
-      <td>${escHtml(v.channel_name || '-')}</td>
-      <td><span class="status-badge status-${v.status}">${v.status}</span></td>
-      <td>${escHtml((v.sections || []).join(', '))}</td>
-    </tr>
-  `).join('');
-}
-
 function toggleAllManage(checked) {
   document.querySelectorAll('.manage-check').forEach(cb => cb.checked = checked);
 }

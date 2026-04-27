@@ -23,6 +23,7 @@ const VIDEOS_DIR  = path.join(__dirname, 'videos');
 const VIDEO_INDEX = path.join(DOCS_DIR, 'video_index.json');
 const EXCLUDED_VIDEOS = path.join(DOCS_DIR, 'excluded_videos.json');
 const SOURCES_INDEX = path.join(DOCS_DIR, 'sources_index.json');
+const SOURCES_DIR   = path.join(__dirname, 'sources');
 
 
 // ─── Video Management Logic ──────────────────────────────────────────────────
@@ -95,6 +96,24 @@ function flagAsSource(videoIds, videoIndexPath, sourcesIndexPath) {
   for (const id of videoIds) {
     if (!index[id]) { results.skipped.push(id); continue; }
     const entry = index[id];
+
+    if (entry.local_file) {
+      const oldPath = path.join(__dirname, entry.local_file);
+      const fileName = path.basename(entry.local_file);
+      const newRelPath = path.join('sources', fileName);
+      const newPath = path.join(__dirname, newRelPath);
+
+      try {
+        if (!fs.existsSync(SOURCES_DIR)) fs.mkdirSync(SOURCES_DIR, { recursive: true });
+        if (fs.existsSync(oldPath)) {
+          fs.renameSync(oldPath, newPath);
+          entry.local_file = newRelPath.replace(/\\/g, '/');
+        }
+      } catch (err) {
+        console.error(`Failed to move file for ${id}:`, err);
+      }
+    }
+
     sources[id] = entry;
     delete index[id];
     results.moved.push(id);
@@ -217,6 +236,17 @@ function onRequest(req, res) {
     return serveLocalVideo(filePath, req, res);
   }
 
+  // ── Source video files ────────────────────────────────────────────────────
+  if (pathname.startsWith('/sources/')) {
+    const rel = pathname.slice('/sources/'.length)
+      .split('/').map(decodeURIComponent).join(path.sep);
+    const filePath = path.join(SOURCES_DIR, rel);
+    if (!filePath.startsWith(SOURCES_DIR + path.sep) && filePath !== SOURCES_DIR) {
+      res.writeHead(403); res.end(); return;
+    }
+    return serveLocalVideo(filePath, req, res);
+  }
+
   // ── Static files from docs ────────────────────────────────────────────────
   let relPath = pathname === '/' ? 'index.html' : pathname.replace(/^\//, '');
   let filePath = path.join(DOCS_DIR, relPath);
@@ -226,6 +256,13 @@ function onRequest(req, res) {
     const ext = path.extname(filePath).toLowerCase();
     res.writeHead(200, { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' });
     return fs.createReadStream(filePath).pipe(res);
+  }
+
+  // SPA Fallback: if not a file, serve index.html
+  const indexFile = path.join(DOCS_DIR, 'index.html');
+  if (fs.existsSync(indexFile)) {
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    return fs.createReadStream(indexFile).pipe(res);
   }
 
   res.writeHead(404);

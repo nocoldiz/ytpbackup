@@ -40,6 +40,7 @@
         <div style="clear:both;"></div>
       </div>
       <div id="masthead">
+        <button id="burger-menu" onclick="toggleSidebar(); return false;" style="display:none">☰</button>
         <a id="logo" href="#" onclick="showPage('youtube'); return false;">YouTube</a>
         <div id="masthead-search">
           <div class="search-form">
@@ -61,7 +62,6 @@
         <a href="#" class="nav-tab" onclick="showPage('years'); return false;">Years <span class="nav-badge" id="badge-years">0</span></a>
         <a href="#" class="nav-tab" onclick="showPage('timeline'); return false;">Timeline</a>
         <a href="#" class="nav-tab" onclick="showPage('saved'); return false;">Saved <span class="nav-badge" id="badge-saved">0</span></a>
-        <a href="#" class="nav-tab" id="nav-manage" style="display:none" onclick="showPage('manage'); return false;">Manage</a>
 
         <!-- Modern Mode Theme Toggles (Sidebar bottom) -->
         <div id="theme-toggles-modern" style="display: none;">
@@ -69,6 +69,7 @@
           <a href="#" onclick="toggleNightDay(); return false;">Switch to Night Mode</a>
         </div>
       </div>
+      <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
       <!-- YOUTUBE HOME -->
       <div class="page active" id="page-youtube">
@@ -232,6 +233,10 @@
         <div class="section-header">
           <h2>Video Search</h2>
           <span class="count-badge" id="videos-count-label"></span>
+          <div id="management-actions" style="display:none; margin-left: 15px; gap: 8px;">
+            <button class="btn-thread" style="background:#d33; color:#fff;" onclick="bulkAction('ban')">Ban Selected</button>
+            <button class="btn-thread" style="background:#28a745; color:#fff;" onclick="bulkAction('flag-source')">Flag as Source</button>
+          </div>
           <div class="view-toggle" style="margin-left: auto;">
             <button id="btn-view-table" class="view-btn active" onclick="setViewMode('table')" title="Table View">≡</button>
             <button id="btn-view-grid" class="view-btn" onclick="setViewMode('grid')" title="Grid View">⊞</button>
@@ -273,6 +278,7 @@
           <table id="video-table">
             <thead>
               <tr>
+                <th id="th-manage" style="display:none"><input type="checkbox" onchange="toggleAllManage(this.checked)"></th>
                 <th data-field="title" onclick="sortTable('title')" style="cursor:pointer">Title / ID <span class="sort-arrow">↕</span></th>
                 <th data-field="channel_name" onclick="sortTable('channel_name')" style="cursor:pointer">Channel <span class="sort-arrow">↕</span></th>
                 <th data-field="publish_date" onclick="sortTable('publish_date')" style="cursor:pointer">Date <span class="sort-arrow">↕</span></th>
@@ -353,32 +359,6 @@
           <span class="count-badge" id="saved-count-label">Videos saved locally in your browser</span>
         </div>
         <div id="saved-videos-grid" class="video-grid"></div>
-      </div>
-
-      <!-- MANAGE -->
-      <div class="page" id="page-manage">
-        <div class="section-header">
-          <h2>Archive Management</h2>
-          <div style="margin-left:auto;">
-            <button class="btn-thread" style="background:#d33; color:#fff;" onclick="bulkAction('ban')">Ban Selected</button>
-            <button class="btn-thread" style="background:#28a745; color:#fff;" onclick="bulkAction('flag-source')">Flag as Source</button>
-          </div>
-        </div>
-        <p style="margin-bottom:15px; color:var(--text-muted);">Select videos from the table below to perform bulk actions.</p>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th><input type="checkbox" onchange="toggleAllManage(this.checked)"></th>
-                <th>Title / ID</th>
-                <th>Channel</th>
-                <th>Status</th>
-                <th>Section</th>
-              </tr>
-            </thead>
-            <tbody id="manage-tbody"></tbody>
-          </table>
-        </div>
       </div>
 
     </div>

@@ -32,6 +32,7 @@ const VIDEO_INDEX = path.join(__dirname, 'docs', 'video_index.json');
 const EXCLUDED_VIDEOS = path.join(__dirname, 'docs', 'excluded_videos.json');
 const SOURCES_INDEX = path.join(__dirname, 'docs', 'sources_index.json');
 const VIDEOS_DIR  = path.join(__dirname, 'videos');
+const SOURCES_DIR = path.join(__dirname, 'sources');
 
 // ─── Video Management Logic ──────────────────────────────────────────────────
 
@@ -82,6 +83,21 @@ function flagAsSource(videoIds, videoIndexPath, sourcesIndexPath) {
   for (const id of videoIds) {
     if (!index[id]) { results.skipped.push(id); continue; }
     const entry = index[id];
+    if (entry.local_file) {
+      const oldPath = path.join(__dirname, entry.local_file);
+      const fileName = path.basename(entry.local_file);
+      const newRelPath = path.join('sources', fileName);
+      const newPath = path.join(__dirname, newRelPath);
+      try {
+        if (!fs.existsSync(SOURCES_DIR)) fs.mkdirSync(SOURCES_DIR, { recursive: true });
+        if (fs.existsSync(oldPath)) {
+          fs.renameSync(oldPath, newPath);
+          entry.local_file = newRelPath.replace(/\\/g, '/');
+        }
+      } catch (err) {
+        console.error(`Failed to move file for ${id}:`, err);
+      }
+    }
     sources[id] = entry;
     delete index[id];
     results.moved.push(id);
@@ -536,6 +552,17 @@ function onRequest(req, res) {
     return serveLocalVideo(filePath, req, res);
   }
 
+  // ── Source video files ────────────────────────────────────────────────────
+  if (reqUrl.pathname.startsWith('/sources/')) {
+    const rel = reqUrl.pathname.slice('/sources/'.length)
+      .split('/').map(decodeURIComponent).join(path.sep);
+    const filePath = path.join(SOURCES_DIR, rel);
+    if (!filePath.startsWith(SOURCES_DIR + path.sep) && filePath !== SOURCES_DIR) {
+      res.writeHead(403); res.end(); return;
+    }
+    return serveLocalVideo(filePath, req, res);
+  }
+
   // ── Static files from docs ────────────────────────────────────────────────
   if (reqUrl.pathname.startsWith('/docs/')) {
     const rel = reqUrl.pathname.slice('/docs/'.length)
@@ -555,26 +582,6 @@ function onRequest(req, res) {
       res.writeHead(200, { 'Content-Type': mime });
       return fs.createReadStream(filePath).pipe(res);
     }
-  }
-
-  // ── Video Manager ────────────────────────────────────────────────────────
-  if (reqUrl.pathname === '/video_manager') {
-    const p = path.join(__dirname, 'video_manager', 'video_manager.html');
-    if (fs.existsSync(p)) {
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-      return res.end(fs.readFileSync(p));
-    }
-    return serveNotFound(res, 'video_manager.html non trovato.');
-  }
-
-  // ── Video Manager Static Assets ──────────────────────────────────────────
-  if (reqUrl.pathname === '/video_manager_client.js') {
-    const p = path.join(__dirname, 'video_manager', 'video_manager_client.js');
-    if (fs.existsSync(p)) {
-      res.writeHead(200, { 'Content-Type': 'application/javascript' });
-      return res.end(fs.readFileSync(p));
-    }
-    return res.writeHead(404).end();
   }
 
   // ── Ban API ──────────────────────────────────────────────────────────────
@@ -626,8 +633,19 @@ function onRequest(req, res) {
   // Both section indices and thread pages use st increments of 30 (scraper convention)
   const pageNum = st > 0 ? Math.floor(st / 30) + 1 : 1;
 
-  // ── Home ─────────────────────────────────────────────────────────────────
+  // ── Home & Dashboard Routes ──────────────────────────────────────────────
   if (!fid && !tid) {
+    const frontendRoutes = ['/watch', '/videos', '/sources', '/channels', '/sections', '/overview'];
+    const isFrontend = frontendRoutes.some(r => reqUrl.pathname.startsWith(r));
+    
+    if (isFrontend) {
+       const p = path.join(__dirname, 'docs', 'index.html');
+       if (fs.existsSync(p)) {
+         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+         return res.end(fs.readFileSync(p));
+       }
+    }
+
     const p = path.join(SITE_MIRROR, 'Home.html');
     if (fs.existsSync(p)) return serveFile(p, res);
     return serveNotFound(res, 'Home.html non trovato nella mirror.');
