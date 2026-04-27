@@ -179,6 +179,11 @@ GERMAN_CHANNELS = [
     "https://www.youtube.com/@FanboyAllianz",
     "https://www.youtube.com/@MinerMorsel",
 ]
+FRENCH_CHANNELS = [
+]
+
+RUSSIAN_CHANNELS = [
+]
 # NocoldizTV: scrape everything except videos whose title matches these words
 NOCOLDIZ_BLACKLIST = re.compile(
     r'(?i)(gameplay|hypernet|devlog|gioco|em\.Path|em\.Brace)'
@@ -282,6 +287,47 @@ def clear_line():
     cols = shutil.get_terminal_size((80, 24)).columns
     print("\r" + " " * cols + "\r", end="", flush=True)
 
+def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, channels_list, year_limit=None):
+    print(f"\n>>> Starting Language Scan for {len(channels_list)} channels...")
+    
+    new_entries = 0
+    for chan_url in channels_list:
+        base_url = chan_url.split('/featured')[0].split('/videos')[0]
+        print(f"[*] Scraping channel: {base_url}")
+        
+        cmd = ["yt-dlp", "--flat-playlist", "--print", "%(id)s|%(title)s|%(upload_date)s", base_url]
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            lines = result.stdout.strip().split('\n')
+            
+            for line in lines:
+                if '|' not in line: continue
+                v_id, v_title, v_date = line.split('|', 2)
+
+                # Keyword Match Check
+                if CHANNEL_KEYWORDS.search(v_title):
+                    if v_id not in index.data:
+                        index.add_video(
+                            video_id=v_id,
+                            section="Youtube",
+                            source_page=f"Language Scrape ({base_url})",
+                            thread_title=v_title
+                        )
+                        new_entries += 1
+                        print(f"    [Found] Match: {v_title}")
+                        
+                        # Save every 10 new entries
+                        if new_entries % 10 == 0:
+                            index.save()
+                            print(f"    [LOG] Auto-saved index ({new_entries} new matches found so far)")
+        except Exception as e:
+            print(f"    [!] Error scraping {chan_url}: {e}")
+
+    index.save()
+    print(f"\n>>> Scraping complete. {new_entries} total matches added. Starting downloads...")
+
+    # Now trigger the download for this specific set (filtered from the main index)
+    do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed)
 
 def is_disallowed_channel(channel_name):
     if not channel_name:
@@ -293,7 +339,72 @@ def is_disallowed_channel(channel_name):
 def is_nocoldiz_channel(ch_url, ch_name=""):
     return "nocoldiz" in (ch_url or "").lower() or "nocoldiz" in (ch_name or "").lower()
 
+def do_download_by_section(index, video_dir, yt_format, rate_limit):
+    """
+    Prompts for a section from SCAN_SECTIONS and downloads pending videos 
+    belonging to that section.
+    """
+    print("\n--- Section Download Mode ---")
+    for i, section in enumerate(SCAN_SECTIONS, 1):
+        print(f"{i}) {section}")
+    
+    try:
+        choice = int(input("\nSelect section number to download: ")) - 1
+        if choice < 0 or choice >= len(SCAN_SECTIONS):
+            print("Invalid selection.")
+            return
+        selected_section = SCAN_SECTIONS[choice]
+    except ValueError:
+        print("Invalid input.")
+        return
 
+    # Filter pending videos that belong to this section
+    # Note: index.data[v_id]['sections'] is a list in your script
+    to_download = []
+    for v_id, info in index.data.items():
+        if info.get("status") == "pending":
+            if selected_section in info.get("sections", []):
+                to_download.append((v_id, info))
+
+    if not to_download:
+        print(f"\n[!] No pending videos found for section: {selected_section}")
+        return
+
+    print(f"\n>>> Found {len(to_download)} videos to download in '{selected_section}'.")
+
+    download_count = 0
+    for v_id, info in to_download:
+        print(f"[*] [{selected_section}] Downloading: {info.get('title', 'Unknown Title')} [{v_id}]")
+        
+        # Reusing the script's logic: update status to 'downloading'
+        info["status"] = "downloading"
+        
+        # Perform the actual download (logic matching your do_download_youtube)
+        success = False
+        out_tmpl = os.path.join(video_dir, "%(title)s [%(id)s].%(ext)s")
+        cmd = ["yt-dlp", "-f", yt_format, "-o", out_tmpl, "--no-playlist", "--quiet", "--no-warnings"]
+        if rate_limit:
+            cmd += ["--rate-limit", rate_limit]
+        cmd.append(f"https://www.youtube.com/watch?v={v_id}")
+
+        try:
+            subprocess.run(cmd, check=True)
+            info["status"] = "downloaded"
+            success = True
+            print(f"    [SUCCESS] Finished: {v_id}")
+        except subprocess.CalledProcessError:
+            info["status"] = "failed"
+            print(f"    [FAILED] Error downloading {v_id}")
+
+        download_count += 1
+        
+        # Save index every 10 entries
+        if download_count % 10 == 0:
+            index.save()
+            print(f"    [LOG] Auto-saved progress ({download_count}/{len(to_download)})")
+
+    index.save() # Final save
+    print(f"\n>>> Section '{selected_section}' batch complete.")
 # ── Video Index ───────────────────────────────────────────────────────────────
 
 class VideoIndex:
@@ -1721,7 +1832,7 @@ def main():
     p.add_argument("--scrape-profiles", action="store_true",
                    help="Scrape channel profiles and save to docs/ytpoopers.json")
     p.add_argument("--year-limit",      type=int, default=2016,
-                   help="Limit downloads to videos published until this year (for Italian mode)")
+                   help="Limit downloads to videos published until this year (for language mode)")
     args, _ = p.parse_known_args()
 
     if not os.path.isdir(args.site_dir):
@@ -1765,9 +1876,9 @@ def main():
     print("  4  Download 'Youtube' section")
     print("       Download only videos scraped via mode 3.")
     print()
-    print("  5  Both  (update index, then download all)")
+    print("  5  Section Download (Filter by SCAN_SECTIONS)")
     print()
-    print("  6  Download Italian YTPs only")
+    print("  6  Download YTPs from selected language")
     print("       Download videos from ALLOWED_CHANNELS, 'YTP nostrane', or 'YTP fai da te'.")
     print()
     print("  7  Stats  →  stats.md")
@@ -1803,23 +1914,38 @@ def main():
     index = VideoIndex(args.video_dir, args.docs_dir)
     index.load()
 
-    if choice in ("1", "5"):
+    if choice in ("1"):
         do_update_index(index, args.site_dir)
         print()
-
+    if choice in ("2"):
+        do_download(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
     if choice == "3":
         do_scrape_channels(index)
         print()
-
-    if choice in ("2", "5"):
-        do_download(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
-
     if choice == "4":
         do_download_youtube(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)
-
+    if choice == "5":
+        do_download_by_section(index, args.video_dir, args.format, args.rate_limit)
     if choice == "6":
-        do_download_italian(index, args.video_dir, args.format, args.rate_limit, args.retry_failed, year_limit=args.year_limit)
-
+        print("\nSelect Language:")
+        print("1. Italian")
+        print("2. English")
+        print("3. German")
+        print("4. French")
+        print("5. Russian")
+        lang_choice = input("Language Choice: ").strip()
+        
+        selected_list = []
+        if lang_choice == "1": selected_list = ITALIAN_CHANNELS
+        elif lang_choice == "2": selected_list = ENGLISH_CHANELS
+        elif lang_choice == "3": selected_list = GERMAN_CHANNELS
+        elif lang_choice == "4": selected_list = FRENCH_CHANNELS
+        elif lang_choice == "5": selected_list = RUSSIAN_CHANNELS
+        
+        if selected_list:
+            do_download_language(index, args.video_dir, args.format, args.rate_limit, args.retry_failed, selected_list, year_limit=args.year_limit)
+        else:
+            print("Invalid language selection or empty list.")
     if choice == "7":
         do_stats(index)
 
