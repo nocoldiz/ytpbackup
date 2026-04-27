@@ -1,5 +1,7 @@
 let allVideos = [];       // from video_index.json
 let allSources = [];      // from sources_index.json
+let allPoopers = {};      // from ytpoopers.json
+let pooperMap = {};       // channel_name -> pooper data
 let filteredVideos = [];
 let appMode = 'videos';   // 'videos' or 'sources'
 let currentPage = 1;
@@ -38,20 +40,23 @@ dz.addEventListener('drop', e => {
 async function loadMultipleFiles(files) {
   let videoData = null;
   let sourceData = null;
+  let pooperData = null;
 
   for (const f of files) {
     const text = await f.text();
     const json = JSON.parse(text);
     if (f.name.includes('sources')) sourceData = json;
+    else if (f.name.includes('ytpoopers')) pooperData = json;
     else videoData = json;
   }
-  initApp(videoData, sourceData);
+  initApp(videoData, sourceData, pooperData);
 }
 
 // Auto-load from same directory
 async function autoLoad() {
   let vData = null;
   let sData = null;
+  let pData = null;
   try {
     const rv = await fetch('video_index.json');
     if (rv.ok) vData = await rv.json();
@@ -60,7 +65,11 @@ async function autoLoad() {
     const rs = await fetch('sources_index.json');
     if (rs.ok) sData = await rs.json();
   } catch (e) { }
-  initApp(vData, sData);
+  try {
+    const rp = await fetch('ytpoopers.json');
+    if (rp.ok) pData = await rp.json();
+  } catch (e) { }
+  initApp(vData, sData, pData);
 }
 autoLoad();
 initDB();
@@ -79,7 +88,7 @@ function resetFilters() {
   if (langSel) langSel.value = 'any';
 }
 
-function initApp(vRaw, sRaw) {
+function initApp(vRaw, sRaw, pRaw) {
   resetFilters();
   if (vRaw) {
     allVideos = Object.entries(vRaw).map(([id, v]) => ({ id, ...v }))
@@ -87,6 +96,15 @@ function initApp(vRaw, sRaw) {
   }
   if (sRaw) {
     allSources = Object.entries(sRaw).map(([id, v]) => ({ id, ...v }));
+  }
+  if (pRaw) {
+    allPoopers = pRaw;
+    pooperMap = {};
+    Object.values(pRaw).forEach(p => {
+      if (p.channel_name) {
+        pooperMap[p.channel_name] = p;
+      }
+    });
   }
 
   if (!vRaw && !sRaw) return;
@@ -185,6 +203,14 @@ function onGlobalSearch() {
   }
 }
 
+function getChannelAvatar(channelName) {
+  const p = pooperMap[channelName];
+  if (p && p.thumbnail) {
+    return 'profile_thumbnails/' + p.thumbnail;
+  }
+  return 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
+}
+
 function performSearch(query) {
   if (!query) return;
   
@@ -210,12 +236,16 @@ function performSearch(query) {
     channelsContainer.innerHTML = matchedChannels.map(c => {
       const chVideos = ytData.filter(v => v.channel_name === c);
       const totalViews = chVideos.reduce((s, v) => s + (v.view_count || 0), 0);
+      const avatar = getChannelAvatar(c);
       return `
-        <div class="channel-card" style="display:inline-block; margin-right:15px; margin-bottom:15px; vertical-align:top; width:220px;" onclick="openProfile('${escAttr(c)}')">
-          <h4>${escHtml(c)}</h4>
-          <div class="ch-stats" style="margin-top:8px;">
-            <span><strong>${chVideos.length}</strong> videos</span><br>
-            <span><strong>${fmtNum(totalViews)}</strong> views</span>
+        <div class="channel-card" style="display:inline-flex; margin-right:15px; margin-bottom:15px; vertical-align:top; width:220px; align-items:center; gap:12px; padding:12px;" onclick="openProfile('${escAttr(c)}')">
+          <img src="${avatar}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">
+          <div style="flex:1; min-width:0;">
+            <h4 style="margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escHtml(c)}</h4>
+            <div class="ch-stats" style="margin-top:4px; font-size:11px;">
+              <span><strong>${chVideos.length}</strong> videos</span><br>
+              <span><strong>${fmtNum(totalViews)}</strong> views</span>
+            </div>
           </div>
         </div>
       `;
@@ -256,10 +286,14 @@ function openVideo(vidId) {
   const channel = v.channel_name || 'Unknown Channel';
 
   document.getElementById('watch-title').textContent = title;
-  document.getElementById('watch-channel').textContent = channel;
-  document.getElementById('watch-channel').onclick = () => openProfile(channel);
-  document.getElementById('watch-views-count').textContent = fmtNum(v.view_count || 0);
-  document.getElementById('watch-date').textContent = v.publish_date ? v.publish_date.slice(0, 10) : '';
+  const avatar = getChannelAvatar(channel);
+  document.getElementById('watch-channel-info').innerHTML = `
+    <img src="${avatar}" alt="Avatar" onclick="openProfile('${escAttr(channel)}')" style="cursor:pointer; border-radius:50%;">
+    <div style="flex:1">
+      <div id="watch-channel" style="font-weight:bold; cursor:pointer; font-size:1.1rem" onclick="openProfile('${escAttr(channel)}')">${escHtml(channel)}</div>
+      <div id="watch-date" style="font-size:0.85rem; color:var(--text-muted)">${v.publish_date ? v.publish_date.slice(0, 10) : ''}</div>
+    </div>
+  `;
 
   let desc = v.description || 'No description available.';
   document.getElementById('watch-description').innerHTML = linkify(escHtml(desc));
@@ -293,22 +327,25 @@ function fallbackToYoutube(vidId) {
 function openProfile(user) {
   showPage('profile');
   const ytData = [...allVideos, ...allSources];
-  document.getElementById('profile-title').textContent = user;
-
+  const avatar = getChannelAvatar(user);
   const userVideos = ytData.filter(v => v.channel_name === user);
   const sorted = [...userVideos].sort((a, b) => {
     return (b.publish_date || '').localeCompare(a.publish_date || '');
   });
 
-  const statsEl = document.getElementById('profile-stats');
-  if (statsEl) {
-    const totalViews = userVideos.reduce((sum, v) => sum + (v.view_count || 0), 0);
-    statsEl.innerHTML = `
-      <strong>Channel Views:</strong> ${fmtNum(totalViews)}<br>
-      <strong>Total Uploads:</strong> ${userVideos.length}<br>
-      <strong>Joined:</strong> ${sorted.length > 0 && sorted[sorted.length - 1].publish_date ? sorted[sorted.length - 1].publish_date.slice(0, 10) : 'Unknown'}
-    `;
-  }
+  document.getElementById('profile-header').innerHTML = `
+    <div style="display:flex; align-items:center; gap:24px;">
+      <img src="${avatar}" style="width:100px; height:100px; border-radius:50%; border:4px solid var(--border); object-fit:cover;">
+      <div>
+        <h2 id="profile-title" style="margin:0; font-size:2rem;">${escHtml(user)}</h2>
+        <div id="profile-stats" style="margin-top:8px; color:var(--text-muted); line-height:1.4;">
+          <strong>${userVideos.length}</strong> videos • 
+          <strong>${fmtNum(userVideos.reduce((sum, v) => sum + (v.view_count || 0), 0))}</strong> total views<br>
+          Joined: ${sorted.length > 0 && sorted[sorted.length - 1].publish_date ? sorted[sorted.length - 1].publish_date.slice(0, 10) : 'Unknown'}
+        </div>
+      </div>
+    </div>
+  `;
 
   const featContainer = document.getElementById('profile-featured');
   const gridContainer = document.getElementById('profile-videos');
@@ -467,7 +504,7 @@ function renderModernHomeCard(v) {
   const viewsText = v.view_count != null ? fmtNum(v.view_count) + ' views' : '';
   const chText = v.channel_name || '-';
   const thumbUrl = `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`;
-  const channelAvatar = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
+  const channelAvatar = getChannelAvatar(chText);
 
   return `
     <div class="modern-home-card" onclick="openVideo('${v.id}')">
@@ -508,6 +545,7 @@ function renderVideoItem(v, mode = 'list') {
 
   const isFirst = window.channelFirstUploadIds && window.channelFirstUploadIds.has(v.id);
   const starBadge = isFirst ? `<span class="tl-star" title="First upload by ${escAttr(channel)}">★</span> ` : '';
+  const avatar = getChannelAvatar(channel);
 
   if (mode === 'grid') {
     return `
@@ -518,7 +556,13 @@ function renderVideoItem(v, mode = 'list') {
       </a>
       <div class="video-info">
         <a href="#" onclick="return openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${starBadge}${escHtml(title)}</a>
-        <div class="video-meta">${views ? `<span>${views}</span><br>` : ''}<a href="#" onclick="return openProfile('${escAttr(channel)}')">${escHtml(channel)}</a></div>
+        <div class="video-meta" style="display:flex; align-items:center; gap:6px;">
+          <img src="${avatar}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
+          <div style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            <a href="#" onclick="return openProfile('${escAttr(channel)}')">${escHtml(channel)}</a>
+            ${views ? `<br><span>${views}</span>` : ''}
+          </div>
+        </div>
       </div>
     </div>`;
   }
@@ -537,7 +581,10 @@ function renderVideoItem(v, mode = 'list') {
         <div class="yt-list-meta">
           <span class="yt-stars">${renderStars(v.view_count)}</span>
           ${views ? `<span class="yt-views">${views}</span>` : ''}
-          <a href="#" class="yt-channel" onclick="event.stopPropagation();return openProfile('${escAttr(channel)}')">${escHtml(channel)}</a>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <img src="${avatar}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
+            <a href="#" class="yt-channel" onclick="event.stopPropagation();return openProfile('${escAttr(channel)}')">${escHtml(channel)}</a>
+          </div>
         </div>
       </div>
     </div>`;
@@ -766,7 +813,14 @@ function renderTable(append = false) {
             ${titleContent}
             <div class="vid-id">${v.id}</div>
           </td>
-          <td data-label="Channel">${v.channel_name ? `<a href="${v.channel_url || '#'}" target="_blank" onclick="event.stopPropagation();" style="color:var(--text-muted);text-decoration:none">${escHtml(v.channel_name)}</a>` : '-'}</td>
+          <td data-label="Channel">
+            ${v.channel_name ? `
+              <div style="display:flex; align-items:center; gap:8px;">
+                <img src="${getChannelAvatar(v.channel_name)}" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+                <a href="${v.channel_url || '#'}" target="_blank" onclick="event.stopPropagation();" style="color:var(--text-muted);text-decoration:none">${escHtml(v.channel_name)}</a>
+              </div>
+            ` : '-'}
+          </td>
           <td data-label="Date">${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
           <td data-label="Status"><span class="status-dot status-${statusClass}"></span><span class="status-text">${v.status || '-'}</span></td>
           <td class="num" data-label="Views">${fmtNum(v.view_count)}</td>
@@ -862,15 +916,22 @@ function renderChannelGrid() {
     return true;
   });
   document.getElementById('channels-count-label').textContent = `${channels.length} channels`;
-  document.getElementById('channel-grid').innerHTML = channels.map(c => `
+  document.getElementById('channel-grid').innerHTML = channels.map(c => {
+    const avatar = getChannelAvatar(c.name);
+    return `
     <div class="channel-card${selectedChannel === c.name ? ' selected' : ''}" onclick="selectChannel('${escAttr(c.name)}')">
-      <h4>${escHtml(c.name)}</h4>
-      <div class="ch-stats">
-        <span><strong>${c.videos.length}</strong> videos</span>
-        ${c.totalViews ? `<span><strong>${fmtNum(c.totalViews)}</strong> views</span>` : ''}
-        ${c.totalLikes ? `<span><strong>${fmtNum(c.totalLikes)}</strong> likes</span>` : ''}
+      <div style="display:flex; align-items:center; gap:16px;">
+        <img src="${avatar}" style="width:60px; height:60px; border-radius:50%; border:2px solid var(--border); object-fit:cover;">
+        <div style="flex:1; min-width:0;">
+          <h4 style="margin:0; font-size:1.1rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escHtml(c.name)}</h4>
+          <div class="ch-stats" style="margin-top:6px;">
+            <span><strong>${c.videos.length}</strong> videos</span><br>
+            ${c.totalViews ? `<span><strong>${fmtNum(c.totalViews)}</strong> views</span>` : ''}
+          </div>
+        </div>
       </div>
-    </div>`).join('') || `<div class="empty">No channels found</div>`;
+    </div>`;
+  }).join('') || `<div class="empty">No channels found</div>`;
 }
 
 function selectChannel(name) {

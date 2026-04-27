@@ -557,7 +557,7 @@ ITALIAN_CHANNELS = [
 "https://youtube.com/truocolo",
 "https://www.youtube.com/@shitmultiverse1404",
 "https://www.youtube.com/user/RaptorArk",
-"https://www.youtube.com/@",
+"https://www.youtube.com/user/CiccioDiMaggio99",
 "https://www.youtube.com/@",
 "https://www.youtube.com/@",
 "https://www.youtube.com/@",
