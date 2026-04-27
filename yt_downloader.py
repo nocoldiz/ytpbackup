@@ -430,7 +430,6 @@ ITALIAN_CHANNELS = [
     "https://www.youtube.com/@luciomarco",
     "https://www.youtube.com/@lullo74",
     "https://www.youtube.com/@luxexcellence2483",
-    "https://www.youtube.com/@mDeplo",
     "https://www.youtube.com/@macioilmagno",
     "https://www.youtube.com/@madanonymous",
     "https://www.youtube.com/@mamaluigi02",
@@ -531,7 +530,6 @@ SPANISH_CHANNELS = [
     "https://www.youtube.com/@Catdany",
     "https://www.youtube.com/@HDLuigi",
     "https://www.youtube.com/@NinterYT",
-    "https://www.youtube.com/@ParodiadorAnimado",
     "https://www.youtube.com/@Reloxard",
     "https://www.youtube.com/@SLBysusparidas",
     "https://www.youtube.com/@SimixF1",
@@ -582,13 +580,54 @@ CHANNEL_KEYWORDS = re.compile(
     # --- GLOBAL & ENGLISH CLASSICS ---
     r'|Pingas|CD-i|Morshu|Mah\s+Boi|He[\s-]?Man|Sparta\s+Remix|Scad|Stutter|Patrick|Jack\s+Black|Gourmet|The\s+king|Weegee|Spadinner|Michael\s+Rosen|Viacom|Skooks|Flex\s+Tape|Phil\s+Swift|Slap\s+Chop|Hotel\s+Mario|Hank\s+Hill|King\s+Harkinian|Zelda\s+CD-i'
     # --- YTPH (SPANISH) ---
-    r'|YTPH|Chavo\s+del\s+8|Loquendo|Pelea\s+de\s+invalidos|Vete\s+a\s+la\s+Versh|Pooppa[ñn]ol'
+    r'|YTPH|YTPHSHORT|YTPBR|Chavo\s+del\s+8|Pelea\s+de\s+invalidos|Vete\s+a\s+la\s+Versh|Pooppa[ñn]ol'
     # --- YTP FR (FRENCH) ---
     r'|YTPFR|YTP\s+FR|Brocante|Joueur\s+du\s+Grenier|JDG|Koh\s+Lanta|Denis\s+Brogniart|David\s+Goodenough'
     # --- YTK (GERMAN / YOUTUBE KACKE) ---
     r'|YouTube\s+Kacke|Marcell\s+D\'Avis|Peter\s+Zwegat|Kinski|Löwenzahn|Peter\s+Lustig|1&1'
     # --- RYTP (RUSSIAN) ---
     r'|RYTP|РУТП|Поцык|Повар|Сашко|Гамаз|Пенек)'
+)
+
+import re
+
+NON_YTP_KEYWORDS = re.compile(
+    r'(?i)('
+    # --- GAMING (SERIOUS/LONGFORM) ---
+    r'Walkthrough|Playthrough|Let\'s\s+Play|Gameplay|Longplay|No\s+Commentary|Speedrun|'
+    r'Boss\s+Fight|Achievement\s+Guide|Trophy\s+Guide|100%\s+Completion|Quest\s+Line|'
+    r'Partita|Giocata|Commento|Reazione|Reaction\s+ita|Dal\s+vivo|Streaming\s+ora|'
+    r'Migliori\s+momenti|Highlights\s+live|Torneo|Guida\s+completa|'
+    
+    # --- TECH, REVIEWS & SHOPPING ---
+    r'Unboxing|Review|Hands-on|Benchmark|Comparison|Specs|Tech\s+News|Setup|'
+    r'Hardware|Software\s+Tutorial|How\s?to\s+Install|Step\s+by\s+Step|Buying\s+Guide|'
+    r'Recensione|Prova|Test|Recensione\s+Onesta|Confronto|Loquendo'
+    r'Cosa\s+ne\s+penso|Consigli\s+per\s+gli\s+acquisti|Scheda\s+Video|'
+    
+    # --- LIFESTYLE, VLOGS & TRENDS ---
+    r'Vlog|Daily\s+Routine|GRWM|Get\s+Ready\s+With\s+Me|Haul|Q&A|'
+    r'Ask\s+Me\s+Anything|Lifestyle|Life\s+Updates|Day\s+in\s+the\s+life|Travel\s+Diary|'
+    r'La\s+mia\s+routine|Cosa\s+mangio|Vlog\s+ita|Viaggio\s+a|Domande\s+e\s+risposte|'
+    r'Le\s+mie\s+opinioni|Draw\s+my\s+life\s+ita|Challenge\s+ita|'
+    
+    # --- OFFICIAL MEDIA, TV & NEWS ---
+    r'Official\s+Music\s+Video|Lyric\s+Video|Sountrack|OST|Official\s+Trailer|Teaser\s+Trailer|'
+    r'Full\s+Episode|News\s+Report|Breaking\s+News|Press\s+Conference|'
+    r'Short\s+Film|Behind\s+the\s+Scenes|BTS|Making\s+of|'
+    r'Puntata\s+intera|Episodio\s+completo|Film\s+completo|Versione\s+integrale|'
+    r'Video\s+ufficiale|Audio\s+ufficiale|Sigla|Testo\s+canzone|Trailer\s+italiano|'
+    r'Servizio|Conferenza\s+stampa|Reportage|'
+    
+    # --- EDUCATION & TUTORIAL ---
+    r'Lecture|Webinar|Course|Seminar|Presentation|Keynote|Workshop|'
+    r'Tutorial\s+for\s+beginners|Masterclass|Podcast\s+Episode|TED\s?Talk|'
+    r'Tutorial\s+ita|Come\s+fare|Spiegazione|Lezione|Corso\s+di|'
+    
+    # --- MISC NON-POOP ---
+    r'ASMR|Meditation|Workout|Fitness\s+Routine|Recipe|Cooking\s+Class|DIY\s+Crafts|'
+    r'Fai\s+da\s+te'
+    r')'
 )
 
 DEFAULT_SITE_DIR = "./site_mirror"
@@ -1239,19 +1278,9 @@ def download_video(video_id, output_dir, yt_format, rate_limit,
 
 # ── Interactive phases ────────────────────────────────────────────────────────
 
-def do_update_index(index, site_dir):
-    scanner = Scanner(site_dir)
-    scan_cache = ScanCache(index.video_dir)
-    scan_cache.load()
-    cached_count = len(scan_cache.data)
-    if cached_count:
-        print(f"  Scan cache: {cached_count} pages already processed — will skip them.")
-
-    print("  Scanning HTML pages for YouTube links...")
-    new_count = scanner.scan_sections(index, scan_cache=scan_cache, save_fn=index.save)
-    index.save()
-    scan_cache.save()
-    print(f"  Scan cache saved → {os.path.abspath(scan_cache.filepath)}")
+def do_update_index(index):
+    # Skip scanning HTML pages as they are already scraped
+    print("  Skipping HTML scan (all pages already scraped).")
 
     removed = index.remove_disallowed_channels()
     if removed:
@@ -1259,7 +1288,7 @@ def do_update_index(index, site_dir):
         index.save()
 
     st = index.stats()
-    print(f"  Total videos in index: {st['total']}  (new this run: {new_count})")
+    print(f"  Total videos in index: {st['total']}")
     print()
 
     need_meta = [vid for vid in index.data if index.needs_metadata(vid)]
@@ -2253,9 +2282,9 @@ def main():
     print()
     print("  What do you want to do?")
     print()
-    print("  1  Update YT video index")
-    print("       Scan HTML pages for links, then fetch title /")
-    print("       description / channel URL / tags from YouTube.")
+    print("  1  Fetch missing metadata")
+    print("       Fetch missing title / description / channel URL /")
+    print("       tags from YouTube for all videos in index.")
     print()
     print("  2  Download indexed videos")
     print("       Download all pending videos in the index.")
@@ -2306,7 +2335,7 @@ def main():
     index.load()
 
     if choice in ("1"):
-        do_update_index(index, args.site_dir)
+        do_update_index(index)
         print()
     if choice in ("2"):
         do_download(index, args.video_dir, args.format, args.rate_limit, args.retry_failed)

@@ -64,7 +64,7 @@ function banVideos(videoIds, videoIndexPath, excludedVideosPath, videosDir) {
 
     // 3. Remove from index
     delete index[id];
-    
+
     results.deleted.push(id);
   }
 
@@ -87,8 +87,8 @@ module.exports = {
 if (require.main === module) {
   const ids = process.argv.slice(2);
   const vIndex = path.join(__dirname, 'docs', 'video_index.json');
-  const vExcl  = path.join(__dirname, 'excluded_videos.json');
-  const vDir   = path.join(__dirname, 'videos');
+  const vExcl = path.join(__dirname, 'excluded_videos.json');
+  const vDir = path.join(__dirname, 'videos');
 
   if (ids.length > 0) {
     // CLI Mode: Ban specific IDs
@@ -107,7 +107,7 @@ if (require.main === module) {
 
     const server = http.createServer((req, res) => {
       const url = new URL(req.url, `http://localhost:${PORT}`);
-      
+
       // Serve Manager HTML
       if (url.pathname === '/' || url.pathname === '/video_manager') {
         const p = path.join(__dirname, 'video_manager', 'video_manager.html');

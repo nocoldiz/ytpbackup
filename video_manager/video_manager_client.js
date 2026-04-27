@@ -4,7 +4,10 @@ let allVideos = [];
 let filteredVideos = [];
 let selectedIds = new Set();
 let currentPage = 1;
+let filterNonYtp = false;
 const PAGE_SIZE = 100;
+
+const NON_YTP_KEYWORDS = /Walkthrough|Playthrough|Let's\s+Play|Gameplay|Longplay|No\s+Commentary|Speedrun|Boss\s+Fight|Achievement\s+Guide|Trophy\s+Guide|100%\s+Completion|Quest\s+Line|Partita|Giocata|Commento|Reazione|Reaction\s+ita|Dal\s+vivo|Streaming\s+ora|Migliori\s+momenti|Highlights\s+live|Torneo|Guida\s+completa|Unboxing|Review|Hands-on|Benchmark|Comparison|Specs|Tech\s+News|Setup|Hardware|Software\s+Tutorial|How\s?to\s+Install|Step\s+by\s+Step|Buying\s+Guide|Recensione|Prova|Test|Recensione\s+Onesta|Confronto|Loquendo|Cosa\s+ne\s+penso|Consigli\s+per\s+gli\s+acquisti|Scheda\s+Video|Vlog|Daily\s+Routine|GRWM|Get\s+Ready\s+With\s+Me|Haul|Q&A|Ask\s+Me\s+Anything|Lifestyle|Life\s+Updates|Day\s+in\s+the\s+life|Travel\s+Diary|La\s+mia\s+routine|Cosa\s+mangio|Vlog\s+ita|Viaggio\s+a|Domande\s+e\s+risposte|Le\s+mie\s+opinioni|Draw\s+my\s+life\s+ita|Challenge\s+ita|Official\s+Music\s+Video|Lyric\s+Video|Sountrack|OST|Official\s+Trailer|Teaser\s+Trailer|Full\s+Episode|News\s+Report|Breaking\s+News|Press\s+Conference|Short\s+Film|Behind\s+the\s+Scenes|BTS|Making\s+of|Puntata\s+intera|Episodio\s+completo|Film\s+completo|Versione\s+integrale|Video\s+ufficiale|Audio\s+ufficiale|Sigla|Testo\s+canzone|Trailer\s+italiano|Servizio|Conferenza\s+stampa|Reportage|Lecture|Webinar|Course|Seminar|Presentation|Keynote|Workshop|Tutorial\s+for\s+beginners|Masterclass|Podcast\s+Episode|TED\s?Talk|Tutorial\s+ita|Come\s+fare|Spiegazione|Lezione|Corso\s+di|ASMR|Meditation|Workout|Fitness\s+Routine|Recipe|Cooking\s+Class|DIY\s+Crafts|Fai\s+da\s+te/i;
 
 // ─── LOADING ─────────────────────────────────────────────────────────────
 fetch('/docs/video_index.json')
@@ -26,6 +29,13 @@ function setupEventListeners() {
   document.getElementById('search-input').addEventListener('input', () => { currentPage = 1; applyFilters(); });
   document.getElementById('filter-status').addEventListener('change', () => { currentPage = 1; applyFilters(); });
   document.getElementById('filter-section').addEventListener('change', () => { currentPage = 1; applyFilters(); });
+  
+  document.getElementById('btn-filter-non-ytp').addEventListener('click', e => {
+    filterNonYtp = !filterNonYtp;
+    e.target.classList.toggle('active', filterNonYtp);
+    currentPage = 1;
+    applyFilters();
+  });
   
   document.getElementById('select-all').addEventListener('change', e => {
     const isChecked = e.target.checked;
@@ -62,6 +72,7 @@ function applyFilters() {
     }
     if (status && v.status !== status) return false;
     if (section && !(v.sections || []).includes(section)) return false;
+    if (filterNonYtp && !NON_YTP_KEYWORDS.test(v.title || '')) return false;
     return true;
   });
 

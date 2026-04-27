@@ -39,6 +39,22 @@
     .select-col { width: 40px; text-align: center; }
     input[type="checkbox"] { transform: scale(1.2); }
     
+    .btn-filter {
+      background: var(--bg-secondary, #f8f9fa);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .btn-filter.active {
+      background: #007bff;
+      color: white;
+      border-color: #0056b3;
+    }
+    
     /* Adapt some index.html styles that might be missing or scoped */
     #video-table { width: 100%; border-collapse: collapse; }
     .page { display: block !important; }
@@ -64,6 +80,7 @@
     
     <div class="search-bar">
       <input type="text" id="search-input" placeholder="Search title, channel, tags, thread, description, video ID...">
+      <button id="btn-filter-non-ytp" class="btn-filter">Non-YTP Keywords</button>
       <select id="filter-status">
         <option value="">All statuses</option>
         <option value="available">Available</option>
