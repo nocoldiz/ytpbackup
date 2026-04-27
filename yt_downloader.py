@@ -196,12 +196,12 @@ CHANNEL_KEYWORDS = re.compile(
     
     # --- YTPITA (ITALIAN) ---
     r'|matteo\s+montesi|avventure|Zeb|Collegio|Bigazzi|Soccer|Ganon|Billy\s+Mays|Branduardi|Luigi|Ambrogio|Risotto|ariete|Harry\s+potter|Round|Peppa|Grylls|Tennis|Acid|Favij|Testoh|Pingu'
-    r'|Dipr[eè]|Bello\s+Figo|Germano|Grillo|Gesù|Nabbo|Yotobi|He[\s-]?Man|Gourmet|The\s+king|Berlusconi|Muniz|Travaglio|Nemesis|Testo|Papa|Jack\s+Black|Super\s+Quark|Iscritti|YTM|YTG|MLG|YTK'
-    r'|Sentence\s+Mix|Ear\s?rape|G-Major|Mondo\s+emo|Sparta\s+Remix|Scad|Stutter|Patrick|Pubblicità|Spot|Spongebob|Reverse|Masking|Pitch\s+Shift'
+    r'|Dipr[eè]|Bello\s+Figo|Germano|Grillo|Gesù|Nabbo|Yotobi|Berlusconi|Muniz|Travaglio|Nemesis|Testo|Papa|Super\s+Quark|Iscritti|YTM|YTG|MLG|YTK'
+    r'|Sentence\s+Mix|Ear\s?rape|G-Major|Mondo\s+emo|Pubblicità|Spot|Spongebob|Reverse|Masking|Pitch\s+Shift'
     r'|Mosconi|Benson|Brumotti|Master\s?chef|Mister\s+Lui|Pappalardo|Sgarbi|Razzi|Salvini|Renzi|Rio\s+mare|Gerry\s+Scotti|Fazio'
     r'|Kabu|Nocoldiz|Poldo|Cloroformio|Giannino|Gianni\s+Morandi|Doraemon|Me\s+cont[ro]o\s+Te'
     # --- GLOBAL & ENGLISH CLASSICS ---
-    r'|Pingas|CD-i|Morshu|Mah\s+Boi|Weegee|Spadinner|Michael\s+Rosen|Viacom|Skooks|Flex\s+Tape|Phil\s+Swift|Slap\s+Chop|Hotel\s+Mario|Hank\s+Hill|King\s+Harkinian|Zelda\s+CD-i'
+    r'|Pingas|CD-i|Morshu|Mah\s+Boi|He[\s-]?Man|Sparta\s+Remix|Scad|Stutter|Patrick|Jack\s+Black|Gourmet|The\s+king|Weegee|Spadinner|Michael\s+Rosen|Viacom|Skooks|Flex\s+Tape|Phil\s+Swift|Slap\s+Chop|Hotel\s+Mario|Hank\s+Hill|King\s+Harkinian|Zelda\s+CD-i'
     # --- YTPH (SPANISH) ---
     r'|YTPH|Chavo\s+del\s+8|Loquendo|Pelea\s+de\s+invalidos|Vete\s+a\s+la\s+Versh|Pooppa[ñn]ol'
     # --- YTP FR (FRENCH) ---
@@ -293,7 +293,7 @@ def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, 
     new_entries = 0
     for chan_url in channels_list:
         base_url = chan_url.split('/featured')[0].split('/videos')[0]
-        print(f"[*] Scraping channel: {base_url}")
+        print(f"[*] Scraping channel: {base_url}",flush=True)
         
         cmd = ["yt-dlp", "--flat-playlist", "--print", "%(id)s|%(title)s|%(upload_date)s", base_url]
         try:
@@ -314,7 +314,7 @@ def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, 
                             thread_title=v_title
                         )
                         new_entries += 1
-                        print(f"    [Found] Match: {v_title}")
+                        print(f"    [Found] Match: {v_title}", flush=True)
                         
                         # Save every 10 new entries
                         if new_entries % 10 == 0:
@@ -349,6 +349,8 @@ def do_download_by_section(index, video_dir, yt_format, rate_limit):
         print(f"{i}) {section}")
     
     try:
+        # Using flush=False for input prompts is usually fine, 
+        # but the main logs need it.
         choice = int(input("\nSelect section number to download: ")) - 1
         if choice < 0 or choice >= len(SCAN_SECTIONS):
             print("Invalid selection.")
@@ -359,7 +361,6 @@ def do_download_by_section(index, video_dir, yt_format, rate_limit):
         return
 
     # Filter pending videos that belong to this section
-    # Note: index.data[v_id]['sections'] is a list in your script
     to_download = []
     for v_id, info in index.data.items():
         if info.get("status") == "pending":
@@ -370,41 +371,52 @@ def do_download_by_section(index, video_dir, yt_format, rate_limit):
         print(f"\n[!] No pending videos found for section: {selected_section}")
         return
 
-    print(f"\n>>> Found {len(to_download)} videos to download in '{selected_section}'.")
+    # Flush here so you see the total count before downloads start
+    print(f"\n>>> Found {len(to_download)} videos to download in '{selected_section}'.", flush=True)
 
     download_count = 0
     for v_id, info in to_download:
-        print(f"[*] [{selected_section}] Downloading: {info.get('title', 'Unknown Title')} [{v_id}]")
+        print(f"[*] [{selected_section}] Downloading: {info.get('title', 'Unknown Title')} [{v_id}]", flush=True)
         
-        # Reusing the script's logic: update status to 'downloading'
+        # 1. Resolve the channel folder (Fix starts here)
+        ch_name = info.get("channel_name")
+        folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
+        out_dir = os.path.join(video_dir, folder_name)
+        
+        # Ensure the directory exists
+        os.makedirs(out_dir, exist_ok=True)
+        
+        # 2. Update out_tmpl to use the channel subfolder
+        out_tmpl = os.path.join(out_dir, "%(title)s [%(id)s].%(ext)s")
+        
         info["status"] = "downloading"
-        
-        # Perform the actual download (logic matching your do_download_youtube)
         success = False
-        out_tmpl = os.path.join(video_dir, "%(title)s [%(id)s].%(ext)s")
-        cmd = ["yt-dlp", "-f", yt_format, "-o", out_tmpl, "--no-playlist", "--quiet", "--no-warnings"]
+        cmd = ["yt-dlp", "-f", yt_format, "-o", out_tmpl, "--no-playlist", "--quiet", "--no-warnings"]        
         if rate_limit:
             cmd += ["--rate-limit", rate_limit]
         cmd.append(f"https://www.youtube.com/watch?v={v_id}")
 
         try:
+            # subprocess.run waits for yt-dlp to finish. 
+            # Once it returns, the next print will fire.
             subprocess.run(cmd, check=True)
             info["status"] = "downloaded"
             success = True
-            print(f"    [SUCCESS] Finished: {v_id}")
+            # Added flush=True: Displays "Finished" as soon as yt-dlp exits
+            print(f"    [SUCCESS] Finished: {v_id}", flush=True)
         except subprocess.CalledProcessError:
             info["status"] = "failed"
-            print(f"    [FAILED] Error downloading {v_id}")
+            print(f"    [FAILED] Error downloading {v_id}", flush=True)
 
         download_count += 1
         
         # Save index every 10 entries
         if download_count % 10 == 0:
             index.save()
-            print(f"    [LOG] Auto-saved progress ({download_count}/{len(to_download)})")
+            print(f"    [LOG] Auto-saved progress ({download_count}/{len(to_download)})", flush=True)
 
     index.save() # Final save
-    print(f"\n>>> Section '{selected_section}' batch complete.")
+    print(f"\n>>> Section '{selected_section}' batch complete.", flush=True)
 # ── Video Index ───────────────────────────────────────────────────────────────
 
 class VideoIndex:
@@ -953,7 +965,7 @@ def do_download(index, video_dir, yt_format, rate_limit, retry_failed):
             if status == "ok":
                 rel = os.path.relpath(local_file, ".") if local_file else None
                 index.set_downloaded(vid, rel, dl_title)
-                print(f"  ✓ {os.path.basename(local_file or '')}")
+                print(f"  ✓ {os.path.basename(local_file or '')}", flush=True)
                 ok_count += 1
             elif status == "exists":
                 if not index.is_done(vid):
