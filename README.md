@@ -39,7 +39,7 @@ ytpbackup/
     └── … (one folder per section)
 ```
 ---
-<img width="1669" height="901" alt="immagine" src="https://github.com/user-attachments/assets/2500efb3-0919-4868-b82a-1d4d7b393810" />
+<img width="1857" height="898" alt="immagine" src="https://github.com/user-attachments/assets/79f8f5b2-ccb3-419e-b268-35e533229e56" />
 
 ## Dashboard Server
 
@@ -59,6 +59,7 @@ npm start
 Runs on [http://localhost:3000](http://localhost:3000) by default.
 
 ---
+<img width="1669" height="901" alt="immagine" src="https://github.com/user-attachments/assets/2500efb3-0919-4868-b82a-1d4d7b393810" />
 
 ## Forum Server
 
