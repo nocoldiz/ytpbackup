@@ -1338,7 +1338,7 @@ function renderVideoItem(v, mode = 'list') {
         ${dur ? `<span class="video-time">${escHtml(dur)}</span>` : ''}
       </a>
       <div class="video-info">
-        <a href="?v=${v.id}" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${starBadge}${escHtml(title)}</a>
+        <a href="watch?v=${v.id}" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${starBadge}${escHtml(title)}</a>
         <div class="video-meta" style="display:flex; align-items:center; gap:6px;">
           <img src="${avatar}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
           <div style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
@@ -1359,7 +1359,7 @@ function renderVideoItem(v, mode = 'list') {
         </a>
       </div>
       <div class="yt-list-info">
-        <a href="?v=${v.id}" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="yt-list-title">${starBadge}${escHtml(title)}</a>
+        <a href="watch?v=${v.id}" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="yt-list-title">${starBadge}${escHtml(title)}</a>
         ${desc ? `<div class="yt-list-desc">${escHtml(desc)}</div>` : ''}
         <div class="yt-list-meta">
           <span class="yt-stars">${renderStars(v.view_count)}</span>
@@ -1588,8 +1588,8 @@ function renderTable(append = false) {
       // Determine the title to display, falling back to the first thread title if v.title is missing
       const fallbackTitle = (v.thread_titles && v.thread_titles[0]) ? v.thread_titles[0] : null;
       const titleContent = v.title
-        ? `<a href="?v=${v.id}">${escHtml(v.title)}</a>`
-        : (fallbackTitle ? `<a href="?v=${v.id}" onclick="event.preventDefault();"><em>${escHtml(fallbackTitle)}</em></a>` : `<span class="vid-id">${v.id}</span>`);
+        ? `<a href="watch?v=${v.id}" onclick="event.preventDefault(); openVideo('${v.id}')">${escHtml(v.title)}</a>`
+        : (fallbackTitle ? `<a href="watch?v=${v.id}" onclick="event.preventDefault(); openVideo('${v.id}')"><em>${escHtml(fallbackTitle)}</em></a>` : `<span class="vid-id">${v.id}</span>`);
 
       const playAction = (v.status === 'downloaded' && v.local_file)
         ? `<a class="btn-play" href="${getLocalVideoPath(v)}" target="_blank" title="Play local file">▶</a>`
@@ -1654,7 +1654,7 @@ function renderTable(append = false) {
         ${checkbox}
         ${facadeHtml}
         <div class="vid-card-info">
-          <a href="?v=${v.id}" onclick="event.preventDefault(); openVideo('${v.id}')" class="vid-card-title" title="${escAttr(titleText)}">${escHtml(titleText)}</a>
+          <a href="watch?v=${v.id}" onclick="event.preventDefault(); openVideo('${v.id}')" class="vid-card-title" title="${escAttr(titleText)}">${escHtml(titleText)}</a>
           <a href="${v.channel_url || '#'}" target="_blank" class="vid-card-ch">${escHtml(chText)}</a>
           <div class="vid-card-meta">
             ${viewsText ? `<span>${viewsText}</span>` : ''}
@@ -1759,7 +1759,7 @@ function selectChannel(name) {
       : '';
 
     return `<tr>
-      <td class="title-cell"><a href="${v.url}" target="_blank" style="color:var(--text);text-decoration:none">${escHtml(v.title || v.id)}</a></td>
+      <td class="title-cell"><a href="watch?v=${v.id}" onclick="event.preventDefault(); openVideo('${v.id}')" style="color:var(--text);text-decoration:none">${escHtml(v.title || v.id)}</a></td>
       <td>${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
       <td title="${v.status || '-'}">${getStatusEmoji(v.status)}</td>
       <td class="num">${fmtNum(v.view_count)}</td>
@@ -2013,7 +2013,7 @@ function selectYear(year) {
 function yrTableRows(videos, field) {
   return videos.map((v, i) => `<tr>
     <td style="color:var(--text-muted)">${i + 1}</td>
-    <td><a href="${v.url}" target="_blank" style="color:var(--text);text-decoration:none">${escHtml((v.title || v.id).slice(0, 40))}${(v.title || v.id).length > 40 ? '…' : ''}</a></td>
+    <td><a href="watch?v=${v.id}" onclick="event.preventDefault(); openVideo('${v.id}')" style="color:var(--text);text-decoration:none">${escHtml((v.title || v.id).slice(0, 40))}${(v.title || v.id).length > 40 ? '…' : ''}</a></td>
     <td class="num">${fmtNum(v[field])}</td>
   </tr>`).join('');
 }
