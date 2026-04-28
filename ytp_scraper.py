@@ -6,7 +6,7 @@ Scans YTP nostrane / YTP fai da te forum pages for YouTube links,
 fetches video description + channel info from YouTube, then downloads.
 
 Requirements:
-    pip install yt-dlp beautifulsoup4 lxml
+    pip install yt-dlp beautifulsoup4 lxml requests
 """
 
 import os
@@ -20,6 +20,8 @@ import subprocess
 import argparse
 import datetime
 import urllib.request
+import tempfile
+import requests
 from pathlib import Path
 
 from bs4 import BeautifulSoup
@@ -1275,23 +1277,20 @@ class VideoIndex:
       }
     }
     """
-
     def __init__(self, video_dir, docs_dir=None):
         self.video_dir = video_dir
-        # Store video_index.json in docs/ for the web visualizer
         self.docs_dir = docs_dir or DEFAULT_DOCS_DIR
         self.filepath = os.path.join(self.docs_dir, "video_index.json")
         self.data = {}
         self.actually_excluded_ids = set()
         self.sources_ids = set()
-        self.excluded_ids = set() # Combined for compatibility
+        self.excluded_ids = set() 
         self.load_excluded()
 
     def load_excluded(self):
         self.actually_excluded_ids = set()
         self.sources_ids = set()
         
-        # 1. Load excluded_videos.json from docs dir
         excl_path = os.path.join(self.docs_dir, "excluded_videos.json")
         if os.path.exists(excl_path):
             try:
@@ -1304,7 +1303,6 @@ class VideoIndex:
             except Exception as e:
                 print(f"  [!] Error loading {excl_path}: {e}")
         
-        # 2. Load sources_index.json from docs dir
         src_path = os.path.join(self.docs_dir, "sources_index.json")
         if os.path.exists(src_path):
             try:
@@ -1315,24 +1313,22 @@ class VideoIndex:
             except Exception as e:
                 print(f"  [!] Error loading {src_path}: {e}")
         
-        # Update combined set
         self.excluded_ids = self.actually_excluded_ids | self.sources_ids
 
     def load(self):
         if os.path.exists(self.filepath):
-            with open(self.filepath, encoding="utf-8") as f:
-                self.data = json.load(f)
-            self.cleanup_index()
+            try:
+                with open(self.filepath, encoding="utf-8") as f:
+                    self.data = json.load(f)
+                self.cleanup_index()
+            except json.JSONDecodeError as e:
+                print(f"\n[CRITICAL ERROR] Failed to load {self.filepath}! File is corrupted. Error: {e}")
+                sys.exit(1) # Halt immediately to prevent overwriting with a blank dictionary
 
     def cleanup_index(self):
-        """
-        Removes excluded videos.
-        """
         to_remove = []
-
         for vid, e in list(self.data.items()):
             self._fix_channel_name(e)
-            # 1. Check if video is actually excluded (blacklist)
             if vid in self.actually_excluded_ids:
                 to_remove.append(vid)
 
@@ -1346,15 +1342,13 @@ class VideoIndex:
     def save(self):
         try:
             os.makedirs(self.docs_dir, exist_ok=True)
-            # 1. Save full index (indent=2 for readability/local use)
-            path = Path(self.filepath).resolve()
-            with open(path, "w", encoding="utf-8") as f:
-                json.dump(self.data, f, separators=(',', ':'), ensure_ascii=False)
+            
+            # 1. Save full index atomically
+            atomic_save(self.data, self.filepath)
 
-            # 2. Save Lite Web Index (minified, only essential fields for browsing/search)
+            # 2. Save Lite Web Index with a DIFFERENT FILENAME
             lite_data = {}
             for vid, meta in self.data.items():
-                # We keep fields used for filtering and the grid view
                 lite_data[vid] = {
                     k: v for k, v in meta.items()
                     if v is not None and k in [
@@ -1364,26 +1358,23 @@ class VideoIndex:
                     ]
                 }
             
-            lite_path = Path(self.docs_dir) / "video_index.json"
-            with open(lite_path, "w", encoding="utf-8") as f:
-                json.dump(lite_data, f, separators=(',', ':'), ensure_ascii=False)
+            # FIX: Changed from video_index.json to video_index_lite.json
+            lite_path = os.path.join(self.docs_dir, "video_index_lite.json")
+            atomic_save(lite_data, lite_path)
 
-            # 3. Save individual detail files for on-demand loading
-            videos_dir = Path(self.docs_dir) / "videos"
-            videos_dir.mkdir(exist_ok=True)
+            # 3. Save individual detail files (Standard save is usually fine here, but atomic is safer)
+            videos_dir = os.path.join(self.docs_dir, "videos")
+            os.makedirs(videos_dir, exist_ok=True)
             for vid, meta in self.data.items():
-                detail_path = videos_dir / f"{vid}.json"
-                # Compact version (no nulls)
+                detail_path = os.path.join(videos_dir, f"{vid}.json")
                 compact_meta = {k: v for k, v in meta.items() if v is not None}
-                with open(detail_path, "w", encoding="utf-8") as f:
-                    json.dump(compact_meta, f, separators=(',', ':'), ensure_ascii=False)
+                atomic_save(compact_meta, detail_path)
                     
         except Exception as e:
             print(f"\n  [!] Error saving optimized indices to {self.docs_dir}: {e}")
 
     def add_video(self, video_id, section, nickname=None, channel_url=None):
         if video_id in self.actually_excluded_ids:
-            # Skip only hard-blacklisted videos during scanning
             return
 
         if video_id not in self.data:
@@ -1413,14 +1404,11 @@ class VideoIndex:
         self._fix_channel_name(e)
 
     def _fix_channel_name(self, e):
-        """Extract channel_name from channel_url if name is missing."""
         if not e.get("channel_name") and e.get("channel_url"):
             url = e["channel_url"]
             url_clean = url.split("?")[0].rstrip("/")
             extracted = None
             if "/@" in url_clean:
-                extracted = url_clean.split("/@")[-1]
-            elif "/@" in url_clean:
                 extracted = url_clean.split("/@")[-1]
             elif "/c/" in url_clean:
                 extracted = url_clean.split("/c/")[-1]
@@ -1430,16 +1418,10 @@ class VideoIndex:
 
     def needs_metadata(self, video_id):
         e = self.data.get(video_id, {})
-        
-        # Don't try to fetch data for videos we know are dead/removed
         if e.get("status") == "unavailable":
             return False
-            
-        # Catch known yt-dlp error artifact
         if e.get("title") == "warnings.warn(":
             return True
-            
-        # Check if ANY of the primary metadata or stats fields are missing (None)
         return (e.get("title") is None or
                 e.get("description") is None or
                 e.get("channel_name") is None or
@@ -1449,27 +1431,19 @@ class VideoIndex:
                 e.get("like_count") is None)
 
     def set_metadata(self, video_id, title=None, description=None,
-                     channel_name=None, channel_url=None,
-                     publish_date=None, view_count=None, like_count=None, tags=None):
+                    channel_name=None, channel_url=None,
+                    publish_date=None, view_count=None, like_count=None, tags=None):
         if video_id not in self.data:
             return
         e = self.data[video_id]
-        if title:
-            e["title"] = title
-        if description is not None:
-            e["description"] = description
-        if channel_name:
-            e["channel_name"] = channel_name
-        if channel_url:
-            e["channel_url"] = channel_url
-        if publish_date is not None:
-            e["publish_date"] = publish_date
-        if view_count is not None:
-            e["view_count"] = view_count
-        if like_count is not None:
-            e["like_count"] = like_count
-        if tags is not None:
-            e["tags"] = tags
+        if title: e["title"] = title
+        if description is not None: e["description"] = description
+        if channel_name: e["channel_name"] = channel_name
+        if channel_url: e["channel_url"] = channel_url
+        if publish_date is not None: e["publish_date"] = publish_date
+        if view_count is not None: e["view_count"] = view_count
+        if like_count is not None: e["like_count"] = like_count
+        if tags is not None: e["tags"] = tags
         self._fix_channel_name(e)
 
     def is_done(self, vid):
@@ -1510,12 +1484,10 @@ class VideoIndex:
 
     def remove_disallowed_channels(self):
         to_remove = [vid for vid, e in self.data.items()
-                     if is_disallowed_channel(e.get("channel_name"))]
+                    if is_disallowed_channel(e.get("channel_name"))]
         for vid in to_remove:
             del self.data[vid]
         return len(to_remove)
-
-
 # ── Scan Cache ───────────────────────────────────────────────────────────────
 
 class ScanCache:
@@ -1688,17 +1660,10 @@ def fetch_yt_metadata(video_id):
 # ── Downloader ────────────────────────────────────────────────────────────────
 
 def save_sources_index(index, sources_data):
-    """
-    Saves sources_index.json in three formats for optimization:
-    1. Full sources_index.json
-    2. Lite sources_index.json (for main web search)
-    3. Individual sources/[id].json (for detail fetching)
-    """
     try:
         src_path = os.path.join(index.docs_dir, "sources_index.json")
         # 1. Full index
-        with open(src_path, "w", encoding="utf-8") as f:
-            json.dump(sources_data, f, separators=(',', ':'), ensure_ascii=False)
+        atomic_save(sources_data, src_path)
 
         # 2. Lite Index
         lite_data = {}
@@ -1712,9 +1677,9 @@ def save_sources_index(index, sources_data):
                 ]
             }
         
-        lite_path = os.path.join(index.docs_dir, "sources_index.json")
-        with open(lite_path, "w", encoding="utf-8") as f:
-            json.dump(lite_data, f, separators=(',', ':'), ensure_ascii=False)
+        # FIX: Changed to sources_index_lite.json
+        lite_path = os.path.join(index.docs_dir, "sources_index_lite.json")
+        atomic_save(lite_data, lite_path)
 
         # 3. Individual files
         sources_dir = os.path.join(index.docs_dir, "sources")
@@ -1722,11 +1687,10 @@ def save_sources_index(index, sources_data):
         for vid, meta in sources_data.items():
             detail_path = os.path.join(sources_dir, f"{vid}.json")
             compact_meta = {k: v for k, v in meta.items() if v is not None}
-            with open(detail_path, "w", encoding="utf-8") as f:
-                json.dump(compact_meta, f, separators=(',', ':'), ensure_ascii=False)
+            atomic_save(compact_meta, detail_path)
+            
     except Exception as e:
         print(f"  [!] Error saving sources_index: {e}")
-
 def download_video(video_id, output_dir, yt_format, rate_limit,
                    current_num, total_num):
     """
@@ -2148,7 +2112,23 @@ def do_download_youtube(index, video_dir, yt_format, rate_limit, retry_failed, l
     print(f"  Failed:      {err_count}  (re-run to retry)")
     print(f"  Index:       {os.path.abspath(index.filepath)}")
 
-
+def atomic_save(data, filepath):
+    """Safely saves JSON data using a temporary file to prevent corruption."""
+    dir_name = os.path.dirname(os.path.abspath(filepath))
+    os.makedirs(dir_name, exist_ok=True)
+    
+    # Create a temporary file
+    fd, tmp_path = tempfile.mkstemp(dir=dir_name, text=True)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(data, f, separators=(',', ':'), ensure_ascii=False)
+        # Atomically replace the target file (works on Windows & Unix)
+        os.replace(tmp_path, filepath)
+    except Exception as e:
+        # Clean up the temp file if something went wrong before the replace
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+        raise e
 def do_download_italian(index, video_dir, yt_format, rate_limit, retry_failed, year_limit=2030):
     def is_italian(e):
         # Must match keywords
@@ -3163,6 +3143,179 @@ def do_full_download_parallel():
     print("\n>>> All processes launched.")
 
 
+def do_scrape_single_url(index, url, args):
+    vid = extract_video_id(url)
+    if not vid:
+        print(f"  [!] Invalid YouTube URL: {url}")
+        return
+
+    print(f"\n>>> Scraping single video: {url}")
+    meta = fetch_yt_metadata(vid)
+    if not meta:
+        print(f"  [!] Could not fetch metadata for {vid} (or video is unavailable).")
+        return
+    if meta == "unavailable":
+        print(f"  [!] Video is unavailable.")
+        return
+
+    title = meta.get("title", "")
+    description = meta.get("description", "")
+    is_ytp = bool(CHANNEL_KEYWORDS.search(title) or CHANNEL_KEYWORDS.search(description))
+
+    if is_ytp:
+        print(f"  [+] Match found! Adding to video_index.json")
+        index.add_video(vid, "Single Scrape", channel_url=meta['channel_url'])
+        index.set_metadata(vid, **meta)
+        index.save()
+
+        ch_name = meta.get("channel_name")
+        folder_name = safe_filename(ch_name) if ch_name else "Unknown Channel"
+        out_dir = os.path.join(args.video_dir, folder_name)
+        print(f"  [*] Downloading to: {out_dir}")
+        status, local_file, dl_title = download_video(vid, out_dir, args.format, args.rate_limit, 1, 1)
+        if status in ("ok", "exists"):
+            rel = os.path.relpath(local_file, ".") if local_file else None
+            index.set_downloaded(vid, rel, dl_title)
+            print(f"  ✓ Downloaded: {os.path.basename(local_file or '')}")
+        else:
+            index.set_failed(vid)
+            print("  ✗ Download failed.")
+        index.save()
+    else:
+        print(f"  [-] No match. Adding to sources_index.json")
+        src_path = os.path.join(index.docs_dir, "sources_index.json")
+        sources_data = {}
+        if os.path.exists(src_path):
+            try:
+                with open(src_path, encoding="utf-8") as f:
+                    sources_data = json.load(f)
+            except json.JSONDecodeError as e:
+                # FIX: Catch JSON corruption instead of wiping the file
+                print(f"  [CRITICAL ERROR] {src_path} is corrupted! Aborting to prevent data loss. Error: {e}")
+                return
+            except Exception:
+                sources_data = {}
+        
+        if vid not in sources_data:
+            sources_data[vid] = {
+                "url": canonical_yt_url(vid),
+                "sections": ["Single Scrape"],
+                "status": "pending"
+            }
+        
+        e = sources_data[vid]
+        for k, v in meta.items():
+            if v is not None:
+                e[k] = v
+        
+        save_sources_index(index, sources_data)
+        print(f"  ✓ Saved to sources_index.json")
+
+    # 1. Scrape comments
+    print(f"  [*] Scraping comments...")
+    comments_dir = os.path.join(args.docs_dir, "comments")
+    os.makedirs(comments_dir, exist_ok=True)
+    comment_file = os.path.join(comments_dir, f"{vid}.json")
+    
+    try:
+        r = subprocess.run(
+            ["yt-dlp", "--dump-single-json", "--write-comments",
+             "--no-warnings", "--socket-timeout", "30", url],
+            capture_output=True, text=True, timeout=120,
+        )
+        if r.returncode == 0 and r.stdout.strip():
+            raw = next((l for l in reversed(r.stdout.splitlines()) if l.strip().startswith("{")), None)
+            if raw:
+                d = json.loads(raw)
+                comments = d.get("comments") or []
+                for c in comments:
+                    if "_time_text" in c: del c["_time_text"]
+                    if "author_is_verified" in c: del c["author_is_verified"]
+                atomic_save(comments, comment_file) # FIX: Atomic save here too
+                print(f"    [+] Saved {len(comments)} comments.")
+    except Exception as e:
+        print(f"    [!] Failed to scrape comments: {e}")
+
+    # 2. Scrape channel profile
+    ch_url = meta.get("channel_url")
+    ch_name = meta.get("channel_name")
+    if ch_url:
+        print(f"  [*] Scraping channel profile and thumbnail...")
+        output_path = os.path.join(args.docs_dir, "ytpoopers_index.json")
+        thumb_dir = os.path.join(args.docs_dir, "profile_thumbnails")
+        os.makedirs(thumb_dir, exist_ok=True)
+        
+        existing_profiles = {}
+        if os.path.exists(output_path):
+            try:
+                with open(output_path, encoding="utf-8") as f:
+                    existing_profiles = json.load(f)
+            except json.JSONDecodeError as e:
+                 # FIX: Catch JSON corruption here as well
+                print(f"  [CRITICAL ERROR] {output_path} is corrupted! Aborting profile update to prevent data loss. Error: {e}")
+                return
+            except Exception:
+                existing_profiles = {}
+        
+        try:
+            about_url = ch_url.rstrip("/")
+            about_url = re.sub(r'/(videos|shorts|streams|playlists|about|community|featured)$', '', about_url)
+            
+            r = subprocess.run(
+                ["yt-dlp", "--dump-json", "--playlist-items", "0",
+                 "--no-warnings", "--socket-timeout", "20", about_url],
+                capture_output=True, text=True, timeout=60,
+            )
+            
+            profile = existing_profiles.get(ch_url, {
+                "channel_name": ch_name,
+                "channel_url": ch_url,
+                "description": None,
+                "subscriber_count": None,
+                "creation_date": None,
+                "thumbnail": None,
+            })
+            
+            if r.returncode == 0 and r.stdout.strip():
+                raw = next((l for l in reversed(r.stdout.splitlines()) if l.strip().startswith("{")), None)
+                if raw:
+                    d = json.loads(raw)
+                    profile["channel_name"] = d.get("uploader") or d.get("channel") or ch_name
+                    profile["description"] = d.get("description") or ""
+                    profile["subscriber_count"] = d.get("channel_follower_count")
+                    raw_date = d.get("upload_date")
+                    if raw_date and len(raw_date) == 8:
+                        profile["creation_date"] = f"{raw_date[:4]}-{raw_date[4:6]}-{raw_date[6:]}"
+                    
+                    thumb_url = None
+                    thumbnails = d.get("thumbnails") or []
+                    if thumbnails:
+                        thumb_url = thumbnails[-1].get("url")
+                    if not thumb_url:
+                        for t in (d.get("channel_thumbnails") or []):
+                            thumb_url = t.get("url")
+                    
+                    if thumb_url:
+                        safe_name = re.sub(r'[<>:"/\\|?*]', '_', profile["channel_name"])[:60]
+                        thumb_file = os.path.join(thumb_dir, f"{safe_name}.jpg")
+                        try:
+                            import requests
+                            img_data = requests.get(thumb_url, timeout=30).content
+                            with open(thumb_file, "wb") as f:
+                                f.write(img_data)
+                            profile["thumbnail"] = f"profile_thumbnails/{safe_name}.jpg"
+                        except Exception:
+                            pass
+            
+            existing_profiles[ch_url] = profile
+            atomic_save(existing_profiles, output_path) # FIX: Atomic save
+            print(f"    [+] Updated channel profile and thumbnail.")
+        except Exception as e:
+            print(f"    [!] Failed to scrape channel profile: {e}")
+
+    print(f"\n>>> Single URL scrape complete.")
+
+
 # ── Menu helpers ──────────────────────────────────────────────────────────────
 
 def ask(prompt, choices):
@@ -3209,6 +3362,7 @@ def main():
                    help="Scrape channel profiles and save to docs/ytpoopers_index.json")
     p.add_argument("--download-italian", action="store_true",
                    help="Run option 4 with language 1 (Italian) and exit")
+    p.add_argument("--url",             help="Scrape a single YouTube URL and exit")
     p.add_argument("--year-limit",      type=int, default=2016,
                    help="Limit downloads to videos published until this year (for language mode)")
     args, _ = p.parse_known_args()
@@ -3217,7 +3371,7 @@ def main():
         print(f"[!] site_dir not found: {args.site_dir}")
         sys.exit(1)
 
-    if args.stats or args.chronology or args.dump_poopers or args.find_mirrors or args.scrape_comments or args.scrape_profiles or args.download_italian:
+    if args.stats or args.chronology or args.dump_poopers or args.find_mirrors or args.scrape_comments or args.scrape_profiles or args.download_italian or args.url:
         index = VideoIndex(args.video_dir, args.docs_dir)
         index.load()
         if args.stats:
@@ -3233,6 +3387,8 @@ def main():
             do_scrape_profiles(index, args.docs_dir)
         if args.download_italian:
             do_download_language(index, args.video_dir, args.format, args.rate_limit, args.retry_failed, ITALIAN_CHANNELS, "italian", year_limit=args.year_limit, skip_scan=False)
+        if args.url:
+            do_scrape_single_url(index, args.url, args)
         return
 
     print_header()
@@ -3242,6 +3398,9 @@ def main():
     print(f"  Sections:  {', '.join(SCAN_SECTIONS)}")
     print()
     print("  What do you want to do?")
+    print()
+    print("  0  Scrape single URL")
+    print("       Manually add a video and scrape everything.")
     print()
     print("  1  Fetch missing metadata")
     print("       Fetch missing metadata. Will NOT fetch new videos.")
@@ -3282,8 +3441,8 @@ def main():
     print()
     print("  q  Quit")
     print()
-    choice = ask("  Choice [1-9/s/d/a/q]: ",
-                 {"1","2","3","4","5","6","7","8","9","s","d","a","q"})
+    choice = ask("  Choice [0-9/s/d/a/q]: ",
+                 {"0","1","2","3","4","5","6","7","8","9","s","d","a","q"})
 
     if choice == "q":
         sys.exit(0)
@@ -3292,6 +3451,11 @@ def main():
 
     index = VideoIndex(args.video_dir, args.docs_dir)
     index.load()
+
+    if choice == "0":
+        url = input("  Enter YouTube URL: ").strip()
+        if url:
+            do_scrape_single_url(index, url, args)
 
     if choice == "1":
         print("\nSelect what metadata to fetch:")

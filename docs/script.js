@@ -26,7 +26,7 @@ function toggleVideoMode() {
 
   const txt = currentVideoMode === "all" ? "Show all videos" :
     currentVideoMode === "ytp" ? "Show YTP videos" :
-      "Show sources videos";
+      "Show other videos";
 
   document.querySelectorAll('.btn-video-mode').forEach(btn => btn.textContent = txt);
 
