@@ -10,7 +10,7 @@ const PAGE_SIZE = 50;
 let selectedChannel = null;
 let selectedSection = null;
 let charts = {};
-
+let globalMaxYear = new Date().getFullYear();
 let currentVideoMode = "all"; // "all", "ytp", "sources"
 let sourceChannels = new Set();
 
@@ -47,10 +47,16 @@ function getActiveVideos(forHome = false) {
     return allVideos.filter(v => !v.channel_name || !sourceChannels.has(v.channel_name));
   }
 
-  if (currentVideoMode === "sources") {
-    return all.filter(v => allSources.includes(v) || (v.channel_name && sourceChannels.has(v.channel_name)));
-  }
-  return all;
+  const currentYear = new Date().getFullYear();
+
+  // Apply global year limit strictly
+  return baseList.filter(v => {
+    if (!v.publish_date) {
+      // Only allow videos with unknown dates if the filter is set to the present year
+      return globalMaxYear === currentYear;
+    }
+    return parseInt(v.publish_date.slice(0, 4)) <= globalMaxYear;
+  });
 }
 
 let renderedHomeVideoIds = new Set();
@@ -65,7 +71,29 @@ function shuffleArray(array) {
   }
   return arr;
 }
+function setGlobalMaxYear(year) {
+  globalMaxYear = parseInt(year);
 
+  // Re-render active views
+  if (document.getElementById('page-youtube').classList.contains('active')) renderHomePage();
+  if (document.getElementById('page-videos').classList.contains('active')) applyFilters();
+  if (document.getElementById('page-search').classList.contains('active')) {
+    const q = document.getElementById('global-search-input').value.trim();
+    if (q) performSearch(q);
+  }
+  if (document.getElementById('page-channels').classList.contains('active')) renderChannelGrid();
+
+  // Reload profile if open
+  if (document.getElementById('page-profile').classList.contains('active')) {
+    const url = new URL(window.location);
+    let user = url.searchParams.get('user') || url.searchParams.get('c') || url.searchParams.get('channel');
+    if (!user && url.pathname.startsWith('/@')) user = url.pathname.slice(2);
+    if (!user && (url.pathname.startsWith('/user/') || url.pathname.startsWith('/c/') || url.pathname.startsWith('/channel/'))) {
+      user = url.pathname.split('/')[2];
+    }
+    if (user) openProfile(decodeURIComponent(user), false);
+  }
+}
 document.getElementById('fileInput').addEventListener('change', e => {
   const files = Array.from(e.target.files);
   loadMultipleFiles(files);
@@ -237,7 +265,20 @@ function initApp(vRaw, sRaw, pRaw) {
   renderChannelGrid();
   renderYearGrid();
   buildFirstUploadCache();
+  const yearSelector = document.getElementById('global-year-selector');
+  if (yearSelector) {
+    const yearsSet = new Set([...(allVideos || []), ...(allSources || [])].map(v => v.publish_date ? parseInt(v.publish_date.slice(0, 4)) : null).filter(Boolean));
+    const minYear = Math.min(...Array.from(yearsSet)) || 2005;
+    const currentYear = new Date().getFullYear();
+    globalMaxYear = currentYear;
 
+    let optionsHtml = '';
+    for (let y = currentYear; y >= minYear; y--) {
+      optionsHtml += `<option value="${y}">${y}</option>`;
+    }
+    yearSelector.innerHTML = optionsHtml;
+    yearSelector.value = globalMaxYear;
+  }
   if (appMode === 'videos') {
     renderHomePage();
   }
@@ -790,7 +831,7 @@ async function openVideo(vidId, pushToHistory = true) {
       }
     } catch (e) {
       console.error("Error loading video details:", e);
-      v.description = 'Error loading metadata.';
+      v.description = 'No metadata avaliable.';
     }
   }
 
@@ -803,7 +844,7 @@ async function openVideo(vidId, pushToHistory = true) {
     <img src="${avatar}" alt="Avatar" onclick="openProfile('${escAttr(channel)}')" style="cursor:pointer; border-radius:50%;">
     <div style="flex:1">
       <div id="watch-channel" style="font-weight:bold; cursor:pointer; font-size:1.1rem" onclick="openProfile('${escAttr(channel)}')">${escHtml(channel)}</div>
-      <div id="watch-date" style="font-size:0.85rem; color:var(--text-muted)">${v.publish_date ? v.publish_date.slice(0, 10) : ''}</div>
+      <div id="watch-date" style="font-size:0.85rem; color:var(--text-muted)">${fmtDate(v.publish_date)}</div>
     </div>
   `;
 
@@ -831,7 +872,12 @@ async function openVideo(vidId, pushToHistory = true) {
 
   const moreContainer = document.getElementById('more-from-channel');
   if (moreContainer) {
-    const moreVids = ytData.filter(x => x.channel_name === v.channel_name && x.id !== v.id).slice(0, 5);
+    const currentYear = new Date().getFullYear();
+    const moreVids = ytData.filter(x => {
+      if (x.channel_name !== v.channel_name || x.id === v.id) return false;
+      if (!x.publish_date) return globalMaxYear === currentYear;
+      return parseInt(x.publish_date.slice(0, 4)) <= globalMaxYear;
+    }).slice(0, 5);
     moreContainer.innerHTML = moreVids.map(x => renderVideoItem(x, 'list')).join('');
   }
   updateSaveButton(vidId);
@@ -1008,6 +1054,11 @@ function openProfile(user, pushToHistory = true) {
   const ytData = [...allVideos, ...allSources];
   const avatar = getChannelAvatar(user);
   const userVideos = ytData.filter(v => v.channel_name === user);
+  // Apply global year limit
+  userVideos = userVideos.filter(v => {
+    if (!v.publish_date) return true;
+    return parseInt(v.publish_date.slice(0, 4)) <= globalMaxYear;
+  });
   const sorted = [...userVideos].sort((a, b) => {
     return (b.publish_date || '').localeCompare(a.publish_date || '');
   });
@@ -1020,7 +1071,7 @@ function openProfile(user, pushToHistory = true) {
         <div id="profile-stats" style="margin-top:8px; color:var(--text-muted); line-height:1.4;">
           <strong>${userVideos.length}</strong> videos • 
           <strong>${fmtNum(userVideos.reduce((sum, v) => sum + (v.view_count || 0), 0))}</strong> total views<br>
-          Joined: ${sorted.length > 0 && sorted[sorted.length - 1].publish_date ? sorted[sorted.length - 1].publish_date.slice(0, 10) : 'Unknown'}
+          Joined: ${sorted.length > 0 && sorted[sorted.length - 1].publish_date ? fmtDate(sorted[sorted.length - 1].publish_date) : 'Unknown'}
         </div>
       </div>
     </div>
@@ -1240,7 +1291,7 @@ window.addEventListener('scroll', () => {
 function renderModernHomeCard(v) {
   const fallbackTitle = (v.thread_titles && v.thread_titles[0]) ? v.thread_titles[0] : null;
   const titleText = v.title || fallbackTitle || v.id;
-  const dateText = v.publish_date ? v.publish_date.slice(0, 10) : 'Unknown Date';
+  const dateText = v.publish_date ? fmtDate(v.publish_date) : 'Unknown Date';
   const viewsText = v.view_count != null ? fmtNum(v.view_count) + ' views' : '';
   const chText = v.channel_name || '-';
   const thumbUrl = `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`;
@@ -1463,7 +1514,11 @@ function applyFilters() {
 
   const queryTokens = q ? tokenize(q) : [];
   const hasQuery = queryTokens.length > 0;
-
+  // Apply global year limit
+  const validData = currentData.filter(v => {
+    if (!v.publish_date) return true;
+    return parseInt(v.publish_date.slice(0, 4)) <= globalMaxYear;
+  });
   // Score all videos if there's a query, then apply hard filters
   let scored = currentData.map(v => ({
     video: v,
@@ -1613,7 +1668,7 @@ function renderTable(append = false) {
               </div>
             ` : '-'}
           </td>
-          <td data-label="Date">${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
+          <td data-label="Date">${fmtDate(v.publish_date)}</td>
           <td data-label="Status" title="${v.status || '-'}">${getStatusEmoji(v.status)}</td>
           <td data-label="Lang" title="${v.language || '-'}">${getLanguageFlag(v.language)}</td>
           <td class="num" data-label="Views">${fmtNum(v.view_count)}</td>
@@ -1632,7 +1687,7 @@ function renderTable(append = false) {
       const statusClass = 'status-' + (v.status || 'unavailable');
       const fallbackTitle = (v.thread_titles && v.thread_titles[0]) ? v.thread_titles[0] : null;
       const titleText = v.title || fallbackTitle || v.id;
-      const dateText = v.publish_date ? v.publish_date.slice(0, 10) : 'Unknown Date';
+      const dateText = v.publish_date ? fmtDate(v.publish_date) : 'Unknown Date';
       const viewsText = v.view_count != null ? fmtNum(v.view_count) + ' views' : '';
       const chText = v.channel_name || '-';
 
@@ -1691,6 +1746,7 @@ function renderPagination(total) {
 function buildChannelData() {
   const map = {};
   allVideos.forEach(v => {
+    if (v.publish_date && parseInt(v.publish_date.slice(0, 4)) > globalMaxYear) return; // Ignore future videos
     const ch = v.channel_name;
     if (!ch) return;
     if (!map[ch]) map[ch] = { name: ch, url: v.channel_url, videos: [], totalViews: 0, totalLikes: 0, firstYear: null };
@@ -1760,7 +1816,7 @@ function selectChannel(name) {
 
     return `<tr>
       <td class="title-cell"><a href="watch?v=${v.id}" onclick="event.preventDefault(); openVideo('${v.id}')" style="color:var(--text);text-decoration:none">${escHtml(v.title || v.id)}</a></td>
-      <td>${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
+      <td>${fmtDate(v.publish_date)}</td>
       <td title="${v.status || '-'}">${getStatusEmoji(v.status)}</td>
       <td class="num">${fmtNum(v.view_count)}</td>
       <td class="num">${fmtNum(v.like_count)}</td>
@@ -2173,6 +2229,11 @@ function pieOpts() {
 
 // ─── UTILS ────────────────────────────────────────────────────────────────
 function fmtNum(n) { return n == null ? '-' : n.toLocaleString(); }
+function fmtDate(s) {
+  if (!s) return '-';
+  const d = new Date(s);
+  return isNaN(d.getTime()) ? s.slice(0, 10) : d.toLocaleDateString();
+}
 function fmtBig(n) {
   if (n == null) return '-';
   if (n >= 1e9) return (n / 1e9).toFixed(1) + 'B';
@@ -2294,7 +2355,7 @@ let ts = {
   msPerPixel: 0,
   centerTime: 0,
   isDragging: false,
-  startY: 0,
+  startX: 0,
   startCenterTime: 0,
   raf: null
 };
@@ -2317,44 +2378,65 @@ function initTimeline() {
   buildFirstUploadCache();
 
   if (!ts.initialized) {
-    const h = container.clientHeight;
-    ts.msPerPixel = (TS_MAX - TS_MIN) / h;
+    const w = container.clientWidth;
+    ts.msPerPixel = (TS_MAX - TS_MIN) / w;
     ts.centerTime = TS_MIN + (TS_MAX - TS_MIN) / 2;
 
     container.addEventListener('wheel', e => {
       e.preventDefault();
-      const factor = e.deltaY > 0 ? 1.15 : 0.87;
-      const rect = container.getBoundingClientRect();
-      const cursorY = e.clientY - rect.top;
-      const pivot = ts.centerTime + (cursorY - rect.height / 2) * ts.msPerPixel;
-      ts.msPerPixel = Math.max(
-        TS_MS_PER_DAY / 150,
-        Math.min((TS_MAX - TS_MIN) / rect.height, ts.msPerPixel * factor)
-      );
-      ts.centerTime = pivot - (cursorY - rect.height / 2) * ts.msPerPixel;
-      clampTimeline(rect.height);
+      // Map vertical scroll to horizontal time movement
+      ts.centerTime += e.deltaY * ts.msPerPixel * 0.8;
+      clampTimeline(container.clientWidth);
       scheduleRender();
     }, { passive: false });
 
+    // Zoom slider logic
+    const zoomSlider = document.getElementById('timeline-zoom-slider');
+    if (zoomSlider) {
+      zoomSlider.addEventListener('input', () => {
+        const w = container.clientWidth;
+        const val = parseFloat(zoomSlider.value); // 0 = zoomed out, 100 = zoomed in
+        const minMs = TS_MS_PER_DAY / 150;
+        const maxMs = (TS_MAX - TS_MIN) / w;
+
+        // Logarithmic zoom for smoother feel
+        const logMin = Math.log(minMs);
+        const logMax = Math.log(maxMs);
+        const logVal = logMax - (val / 100) * (logMax - logMin);
+        ts.msPerPixel = Math.exp(logVal);
+
+        clampTimeline(w);
+        scheduleRender();
+      });
+
+      // Initial slider sync
+      const minMs = TS_MS_PER_DAY / 150;
+      const maxMs = (TS_MAX - TS_MIN) / container.clientWidth;
+      const logMin = Math.log(minMs);
+      const logMax = Math.log(maxMs);
+      const currentLog = Math.log(ts.msPerPixel);
+      zoomSlider.value = ((logMax - currentLog) / (logMax - logMin)) * 100;
+    }
+
     container.addEventListener('mousedown', e => {
-      ts.isDragging = true; ts.startY = e.clientY; ts.startCenterTime = ts.centerTime;
+      ts.isDragging = true; ts.startX = e.clientX; ts.startCenterTime = ts.centerTime;
     });
     window.addEventListener('mousemove', e => {
       if (!ts.isDragging) return;
-      ts.centerTime = ts.startCenterTime - (e.clientY - ts.startY) * ts.msPerPixel;
-      clampTimeline(container.clientHeight);
+      ts.centerTime = ts.startCenterTime - (e.clientX - ts.startX) * ts.msPerPixel;
+      clampTimeline(container.clientWidth);
       scheduleRender();
     });
     window.addEventListener('mouseup', () => { ts.isDragging = false; });
     window.addEventListener('mouseleave', () => { ts.isDragging = false; });
 
-    let lastTY = 0;
-    container.addEventListener('touchstart', e => { lastTY = e.touches[0].clientY; }, { passive: true });
+    let lastTX = 0;
+    container.addEventListener('touchstart', e => { lastTX = e.touches[0].clientX; }, { passive: true });
     container.addEventListener('touchmove', e => {
       e.preventDefault();
-      const dy = e.touches[0].clientY - lastTY; lastTY = e.touches[0].clientY;
-      ts.centerTime -= dy * ts.msPerPixel;
-      clampTimeline(container.clientHeight); scheduleRender();
+      const dx = e.touches[0].clientX - lastTX; lastTX = e.touches[0].clientX;
+      ts.centerTime -= dx * ts.msPerPixel;
+      clampTimeline(container.clientWidth); scheduleRender();
     }, { passive: false });
 
     ts.initialized = true;
@@ -2374,8 +2456,8 @@ function initTimeline() {
   scheduleRender();
 }
 
-function clampTimeline(h) {
-  const half = (h / 2) * ts.msPerPixel;
+function clampTimeline(w) {
+  const half = (w / 2) * ts.msPerPixel;
   ts.centerTime = Math.max(TS_MIN + half, Math.min(TS_MAX - half, ts.centerTime));
 }
 
@@ -2408,9 +2490,7 @@ function getTickConfig(zoom) {
   return {
     start: d => d.setHours(0, 0, 0, 0),
     advance: d => d.setDate(d.getDate() + 1),
-    label: d => d.getDate() === 1
-      ? d.toLocaleString('default', { month: 'short', day: 'numeric' })
-      : String(d.getDate()),
+    label: d => d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }),
     isMajor: d => d.getDate() === 1
   };
 }
@@ -2421,7 +2501,7 @@ function renderTimelineView() {
 
   const W = container.clientWidth;
   const H = container.clientHeight;
-  const half = H / 2;
+  const half = W / 2;
   const startT = ts.centerTime - half * ts.msPerPixel;
   const endT = ts.centerTime + half * ts.msPerPixel;
   const zoom = getZoomLevel();
@@ -2445,52 +2525,52 @@ function renderTimelineView() {
   const majorColor = isDark ? 'rgba(255,255,255,0.20)' : 'rgba(0,0,0,0.20)';
   const labelColor = isDark ? '#aaa' : '#555';
   const majorLabelClr = isDark ? '#eee' : '#111';
-  const AXIS_W = 90;
+  const AXIS_H = 60;
 
-  // Draw axis background
+  // Draw axis background at bottom
   ctx.fillStyle = isDark ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.04)';
-  ctx.fillRect(0, 0, AXIS_W, H);
+  ctx.fillRect(0, H - AXIS_H, W, AXIS_H);
 
   // Draw ticks & labels on canvas
   const cur = new Date(startT);
   cfg.start(cur);
-  let lastLabelY = -999;
+  let lastLabelX = -999;
 
   while (cur.getTime() <= endT) {
-    const yPos = (cur.getTime() - startT) / ts.msPerPixel;
+    const xPos = (cur.getTime() - startT) / ts.msPerPixel;
     const isMaj = cfg.isMajor(cur);
 
     // Grid line
     ctx.beginPath();
-    ctx.moveTo(AXIS_W, yPos);
-    ctx.lineTo(W, yPos);
+    ctx.moveTo(xPos, 0);
+    ctx.lineTo(xPos, H - AXIS_H);
     ctx.strokeStyle = isMaj ? majorColor : gridColor;
     ctx.lineWidth = isMaj ? 1.5 : 0.8;
     ctx.stroke();
 
     // Spine dot
     ctx.beginPath();
-    ctx.arc(AXIS_W + 3, yPos, isMaj ? 4 : 2, 0, Math.PI * 2);
+    ctx.arc(xPos, H - AXIS_H - 3, isMaj ? 4 : 2, 0, Math.PI * 2);
     ctx.fillStyle = isMaj ? (isDark ? '#4af' : '#36c') : (isDark ? '#555' : '#bbb');
     ctx.fill();
 
     // Label (skip if too close to previous)
-    if (yPos - lastLabelY >= TL_MIN_LABEL_PX) {
+    if (xPos - lastLabelX >= TL_MIN_LABEL_PX) {
       const label = cfg.label(cur);
       ctx.font = isMaj ? 'bold 13px sans-serif' : '11px sans-serif';
       ctx.fillStyle = isMaj ? majorLabelClr : labelColor;
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(label, AXIS_W - 8, yPos);
-      lastLabelY = yPos;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillText(label, xPos, H - AXIS_H + 10);
+      lastLabelX = xPos;
     }
 
     cfg.advance(cur);
   }
 
-  // Vertical spine line
+  // Horizontal spine line
   ctx.beginPath();
-  ctx.moveTo(AXIS_W + 1, 0); ctx.lineTo(AXIS_W + 1, H);
+  ctx.moveTo(0, H - AXIS_H - 1); ctx.lineTo(W, H - AXIS_H - 1);
   ctx.strokeStyle = isDark ? '#4af' : '#36c';
   ctx.lineWidth = 2; ctx.stroke();
 
@@ -2522,23 +2602,24 @@ function renderTimelineView() {
   visible.sort((a, b) => a.publish_date.localeCompare(b.publish_date));
 
   const frag = document.createDocumentFragment();
-  const CARD_H = 52;
+  const CARD_W = 240;
+  const CARD_H = 60;
   const placed = [];
 
   visible.forEach(v => {
     const t = new Date(v.publish_date).getTime();
-    const yPos = (t - startT) / ts.msPerPixel;
+    const xPos = (t - startT) / ts.msPerPixel;
     const isMilestone = (v.view_count || 0) >= 10_000_000;
     const isFirst = window.channelFirstUploadIds && window.channelFirstUploadIds.has(v.id);
 
-    let col = 0;
-    while (placed.some(p => p.col === col && Math.abs(p.top - yPos) < CARD_H)) col++;
-    placed.push({ col, top: yPos });
+    let row = 0;
+    while (placed.some(p => p.row === row && Math.abs(p.left - xPos) < CARD_W)) row++;
+    placed.push({ row, left: xPos });
 
     const card = document.createElement('div');
     card.className = 'tl-card' + (isMilestone ? ' tl-milestone' : '') + (isFirst ? ' tl-first' : '');
-    card.style.top = `${Math.round(yPos)}px`;
-    card.style.left = `${AXIS_W + 14 + col * 255}px`;
+    card.style.left = `${Math.round(xPos)}px`;
+    card.style.bottom = `${AXIS_H + 20 + row * CARD_H}px`;
     card.onclick = () => openVideo(v.id);
 
     const views = v.view_count ? fmtNum(v.view_count) + ' views' : '';

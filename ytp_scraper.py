@@ -2463,21 +2463,65 @@ def do_scrape_thumbnails(index, docs_dir):
         os.makedirs(output_folder)
         print(f"  Created folder: {output_folder}/")
         
-    try:
-        with open(input_file, "r", encoding="utf-8") as f:
-            youtubers_data = json.load(f)
-    except FileNotFoundError:
-        print(f"  [!] Error: The file '{input_file}' was not found.")
-        return
-    except json.JSONDecodeError:
-        print(f"  [!] Error: The file '{input_file}' is not a valid JSON file.")
-        return
+    youtubers_data = {}
+    if os.path.exists(input_file):
+        try:
+            with open(input_file, "r", encoding="utf-8") as f:
+                youtubers_data = json.load(f)
+        except json.JSONDecodeError:
+            print(f"  [!] Error: The file '{input_file}' is not a valid JSON file.")
+            return
+    
+    changes_made = False
+
+    # 1. Collect unique channels from the main index (video_index.json)
+    print("  Syncing channels from video_index.json...")
+    for e in index.data.values():
+        ch_url = e.get("channel_url")
+        ch_name = e.get("channel_name")
+        if ch_url and ch_url not in youtubers_data:
+            youtubers_data[ch_url] = {
+                "channel_name": ch_name,
+                "channel_url": ch_url,
+                "description": None,
+                "subscriber_count": None,
+                "creation_date": None,
+                "thumbnail": None,
+            }
+            changes_made = True
+
+    # 2. Collect unique channels from sources_index.json
+    print("  Syncing channels from sources_index.json...")
+    src_path = os.path.join(docs_dir, "sources_index.json")
+    if os.path.exists(src_path):
+        try:
+            with open(src_path, encoding="utf-8") as f:
+                sources_data = json.load(f)
+            for e in sources_data.values():
+                ch_url = e.get("channel_url")
+                ch_name = e.get("channel_name")
+                if ch_url and ch_url not in youtubers_data:
+                    youtubers_data[ch_url] = {
+                        "channel_name": ch_name,
+                        "channel_url": ch_url,
+                        "description": None,
+                        "subscriber_count": None,
+                        "creation_date": None,
+                        "thumbnail": None,
+                    }
+                    changes_made = True
+        except Exception as e:
+            print(f"  [!] Error reading sources_index.json: {e}")
+
+    if changes_made:
+        print(f"  [+] Updated ytpoopers_index.json with new channels.")
+        with open(input_file, "w", encoding="utf-8") as f:
+            json.dump(youtubers_data, f, indent=2, ensure_ascii=False)
+        changes_made = False # Reset for thumbnail tracking
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
     }
-
-    changes_made = False
 
     for url, info in youtubers_data.items():
         # Tag missing profile names from URL if null

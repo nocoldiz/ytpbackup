@@ -2700,13 +2700,13 @@
     position: absolute;
     background: var(--surface2);
     border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 0 6px 6px 0;
-    padding: 5px 9px;
-    max-width: 230px;
+    border-bottom: 3px solid var(--accent);
+    border-radius: 6px 6px 0 0;
+    padding: 6px 10px;
+    width: 230px;
     cursor: pointer;
     z-index: 5;
-    transform: translateY(-50%);
+    transform: translateX(-50%);
     transition: box-shadow 0.12s, border-color 0.12s;
     overflow: hidden;
   }
@@ -2746,7 +2746,7 @@
 
   /* Milestone card (>10M views) */
   .tl-card.tl-milestone {
-    border-left-color: #e65;
+    border-bottom-color: #e65;
     background: color-mix(in srgb, var(--surface2) 92%, #e6553300);
   }
 
@@ -2756,16 +2756,16 @@
 
   /* First upload badge */
   .tl-card.tl-first {
-    border-left-color: gold;
+    border-bottom-color: gold;
   }
 
   /* Dot on spine (::before on tl-card) */
   .tl-card::before {
     content: '';
     position: absolute;
-    left: -8px;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    bottom: -8px;
+    transform: translateX(-50%);
     width: 7px;
     height: 7px;
     border-radius: 50%;
