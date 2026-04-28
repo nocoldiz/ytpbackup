@@ -124,5 +124,5 @@ pip install yt-dlp beautifulsoup4 lxml
 Launch the interactive menu:
 
 ```bash
-python yt_downloader.py
+python ytp_scraper.py
 ```
