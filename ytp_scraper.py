@@ -1266,6 +1266,7 @@ class VideoIndex:
         to_remove = []
 
         for vid, e in list(self.data.items()):
+            self._fix_channel_name(e)
             # 1. Check if video is actually excluded (blacklist)
             if vid in self.actually_excluded_ids:
                 to_remove.append(vid)
@@ -1322,6 +1323,23 @@ class VideoIndex:
             e.setdefault("thread_titles", []).append(thread_title)
         if nickname and not e.get("nickname"):
             e["nickname"] = nickname
+        self._fix_channel_name(e)
+
+    def _fix_channel_name(self, e):
+        """Extract channel_name from channel_url if name is missing."""
+        if not e.get("channel_name") and e.get("channel_url"):
+            url = e["channel_url"]
+            url_clean = url.split("?")[0].rstrip("/")
+            extracted = None
+            if "/@" in url_clean:
+                extracted = url_clean.split("/@")[-1]
+            elif "/user/" in url_clean:
+                extracted = url_clean.split("/user/")[-1]
+            elif "/c/" in url_clean:
+                extracted = url_clean.split("/c/")[-1]
+            
+            if extracted:
+                e["channel_name"] = extracted
 
     def needs_metadata(self, video_id):
         e = self.data.get(video_id, {})
@@ -1365,6 +1383,7 @@ class VideoIndex:
             e["like_count"] = like_count
         if tags is not None:
             e["tags"] = tags
+        self._fix_channel_name(e)
 
     def is_done(self, vid):
         return self.data.get(vid, {}).get("status") in ("downloaded", "unavailable")
@@ -2461,7 +2480,35 @@ def do_scrape_thumbnails(index, docs_dir):
     changes_made = False
 
     for url, info in youtubers_data.items():
+        # Tag missing profile names from URL if null
+        if not info.get("channel_name"):
+            url_clean = url.split("?")[0].rstrip("/")
+            extracted = None
+            if "/@" in url_clean:
+                extracted = url_clean.split("/@")[-1]
+            elif "/user/" in url_clean:
+                extracted = url_clean.split("/user/")[-1]
+            elif "/c/" in url_clean:
+                extracted = url_clean.split("/c/")[-1]
+            
+            if extracted:
+                info["channel_name"] = extracted
+                changes_made = True
+                print(f"  [Tagging] {url} -> {extracted}")
+
         channel_name = info.get("channel_name", "UnknownChannel")
+        
+        # Skip if thumbnail already exists
+        safe_name = "".join(c for c in channel_name if c.isalnum() or c in " _-").strip()
+        filename = f"{safe_name}.jpg"
+        file_path = os.path.join(output_folder, filename)
+        
+        if os.path.exists(file_path):
+            if not info.get("thumbnail"):
+                info["thumbnail"] = filename
+                changes_made = True
+            continue
+
         print(f"  Processing {channel_name}...")
         
         try:
@@ -2475,10 +2522,6 @@ def do_scrape_thumbnails(index, docs_dir):
                 img_url = meta_tag["content"]
                 
                 img_data = requests.get(img_url, headers=headers).content
-                
-                safe_name = "".join(c for c in channel_name if c.isalnum() or c in " _-").strip()
-                filename = f"{safe_name}.jpg"
-                file_path = os.path.join(output_folder, filename)
                 
                 with open(file_path, "wb") as f:
                     f.write(img_data)
@@ -2575,6 +2618,8 @@ def do_auto_languages(index):
     channels_by_lang = defaultdict(set)
 
     for video_id, video in index.data.items():
+        if video.get('language'):
+            continue
         title = video.get('title')
         thread_titles = video.get('thread_titles', [])
         channel_url = video.get('channel_url')
@@ -2830,6 +2875,20 @@ def do_scrape_sources_metadata(index):
             if meta.get("view_count") is not None: e["view_count"] = meta["view_count"]
             if meta.get("like_count") is not None: e["like_count"] = meta["like_count"]
             if meta.get("tags") is not None: e["tags"] = meta["tags"]
+            
+            # Tag missing profile names from URL if null
+            if not e.get("channel_name") and e.get("channel_url"):
+                url = e["channel_url"]
+                url_clean = url.split("?")[0].rstrip("/")
+                extracted = None
+                if "/@" in url_clean:
+                    extracted = url_clean.split("/@")[-1]
+                elif "/user/" in url_clean:
+                    extracted = url_clean.split("/user/")[-1]
+                elif "/c/" in url_clean:
+                    extracted = url_clean.split("/c/")[-1]
+                if extracted:
+                    e["channel_name"] = extracted
 
         if i % 20 == 0:
             with open(src_path, "w", encoding="utf-8") as f:
@@ -2936,7 +2995,7 @@ def do_full_scrape_run(index, args):
     do_scrape_sources_metadata(index)
     create_progressive_backup(index, "step2_metadata")
     
-    print("\nStep 3: Scrape Thumbnails (Option 7)")
+    print("\nStep 3: Scrape Thumbnails and Tag Missing Profiles (Option 7)")
     do_scrape_thumbnails(index, args.docs_dir)
     create_progressive_backup(index, "step3_thumbnails")
     
@@ -3083,7 +3142,7 @@ def main():
     print("  6  Scrape comments")
     print("       Fetch comments for every indexed video in sources_index.json.")
     print()
-    print("  7  Scrape thumbnails")
+    print("  7  Scrape thumbnails and tag missing profiles")
     print("       Download profile pictures for channels in ytpoopers_index.json")
     print()
     print("  8  Auto languages")

@@ -124,7 +124,14 @@ async function autoLoad() {
       if (r.ok || r.status === 400) {
         isServerMode = true;
         console.log("Server mode detected: Management features enabled.");
-        document.getElementById('management-actions').style.display = 'flex';
+        const ma = document.getElementById('management-actions');
+        if (ma) ma.style.display = 'flex';
+        
+        // Show import button and hide help
+        const importBtn = document.getElementById('btn-import');
+        const helpBtn = document.getElementById('btn-help');
+        if (importBtn) importBtn.style.display = 'inline-block';
+        if (helpBtn) helpBtn.style.display = 'none';
       }
     } catch (e) { }
   }
@@ -137,7 +144,7 @@ const ALLOWED_SECTIONS = new Set(["YTP nostrane", "YTP fai da te", "YTPMV dimpor
 const SOURCES_SECTIONS = new Set(["Risorse", "Tutorial per il pooping", "Old Sources"]);
 
 function resetFilters() {
-  const inputs = ['search-input', 'filter-status', 'filter-section', 'filter-channel', 'filter-views-min', 'filter-likes-min', 'filter-year', 'channel-search', 'channel-year-min', 'channel-year-max'];
+  const inputs = ['search-input', 'filter-status', 'filter-section', 'filter-channel', 'filter-views-min', 'filter-likes-min', 'filter-year-min', 'filter-year-max', 'channel-search', 'channel-year-min', 'channel-year-max'];
   inputs.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = (el.tagName === 'SELECT' ? '' : '');
@@ -148,6 +155,7 @@ function resetFilters() {
 
 function initApp(vRaw, sRaw, pRaw) {
   resetFilters();
+  syncSearchLayout();
   if (vRaw) {
     allVideos = Object.entries(vRaw).map(([id, v]) => ({ id, ...v }))
       .filter(v => (v.sections || []).some(s => ALLOWED_SECTIONS.has(s)));
@@ -186,19 +194,21 @@ function initApp(vRaw, sRaw, pRaw) {
   const channels = new Set(allVideos.map(v => v.channel_name).filter(Boolean));
   const sections = new Set(allVideos.flatMap(v => v.sections || []));
 
-  document.getElementById('badge-videos').textContent = totalVideos;
-  document.getElementById('badge-sources').textContent = allSources.length;
-  document.getElementById('badge-channels').textContent = channels.size;
-  document.getElementById('badge-sections').textContent = sections.size;
+  const bV = document.getElementById('badge-videos');
+  if (bV) bV.textContent = totalVideos;
+  const bS = document.getElementById('badge-sources');
+  if (bS) bS.textContent = allSources.length;
+  const bC = document.getElementById('badge-channels');
+  if (bC) bC.textContent = channels.size;
 
   const years = new Set(allVideos.map(v => v.publish_date ? v.publish_date.slice(0, 4) : null).filter(Boolean));
-  document.getElementById('badge-years').textContent = years.size;
+  const bY = document.getElementById('badge-years');
+  if (bY) bY.textContent = years.size;
 
   buildFilterOptions();
   buildOverview();
   applyFilters();
   renderChannelGrid();
-  renderSectionGrid();
   renderYearGrid();
   buildFirstUploadCache();
 
@@ -218,7 +228,6 @@ function handleRouting() {
   let page = params.get('page');
   let videoId = params.get('v');
   let user = params.get('user') || params.get('c') || params.get('channel');
-  let section = params.get('section');
   let query = params.get('q') || params.get('search_query');
 
   // Handle YouTube-style paths
@@ -234,8 +243,6 @@ function handleRouting() {
     page = 'sources';
   } else if (path === '/channels') {
     page = 'channels';
-  } else if (path === '/sections') {
-    page = 'sections';
   } else if (path === '/overview') {
     page = 'overview';
   }
@@ -244,9 +251,6 @@ function handleRouting() {
     openVideo(videoId, false);
   } else if (user) {
     openProfile(user, false);
-  } else if (section) {
-    showPage('sections', false);
-    selectSection(section, false);
   } else if (page) {
     showPage(page, false);
   } else if (query) {
@@ -336,7 +340,24 @@ function toggleThemeMode() {
   const isOld = document.body.classList.toggle('theme-old');
   const btn = document.getElementById('toggle-modern-old');
   if (btn) btn.textContent = isOld ? 'Switch to Modern Mode' : 'Switch to Old Mode';
+  
+  syncSearchLayout();
+
   if (typeof updateVideoLayoutForTheme === 'function') updateVideoLayoutForTheme();
+}
+
+function syncSearchLayout() {
+  const isOld = document.body.classList.contains('theme-old');
+  const searchBar = document.getElementById('masthead-search');
+  if (searchBar) {
+    if (isOld) {
+      const nav = document.getElementById('masthead-nav');
+      if (nav) nav.appendChild(searchBar);
+    } else {
+      const navRight = document.getElementById('masthead-nav-right');
+      if (navRight) navRight.appendChild(searchBar);
+    }
+  }
 }
 
 function toggleNightDay() {
@@ -346,19 +367,129 @@ function toggleNightDay() {
   if (btn) btn.textContent = isLight ? 'Switch to Night Mode' : 'Switch to Day Mode';
 }
 
-document.getElementById('global-search-input').addEventListener('keypress', (e) => {
+let searchDebounceTimer;
+let selectedSuggestionIndex = -1;
+
+function onGlobalSearchInput() {
+  const q = document.getElementById('global-search-input').value.trim();
+  const suggestionsBox = document.getElementById('search-suggestions');
+  
+  if (!q) {
+    suggestionsBox.style.display = 'none';
+    return;
+  }
+
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(() => {
+    const queryTokens = tokenize(q);
+    if (queryTokens.length === 0) return;
+
+    // Search titles and channel names for suggestions
+    const ytData = getActiveVideos(false);
+    
+    // Get unique titles and channel names that match
+    const titleMatches = [];
+    const channelMatches = new Set();
+    
+    for (const v of ytData) {
+      if (scoreField(v.title, queryTokens).score > 0) {
+        titleMatches.push({ text: v.title, type: 'video' });
+      }
+      if (v.channel_name && scoreField(v.channel_name, queryTokens).score > 0) {
+        channelMatches.add(v.channel_name);
+      }
+      if (titleMatches.length > 50) break; // Limit scanning for performance
+    }
+
+    let results = [
+      ...Array.from(channelMatches).map(c => ({ text: c, type: 'channel' })),
+      ...titleMatches
+    ];
+
+    // Remove duplicates
+    const seen = new Set();
+    results = results.filter(r => {
+      const k = r.text.toLowerCase() + r.type;
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+
+    // Sort: channels first, then by match score/length
+    results.sort((a, b) => {
+      if (a.type !== b.type) return a.type === 'channel' ? -1 : 1;
+      return a.text.length - b.text.length;
+    });
+
+    results = results.slice(0, 10);
+
+    if (results.length > 0) {
+      selectedSuggestionIndex = -1;
+      suggestionsBox.innerHTML = results.map((r, i) => `
+        <div class="suggestion-item" onclick="selectSuggestion('${escAttr(r.text)}')">
+          <span class="suggestion-text">${escHtml(r.text)}</span>
+          <span class="suggestion-type">${r.type}</span>
+        </div>
+      `).join('');
+      suggestionsBox.style.display = 'block';
+    } else {
+      suggestionsBox.style.display = 'none';
+    }
+  }, 150);
+}
+
+function selectSuggestion(text) {
+  const input = document.getElementById('global-search-input');
+  input.value = text;
+  document.getElementById('search-suggestions').style.display = 'none';
+  performSearch(text);
+}
+
+document.getElementById('global-search-input').addEventListener('keydown', (e) => {
+  const suggestionsBox = document.getElementById('search-suggestions');
+  const items = suggestionsBox.querySelectorAll('.suggestion-item');
+  
+  if (suggestionsBox.style.display === 'block' && items.length > 0) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
+      updateSuggestionSelection(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
+      updateSuggestionSelection(items);
+    } else if (e.key === 'Escape') {
+      suggestionsBox.style.display = 'none';
+    } else if (e.key === 'Enter' && selectedSuggestionIndex >= 0) {
+      e.preventDefault();
+      items[selectedSuggestionIndex].click();
+      return;
+    }
+  }
+
   if (e.key === 'Enter') {
     const q = e.target.value.trim();
     performSearch(q);
   }
 });
 
-function onGlobalSearch() {
-  const q = document.getElementById('global-search-input').value.trim();
-  if (q.length > 0) {
-    performSearch(q);
+function updateSuggestionSelection(items) {
+  items.forEach((item, i) => {
+    item.classList.toggle('selected', i === selectedSuggestionIndex);
+  });
+  if (selectedSuggestionIndex >= 0) {
+    // Optionally update input as user arrows through, like Google
+    // document.getElementById('global-search-input').value = items[selectedSuggestionIndex].querySelector('.suggestion-text').textContent;
   }
 }
+
+// Hide suggestions on outside click
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-form')) {
+    const box = document.getElementById('search-suggestions');
+    if (box) box.style.display = 'none';
+  }
+});
 
 function getChannelAvatar(channelName) {
   const p = pooperMap[channelName];
@@ -391,6 +522,30 @@ function tokenize(str) {
   return str.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim().split(/\s+/).filter(Boolean);
 }
 
+function levenshtein(a, b) {
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+  const matrix = Array.from({ length: b.length + 1 }, (_, i) => [i]);
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) matrix[i][j] = matrix[i - 1][j - 1];
+      else matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j] + 1);
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+function fuzzyScore(s1, s2) {
+  const maxLen = Math.max(s1.length, s2.length);
+  if (maxLen === 0) return 1.0;
+  const dist = levenshtein(s1, s2);
+  // Allow 1 typo per 4 characters
+  const threshold = Math.floor(maxLen / 4) + 1;
+  if (dist > threshold) return 0;
+  return (maxLen - dist) / maxLen;
+}
+
 /**
  * Score a single field for a set of query tokens.
  * Returns { score, matchedTokens } where matchedTokens is a Set of tokens found.
@@ -404,7 +559,7 @@ function tokenize(str) {
  * Uses BM25-style saturation: tf / (tf + 1) so repeating a word has
  * diminishing returns.
  */
-function scoreField(fieldValue, queryTokens) {
+function scoreField(fieldValue, queryTokens, allowFuzzy = true) {
   if (!fieldValue) return { score: 0, matchedTokens: new Set() };
   const lower = fieldValue.toLowerCase();
   const fieldTokens = tokenize(fieldValue);
@@ -426,15 +581,26 @@ function scoreField(fieldValue, queryTokens) {
     else if (lower.includes(qt)) {
       bestTermScore = 0.6;
     }
+    // 4. Fuzzy / typo match (only for tokens >= 3 chars)
+    else if (allowFuzzy && qt.length >= 3) {
+      let bestFuzzy = 0;
+      for (const ft of fieldTokens) {
+        if (Math.abs(ft.length - qt.length) > 2) continue;
+        const s = fuzzyScore(ft, qt);
+        if (s > bestFuzzy) bestFuzzy = s;
+      }
+      if (bestFuzzy > 0.75) {
+        bestTermScore = bestFuzzy * 0.5; // Lower weight for fuzzy matches
+      }
+    }
 
     if (bestTermScore > 0) {
       matchedTokens.add(qt);
-      // Count how many times this token appears (BM25 saturation)
       let tf = 0;
       for (const ft of fieldTokens) {
         if (ft === qt || ft.startsWith(qt) || ft.includes(qt)) tf++;
       }
-      totalScore += bestTermScore * (tf / (tf + 1));
+      totalScore += bestTermScore * ((tf * 2.2) / (tf + 1.2));
     }
   }
   return { score: totalScore, matchedTokens };
@@ -481,14 +647,21 @@ function scoreVideo(video, queryTokens) {
  * Score a channel name against query tokens for the channel results section.
  */
 function scoreChannel(channelName, queryTokens) {
-  const { score, matchedTokens } = scoreField(channelName, queryTokens);
+  // Stricter matching for channels: fuzzy is okay but needs high coverage
+  const { score, matchedTokens } = scoreField(channelName, queryTokens, true);
   if (score === 0) return 0;
   const coverage = matchedTokens.size / queryTokens.length;
+  
+  // Require at least 50% coverage for channel names to avoid random results
+  if (coverage < 0.5 && queryTokens.length > 1) return 0;
+  
   return score * coverage;
 }
 
 function performSearch(query) {
   if (!query) return;
+  const suggestionsBox = document.getElementById('search-suggestions');
+  if (suggestionsBox) suggestionsBox.style.display = 'none';
 
   // Only switch page if we aren't already on the search results page
   const searchPage = document.getElementById('page-search');
@@ -498,6 +671,14 @@ function performSearch(query) {
 
   document.getElementById('search-query-display').textContent = query;
 
+  // Read advanced filters
+  const fStatus = document.getElementById('search-filter-status')?.value || '';
+  const fSection = document.getElementById('search-filter-section')?.value || '';
+  const fYearMin = document.getElementById('search-filter-year-min')?.value || '';
+  const fYearMax = document.getElementById('search-filter-year-max')?.value || '';
+  const fLang = document.getElementById('search-filter-language')?.value || 'any';
+  const fSort = document.getElementById('search-sort')?.value || 'relevance';
+
   const ytData = getActiveVideos(false);
   const queryTokens = tokenize(query);
   if (queryTokens.length === 0) return;
@@ -506,13 +687,15 @@ function performSearch(query) {
   const allChannels = [...new Set(ytData.map(v => v.channel_name).filter(Boolean))];
   const scoredChannels = allChannels
     .map(c => ({ name: c, score: scoreChannel(c, queryTokens) }))
-    .filter(c => c.score > 0)
+    .filter(c => c.score > 0.1) // Lower threshold to allow valid matches to show up
     .sort((a, b) => b.score - a.score);
 
+  const channelsSection = document.getElementById('search-channels-section');
   const channelsContainer = document.getElementById('search-channels-results');
   if (scoredChannels.length === 0) {
-    channelsContainer.innerHTML = '<p class="empty" style="padding:10px;">No channels found.</p>';
+    if (channelsSection) channelsSection.style.display = 'none';
   } else {
+    if (channelsSection) channelsSection.style.display = 'block';
     channelsContainer.innerHTML = scoredChannels.map(({ name: c }) => {
       const chVideos = ytData.filter(v => v.channel_name === c);
       const totalViews = chVideos.reduce((s, v) => s + (v.view_count || 0), 0);
@@ -533,14 +716,35 @@ function performSearch(query) {
   }
 
   // ── Search Videos ────────────────────────────────────────────────────
-  const scoredVideos = ytData
+  let scoredVideos = ytData
     .map(v => ({ video: v, score: scoreVideo(v, queryTokens) }))
-    .filter(r => r.score > 0)
-    .sort((a, b) => b.score - a.score);
+    .filter(r => r.score > 0);
+
+  // Apply filters
+  scoredVideos = scoredVideos.filter(({ video: v }) => {
+    if (fStatus && v.status !== fStatus) return false;
+    if (fSection && !(v.sections || []).includes(fSection)) return false;
+    
+    const y = v.publish_date ? parseInt(v.publish_date.slice(0, 4)) : null;
+    if (fYearMin && (!y || y < parseInt(fYearMin))) return false;
+    if (fYearMax && (!y || y > parseInt(fYearMax))) return false;
+    
+    if (fLang !== 'any' && (v.language || '').toLowerCase() !== fLang) return false;
+    return true;
+  });
+
+  // Sort
+  if (fSort === 'relevance') {
+    scoredVideos.sort((a, b) => b.score - a.score);
+  } else if (fSort === 'publish_date') {
+    scoredVideos.sort((a, b) => (b.video.publish_date || '').localeCompare(a.video.publish_date || ''));
+  } else if (fSort === 'view_count') {
+    scoredVideos.sort((a, b) => (b.video.view_count || 0) - (a.video.view_count || 0));
+  }
 
   const videosContainer = document.getElementById('search-videos-results');
   if (scoredVideos.length === 0) {
-    videosContainer.innerHTML = '<p class="empty" style="padding:10px;">No videos found.</p>';
+    videosContainer.innerHTML = '<p class="empty" style="padding:10px;">No videos found matching your criteria.</p>';
   } else {
     videosContainer.innerHTML = scoredVideos.slice(0, 50).map(r => renderVideoItem(r.video, 'list')).join('');
   }
@@ -573,12 +777,21 @@ function openVideo(vidId, pushToHistory = true) {
   `;
 
   let desc = v.description || 'No description available.';
-  document.getElementById('watch-description').innerHTML = linkify(escHtml(desc));
+  let tagsHtml = '';
+  if (v.tags && v.tags.length > 0) {
+    const filteredTags = v.tags.filter(t => t.length > 3);
+    if (filteredTags.length > 0) {
+      tagsHtml = '<div class="video-tags-list" style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 10px; display: flex; flex-wrap: wrap; gap: 6px;">' +
+        filteredTags.map(t => `<a href="#" class="tag-pill" style="text-decoration:none; color:var(--accent); background:var(--surface2); padding:4px 10px; border-radius:15px; font-size:0.8rem;" onclick="performSearch('${escAttr(t)}'); return false;">#${escHtml(t)}</a>`).join('') +
+        '</div>';
+    }
+  }
+  document.getElementById('watch-description').innerHTML = linkify(escHtml(desc)) + tagsHtml;
 
   const playerContainer = document.getElementById('watch-player');
   if (v.status === 'downloaded' && v.local_file) {
     const src = getLocalVideoPath(v);
-    playerContainer.innerHTML = `<video controls autoplay style="width:100%; height:390px; background:#000;">
+    playerContainer.innerHTML = `<video controls autoplay style="width:100%; height:100%; background:#000;">
       <source src="${src}" type="video/mp4" onerror="fallbackToYoutube('${v.id}')">
     </video>`;
   } else {
@@ -592,6 +805,7 @@ function openVideo(vidId, pushToHistory = true) {
   }
   updateSaveButton(vidId);
   loadVideoResponses(v);
+  loadRelatedVideos(v);
   loadComments(vidId);
   return false;
 }
@@ -628,6 +842,47 @@ function loadVideoResponses(video) {
   container.innerHTML = `<div class="video-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 10px;">
     ${matched.map(v => renderVideoItem(v, 'grid')).join('')}
   </div>`;
+}
+
+function loadRelatedVideos(video) {
+  const container = document.getElementById('related-videos');
+  if (!container) return;
+  
+  const ytData = [...allVideos, ...allSources];
+  const videoTags = new Set(video.tags || []);
+  const videoSections = new Set(video.sections || []);
+  
+  // Score based on shared sections and tags
+  const scored = ytData
+    .filter(v => v.id !== video.id)
+    .map(v => {
+      let score = 0;
+      if (v.sections) {
+        v.sections.forEach(s => {
+          if (videoSections.has(s)) score += 5;
+        });
+      }
+      if (v.tags) {
+        v.tags.forEach(t => {
+          if (videoTags.has(t)) score += 2;
+        });
+      }
+      // Boost same channel slightly but not too much as they are already in "More from channel"
+      if (v.channel_name === video.channel_name) score += 1;
+      
+      return { video: v, score };
+    })
+    .filter(r => r.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10);
+    
+  if (scored.length === 0) {
+    document.getElementById('related-videos-box').style.display = 'none';
+    return;
+  }
+  
+  document.getElementById('related-videos-box').style.display = 'block';
+  container.innerHTML = scored.map(r => renderVideoItem(r.video, 'list')).join('');
 }
 
 async function loadComments(vidId) {
@@ -989,6 +1244,49 @@ function renderStars(viewCount) {
   ).join('');
 }
 
+// ─── IMPORT LOGIC ──────────────────────────────────────────────────────────
+function openImportModal() {
+  const modal = document.getElementById('import-modal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeImportModal() {
+  const modal = document.getElementById('import-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function submitImport() {
+  const urlsText = document.getElementById('import-urls').value;
+  const target = document.getElementById('import-target').value;
+  
+  if (!urlsText.trim()) {
+    alert("Please enter at least one URL.");
+    return;
+  }
+  
+  // Split by newline, comma, or space
+  const urls = urlsText.split(/[\n,\s]+/).filter(u => u.trim());
+  
+  try {
+    const r = await fetch('/api/import', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ urls, target })
+    });
+    const result = await r.json();
+    
+    if (result.success) {
+      alert(`Successfully added ${result.results.added.length} videos. ${result.results.skipped.length} were skipped (invalid or duplicates).`);
+      closeImportModal();
+      location.reload(); 
+    } else {
+      alert("Error: " + result.error);
+    }
+  } catch (e) {
+    alert("Failed to connect to server.");
+  }
+}
+
 function renderVideoItem(v, mode = 'list') {
   const title = v.title || v.id;
   const channel = v.channel_name || 'Unknown';
@@ -1004,12 +1302,12 @@ function renderVideoItem(v, mode = 'list') {
   if (mode === 'grid') {
     return `
     <div class="video-item grid">
-      <a href="#" onclick="return openVideo('${v.id}')" class="video-thumb">
+      <a href="#" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="video-thumb">
         <img src="${thumbUrl}" alt="" loading="lazy">
         ${dur ? `<span class="video-time">${escHtml(dur)}</span>` : ''}
       </a>
       <div class="video-info">
-        <a href="#" onclick="return openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${starBadge}${escHtml(title)}</a>
+        <a href="#" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${starBadge}${escHtml(title)}</a>
         <div class="video-meta" style="display:flex; align-items:center; gap:6px;">
           <img src="${avatar}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
           <div style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
@@ -1024,13 +1322,13 @@ function renderVideoItem(v, mode = 'list') {
   return `
     <div class="video-item list" onclick="openVideo('${v.id}')" style="cursor:pointer;">
       <div class="yt-list-thumb">
-        <a href="#" onclick="event.stopPropagation();return openVideo('${v.id}')">
+        <a href="#" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')">
           <img src="${thumbUrl}" alt="" loading="lazy">
           ${dur ? `<span class="video-time">${escHtml(dur)}</span>` : ''}
         </a>
       </div>
       <div class="yt-list-info">
-        <a href="#" onclick="event.stopPropagation();return openVideo('${v.id}')" class="yt-list-title">${starBadge}${escHtml(title)}</a>
+        <a href="#" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="yt-list-title">${starBadge}${escHtml(title)}</a>
         ${desc ? `<div class="yt-list-desc">${escHtml(desc)}</div>` : ''}
         <div class="yt-list-meta">
           <span class="yt-stars">${renderStars(v.view_count)}</span>
@@ -1048,8 +1346,12 @@ function renderVideoItem(v, mode = 'list') {
 // ─── FILTER OPTIONS ───────────────────────────────────────────────────────
 function buildFilterOptions() {
   const sectionSel = document.getElementById('filter-section');
+  const sectionSelSearch = document.getElementById('search-filter-section');
   const channelDatalist = document.getElementById('channel-datalist');
-  const yearSel = document.getElementById('filter-year');
+  const yearMinSel = document.getElementById('filter-year-min');
+  const yearMaxSel = document.getElementById('filter-year-max');
+  const yearMinSelSearch = document.getElementById('search-filter-year-min');
+  const yearMaxSelSearch = document.getElementById('search-filter-year-max');
 
   const currentData = appMode === 'sources' ? allSources : allVideos;
 
@@ -1061,27 +1363,26 @@ function buildFilterOptions() {
     .filter(s => s !== 'Risorse' || appMode === 'sources')
     .sort();
 
-  sectionSel.innerHTML = '<option value="">All Sections</option>';
-  sections.forEach(s => {
-    const o = document.createElement('option'); o.value = s; o.textContent = s;
-    sectionSel.appendChild(o);
-  });
+  const secHtml = '<option value="">All Sections</option>' + sections.map(s => `<option value="${s}">${s}</option>`).join('');
+  if (sectionSel) sectionSel.innerHTML = secHtml;
+  if (sectionSelSearch) sectionSelSearch.innerHTML = secHtml;
 
   // 2. Build Channels
   const channels = [...new Set(currentData.map(v => v.channel_name).filter(Boolean))].sort();
-  channelDatalist.innerHTML = '';
-  channels.forEach(c => {
-    const o = document.createElement('option'); o.value = c;
-    channelDatalist.appendChild(o);
-  });
+  if (channelDatalist) {
+    channelDatalist.innerHTML = channels.map(c => `<option value="${c}">`).join('');
+  }
 
   // 3. Build Years
   const years = [...new Set(currentData.map(v => v.publish_date ? v.publish_date.slice(0, 4) : null).filter(Boolean))].sort();
-  yearSel.innerHTML = '<option value="">All Years</option>';
-  years.forEach(y => {
-    const o = document.createElement('option'); o.value = y; o.textContent = y;
-    yearSel.appendChild(o);
-  });
+  
+  const minYearHtml = '<option value="">Min</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
+  const maxYearHtml = '<option value="">Max</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
+  
+  if (yearMinSel) yearMinSel.innerHTML = minYearHtml;
+  if (yearMaxSel) yearMaxSel.innerHTML = maxYearHtml;
+  if (yearMinSelSearch) yearMinSelSearch.innerHTML = minYearHtml;
+  if (yearMaxSelSearch) yearMaxSelSearch.innerHTML = maxYearHtml;
 }
 // ─── FILTERS + TABLE ──────────────────────────────────────────────────────
 let sortField = 'publish_date';
@@ -1123,7 +1424,8 @@ function applyFilters() {
   const channel = document.getElementById('filter-channel').value;
   const viewsMin = parseInt(document.getElementById('filter-views-min').value) || 0;
   const likesMin = parseInt(document.getElementById('filter-likes-min').value) || 0;
-  const year = document.getElementById('filter-year').value;
+  const yearMin = document.getElementById('filter-year-min').value;
+  const yearMax = document.getElementById('filter-year-max').value;
   const langSelect = document.getElementById('filter-language');
   const selectedLangs = Array.from(langSelect.selectedOptions).map(opt => opt.value.toLowerCase());
   const currentData = appMode === 'sources' ? allSources : allVideos;
@@ -1149,7 +1451,11 @@ function applyFilters() {
     if (channel && (!v.channel_name || v.channel_name.toLowerCase() !== channel.toLowerCase())) return false;
     if (viewsMin && (v.view_count || 0) < viewsMin) return false;
     if (likesMin && (v.like_count || 0) < likesMin) return false;
-    if (year && (!v.publish_date || !v.publish_date.startsWith(year))) return false;
+    
+    const y = v.publish_date ? parseInt(v.publish_date.slice(0, 4)) : null;
+    if (yearMin && (!y || y < parseInt(yearMin))) return false;
+    if (yearMax && (!y || y > parseInt(yearMax))) return false;
+
     if (selectedLangs.length > 0 && !selectedLangs.includes("Any".toLocaleLowerCase())) {
       const vidLang = (v.language || "").toLowerCase();
       if (!selectedLangs.includes(vidLang)) return false;
@@ -1285,13 +1591,14 @@ function renderTable(append = false) {
           </td>
           <td data-label="Date">${v.publish_date ? v.publish_date.slice(0, 10) : '-'}</td>
           <td data-label="Status" title="${v.status || '-'}">${getStatusEmoji(v.status)}</td>
+          <td data-label="Lang" title="${v.language || '-'}">${getLanguageFlag(v.language)}</td>
           <td class="num" data-label="Views">${fmtNum(v.view_count)}</td>
           <td class="num" data-label="Likes">${fmtNum(v.like_count)}</td>
           <td data-label="Section">${sections || '-'}</td>
           <td data-label="Threads">${threads || '-'}</td>
           <td data-label="Actions" onclick="event.stopPropagation();">${playAction} <a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
         </tr>`;
-    }).join('') || (append ? '' : `<tr><td colspan="9" class="empty">No videos match your filters</td></tr>`);
+    }).join('') || (append ? '' : `<tr><td colspan="10" class="empty">No videos match your filters</td></tr>`);
 
     if (append) {
       tbody.insertAdjacentHTML('beforeend', html);
@@ -1332,7 +1639,7 @@ function renderTable(append = false) {
             <span>${dateText}</span>
           </div>
           <div class="vid-status-row" title="${v.status || '-'}">
-            ${getStatusEmoji(v.status)}
+            ${getStatusEmoji(v.status)} ${getLanguageFlag(v.language)}
           </div>
         </div>
       </div>`;
@@ -1506,69 +1813,7 @@ function selectChannel(name) {
   }, 50);
 }
 
-// ─── SECTIONS ─────────────────────────────────────────────────────────────
-function buildSectionData() {
-  const map = {};
-  allVideos.forEach(v => {
-    (v.sections || []).forEach(s => {
-      if (!map[s]) map[s] = { name: s, videos: [], totalViews: 0 };
-      map[s].videos.push(v);
-      map[s].totalViews += v.view_count || 0;
-    });
-  });
-  return Object.values(map).sort((a, b) => b.videos.length - a.videos.length);
-}
-
-function renderSectionGrid() {
-  const sections = buildSectionData();
-  document.getElementById('section-grid').innerHTML = sections.map(s => `
-    <div class="section-card${selectedSection === s.name ? ' selected' : ''}" onclick="selectSection('${escAttr(s.name)}')">
-      <h4>${escHtml(s.name)}</h4>
-      <div class="s-count">${s.videos.length}</div>
-      <div class="s-sub">${fmtNum(s.totalViews)} total views</div>
-    </div>`).join('');
-}
-
-function selectSection(name, pushToHistory = true) {
-  selectedSection = selectedSection === name ? null : name;
-  if (pushToHistory) {
-    if (selectedSection) updateURL({ section: name }, '/sections');
-    else updateURL({}, '/sections');
-  }
-  renderSectionGrid();
-  const panel = document.getElementById('section-detail-panel');
-  if (!selectedSection) { panel.style.display = 'none'; return; }
-
-  const sec = buildSectionData().find(s => s.name === name);
-  const byYear = {};
-  sec.videos.forEach(v => {
-    const y = v.publish_date ? v.publish_date.slice(0, 4) : 'Unknown';
-    byYear[y] = (byYear[y] || 0) + 1;
-  });
-  const years = Object.keys(byYear).sort();
-
-  panel.style.display = 'block';
-  panel.innerHTML = `<div class="channel-detail" style="border-color:var(--accent2)">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <h3>${escHtml(sec.name)}</h3>
-      <span style="color:var(--text-muted)">${sec.videos.length} videos · ${fmtNum(sec.totalViews)} views</span>
-      <button class="close-btn" onclick="selectedSection=null;document.getElementById('section-detail-panel').style.display='none';renderSectionGrid()">✕ Close</button>
-    </div>
-    <div class="chart-card" style="max-width:600px">
-      <h3>Videos by Year in "${escHtml(sec.name)}"</h3>
-      <canvas id="sec-year-chart" style="max-height:200px"></canvas>
-    </div>
-  </div>`;
-
-  setTimeout(() => {
-    destroyChart('sec-year');
-    charts['sec-year'] = new Chart(document.getElementById('sec-year-chart'), {
-      type: 'bar',
-      data: { labels: years, datasets: [{ label: 'Videos', data: years.map(y => byYear[y]), backgroundColor: PALETTE[1] + 'cc', borderRadius: 6 }] },
-      options: chartOpts('Videos per year')
-    });
-  }, 50);
-}
+// SECTIONS LOGIC REMOVED
 
 // ─── YEARS ────────────────────────────────────────────────────────────────
 let selectedYear = null;
@@ -1591,10 +1836,12 @@ function renderYearGrid() {
   document.getElementById('years-count-label').textContent = `${years.length} years`;
   const maxCount = Math.max(...years.map(y => y.videos.length));
   document.getElementById('year-grid').innerHTML = years.map(y => `
-    <div class="year-card${selectedYear === y.year ? ' selected' : ''}" onclick="selectYear('${y.year}')">
-      <div class="y-year">${y.year}</div>
-      <div class="y-count">${y.videos.length} video${y.videos.length !== 1 ? 's' : ''}</div>
-      <div class="y-bar" style="width:${Math.round(y.videos.length / maxCount * 100)}%"></div>
+    <div class="year-card box${selectedYear === y.year ? ' selected' : ''}" onclick="selectYear('${y.year}')">
+      <div class="box-header" style="text-align:center; padding: 4px;">${y.year}</div>
+      <div class="box-content" style="text-align:center; padding: 10px;">
+        <div class="y-count">${y.videos.length} video${y.videos.length !== 1 ? 's' : ''}</div>
+        <div class="y-bar" style="width:${Math.round(y.videos.length / maxCount * 100)}%"></div>
+      </div>
     </div>`).join('') || `<div class="empty">No dated videos</div>`;
 }
 
@@ -1664,17 +1911,17 @@ function selectYear(year) {
     </div>
 
     <div class="year-charts-grid">
-      <div class="chart-card">
-        <h3>Videos per Month</h3>
-        <canvas id="yr-month-chart" style="max-height:200px"></canvas>
+      <div class="chart-card box">
+        <div class="box-header">Videos per Month</div>
+        <div class="box-content"><canvas id="yr-month-chart" style="max-height:200px"></canvas></div>
       </div>
-      <div class="chart-card">
-        <h3>Status Breakdown</h3>
-        <canvas id="yr-status-chart" style="max-height:200px"></canvas>
+      <div class="chart-card box">
+        <div class="box-header">Status Breakdown</div>
+        <div class="box-content"><canvas id="yr-status-chart" style="max-height:200px"></canvas></div>
       </div>
-      <div class="chart-card">
-        <h3>Top Creators</h3>
-        <canvas id="yr-creators-chart" style="max-height:200px"></canvas>
+      <div class="chart-card box">
+        <div class="box-header">Top Creators</div>
+        <div class="box-content"><canvas id="yr-creators-chart" style="max-height:200px"></canvas></div>
       </div>
     </div>
 
@@ -1686,22 +1933,26 @@ function selectYear(year) {
 
     <div class="charts-row cols2" style="margin-bottom:0">
       ${allByViews.length ? `
-      <div class="chart-card top-videos-year">
-        <h3>Top by Views <span style="font-size:.75rem;color:var(--text-muted);text-transform:none;letter-spacing:0">(${allByViews.length} total)</span></h3>
-        <div class="table-wrap"><table>
-          <thead><tr><th>#</th><th>Title</th><th>Views</th></tr></thead>
-          <tbody id="yr-views-tbody">${yrTableRows(topByViews, 'view_count')}</tbody>
-        </table></div>
-        ${allByViews.length > 5 ? `<div style="text-align:center;margin-top:10px"><button class="src-expand-btn" id="yr-views-btn" onclick="expandYearTable('views')">Show all ${allByViews.length} ▼</button></div>` : ''}
+      <div class="chart-card box top-videos-year">
+        <div class="box-header">Top by Views <span style="font-size:.75rem;color:var(--text-muted);text-transform:none;letter-spacing:0">(${allByViews.length} total)</span></div>
+        <div class="box-content">
+          <div class="table-wrap"><table>
+            <thead><tr><th>#</th><th>Title</th><th>Views</th></tr></thead>
+            <tbody id="yr-views-tbody">${yrTableRows(topByViews, 'view_count')}</tbody>
+          </table></div>
+          ${allByViews.length > 5 ? `<div style="text-align:center;margin-top:10px"><button class="src-expand-btn" id="yr-views-btn" onclick="expandYearTable('views')">Show all ${allByViews.length} ▼</button></div>` : ''}
+        </div>
       </div>` : ''}
       ${allByLikes.length ? `
-      <div class="chart-card top-videos-year">
-        <h3>Top by Likes <span style="font-size:.75rem;color:var(--text-muted);text-transform:none;letter-spacing:0">(${allByLikes.length} total)</span></h3>
-        <div class="table-wrap"><table>
-          <thead><tr><th>#</th><th>Title</th><th>Likes</th></tr></thead>
-          <tbody id="yr-likes-tbody">${yrTableRows(topByLikes, 'like_count')}</tbody>
-        </table></div>
-        ${allByLikes.length > 5 ? `<div style="text-align:center;margin-top:10px"><button class="src-expand-btn" id="yr-likes-btn" onclick="expandYearTable('likes')">Show all ${allByLikes.length} ▼</button></div>` : ''}
+      <div class="chart-card box top-videos-year">
+        <div class="box-header">Top by Likes <span style="font-size:.75rem;color:var(--text-muted);text-transform:none;letter-spacing:0">(${allByLikes.length} total)</span></div>
+        <div class="box-content">
+          <div class="table-wrap"><table>
+            <thead><tr><th>#</th><th>Title</th><th>Likes</th></tr></thead>
+            <tbody id="yr-likes-tbody">${yrTableRows(topByLikes, 'like_count')}</tbody>
+          </table></div>
+          ${allByLikes.length > 5 ? `<div style="text-align:center;margin-top:10px"><button class="src-expand-btn" id="yr-likes-btn" onclick="expandYearTable('likes')">Show all ${allByLikes.length} ▼</button></div>` : ''}
+        </div>
       </div>` : ''}
     </div>
   </div>`;
@@ -1923,10 +2174,22 @@ function fmtBig(n) {
   return String(n);
 }
 function getStatusEmoji(status) {
-  if (status === 'downloaded' || status === 'available') return '🟢';
-  if (status === 'pending') return '🟡';
-  if (status === 'unavailable') return '🔴';
-  return '⚪';
+  if (status === 'downloaded') return '✅';
+  if (status === 'unavailable') return '❌';
+  return '⏳';
+}
+
+function getLanguageFlag(lang) {
+  if (!lang) return '-';
+  const maps = {
+    'english': '🇬🇧',
+    'italian': '🇮🇹',
+    'spanish': '🇪🇸',
+    'russian': '🇷🇺',
+    'french': '🇫🇷',
+    'german': '🇩🇪'
+  };
+  return maps[lang.toLowerCase()] || '🌐';
 }
 // ─── TIMELINE ─────────────────────────────────────────────────────────────
 function renderTimeline() {
@@ -2396,18 +2659,32 @@ async function bulkAction(type) {
   const ids = Array.from(checks).map(cb => cb.getAttribute('data-id'));
 
   if (ids.length === 0) return alert("Select at least one video.");
-  if (!confirm(`Are you sure you want to ${type === 'ban' ? 'BAN' : 'FLAG AS SOURCE'} ${ids.length} videos?`)) return;
 
-  const endpoint = type === 'ban' ? '/api/ban' : '/api/flag-source';
+  let body = { videoIds: ids };
+  let endpoint = '';
+
+  if (type === 'ban') {
+    if (!confirm(`Are you sure you want to BAN ${ids.length} videos?`)) return;
+    endpoint = '/api/ban';
+  } else if (type === 'flag-source') {
+    if (!confirm(`Are you sure you want to FLAG AS SOURCE ${ids.length} videos?`)) return;
+    endpoint = '/api/flag-source';
+  } else if (type === 'set-lang') {
+    const lang = document.getElementById('mgmt-lang-select').value;
+    if (!lang) return alert("Please select a language.");
+    if (!confirm(`Set language to ${lang} for ${ids.length} videos?`)) return;
+    endpoint = '/api/set-lang';
+    body.language = lang;
+  }
+
   try {
     const r = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ videoIds: ids })
+      body: JSON.stringify(body)
     });
     const res = await r.json();
     if (res.success) {
-      alert("Action completed successfully. Reloading data...");
       location.reload();
     } else {
       alert("Error: " + (res.error || "Unknown error"));

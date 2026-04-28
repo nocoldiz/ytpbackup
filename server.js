@@ -128,6 +128,56 @@ function flagAsSource(videoIds, videoIndexPath, sourcesIndexPath) {
   }
 }
 
+/**
+ * Imports a list of YT URLs into the specified index.
+ */
+function importVideos(urls, target, videoIndexPath, sourcesIndexPath) {
+  const filePath = target === 'sources' ? sourcesIndexPath : videoIndexPath;
+  let index = {};
+  try {
+    if (fs.existsSync(filePath)) {
+      index = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    }
+  } catch (err) {
+    return { success: false, error: 'Failed to read index' };
+  }
+
+  const results = { added: [], skipped: [] };
+  
+  for (let url of urls) {
+    url = url.trim();
+    if (!url) continue;
+    
+    // Extract ID from YT URL
+    const match = url.match(/(?:v=|vi\/|shorts\/|be\/|embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if (!match) {
+      results.skipped.push(url);
+      continue;
+    }
+    
+    const id = match[1];
+    if (index[id]) {
+      results.skipped.push(url);
+      continue;
+    }
+    
+    index[id] = {
+      id: id,
+      url: `https://www.youtube.com/watch?v=${id}`,
+      status: 'available',
+      sections: ['Imported']
+    };
+    results.added.push(id);
+  }
+
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(index, null, 2));
+    return { success: true, results };
+  } catch (err) {
+    return { success: false, error: 'Failed to save changes' };
+  }
+}
+
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.js':   'application/javascript',
@@ -215,6 +265,24 @@ function onRequest(req, res) {
       try {
         const { videoIds } = JSON.parse(body);
         const result = flagAsSource(videoIds, VIDEO_INDEX, SOURCES_INDEX);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+
+  // ── API: Import Videos ───────────────────────────────────────────────────
+  if (pathname === '/api/import' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const { urls, target } = JSON.parse(body);
+        const result = importVideos(urls, target, VIDEO_INDEX, SOURCES_INDEX);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(result));
       } catch (err) {
