@@ -12,8 +12,12 @@ Check data and analytics breakdown here
 
 ```text
 ytpbackup/
-├── scraper.py          # Downloads forum sections, index pages, threads
-├── yt_downloader.py    # Scans for YouTube links and downloads videos
+├── scripts/
+│   ├── forum_scraper.py    # Downloads forum sections, index pages, threads
+│   ├── ytp_scraper.py      # Scans for YouTube links and downloads videos
+│   ├── compress_videos.py  # Video compression tool
+│   └── compress_pages.py   # HTML compression tool
+
 ├── server.js           # Main router & Dashboard server
 ├── server_forum.js     # Legacy Forum Mirror logic
 ├── package.json
@@ -113,25 +117,32 @@ playwright install chromium
 
 ```bash
 # Scrape everything
-python scraper.py
+python scripts/forum_scraper.py
+
 
 # Slower pace
-python scraper.py --delay 2.0
+python scripts/forum_scraper.py --delay 2.0
+
 
 # Specific sections only (use --list to see indices)
-python scraper.py --sections 0,1,5
+python scripts/forum_scraper.py --sections 0,1,5
+
 
 # List all sections with their index
-python scraper.py --list
+python scripts/forum_scraper.py --list
+
 
 # Skip image embedding
-python scraper.py --no-embed-images
+python scripts/forum_scraper.py --no-embed-images
+
 
 # Also inline CSS
-python scraper.py --embed-css
+python scripts/forum_scraper.py --embed-css
+
 
 # Scrape a single thread (used internally by the mirror server)
-python scraper.py --sections 3 --thread-url "https://youtubepoopita.forumfree.it/?t=12345678"
+python scripts/forum_scraper.py --sections 3 --thread-url "https://youtubepoopita.forumfree.it/?t=12345678"
+
 ```
 
 Run again at any time to resume — already-scraped pages are skipped automatically.
@@ -151,7 +162,8 @@ Progress is saved in `site_mirror/.scraper_state.json` after every few threads.
 
 ## YouTube Downloader
 
-The `yt_downloader.py` script is an interactive CLI tool that scans the scraped forum pages (or a predefined list of allowed YouTube channels) to find and archive YouTube videos. It relies on `yt-dlp` to fetch metadata and download the video files.
+The `scripts/ytp_scraper.py` script is an interactive CLI tool that scans the scraped forum pages (or a predefined list of allowed YouTube channels) to find and archive YouTube videos. It relies on `yt-dlp` to fetch metadata and download the video files.
+
 
 ### How it works
 
@@ -171,5 +183,6 @@ pip install yt-dlp beautifulsoup4 lxml
 Launch the interactive menu:
 
 ```bash
-python yt_downloader.py
+python scripts/ytp_scraper.py
+
 ```
