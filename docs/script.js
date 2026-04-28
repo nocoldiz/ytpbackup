@@ -368,6 +368,125 @@ function getChannelAvatar(channelName) {
   return 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
 }
 
+// ─── WEIGHTED SEARCH ENGINE ──────────────────────────────────────────────
+// BM25-inspired scoring with field-level weights. Order-independent: each
+// query token is scored independently so "harry potter vera storia" matches
+// "storia potter harry" equally well.
+
+const SEARCH_FIELD_WEIGHTS = {
+  title:       10,
+  tags:         8,
+  channel:      6,
+  sections:     4,
+  threadTitles: 3,
+  description:  2,
+  id:           1
+};
+
+/**
+ * Tokenise a string: lowercase, split on whitespace / punctuation, deduplicate.
+ */
+function tokenize(str) {
+  if (!str) return [];
+  return str.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim().split(/\s+/).filter(Boolean);
+}
+
+/**
+ * Score a single field for a set of query tokens.
+ * Returns { score, matchedTokens } where matchedTokens is a Set of tokens found.
+ *
+ * Scoring per token:
+ *   • Exact word match            → 1.0
+ *   • Field string starts with token → 0.9
+ *   • Substring / partial match   → 0.6
+ *   • No match                    → 0
+ *
+ * Uses BM25-style saturation: tf / (tf + 1) so repeating a word has
+ * diminishing returns.
+ */
+function scoreField(fieldValue, queryTokens) {
+  if (!fieldValue) return { score: 0, matchedTokens: new Set() };
+  const lower = fieldValue.toLowerCase();
+  const fieldTokens = tokenize(fieldValue);
+  const fieldTokenSet = new Set(fieldTokens);
+  let totalScore = 0;
+  const matchedTokens = new Set();
+
+  for (const qt of queryTokens) {
+    let bestTermScore = 0;
+    // 1. Exact word match
+    if (fieldTokenSet.has(qt)) {
+      bestTermScore = 1.0;
+    }
+    // 2. Prefix of a word (e.g. "harr" matches "harry")
+    else if (fieldTokens.some(ft => ft.startsWith(qt))) {
+      bestTermScore = 0.9;
+    }
+    // 3. Substring anywhere
+    else if (lower.includes(qt)) {
+      bestTermScore = 0.6;
+    }
+
+    if (bestTermScore > 0) {
+      matchedTokens.add(qt);
+      // Count how many times this token appears (BM25 saturation)
+      let tf = 0;
+      for (const ft of fieldTokens) {
+        if (ft === qt || ft.startsWith(qt) || ft.includes(qt)) tf++;
+      }
+      totalScore += bestTermScore * (tf / (tf + 1));
+    }
+  }
+  return { score: totalScore, matchedTokens };
+}
+
+/**
+ * Score a video against query tokens. Returns a numeric relevance score (0 = no match).
+ */
+function scoreVideo(video, queryTokens) {
+  const fields = [
+    { value: video.title,                        weight: SEARCH_FIELD_WEIGHTS.title },
+    { value: (video.tags || []).join(' '),        weight: SEARCH_FIELD_WEIGHTS.tags },
+    { value: video.channel_name,                 weight: SEARCH_FIELD_WEIGHTS.channel },
+    { value: (video.sections || []).join(' '),    weight: SEARCH_FIELD_WEIGHTS.sections },
+    { value: (video.thread_titles || []).join(' '), weight: SEARCH_FIELD_WEIGHTS.threadTitles },
+    { value: video.description,                  weight: SEARCH_FIELD_WEIGHTS.description },
+    { value: video.id,                           weight: SEARCH_FIELD_WEIGHTS.id }
+  ];
+
+  let totalScore = 0;
+  const allMatched = new Set();
+
+  for (const { value, weight } of fields) {
+    const { score, matchedTokens } = scoreField(value, queryTokens);
+    totalScore += score * weight;
+    matchedTokens.forEach(t => allMatched.add(t));
+  }
+
+  if (totalScore === 0) return 0;
+
+  // Proportion of query tokens matched across all fields
+  const coverage = allMatched.size / queryTokens.length;
+
+  // Strong bonus when ALL query tokens appear somewhere (order-independent)
+  const allMatchBonus = coverage === 1.0 ? 2.0 : 0;
+
+  // Mild popularity signal (log-scaled, capped)
+  const popBoost = 1 + Math.min(Math.log10(Math.max(video.view_count || 1, 1)) / 10, 0.3);
+
+  return (totalScore + allMatchBonus) * coverage * popBoost;
+}
+
+/**
+ * Score a channel name against query tokens for the channel results section.
+ */
+function scoreChannel(channelName, queryTokens) {
+  const { score, matchedTokens } = scoreField(channelName, queryTokens);
+  if (score === 0) return 0;
+  const coverage = matchedTokens.size / queryTokens.length;
+  return score * coverage;
+}
+
 function performSearch(query) {
   if (!query) return;
 
@@ -380,17 +499,21 @@ function performSearch(query) {
   document.getElementById('search-query-display').textContent = query;
 
   const ytData = getActiveVideos(false);
-  const qLower = query.toLowerCase();
+  const queryTokens = tokenize(query);
+  if (queryTokens.length === 0) return;
 
-  // Search Channels
+  // ── Search Channels ──────────────────────────────────────────────────
   const allChannels = [...new Set(ytData.map(v => v.channel_name).filter(Boolean))];
-  const matchedChannels = allChannels.filter(c => c.toLowerCase().includes(qLower));
+  const scoredChannels = allChannels
+    .map(c => ({ name: c, score: scoreChannel(c, queryTokens) }))
+    .filter(c => c.score > 0)
+    .sort((a, b) => b.score - a.score);
 
   const channelsContainer = document.getElementById('search-channels-results');
-  if (matchedChannels.length === 0) {
+  if (scoredChannels.length === 0) {
     channelsContainer.innerHTML = '<p class="empty" style="padding:10px;">No channels found.</p>';
   } else {
-    channelsContainer.innerHTML = matchedChannels.map(c => {
+    channelsContainer.innerHTML = scoredChannels.map(({ name: c }) => {
       const chVideos = ytData.filter(v => v.channel_name === c);
       const totalViews = chVideos.reduce((s, v) => s + (v.view_count || 0), 0);
       const avatar = getChannelAvatar(c);
@@ -409,22 +532,17 @@ function performSearch(query) {
     }).join('');
   }
 
-  // Search Videos
-  const matchedVideos = ytData.filter(v => {
-    const titleMatch = (v.title || '').toLowerCase().includes(qLower);
-    const idMatch = (v.id || '').toLowerCase().includes(qLower);
-    const descMatch = (v.description || '').toLowerCase().includes(qLower);
-    const tagMatch = (v.tags || []).some(t => t.toLowerCase().includes(qLower));
-    return titleMatch || idMatch || descMatch || tagMatch;
-  });
-
-  matchedVideos.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
+  // ── Search Videos ────────────────────────────────────────────────────
+  const scoredVideos = ytData
+    .map(v => ({ video: v, score: scoreVideo(v, queryTokens) }))
+    .filter(r => r.score > 0)
+    .sort((a, b) => b.score - a.score);
 
   const videosContainer = document.getElementById('search-videos-results');
-  if (matchedVideos.length === 0) {
+  if (scoredVideos.length === 0) {
     videosContainer.innerHTML = '<p class="empty" style="padding:10px;">No videos found.</p>';
   } else {
-    videosContainer.innerHTML = matchedVideos.slice(0, 50).map(v => renderVideoItem(v, 'list')).join('');
+    videosContainer.innerHTML = scoredVideos.slice(0, 50).map(r => renderVideoItem(r.video, 'list')).join('');
   }
 }
 
@@ -999,7 +1117,7 @@ function loadFacade(id) {
 }
 
 function applyFilters() {
-  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  const q = document.getElementById('search-input').value.trim();
   const status = document.getElementById('filter-status').value;
   const section = document.getElementById('filter-section').value;
   const channel = document.getElementById('filter-channel').value;
@@ -1010,23 +1128,22 @@ function applyFilters() {
   const selectedLangs = Array.from(langSelect.selectedOptions).map(opt => opt.value.toLowerCase());
   const currentData = appMode === 'sources' ? allSources : allVideos;
 
-  filteredVideos = currentData.filter(v => {
-    // 1. IMPROVED SEARCH BAR LOGIC
-    if (q) {
-      const haystack = [
-        v.id,
-        v.title,
-        v.channel_name,
-        v.description,
-        ...(v.thread_titles || []),
-        ...(v.tags || [])
-      ].join(' ').toLowerCase();
+  const queryTokens = q ? tokenize(q) : [];
+  const hasQuery = queryTokens.length > 0;
 
-      const searchTerms = q.split(/\s+/);
-      const matchesAllTerms = searchTerms.every(term => haystack.includes(term));
-      if (!matchesAllTerms) return false;
-    }
+  // Score all videos if there's a query, then apply hard filters
+  let scored = currentData.map(v => ({
+    video: v,
+    score: hasQuery ? scoreVideo(v, queryTokens) : 1
+  }));
 
+  // Filter out non-matching search results
+  if (hasQuery) {
+    scored = scored.filter(r => r.score > 0);
+  }
+
+  // Apply hard filters
+  scored = scored.filter(({ video: v }) => {
     if (status && v.status !== status) return false;
     if (section && !(v.sections || []).includes(section)) return false;
     if (channel && (!v.channel_name || v.channel_name.toLowerCase() !== channel.toLowerCase())) return false;
@@ -1040,18 +1157,22 @@ function applyFilters() {
     return true;
   });
 
-  // 3. Sorting Logic
-  filteredVideos.sort((a, b) => {
-    let av = a[sortField] || '';
-    let bv = b[sortField] || '';
-    // Fix: Check types independently
-    if (typeof av === 'string') av = av.toLowerCase();
-    if (typeof bv === 'string') bv = bv.toLowerCase();
+  // Sort by relevance when searching, otherwise by the chosen column
+  if (hasQuery) {
+    scored.sort((a, b) => b.score - a.score);
+  } else {
+    scored.sort((a, b) => {
+      let av = a.video[sortField] || '';
+      let bv = b.video[sortField] || '';
+      if (typeof av === 'string') av = av.toLowerCase();
+      if (typeof bv === 'string') bv = bv.toLowerCase();
+      if (av > bv) return sortDir;
+      if (av < bv) return -sortDir;
+      return 0;
+    });
+  }
 
-    if (av > bv) return sortDir;
-    if (av < bv) return -sortDir;
-    return 0;
-  });
+  filteredVideos = scored.map(r => r.video);
 
   currentPage = 1;
   renderTable(false);

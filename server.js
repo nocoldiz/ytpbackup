@@ -270,6 +270,14 @@ function onRequest(req, res) {
 }
 
 // ─── Start server ─────────────────────────────────────────────────────────────
+if (fs.existsSync(VIDEO_INDEX)) {
+  try {
+    fs.copyFileSync(VIDEO_INDEX, VIDEO_INDEX + '.bak');
+    // console.log(`  Backup:   ${VIDEO_INDEX}.bak created`);
+  } catch (err) {
+    console.error(`  [!] Failed to create backup:`, err.message);
+  }
+}
 
 const server = http.createServer(onRequest);
 

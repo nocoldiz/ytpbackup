@@ -13,3 +13,4 @@ processed_cache.json
 /reference
 /__pycache__
 *.pyc
+*.bak
