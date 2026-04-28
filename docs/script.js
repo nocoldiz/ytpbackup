@@ -24,10 +24,10 @@ function toggleVideoMode() {
   else if (currentVideoMode === "ytp") currentVideoMode = "sources";
   else currentVideoMode = "all";
 
-  const txt = currentVideoMode === "all" ? "Show all videos" : 
-              currentVideoMode === "ytp" ? "Show YTP videos" : 
-              "Show sources videos";
-              
+  const txt = currentVideoMode === "all" ? "Show all videos" :
+    currentVideoMode === "ytp" ? "Show YTP videos" :
+      "Show sources videos";
+
   document.querySelectorAll('.btn-video-mode').forEach(btn => btn.textContent = txt);
 
   if (document.getElementById('page-youtube').classList.contains('active')) {
@@ -42,11 +42,11 @@ function toggleVideoMode() {
 function getActiveVideos(forHome = false) {
   const all = [...allVideos, ...allSources];
   if (currentVideoMode === "all") return forHome ? allVideos : all;
-  
+
   if (currentVideoMode === "ytp") {
     return allVideos.filter(v => !v.channel_name || !sourceChannels.has(v.channel_name));
   }
-  
+
   if (currentVideoMode === "sources") {
     return all.filter(v => allSources.includes(v) || (v.channel_name && sourceChannels.has(v.channel_name)));
   }
@@ -110,16 +110,25 @@ async function autoLoad() {
   try {
     const rv = await fetch('video_index.json');
     if (rv.ok) vData = await rv.json();
+    else {
+      // Fallback to the old big index if the lite one doesn't exist yet
+      const rv2 = await fetch('video_index.json');
+      if (rv2.ok) vData = await rv2.json();
+    }
   } catch (e) { }
   try {
     const rs = await fetch('sources_index.json');
     if (rs.ok) sData = await rs.json();
+    else {
+      const rs2 = await fetch('sources_index.json');
+      if (rs2.ok) sData = await rs2.json();
+    }
   } catch (e) { }
   try {
     const rp = await fetch('ytpoopers_index.json'); // fixed path
     if (rp.ok) pData = await rp.json();
   } catch (e) { }
-  
+
   initApp(vData, sData, pData);
 
   // Detect server mode for management features
@@ -131,7 +140,7 @@ async function autoLoad() {
         console.log("Server mode detected: Management features enabled.");
         const ma = document.getElementById('management-actions');
         if (ma) ma.style.display = 'flex';
-        
+
         // Show import button and hide help
         const importBtn = document.getElementById('btn-import');
         const helpBtn = document.getElementById('btn-help');
@@ -199,7 +208,7 @@ function initApp(vRaw, sRaw, pRaw) {
 
   document.getElementById('landing').style.display = 'none';
   document.getElementById('app').style.display = 'block';
-  
+
   // Hide all loaders
   document.querySelectorAll('.page').forEach(el => el.classList.remove('is-loading'));
   document.querySelectorAll('.page-loader').forEach(el => el.style.display = 'none');
@@ -355,7 +364,7 @@ function toggleThemeMode() {
   const isOld = document.body.classList.toggle('theme-old');
   const btn = document.getElementById('toggle-modern-old');
   if (btn) btn.textContent = isOld ? 'Switch to Modern Mode' : 'Switch to Old Mode';
-  
+
   syncSearchLayout();
 
   if (typeof updateVideoLayoutForTheme === 'function') updateVideoLayoutForTheme();
@@ -388,7 +397,7 @@ let selectedSuggestionIndex = -1;
 function onGlobalSearchInput() {
   const q = document.getElementById('global-search-input').value.trim();
   const suggestionsBox = document.getElementById('search-suggestions');
-  
+
   if (!q) {
     suggestionsBox.style.display = 'none';
     return;
@@ -401,11 +410,11 @@ function onGlobalSearchInput() {
 
     // Search titles and channel names for suggestions
     const ytData = getActiveVideos(false);
-    
+
     // Get unique titles and channel names that match
     const titleMatches = [];
     const channelMatches = new Set();
-    
+
     for (const v of ytData) {
       if (scoreField(v.title, queryTokens).score > 0) {
         titleMatches.push({ text: v.title, type: 'video' });
@@ -463,7 +472,7 @@ function selectSuggestion(text) {
 document.getElementById('global-search-input').addEventListener('keydown', (e) => {
   const suggestionsBox = document.getElementById('search-suggestions');
   const items = suggestionsBox.querySelectorAll('.suggestion-item');
-  
+
   if (suggestionsBox.style.display === 'block' && items.length > 0) {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -520,13 +529,13 @@ function getChannelAvatar(channelName) {
 // "storia potter harry" equally well.
 
 const SEARCH_FIELD_WEIGHTS = {
-  title:       10,
-  tags:         8,
-  channel:      6,
-  sections:     4,
+  title: 10,
+  tags: 8,
+  channel: 6,
+  sections: 4,
   threadTitles: 3,
-  description:  2,
-  id:           1
+  description: 2,
+  id: 1
 };
 
 /**
@@ -626,13 +635,13 @@ function scoreField(fieldValue, queryTokens, allowFuzzy = true) {
  */
 function scoreVideo(video, queryTokens) {
   const fields = [
-    { value: video.title,                        weight: SEARCH_FIELD_WEIGHTS.title },
-    { value: (video.tags || []).join(' '),        weight: SEARCH_FIELD_WEIGHTS.tags },
-    { value: video.channel_name,                 weight: SEARCH_FIELD_WEIGHTS.channel },
-    { value: (video.sections || []).join(' '),    weight: SEARCH_FIELD_WEIGHTS.sections },
+    { value: video.title, weight: SEARCH_FIELD_WEIGHTS.title },
+    { value: (video.tags || []).join(' '), weight: SEARCH_FIELD_WEIGHTS.tags },
+    { value: video.channel_name, weight: SEARCH_FIELD_WEIGHTS.channel },
+    { value: (video.sections || []).join(' '), weight: SEARCH_FIELD_WEIGHTS.sections },
     { value: (video.thread_titles || []).join(' '), weight: SEARCH_FIELD_WEIGHTS.threadTitles },
-    { value: video.description,                  weight: SEARCH_FIELD_WEIGHTS.description },
-    { value: video.id,                           weight: SEARCH_FIELD_WEIGHTS.id }
+    { value: video.description, weight: SEARCH_FIELD_WEIGHTS.description },
+    { value: video.id, weight: SEARCH_FIELD_WEIGHTS.id }
   ];
 
   let totalScore = 0;
@@ -666,10 +675,10 @@ function scoreChannel(channelName, queryTokens) {
   const { score, matchedTokens } = scoreField(channelName, queryTokens, true);
   if (score === 0) return 0;
   const coverage = matchedTokens.size / queryTokens.length;
-  
+
   // Require at least 50% coverage for channel names to avoid random results
   if (coverage < 0.5 && queryTokens.length > 1) return 0;
-  
+
   return score * coverage;
 }
 
@@ -739,11 +748,11 @@ function performSearch(query) {
   scoredVideos = scoredVideos.filter(({ video: v }) => {
     if (fStatus && v.status !== fStatus) return false;
     if (fSection && !(v.sections || []).includes(fSection)) return false;
-    
+
     const y = v.publish_date ? parseInt(v.publish_date.slice(0, 4)) : null;
     if (fYearMin && (!y || y < parseInt(fYearMin))) return false;
     if (fYearMax && (!y || y > parseInt(fYearMax))) return false;
-    
+
     if (fLang !== 'any' && (v.language || '').toLowerCase() !== fLang) return false;
     return true;
   });
@@ -766,7 +775,7 @@ function performSearch(query) {
 }
 
 // ─── YOUTUBE LOGIC ───────────────────────────────────────────────────────
-function openVideo(vidId, pushToHistory = true) {
+async function openVideo(vidId, pushToHistory = true) {
   if (pushToHistory) updateURL({ v: vidId }, '/watch');
   window.scrollTo(0, 0);
   showPage('video', false);
@@ -776,6 +785,30 @@ function openVideo(vidId, pushToHistory = true) {
   if (!v) {
     document.getElementById('watch-title').textContent = "Video not found";
     return false;
+  }
+
+  // If detailed fields are missing, fetch the full JSON
+  if (v.description === undefined) {
+    document.getElementById('watch-title').textContent = "Loading...";
+    document.getElementById('watch-description').textContent = "Fetching metadata...";
+    try {
+      // Try videos folder first
+      let resp = await fetch(`videos/${vidId}.json`);
+      if (!resp.ok) {
+        // Try sources folder next
+        resp = await fetch(`sources/${vidId}.json`);
+      }
+
+      if (resp.ok) {
+        const fullData = await resp.json();
+        Object.assign(v, fullData);
+      } else {
+        v.description = 'Metadata not found.';
+      }
+    } catch (e) {
+      console.error("Error loading video details:", e);
+      v.description = 'Error loading metadata.';
+    }
   }
 
   const title = v.title || v.id;
@@ -862,11 +895,11 @@ function loadVideoResponses(video) {
 function loadRelatedVideos(video) {
   const container = document.getElementById('related-videos');
   if (!container) return;
-  
+
   const ytData = [...allVideos, ...allSources];
   const videoTags = new Set(video.tags || []);
   const videoSections = new Set(video.sections || []);
-  
+
   // Score based on shared sections and tags
   const scored = ytData
     .filter(v => v.id !== video.id)
@@ -884,18 +917,18 @@ function loadRelatedVideos(video) {
       }
       // Boost same channel slightly but not too much as they are already in "More from channel"
       if (v.channel_name === video.channel_name) score += 1;
-      
+
       return { video: v, score };
     })
     .filter(r => r.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, 10);
-    
+
   if (scored.length === 0) {
     document.getElementById('related-videos-box').style.display = 'none';
     return;
   }
-  
+
   document.getElementById('related-videos-box').style.display = 'block';
   container.innerHTML = scored.map(r => renderVideoItem(r.video, 'list')).join('');
 }
@@ -1034,7 +1067,7 @@ function updateVideoLayoutForTheme() {
   const isOld = document.body.classList.contains('theme-old');
   const mainCol = document.querySelector('#page-video .col-right');
   const sideCol = document.querySelector('#page-video .col-left');
-  
+
   const title = document.getElementById('watch-title');
   const video = document.getElementById('watch-video-container');
   const stats = document.querySelector('.watch-stats');
@@ -1042,7 +1075,7 @@ function updateVideoLayoutForTheme() {
   const desc = document.getElementById('watch-description');
   const actions = document.getElementById('watch-actions');
   const date = document.getElementById('watch-date');
-  
+
   if (!mainCol || !sideCol || !title || !video || !channel || !desc) return;
 
   let channelRow = document.getElementById('modern-channel-row');
@@ -1051,15 +1084,15 @@ function updateVideoLayoutForTheme() {
     // Restore Old Mode
     mainCol.insertBefore(title, video);
     sideCol.insertBefore(stats, sideCol.firstChild);
-    
+
     // Put date back into channel info if it was moved
     const channelTextWrap = channel.querySelector('div');
     if (date && channelTextWrap) {
-        channelTextWrap.appendChild(date);
-        date.style.display = 'block';
-        date.style.marginLeft = '0';
+      channelTextWrap.appendChild(date);
+      date.style.display = 'block';
+      date.style.marginLeft = '0';
     }
-    
+
     sideCol.insertBefore(channel, stats.nextSibling);
     sideCol.insertBefore(desc, channel.nextSibling);
     sideCol.insertBefore(actions, desc.nextSibling);
@@ -1068,7 +1101,7 @@ function updateVideoLayoutForTheme() {
     // Modern Mode
     mainCol.insertBefore(video, mainCol.firstChild);
     mainCol.insertBefore(title, video.nextSibling);
-    
+
     if (!channelRow) {
       channelRow = document.createElement('div');
       channelRow.id = 'modern-channel-row';
@@ -1078,15 +1111,15 @@ function updateVideoLayoutForTheme() {
     channelRow.style.display = 'flex';
     channelRow.appendChild(channel);
     channelRow.appendChild(actions);
-    
+
     mainCol.insertBefore(desc, channelRow.nextSibling);
     desc.insertBefore(stats, desc.firstChild);
-    
+
     // Move date next to views in description box
     if (date) {
-        stats.appendChild(date);
-        date.style.display = 'inline-block';
-        date.style.marginLeft = '8px';
+      stats.appendChild(date);
+      date.style.display = 'inline-block';
+      date.style.marginLeft = '8px';
     }
   }
 }
@@ -1273,15 +1306,15 @@ function closeImportModal() {
 async function submitImport() {
   const urlsText = document.getElementById('import-urls').value;
   const target = document.getElementById('import-target').value;
-  
+
   if (!urlsText.trim()) {
     alert("Please enter at least one URL.");
     return;
   }
-  
+
   // Split by newline, comma, or space
   const urls = urlsText.split(/[\n,\s]+/).filter(u => u.trim());
-  
+
   try {
     const r = await fetch('/api/import', {
       method: 'POST',
@@ -1289,11 +1322,11 @@ async function submitImport() {
       body: JSON.stringify({ urls, target })
     });
     const result = await r.json();
-    
+
     if (result.success) {
       alert(`Successfully added ${result.results.added.length} videos. ${result.results.skipped.length} were skipped (invalid or duplicates).`);
       closeImportModal();
-      location.reload(); 
+      location.reload();
     } else {
       alert("Error: " + result.error);
     }
@@ -1390,10 +1423,10 @@ function buildFilterOptions() {
 
   // 3. Build Years
   const years = [...new Set(currentData.map(v => v.publish_date ? v.publish_date.slice(0, 4) : null).filter(Boolean))].sort();
-  
+
   const minYearHtml = '<option value="">Min</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
   const maxYearHtml = '<option value="">Max</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
-  
+
   if (yearMinSel) yearMinSel.innerHTML = minYearHtml;
   if (yearMaxSel) yearMaxSel.innerHTML = maxYearHtml;
   if (yearMinSelSearch) yearMinSelSearch.innerHTML = minYearHtml;
@@ -1466,7 +1499,7 @@ function applyFilters() {
     if (channel && (!v.channel_name || v.channel_name.toLowerCase() !== channel.toLowerCase())) return false;
     if (viewsMin && (v.view_count || 0) < viewsMin) return false;
     if (likesMin && (v.like_count || 0) < likesMin) return false;
-    
+
     const y = v.publish_date ? parseInt(v.publish_date.slice(0, 4)) : null;
     if (yearMin && (!y || y < parseInt(yearMin))) return false;
     if (yearMax && (!y || y > parseInt(yearMax))) return false;
@@ -2633,7 +2666,7 @@ async function updateSaveButton(vidId) {
   const icon = saved ? '★' : '☆';
   btn.innerHTML = `<span style="font-size:1.2rem; vertical-align:middle; margin-right:8px;">${icon}</span> ${saved ? 'Unsave Video' : 'Save Video'}`;
   btn.classList.toggle('active', saved);
-  
+
   btn.onclick = (e) => {
     e.preventDefault();
     if (saved) {
@@ -2653,7 +2686,7 @@ async function renderSavedPage() {
 
   const saved = await getSavedVideos();
   if (label) label.textContent = `${saved.length} videos saved locally in your browser`;
-  
+
   if (saved.length === 0) {
     grid.innerHTML = '<div class="empty" style="grid-column: 1/-1; padding: 40px; text-align: center; color: var(--text-muted);">No saved videos yet. Start exploring and click "Save Video" to keep track of your favorites!</div>';
   } else {
