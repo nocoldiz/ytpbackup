@@ -181,8 +181,10 @@ function initApp(vRaw, sRaw, pRaw) {
   resetFilters();
   syncSearchLayout();
   if (vRaw) {
-    allVideos = Object.entries(vRaw).map(([id, v]) => ({ id, ...v }))
-      .filter(v => (v.sections || []).some(s => ALLOWED_SECTIONS.has(s)));
+    allVideos = Object.entries(vRaw).map(([id, v]) => {
+      const sections = (v.sections && v.sections.length > 0) ? v.sections : ["Youtube"];
+      return { id, ...v, sections };
+    }).filter(v => v.sections.some(s => ALLOWED_SECTIONS.has(s)));
   }
   if (sRaw) {
     allSources = Object.entries(sRaw).map(([id, v]) => ({ id, ...v }));
@@ -355,9 +357,6 @@ function showPage(name, pushToHistory = true) {
   }
 }
 
-function toggleSidebar() {
-  document.body.classList.toggle('sidebar-open');
-}
 
 // ─── THEME TOGGLES & SEARCH ────────────────────────────────────────────────
 function toggleThemeMode() {
@@ -720,23 +719,7 @@ function performSearch(query) {
     if (channelsSection) channelsSection.style.display = 'none';
   } else {
     if (channelsSection) channelsSection.style.display = 'block';
-    channelsContainer.innerHTML = scoredChannels.map(({ name: c }) => {
-      const chVideos = ytData.filter(v => v.channel_name === c);
-      const totalViews = chVideos.reduce((s, v) => s + (v.view_count || 0), 0);
-      const avatar = getChannelAvatar(c);
-      return `
-        <div class="channel-card" style="display:inline-flex; margin-right:15px; margin-bottom:15px; vertical-align:top; width:220px; align-items:center; gap:12px; padding:12px;" onclick="openProfile('${escAttr(c)}')">
-          <img src="${avatar}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;">
-          <div style="flex:1; min-width:0;">
-            <h4 style="margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escHtml(c)}</h4>
-            <div class="ch-stats" style="margin-top:4px; font-size:11px;">
-              <span><strong>${chVideos.length}</strong> videos</span><br>
-              <span><strong>${fmtNum(totalViews)}</strong> views</span>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
+    channelsContainer.innerHTML = scoredChannels.map(({ name: c }) => renderChannelCard(c, 'search')).join('');
   }
 
   // ── Search Videos ────────────────────────────────────────────────────
@@ -1355,7 +1338,7 @@ function renderVideoItem(v, mode = 'list') {
         ${dur ? `<span class="video-time">${escHtml(dur)}</span>` : ''}
       </a>
       <div class="video-info">
-        <a href="#" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${starBadge}${escHtml(title)}</a>
+        <a href="?v=${v.id}" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="video-title" title="${escAttr(title)}">${starBadge}${escHtml(title)}</a>
         <div class="video-meta" style="display:flex; align-items:center; gap:6px;">
           <img src="${avatar}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
           <div style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
@@ -1376,7 +1359,7 @@ function renderVideoItem(v, mode = 'list') {
         </a>
       </div>
       <div class="yt-list-info">
-        <a href="#" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="yt-list-title">${starBadge}${escHtml(title)}</a>
+        <a href="?v=${v.id}" onclick="event.preventDefault(); event.stopPropagation(); openVideo('${v.id}')" class="yt-list-title">${starBadge}${escHtml(title)}</a>
         ${desc ? `<div class="yt-list-desc">${escHtml(desc)}</div>` : ''}
         <div class="yt-list-meta">
           <span class="yt-stars">${renderStars(v.view_count)}</span>
@@ -1594,26 +1577,19 @@ function renderTable(append = false) {
     const html = slice.map(v => {
       const statusClass = 'status-' + (v.status || 'unavailable');
 
-      const threads = (v.source_pages || [])
-        // 1. Check if the string includes 'channel_scrape' and exclude it if it does
+      const ytpifHtml = (v.source_pages || [])
         .filter(sp => !sp.includes('channel_scrape'))
-        // 2. Map over whatever is left to create your links
         .map((sp, i) => {
           const path = 'https://raw.githubusercontent.com/nocoldiz/ytpbackup/main/site_mirror/' + sp.replace(/\\/g, '/');
-
-
           const label = (v.thread_titles || [])[i] || sp;
-
-
-          return `<a class="btn-thread" href="${path}" onclick="downloadFile('${path}', '${escAttr(label)}.html')" title="${escHtml(label)}">📄 ${escHtml(label.length > 22 ? label.slice(0, 22) + '…' : label)}</a>`;
-        }).join(' ');
-      const sections = (v.sections || []).map(s => `<span class="tag-pill">${escHtml(s)}</span>`).join('');
+          return `<a class="btn-play" href="${path}" onclick="event.stopPropagation(); downloadFile('${path}', '${escAttr(label)}.html'); return false;" title="Download Forum Source: ${escHtml(label)}" style="background:var(--accent2); margin-left: 4px; font-size: 10px; padding: 2px 5px;">YTPIF</a>`;
+        }).join('');
 
       // Determine the title to display, falling back to the first thread title if v.title is missing
       const fallbackTitle = (v.thread_titles && v.thread_titles[0]) ? v.thread_titles[0] : null;
       const titleContent = v.title
-        ? `<a href="${v.url}" target="_blank">${escHtml(v.title)}</a>`
-        : (fallbackTitle ? `<a href="${v.url}" target="_blank"><em>${escHtml(fallbackTitle)}</em></a>` : `<span class="vid-id">${v.id}</span>`);
+        ? `<a href="?v=${v.id}">${escHtml(v.title)}</a>`
+        : (fallbackTitle ? `<a href="?v=${v.id}" onclick="event.preventDefault();"><em>${escHtml(fallbackTitle)}</em></a>` : `<span class="vid-id">${v.id}</span>`);
 
       const playAction = (v.status === 'downloaded' && v.local_file)
         ? `<a class="btn-play" href="${getLocalVideoPath(v)}" target="_blank" title="Play local file">▶</a>`
@@ -1623,7 +1599,7 @@ function renderTable(append = false) {
         ? `<td onclick="event.stopPropagation();"><input type="checkbox" class="manage-check" data-id="${v.id}" onchange="updateManagementVisibility()"></td>`
         : '';
 
-      return `<tr onclick="openVideo('${v.id}')" style="cursor:pointer">
+      return `<tr>
           ${checkbox}
           <td class="title-cell" data-label="Title">
             ${titleContent}
@@ -1642,11 +1618,9 @@ function renderTable(append = false) {
           <td data-label="Lang" title="${v.language || '-'}">${getLanguageFlag(v.language)}</td>
           <td class="num" data-label="Views">${fmtNum(v.view_count)}</td>
           <td class="num" data-label="Likes">${fmtNum(v.like_count)}</td>
-          <td data-label="Section">${sections || '-'}</td>
-          <td data-label="Threads">${threads || '-'}</td>
-          <td data-label="Actions" onclick="event.stopPropagation();">${playAction} <a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
+          <td data-label="Actions" onclick="event.stopPropagation();">${playAction} <a class="btn-yt" href="${v.url || `https://www.youtube.com/watch?v=${v.id}`}" target="_blank" rel="noopener noreferrer">YT</a>${ytpifHtml}</td>
         </tr>`;
-    }).join('') || (append ? '' : `<tr><td colspan="10" class="empty">No videos match your filters</td></tr>`);
+    }).join('') || (append ? '' : `<tr><td colspan="8" class="empty">No videos match your filters</td></tr>`);
 
     if (append) {
       tbody.insertAdjacentHTML('beforeend', html);
@@ -1680,7 +1654,7 @@ function renderTable(append = false) {
         ${checkbox}
         ${facadeHtml}
         <div class="vid-card-info">
-          <a href="${v.url}" target="_blank" class="vid-card-title" title="${escAttr(titleText)}">${escHtml(titleText)}</a>
+          <a href="?v=${v.id}" onclick="event.preventDefault(); openVideo('${v.id}')" class="vid-card-title" title="${escAttr(titleText)}">${escHtml(titleText)}</a>
           <a href="${v.channel_url || '#'}" target="_blank" class="vid-card-ch">${escHtml(chText)}</a>
           <div class="vid-card-meta">
             ${viewsText ? `<span>${viewsText}</span>` : ''}
@@ -1743,22 +1717,7 @@ function renderChannelGrid() {
     return true;
   });
   document.getElementById('channels-count-label').textContent = `${channels.length} channels`;
-  document.getElementById('channel-grid').innerHTML = channels.map(c => {
-    const avatar = getChannelAvatar(c.name);
-    return `
-    <div class="channel-card${selectedChannel === c.name ? ' selected' : ''}" onclick="selectChannel('${escAttr(c.name)}')">
-      <div style="display:flex; align-items:center; gap:16px;">
-        <img src="${avatar}" style="width:60px; height:60px; border-radius:50%; border:2px solid var(--border); object-fit:cover;">
-        <div style="flex:1; min-width:0;">
-          <h4 style="margin:0; font-size:1.1rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escHtml(c.name)}</h4>
-          <div class="ch-stats" style="margin-top:6px;">
-            <span><strong>${c.videos.length}</strong> videos</span><br>
-            ${c.totalViews ? `<span><strong>${fmtNum(c.totalViews)}</strong> views</span>` : ''}
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }).join('') || `<div class="empty">No channels found</div>`;
+  document.getElementById('channel-grid').innerHTML = channels.map(c => renderChannelCard(c)).join('') || `<div class="empty">No channels found</div>`;
 }
 
 function selectChannel(name) {
@@ -1805,7 +1764,7 @@ function selectChannel(name) {
       <td title="${v.status || '-'}">${getStatusEmoji(v.status)}</td>
       <td class="num">${fmtNum(v.view_count)}</td>
       <td class="num">${fmtNum(v.like_count)}</td>
-      <td>${playAction} <a class="btn-yt" href="${v.url}" target="_blank">YT</a></td>
+      <td>${playAction} <a class="btn-yt" href="${v.url || `https://www.youtube.com/watch?v=${v.id}`}" target="_blank" rel="noopener noreferrer">YT</a></td>
     </tr>`;
   }).join('');
 
@@ -2746,7 +2705,4 @@ async function bulkAction(type) {
   } catch (e) {
     alert("Request failed: " + e.message);
   }
-}
-function toggleSidebar() {
-  document.body.classList.toggle('sidebar-open');
 }
