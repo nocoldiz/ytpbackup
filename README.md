@@ -1,7 +1,7 @@
-# YTP Scraper & YTP Italian Forum Backup
-<img width="1401" height="907" alt="immagine" src="https://github.com/user-attachments/assets/c54df216-636b-4b21-a322-79e58b38829b" />
+# YTP Museum
+<img width="1379" height="918" alt="immagine" src="https://github.com/user-attachments/assets/309045c9-1410-458c-a9e0-f776d21984b7" />
 
-Offline scraper for YTP videos, 2009 era Youtube style dashboard and local mirror server for the historic YouTube Poop Italian Forum
+Offline scraper and museum for YTP videos, 2009 era Youtube style dashboard and local mirror server for the historic YouTube Poop Italian Forum
 (`youtubepoopita.forumfree.it`).
 
 Check data and analytics breakdown here
@@ -43,9 +43,9 @@ ytpbackup/
     └── … (one folder per section)
 ```
 ---
-<img width="1669" height="901" alt="immagine" src="https://github.com/user-attachments/assets/2500efb3-0919-4868-b82a-1d4d7b393810" />
 
 ## Dashboard Server
+<img width="1857" height="898" alt="immagine" src="https://github.com/user-attachments/assets/79f8f5b2-ccb3-419e-b268-35e533229e56" />
 
 The main entry point for the YTP Archive. It serves the interactive dashboard, search interface, and local video playback.
 
@@ -65,6 +65,7 @@ Runs on [http://localhost:3000](http://localhost:3000) by default.
 ---
 
 ## Forum Server
+<img width="1669" height="901" alt="immagine" src="https://github.com/user-attachments/assets/2500efb3-0919-4868-b82a-1d4d7b393810" />
 
 A zero-dependency Node.js HTTP server that serves the scraped pages with all
 internal forum links rewritten to local equivalents.
@@ -104,66 +105,10 @@ offset.
 
 ---
 
-## Scraper
+## YTP Scraper
+<img width="1069" height="574" alt="immagine" src="https://github.com/user-attachments/assets/fdb51cd4-150e-43a2-ad29-2afc2e39ade0" />
 
-### Requirements
-
-```bash
-pip install playwright beautifulsoup4 lxml requests
-playwright install chromium
-```
-
-### Usage
-
-```bash
-# Scrape everything
-python scripts/forum_scraper.py
-
-
-# Slower pace
-python scripts/forum_scraper.py --delay 2.0
-
-
-# Specific sections only (use --list to see indices)
-python scripts/forum_scraper.py --sections 0,1,5
-
-
-# List all sections with their index
-python scripts/forum_scraper.py --list
-
-
-# Skip image embedding
-python scripts/forum_scraper.py --no-embed-images
-
-
-# Also inline CSS
-python scripts/forum_scraper.py --embed-css
-
-
-# Scrape a single thread (used internally by the mirror server)
-python scripts/forum_scraper.py --sections 3 --thread-url "https://youtubepoopita.forumfree.it/?t=12345678"
-
-```
-
-Run again at any time to resume — already-scraped pages are skipped automatically.
-
-### Scraping passes
-
-| Pass | What happens |
-|------|-------------|
-| 1    | Downloads `Home.html` |
-| 2    | Downloads all section index pages into `{Section}/index/` |
-| 2.5  | Scans saved index HTML files for any thread links missed during Pass 2 |
-| 3    | Downloads every thread page |
-
-Progress is saved in `site_mirror/.scraper_state.json` after every few threads.
-
----
-
-## YouTube Downloader
-
-The `scripts/ytp_scraper.py` script is an interactive CLI tool that scans the scraped forum pages (or a predefined list of allowed YouTube channels) to find and archive YouTube videos. It relies on `yt-dlp` to fetch metadata and download the video files.
-
+The `ytp_scraper.py` script is an interactive CLI tool that scans the scraped forum pages (or a predefined list of allowed YouTube channels) to find and archive YouTube videos. It relies on `yt-dlp` to fetch metadata and download the video files.
 
 ### How it works
 
@@ -183,6 +128,5 @@ pip install yt-dlp beautifulsoup4 lxml
 Launch the interactive menu:
 
 ```bash
-python scripts/ytp_scraper.py
-
+python ytp_scraper.py
 ```
