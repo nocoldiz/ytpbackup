@@ -14,6 +14,11 @@ let charts = {};
 let currentVideoMode = "all"; // "all", "ytp", "sources"
 let sourceChannels = new Set();
 
+// DB Constants (Must be at top for initialization)
+const dbName = 'YTPArchiveDB';
+const storeName = 'savedVideos';
+let db;
+
 function toggleVideoMode() {
   if (currentVideoMode === "all") currentVideoMode = "ytp";
   else if (currentVideoMode === "ytp") currentVideoMode = "sources";
@@ -136,8 +141,18 @@ async function autoLoad() {
     } catch (e) { }
   }
 }
-autoLoad();
-initDB();
+
+// Start app
+(async () => {
+  try {
+    await initDB();
+    console.log("Database initialized.");
+  } catch (e) {
+    console.error("Database initialization failed:", e);
+  }
+  await autoLoad();
+})();
+
 
 // ─── INIT ─────────────────────────────────────────────────────────────────
 const ALLOWED_SECTIONS = new Set(["YTP nostrane", "YTP fai da te", "YTPMV dimportazione", "YTP da internet", "Internet", "Youtube", "Scraped Channel"]);
@@ -2535,9 +2550,6 @@ function renderTimelineView() {
 
 
 // ─── SAVED VIDEOS (IndexedDB) ──────────────────────────────────────────────
-const dbName = 'YTPArchiveDB';
-const storeName = 'savedVideos';
-let db;
 
 function initDB() {
   return new Promise((resolve, reject) => {
@@ -2553,7 +2565,10 @@ function initDB() {
       updateSavedBadge();
       resolve();
     };
-    request.onerror = (e) => reject(e);
+    request.onerror = (e) => {
+      console.error("IndexedDB error:", e.target.error);
+      reject(e.target.error);
+    };
   });
 }
 
@@ -2615,8 +2630,12 @@ async function updateSaveButton(vidId) {
   if (!btn) return;
 
   const saved = await isVideoSaved(vidId);
-  btn.textContent = saved ? 'Unsave Video' : 'Save Video';
-  btn.onclick = () => {
+  const icon = saved ? '★' : '☆';
+  btn.innerHTML = `<span style="font-size:1.2rem; vertical-align:middle; margin-right:8px;">${icon}</span> ${saved ? 'Unsave Video' : 'Save Video'}`;
+  btn.classList.toggle('active', saved);
+  
+  btn.onclick = (e) => {
+    e.preventDefault();
     if (saved) {
       removeVideoFromDB(vidId);
     } else {
@@ -2629,14 +2648,16 @@ async function updateSaveButton(vidId) {
 
 async function renderSavedPage() {
   const grid = document.getElementById('saved-videos-grid');
+  const label = document.getElementById('saved-count-label');
   if (!grid) return;
 
   const saved = await getSavedVideos();
+  if (label) label.textContent = `${saved.length} videos saved locally in your browser`;
+  
   if (saved.length === 0) {
-    grid.innerHTML = '<div class="empty">No saved videos yet.</div>';
+    grid.innerHTML = '<div class="empty" style="grid-column: 1/-1; padding: 40px; text-align: center; color: var(--text-muted);">No saved videos yet. Start exploring and click "Save Video" to keep track of your favorites!</div>';
   } else {
     // Sort by views or date? Let's do most recent (if we had a saved_at timestamp, but we don't yet)
-    // For now just show them.
     grid.innerHTML = saved.map(v => renderVideoItem(v, 'grid')).join('');
   }
 }
@@ -2692,4 +2713,7 @@ async function bulkAction(type) {
   } catch (e) {
     alert("Request failed: " + e.message);
   }
+}
+function toggleSidebar() {
+  document.body.classList.toggle('sidebar-open');
 }
