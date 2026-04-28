@@ -2660,10 +2660,12 @@ def do_scrape_thumbnails(index, docs_dir):
                 changes_made = True
                 print(f"  [Tagging] {url} -> {extracted}")
 
-        channel_name = info.get("channel_name", "UnknownChannel")
+        channel_name = info.get("channel_name") or "UnknownChannel"
         
         # Skip if thumbnail already exists
         safe_name = "".join(c for c in channel_name if c.isalnum() or c in " _-").strip()
+        if not safe_name:
+            safe_name = "UnknownChannel"
         filename = f"{safe_name}.jpg"
         file_path = os.path.join(output_folder, filename)
         
