@@ -39,9 +39,9 @@ ytpbackup/
     └── … (one folder per section)
 ```
 ---
-<img width="1857" height="898" alt="immagine" src="https://github.com/user-attachments/assets/79f8f5b2-ccb3-419e-b268-35e533229e56" />
 
 ## Dashboard Server
+<img width="1857" height="898" alt="immagine" src="https://github.com/user-attachments/assets/79f8f5b2-ccb3-419e-b268-35e533229e56" />
 
 The main entry point for the YTP Archive. It serves the interactive dashboard, search interface, and local video playback.
 
@@ -59,9 +59,9 @@ npm start
 Runs on [http://localhost:3000](http://localhost:3000) by default.
 
 ---
-<img width="1669" height="901" alt="immagine" src="https://github.com/user-attachments/assets/2500efb3-0919-4868-b82a-1d4d7b393810" />
 
 ## Forum Server
+<img width="1669" height="901" alt="immagine" src="https://github.com/user-attachments/assets/2500efb3-0919-4868-b82a-1d4d7b393810" />
 
 A zero-dependency Node.js HTTP server that serves the scraped pages with all
 internal forum links rewritten to local equivalents.
