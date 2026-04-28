@@ -1,5 +1,5 @@
 # YTP Scraper & YTP Italian Forum Backup
-<img width="1401" height="907" alt="immagine" src="https://github.com/user-attachments/assets/c54df216-636b-4b21-a322-79e58b38829b" />
+<img width="1379" height="918" alt="immagine" src="https://github.com/user-attachments/assets/309045c9-1410-458c-a9e0-f776d21984b7" />
 
 Offline scraper for YTP videos, 2009 era Youtube style dashboard and local mirror server for the historic YouTube Poop Italian Forum
 (`youtubepoopita.forumfree.it`).
