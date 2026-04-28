@@ -12,18 +12,18 @@ if (process.argv.includes('forum')) {
   return;
 }
 
-const http  = require('http');
-const fs    = require('fs');
-const path  = require('path');
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
 const { URL } = require('url');
 
-const PORT        = parseInt(process.env.PORT || '3000', 10);
-const DOCS_DIR    = path.join(__dirname, 'docs');
-const VIDEOS_DIR  = path.join(__dirname, 'videos');
+const PORT = parseInt(process.env.PORT || '3000', 10);
+const DOCS_DIR = path.join(__dirname, 'docs');
+const VIDEOS_DIR = path.join(__dirname, 'videos');
 const VIDEO_INDEX = path.join(DOCS_DIR, 'video_index.json');
 const EXCLUDED_VIDEOS = path.join(DOCS_DIR, 'excluded_videos.json');
 const SOURCES_INDEX = path.join(DOCS_DIR, 'sources_index.json');
-const SOURCES_DIR   = path.join(__dirname, 'sources');
+const SOURCES_DIR = path.join(__dirname, 'sources');
 
 
 // ─── Video Management Logic ──────────────────────────────────────────────────
@@ -45,7 +45,7 @@ function banVideos(videoIds, videoIndexPath, excludedVideosPath, videosDir) {
     if (fs.existsSync(excludedVideosPath)) {
       excluded = JSON.parse(fs.readFileSync(excludedVideosPath, 'utf8'));
     }
-  } catch (err) {}
+  } catch (err) { }
 
   const results = { deleted: [], failed: [], skipped: [] };
 
@@ -57,7 +57,7 @@ function banVideos(videoIds, videoIndexPath, excludedVideosPath, videosDir) {
       const filePath = path.join(__dirname, entry.local_file);
       try {
         if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-      } catch (err) {}
+      } catch (err) { }
     }
 
     excluded[id] = entry;
@@ -66,8 +66,8 @@ function banVideos(videoIds, videoIndexPath, excludedVideosPath, videosDir) {
   }
 
   try {
-    fs.writeFileSync(videoIndexPath, JSON.stringify(index, null, 2));
-    fs.writeFileSync(excludedVideosPath, JSON.stringify(excluded, null, 2));
+    fs.writeFileSync(videoIndexPath, JSON.stringify(index));
+    fs.writeFileSync(excludedVideosPath, JSON.stringify(excluded));
     return { success: true, results };
   } catch (err) {
     return { success: false, error: 'Failed to save changes' };
@@ -89,7 +89,7 @@ function flagAsSource(videoIds, videoIndexPath, sourcesIndexPath) {
     if (fs.existsSync(sourcesIndexPath)) {
       sources = JSON.parse(fs.readFileSync(sourcesIndexPath, 'utf8'));
     }
-  } catch (err) {}
+  } catch (err) { }
 
   const results = { moved: [], skipped: [] };
 
@@ -114,14 +114,27 @@ function flagAsSource(videoIds, videoIndexPath, sourcesIndexPath) {
       }
     }
 
+    // Move individual metadata JSON from docs/videos to docs/sources
+    const oldJsonPath = path.join(DOCS_DIR, 'videos', `${id}.json`);
+    const newJsonPath = path.join(DOCS_DIR, 'sources', `${id}.json`);
+    try {
+      const sourcesJsonDir = path.join(DOCS_DIR, 'sources');
+      if (!fs.existsSync(sourcesJsonDir)) fs.mkdirSync(sourcesJsonDir, { recursive: true });
+      if (fs.existsSync(oldJsonPath)) {
+        fs.renameSync(oldJsonPath, newJsonPath);
+      }
+    } catch (err) {
+      console.error(`Failed to move JSON metadata for ${id}:`, err);
+    }
+
     sources[id] = entry;
     delete index[id];
     results.moved.push(id);
   }
 
   try {
-    fs.writeFileSync(videoIndexPath, JSON.stringify(index, null, 2));
-    fs.writeFileSync(sourcesIndexPath, JSON.stringify(sources, null, 2));
+    fs.writeFileSync(videoIndexPath, JSON.stringify(index));
+    fs.writeFileSync(sourcesIndexPath, JSON.stringify(sources));
     return { success: true, results };
   } catch (err) {
     return { success: false, error: 'Failed to save changes' };
@@ -143,24 +156,24 @@ function importVideos(urls, target, videoIndexPath, sourcesIndexPath) {
   }
 
   const results = { added: [], skipped: [] };
-  
+
   for (let url of urls) {
     url = url.trim();
     if (!url) continue;
-    
+
     // Extract ID from YT URL
     const match = url.match(/(?:v=|vi\/|shorts\/|be\/|embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
     if (!match) {
       results.skipped.push(url);
       continue;
     }
-    
+
     const id = match[1];
     if (index[id]) {
       results.skipped.push(url);
       continue;
     }
-    
+
     index[id] = {
       id: id,
       url: `https://www.youtube.com/watch?v=${id}`,
@@ -171,7 +184,39 @@ function importVideos(urls, target, videoIndexPath, sourcesIndexPath) {
   }
 
   try {
-    fs.writeFileSync(filePath, JSON.stringify(index, null, 2));
+    fs.writeFileSync(filePath, JSON.stringify(index));
+    return { success: true, results };
+  } catch (err) {
+    return { success: false, error: 'Failed to save changes' };
+  }
+}
+
+/**
+ * Sets the language for a list of videos.
+ */
+function setLanguage(videoIds, language, videoIndexPath, sourcesIndexPath) {
+  let vIndex = {};
+  let sIndex = {};
+  try { if (fs.existsSync(videoIndexPath)) vIndex = JSON.parse(fs.readFileSync(videoIndexPath, 'utf8')); } catch (err) { }
+  try { if (fs.existsSync(sourcesIndexPath)) sIndex = JSON.parse(fs.readFileSync(sourcesIndexPath, 'utf8')); } catch (err) { }
+
+  const results = { updated: [], skipped: [] };
+
+  for (const id of videoIds) {
+    if (vIndex[id]) {
+      vIndex[id].language = language;
+      results.updated.push(id);
+    } else if (sIndex[id]) {
+      sIndex[id].language = language;
+      results.updated.push(id);
+    } else {
+      results.skipped.push(id);
+    }
+  }
+
+  try {
+    fs.writeFileSync(videoIndexPath, JSON.stringify(vIndex));
+    fs.writeFileSync(sourcesIndexPath, JSON.stringify(sIndex));
     return { success: true, results };
   } catch (err) {
     return { success: false, error: 'Failed to save changes' };
@@ -180,15 +225,15 @@ function importVideos(urls, target, videoIndexPath, sourcesIndexPath) {
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
-  '.js':   'application/javascript',
-  '.css':  'text/css',
+  '.js': 'application/javascript',
+  '.css': 'text/css',
   '.json': 'application/json',
-  '.png':  'image/png',
-  '.jpg':  'image/jpeg',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
   '.webp': 'image/webp',
   '.webm': 'video/webm',
-  '.mp4':  'video/mp4',
-  '.ico':  'image/x-icon',
+  '.mp4': 'video/mp4',
+  '.ico': 'image/x-icon',
 };
 
 // ─── Local video file serving (with range-request support for seeking) ────────
@@ -205,19 +250,19 @@ function serveLocalVideo(filePath, req, res) {
   if (range) {
     const [, s, e] = range.replace(/bytes=/, '').match(/^(\d*)-(\d*)$/) || [];
     const start = s ? parseInt(s, 10) : 0;
-    const end   = e ? parseInt(e, 10) : total - 1;
+    const end = e ? parseInt(e, 10) : total - 1;
     res.writeHead(206, {
-      'Content-Range':  `bytes ${start}-${end}/${total}`,
-      'Accept-Ranges':  'bytes',
+      'Content-Range': `bytes ${start}-${end}/${total}`,
+      'Accept-Ranges': 'bytes',
       'Content-Length': end - start + 1,
-      'Content-Type':   'video/mp4',
+      'Content-Type': 'video/mp4',
     });
     fs.createReadStream(filePath, { start, end }).pipe(res);
   } else {
     res.writeHead(200, {
       'Content-Length': total,
-      'Content-Type':   'video/mp4',
-      'Accept-Ranges':  'bytes',
+      'Content-Type': 'video/mp4',
+      'Accept-Ranges': 'bytes',
     });
     fs.createReadStream(filePath).pipe(res);
   }
@@ -283,6 +328,23 @@ function onRequest(req, res) {
       try {
         const { urls, target } = JSON.parse(body);
         const result = importVideos(urls, target, VIDEO_INDEX, SOURCES_INDEX);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+    });
+    return;
+  }
+  // ── API: Set Language ────────────────────────────────────────────────────
+  if (pathname === '/api/set-lang' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const { videoIds, language } = JSON.parse(body);
+        const result = setLanguage(videoIds, language, VIDEO_INDEX, SOURCES_INDEX);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(result));
       } catch (err) {

@@ -1142,8 +1142,6 @@ def do_download_language(index, video_dir, yt_format, rate_limit, retry_failed, 
                         index.add_video(
                             video_id=v_id,
                             section="Youtube",
-                            source_page=f"Language Scrape ({base_url})",
-                            thread_title=v_title,
                             channel_url=base_url
                         )
                         # Tag with language immediately
@@ -1271,8 +1269,6 @@ class VideoIndex:
         "tags":          list[str],
         "nickname":      str | null,    <- author of first post of source thread
         "sections":      ["YTP nostrane", ...],
-        "source_pages":  ["YTP nostrane/71236585_Title.html", ...],
-        "thread_titles": ["In the Madonna — Tassista Romano", ...],
         "status":        "pending" | "downloaded" | "unavailable" | "failed",
         "local_file":    str | null,
         "mirrors":       list | null,
@@ -1353,7 +1349,7 @@ class VideoIndex:
             # 1. Save full index (indent=2 for readability/local use)
             path = Path(self.filepath).resolve()
             with open(path, "w", encoding="utf-8") as f:
-                json.dump(self.data, f, indent=2, ensure_ascii=False)
+                json.dump(self.data, f, separators=(',', ':'), ensure_ascii=False)
 
             # 2. Save Lite Web Index (minified, only essential fields for browsing/search)
             lite_data = {}
@@ -1370,7 +1366,7 @@ class VideoIndex:
             
             lite_path = Path(self.docs_dir) / "video_index.json"
             with open(lite_path, "w", encoding="utf-8") as f:
-                json.dump(lite_data, f, ensure_ascii=False)
+                json.dump(lite_data, f, separators=(',', ':'), ensure_ascii=False)
 
             # 3. Save individual detail files for on-demand loading
             videos_dir = Path(self.docs_dir) / "videos"
@@ -1380,12 +1376,12 @@ class VideoIndex:
                 # Compact version (no nulls)
                 compact_meta = {k: v for k, v in meta.items() if v is not None}
                 with open(detail_path, "w", encoding="utf-8") as f:
-                    json.dump(compact_meta, f, ensure_ascii=False)
+                    json.dump(compact_meta, f, separators=(',', ':'), ensure_ascii=False)
                     
         except Exception as e:
             print(f"\n  [!] Error saving optimized indices to {self.docs_dir}: {e}")
 
-    def add_video(self, video_id, section, source_page, thread_title=None, nickname=None, channel_url=None):
+    def add_video(self, video_id, section, nickname=None, channel_url=None):
         if video_id in self.actually_excluded_ids:
             # Skip only hard-blacklisted videos during scanning
             return
@@ -1403,8 +1399,6 @@ class VideoIndex:
                 "tags": [],
                 "nickname": None,
                 "sections": [],
-                "source_pages": [],
-                "thread_titles": [],
                 "status": "pending",
                 "local_file": None,
                 "mirrors": None,
@@ -1414,10 +1408,6 @@ class VideoIndex:
             e["channel_url"] = channel_url
         if section not in e["sections"]:
             e["sections"].append(section)
-        if source_page not in e["source_pages"]:
-            e["source_pages"].append(source_page)
-        if thread_title and thread_title not in e.get("thread_titles", []):
-            e.setdefault("thread_titles", []).append(thread_title)
         if nickname and not e.get("nickname"):
             e["nickname"] = nickname
         self._fix_channel_name(e)
@@ -1552,7 +1542,7 @@ class ScanCache:
     def save(self):
         os.makedirs(os.path.dirname(self.filepath), exist_ok=True)
         with open(self.filepath, "w", encoding="utf-8") as f:
-            json.dump(self.data, f, indent=2, ensure_ascii=False)
+            json.dump(self.data, f, separators=(',', ':'), ensure_ascii=False)
 
     def is_scanned(self, rel_path):
         return rel_path in self.data
@@ -1622,18 +1612,11 @@ class Scanner:
                     skipped += 1
                     continue
 
-                fname = os.path.basename(fpath)
-                if re.match(r'^page_\d+\.html$', fname):
-                    parent = os.path.basename(os.path.dirname(fpath))
-                    thread_title = thread_title_from_filename(parent)
-                else:
-                    thread_title = thread_title_from_filename(fname)
-
                 ids, nickname = self.scan_file(fpath)
                 new_this_file = 0
                 for vid in ids:
                     was_new = vid not in index.data
-                    index.add_video(vid, sec, rel, thread_title, nickname=nickname)
+                    index.add_video(vid, sec, nickname=nickname)
                     if was_new:
                         new_found += 1
                         new_this_file += 1
@@ -1715,7 +1698,7 @@ def save_sources_index(index, sources_data):
         src_path = os.path.join(index.docs_dir, "sources_index.json")
         # 1. Full index
         with open(src_path, "w", encoding="utf-8") as f:
-            json.dump(sources_data, f, indent=2, ensure_ascii=False)
+            json.dump(sources_data, f, separators=(',', ':'), ensure_ascii=False)
 
         # 2. Lite Index
         lite_data = {}
@@ -1731,7 +1714,7 @@ def save_sources_index(index, sources_data):
         
         lite_path = os.path.join(index.docs_dir, "sources_index.json")
         with open(lite_path, "w", encoding="utf-8") as f:
-            json.dump(lite_data, f, ensure_ascii=False)
+            json.dump(lite_data, f, separators=(',', ':'), ensure_ascii=False)
 
         # 3. Individual files
         sources_dir = os.path.join(index.docs_dir, "sources")
@@ -1740,7 +1723,7 @@ def save_sources_index(index, sources_data):
             detail_path = os.path.join(sources_dir, f"{vid}.json")
             compact_meta = {k: v for k, v in meta.items() if v is not None}
             with open(detail_path, "w", encoding="utf-8") as f:
-                json.dump(compact_meta, f, ensure_ascii=False)
+                json.dump(compact_meta, f, separators=(',', ':'), ensure_ascii=False)
     except Exception as e:
         print(f"  [!] Error saving sources_index: {e}")
 
@@ -2032,7 +2015,7 @@ def do_scrape_channels(index):
                         if is_match and vid and vid not in index.data and vid not in index.excluded_ids:
                             clear_line()
                             print(f"    [+] New keyword match found: {title} ({vid})")
-                            index.add_video(vid, "Scraped Channel", videos_url, title)
+                            index.add_video(vid, "Scraped Channel", channel_url=ch_url)
                             index.set_metadata(vid, title=title, channel_url=ch_url)
                             new_total += 1
                             
@@ -2677,7 +2660,7 @@ def do_scrape_thumbnails(index, docs_dir):
         print(f"\n  Updating {input_file} with new thumbnail filenames...")
         try:
             with open(input_file, "w", encoding="utf-8") as f:
-                json.dump(youtubers_data, f, indent=2, ensure_ascii=False)
+                json.dump(youtubers_data, f, separators=(',', ':'), ensure_ascii=False)
             print("   [+] JSON file updated successfully.")
         except Exception as e:
             print(f"   [!] Error saving back to '{input_file}': {e}")
@@ -2855,7 +2838,7 @@ def do_scrape_profiles(index, docs_dir):
     
     if added_new:
         with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(existing, f, indent=2, ensure_ascii=False)
+            json.dump(existing, f, separators=(',', ':'), ensure_ascii=False)
         print(f"  Updated {output_path} with new channels from index.")
 
     thumb_dir = os.path.join(docs_dir, "profile_thumbnails")
@@ -2948,7 +2931,7 @@ def do_scrape_profiles(index, docs_dir):
         # Save periodically
         if i % 10 == 0:
             with open(output_path, "w", encoding="utf-8") as f:
-                json.dump(existing, f, indent=2, ensure_ascii=False)
+                json.dump(existing, f, separators=(',', ':'), ensure_ascii=False)
 
         time.sleep(0.5)
 
@@ -2956,7 +2939,7 @@ def do_scrape_profiles(index, docs_dir):
 
     # Final save
     with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(existing, f, indent=2, ensure_ascii=False)
+        json.dump(existing, f, separators=(',', ':'), ensure_ascii=False)
 
     print(f"  Done. Scraped: {scraped}  Skipped: {skipped}  Failed: {failed}")
     print(f"  Profiles saved to: {os.path.abspath(output_path)}")
@@ -3086,8 +3069,12 @@ def do_scrape_comments(index, video_dir):
                 if raw:
                     d = json.loads(raw)
                     comments = d.get("comments") or []
+                    # Clean and minify comments
+                    for c in comments:
+                        if "_time_text" in c: del c["_time_text"]
+                        if "author_is_verified" in c: del c["author_is_verified"]
                     with open(comment_file, "w", encoding="utf-8") as f:
-                        json.dump(comments, f, indent=2, ensure_ascii=False)
+                        json.dump(comments, f, separators=(',', ':'), ensure_ascii=False)
                     done += 1
                 else:
                     failed += 1
