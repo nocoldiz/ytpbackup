@@ -1284,7 +1284,7 @@ class VideoIndex:
             # Use Path to normalize/resolve the path to avoid "Invalid argument" errors on Windows
             path = Path(self.filepath).resolve()
             with open(path, "w", encoding="utf-8") as f:
-                json.dump(self.data, f, indent=2, ensure_ascii=False)
+                json.dump(self.data, f, separators=(',', ':'), ensure_ascii=False)
         except Exception as e:
             print(f"\n  [!] Error saving index to {self.filepath}: {e}")
 
@@ -1455,7 +1455,7 @@ class ScanCache:
     def save(self):
         os.makedirs(os.path.dirname(self.filepath), exist_ok=True)
         with open(self.filepath, "w", encoding="utf-8") as f:
-            json.dump(self.data, f, indent=2, ensure_ascii=False)
+            json.dump(self.data, f, separators=(',', ':'), ensure_ascii=False)
 
     def is_scanned(self, rel_path):
         return rel_path in self.data
@@ -2162,7 +2162,7 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
             if e.get("status") == "failed":
                 e["status"] = "pending"
         with open(src_path, "w", encoding="utf-8") as f:
-            json.dump(sources_data, f, indent=2, ensure_ascii=False)
+            json.dump(sources_data, f, separators=(',', ':'), ensure_ascii=False)
         print("  Cleared failed status in sources_index.json — will retry.\n")
 
     pending = [vid for vid, e in sources_data.items() if e.get("status") == "pending"]
@@ -2224,7 +2224,7 @@ def do_download_risorse(index, video_dir, yt_format, rate_limit, retry_failed):
 
             # Save after each download
             with open(src_path, "w", encoding="utf-8") as f:
-                json.dump(sources_data, f, indent=2, ensure_ascii=False)
+                json.dump(sources_data, f, separators=(',', ':'), ensure_ascii=False)
 
             if status == "ok":
                 time.sleep(1)
@@ -2516,7 +2516,7 @@ def do_scrape_thumbnails(index, docs_dir):
     if changes_made:
         print(f"  [+] Updated ytpoopers_index.json with new channels.")
         with open(input_file, "w", encoding="utf-8") as f:
-            json.dump(youtubers_data, f, indent=2, ensure_ascii=False)
+            json.dump(youtubers_data, f, separators=(',', ':'), ensure_ascii=False)
         changes_made = False # Reset for thumbnail tracking
 
     headers = {
@@ -2586,7 +2586,7 @@ def do_scrape_thumbnails(index, docs_dir):
         print(f"\n  Updating {input_file} with new thumbnail filenames...")
         try:
             with open(input_file, "w", encoding="utf-8") as f:
-                json.dump(youtubers_data, f, indent=2, ensure_ascii=False)
+                json.dump(youtubers_data, f, separators=(',', ':'), ensure_ascii=False)
             print("   [+] JSON file updated successfully.")
         except Exception as e:
             print(f"   [!] Error saving back to '{input_file}': {e}")
@@ -2764,7 +2764,7 @@ def do_scrape_profiles(index, docs_dir):
     
     if added_new:
         with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(existing, f, indent=2, ensure_ascii=False)
+            json.dump(existing, f, separators=(',', ':'), ensure_ascii=False)
         print(f"  Updated {output_path} with new channels from index.")
 
     thumb_dir = os.path.join(docs_dir, "profile_thumbnails")
@@ -2857,7 +2857,7 @@ def do_scrape_profiles(index, docs_dir):
         # Save periodically
         if i % 10 == 0:
             with open(output_path, "w", encoding="utf-8") as f:
-                json.dump(existing, f, indent=2, ensure_ascii=False)
+                json.dump(existing, f, separators=(',', ':'), ensure_ascii=False)
 
         time.sleep(0.5)
 
@@ -2865,7 +2865,7 @@ def do_scrape_profiles(index, docs_dir):
 
     # Final save
     with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(existing, f, indent=2, ensure_ascii=False)
+        json.dump(existing, f, separators=(',', ':'), ensure_ascii=False)
 
     print(f"  Done. Scraped: {scraped}  Skipped: {skipped}  Failed: {failed}")
     print(f"  Profiles saved to: {os.path.abspath(output_path)}")
@@ -2936,11 +2936,11 @@ def do_scrape_sources_metadata(index):
 
         if i % 20 == 0:
             with open(src_path, "w", encoding="utf-8") as f:
-                json.dump(sources_data, f, indent=2, ensure_ascii=False)
+                json.dump(sources_data, f, separators=(',', ':'), ensure_ascii=False)
 
     clear_line()
     with open(src_path, "w", encoding="utf-8") as f:
-        json.dump(sources_data, f, indent=2, ensure_ascii=False)
+        json.dump(sources_data, f, separators=(',', ':'), ensure_ascii=False)
 
     print(f"  Done — sources_index.json metadata updated.")
 
@@ -2998,7 +2998,7 @@ def do_scrape_comments(index, video_dir):
                     d = json.loads(raw)
                     comments = d.get("comments") or []
                     with open(comment_file, "w", encoding="utf-8") as f:
-                        json.dump(comments, f, indent=2, ensure_ascii=False)
+                        json.dump(comments, f, separators=(',', ':'), ensure_ascii=False)
                     done += 1
                 else:
                     failed += 1
